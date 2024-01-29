@@ -1,0 +1,8 @@
+{
+  "homepage": "https://github.com/copycats-plus/copycats/",
+  "promos": {
+    "1.20.1-recommended": "0.6.1-mc1.20.1",
+    "1.19.2-recommended": "0.6.1-mc1.19.2",
+    "1.18.2-recommended": "0.6.1-mc1.18.2"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "package": "com.copycatsplus.copycats.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "refmap": "copycats.refmap.json",
+  "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
+  "mixins": [
+    "copycat.TrackPlacementMixin",
+    "copycat.fence.COMPATFenceBlockMixin",
+    "copycat.fence.FenceBlockMixin",
+    "copycat.fence.ValueBoxRendererMixin",
+    "copycat.fencegate.BlockCanSurviveMixin",
+    "copycat.fencegate.COMPATPathNodeDefaultsMixin",
+    "copycat.fencegate.WalkNodeEvaluatorMixin",
+    "copycat.slab.SeatMovementBehaviourMixin",
+    "copycat.stairs.StairBlockMixin",
+    "copycat.stairs.StructureTransformMixin",
+    "copycat.trapdoor.DismountHelperMixin",
+    "copycat.trapdoor.RedStoneWireBlockMixin",
+    "copycat.wall.TrackPaverMixin",
+    "copycat.wall.WallBlockMixin",
+    "featuretoggle.CreativeModeTabsAccessor"
+  ],
+  "client": [
+    "featuretoggle.SubMenuConfigScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
