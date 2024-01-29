@@ -4,21 +4,21 @@
     {
       "conditions": [
         {
-          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_slab",
-          "invert": false
+          "invert": false,
+          "type": "copycats:feature_enabled"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "ss"
+        ],
         "key": {
           "s": {
             "item": "create:copycat_step"
           }
         },
-        "pattern": [
-          "ss"
-        ],
         "result": {
           "item": "copycats:copycat_slab"
         }

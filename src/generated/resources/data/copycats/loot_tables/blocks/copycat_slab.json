@@ -2,24 +2,25 @@
   "type": "minecraft:block",
   "pools": [
     {
+      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
+              "function": "minecraft:set_count",
               "conditions": [
                 {
-                  "block": "copycats:copycat_slab",
                   "condition": "minecraft:block_state_property",
+                  "block": "copycats:copycat_slab",
                   "properties": {
                     "type": "double"
                   }
                 }
               ],
               "count": 2.0,
-              "function": "minecraft:set_count"
+              "add": false
             },
             {
               "function": "minecraft:explosion_decay"
@@ -27,8 +28,7 @@
           ],
           "name": "copycats:copycat_slab"
         }
-      ],
-      "rolls": 1.0
+      ]
     }
   ]
 }

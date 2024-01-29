@@ -1,10 +1,23 @@
 {
   "advancements": [
     {
+      "conditions": [
+        {
+          "feature": "copycats:copycat_slab",
+          "invert": false,
+          "type": "copycats:feature_enabled"
+        }
+      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "copycats:crafting/palettes/copycat_slab"
+          ]
+        },
         "criteria": {
           "has_item": {
+            "trigger": "minecraft:inventory_changed",
             "conditions": {
               "items": [
                 {
@@ -13,14 +26,13 @@
                   ]
                 }
               ]
-            },
-            "trigger": "minecraft:inventory_changed"
+            }
           },
           "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
             "conditions": {
               "recipe": "copycats:crafting/palettes/copycat_slab"
-            },
-            "trigger": "minecraft:recipe_unlocked"
+            }
           }
         },
         "requirements": [
@@ -28,20 +40,8 @@
             "has_item",
             "has_the_recipe"
           ]
-        ],
-        "rewards": {
-          "recipes": [
-            "copycats:crafting/palettes/copycat_slab"
-          ]
-        }
-      },
-      "conditions": [
-        {
-          "type": "copycats:feature_enabled",
-          "feature": "copycats:copycat_slab",
-          "invert": false
-        }
-      ]
+        ]
+      }
     }
   ]
 }

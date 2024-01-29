@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.datagen.recipes;
 
+import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.google.gson.JsonObject;
-import com.copycatsplus.copycats.Copycats;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
@@ -27,8 +27,9 @@ public class FeatureEnabledCondition implements ICondition {
         return NAME;
     }
 
+    @SuppressWarnings("removal")
     @Override
-    public boolean test(IContext context) {
+    public boolean test() {
         return FeatureToggle.isEnabled(feature) != invert;
     }
 

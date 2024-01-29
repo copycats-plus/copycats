@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+import static com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock.byDirection;
+
 public class CopycatBoxItem extends BlockItem {
 
     public CopycatBoxItem(Properties builder) {
@@ -39,7 +41,7 @@ public class CopycatBoxItem extends BlockItem {
     @Override
     protected boolean updateCustomBlockEntityTag(@NotNull BlockPos pos, @NotNull Level world, Player player, @NotNull ItemStack stack, @NotNull BlockState state) {
         for (Direction direction : Iterate.directions) {
-            state = state.setValue(CopycatBoardBlock.byDirection(direction), true);
+            state = state.setValue(byDirection(direction), true);
         }
         world.setBlockAndUpdate(pos, state);
         return super.updateCustomBlockEntityTag(pos, world, player, stack, state);

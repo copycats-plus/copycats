@@ -4,27 +4,27 @@
     {
       "conditions": [
         {
-          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_block",
-          "invert": false
+          "invert": false,
+          "type": "copycats:feature_enabled"
         },
         {
-          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_slab",
-          "invert": false
+          "invert": false,
+          "type": "copycats:feature_enabled"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "s",
+          "s"
+        ],
         "key": {
           "s": {
             "item": "copycats:copycat_slab"
           }
         },
-        "pattern": [
-          "s",
-          "s"
-        ],
         "result": {
           "item": "copycats:copycat_block"
         }

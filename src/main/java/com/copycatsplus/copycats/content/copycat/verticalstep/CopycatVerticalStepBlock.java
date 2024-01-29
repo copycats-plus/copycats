@@ -2,8 +2,7 @@ package com.copycatsplus.copycats.content.copycat.verticalstep;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.MathHelper;
-import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.ShimWaterloggedCopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
@@ -39,9 +38,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.content.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatVerticalStepBlock extends WaterloggedCopycatBlock {
+public class CopycatVerticalStepBlock extends ShimWaterloggedCopycatBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -95,7 +95,7 @@ public class CopycatVerticalStepBlock extends WaterloggedCopycatBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = MathHelper.DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

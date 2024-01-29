@@ -3,19 +3,15 @@ package com.copycatsplus.copycats.content.copycat.board;
 import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock.byDirection;
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 
 public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatModel {
@@ -25,10 +21,10 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material,
-                                              ModelData wrappedData, RenderType renderType) {
+    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, Random rand, BlockState material,
+                                              IModelData wrappedData) {
         BakedModel model = getModelOf(material);
-        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
+        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData);
 
         List<BakedQuad> quads = new ArrayList<>();
 
@@ -43,7 +39,7 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
         }
 
         for (Direction direction : Iterate.directions) {
-            if (state.getValue(CopycatBoardBlock.byDirection(direction)))
+            if (state.getValue(byDirection(direction)))
                 if (direction.getAxis().isVertical()) {
                     Map<Direction, Boolean> edges = direction == Direction.DOWN ? bottomEdges : topEdges;
                     int north = !edges.get(Direction.NORTH) ? 1 : 0;

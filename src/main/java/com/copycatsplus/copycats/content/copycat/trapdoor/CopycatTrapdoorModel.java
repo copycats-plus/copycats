@@ -2,17 +2,16 @@ package com.copycatsplus.copycats.content.copycat.trapdoor;
 
 import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static net.minecraft.world.level.block.TrapDoorBlock.*;
 
@@ -23,10 +22,10 @@ public class CopycatTrapdoorModel extends CopycatModel implements ISimpleCopycat
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material,
-                                              ModelData wrappedData, RenderType renderType) {
+    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, Random rand, BlockState material,
+                                              IModelData wrappedData) {
         BakedModel model = getModelOf(material);
-        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
+        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData);
 
         List<BakedQuad> quads = new ArrayList<>();
 

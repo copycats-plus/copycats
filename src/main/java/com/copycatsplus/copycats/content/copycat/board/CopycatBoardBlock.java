@@ -3,7 +3,7 @@ package com.copycatsplus.copycats.content.copycat.board;
 import com.google.common.collect.ImmutableMap;
 import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.CCShapes;
-import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.ShimWaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Function;
 
-public class CopycatBoardBlock extends WaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatBoardBlock extends ShimWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
     public static BooleanProperty UP = BlockStateProperties.UP;
     public static BooleanProperty DOWN = BlockStateProperties.DOWN;
     public static BooleanProperty NORTH = BlockStateProperties.NORTH;
@@ -125,7 +125,7 @@ public class CopycatBoardBlock extends WaterloggedCopycatBlock implements ISpeci
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean canBeReplaced(BlockState pState, BlockPlaceContext pUseContext) {
+    public boolean canBeReplaced(@NotNull BlockState pState, BlockPlaceContext pUseContext) {
         ItemStack itemstack = pUseContext.getItemInHand();
         if (!itemstack.is(this.asItem())) return false;
         if (!pState.getValue(byDirection(pUseContext.getClickedFace().getOpposite()))) {
