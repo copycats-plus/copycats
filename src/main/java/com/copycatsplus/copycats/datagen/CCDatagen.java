@@ -5,7 +5,6 @@ import com.copycatsplus.copycats.datagen.recipes.CCStandardRecipes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
 import net.minecraft.core.HolderLookup;
@@ -43,7 +42,6 @@ public class CCDatagen {
 
             provideDefaultLang("interface", langConsumer);
             provideDefaultLang("tooltips", langConsumer);
-            providePonderLang(langConsumer);
         });
     }
 
@@ -59,14 +57,6 @@ public class CCDatagen {
             String value = entry.getValue().getAsString();
             consumer.accept(key, value);
         }
-    }
-
-    private static void providePonderLang(BiConsumer<String, String> consumer) {
-        // Register these since FMLClientSetupEvent does not run during datagen
-
-        PonderLocalization.generateSceneLang();
-
-        PonderLocalization.provideLang(Copycats.MODID, consumer);
     }
 }
 
