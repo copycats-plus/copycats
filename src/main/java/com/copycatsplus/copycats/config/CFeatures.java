@@ -3,10 +3,15 @@ package com.copycatsplus.copycats.config;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles all configs related to the feature toggle.
+ * Values in this class should NOT be accessed directly. Please access via {@link FeatureToggle} instead.
+ */
 public class CFeatures extends SyncConfigBase {
 
     @Override
@@ -23,10 +28,12 @@ public class CFeatures extends SyncConfigBase {
         FeatureToggle.TOGGLEABLE_FEATURES.forEach((r) -> toggles.put(r, builder.define(r.getPath(), true)));
     }
 
+    @ApiStatus.Internal
     public boolean hasToggle(ResourceLocation key) {
         return (synchronizedToggles != null && synchronizedToggles.containsKey(key)) || toggles.containsKey(key);
     }
 
+    @ApiStatus.Internal
     public boolean isEnabled(ResourceLocation key) {
         if (this.synchronizedToggles != null) {
             Boolean synced = synchronizedToggles.get(key);

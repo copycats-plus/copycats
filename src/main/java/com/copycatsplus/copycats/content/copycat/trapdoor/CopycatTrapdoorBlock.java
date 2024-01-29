@@ -4,7 +4,6 @@ import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.TrapDoorBlock.*;
 
@@ -46,12 +44,14 @@ public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
         super.createBlockStateDefinition(pBuilder.add(FACING, OPEN, HALF, POWERED));
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-        BlockState state = trapdoor.getStateForPlacement(pContext);
-        if (state == null) return super.getStateForPlacement(pContext);
-        return copyState(state, super.getStateForPlacement(pContext), false);
+    public BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
+        return to
+                .setValue(FACING, from.getValue(FACING))
+                .setValue(OPEN, from.getValue(OPEN))
+                .setValue(HALF, from.getValue(HALF))
+                .setValue(POWERED, from.getValue(POWERED))
+                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 
     @Override
@@ -113,15 +113,6 @@ public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
     @Override
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
-    }
-
-    public static BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
-        return to
-                .setValue(FACING, from.getValue(FACING))
-                .setValue(OPEN, from.getValue(OPEN))
-                .setValue(HALF, from.getValue(HALF))
-                .setValue(POWERED, from.getValue(POWERED))
-                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 }
 

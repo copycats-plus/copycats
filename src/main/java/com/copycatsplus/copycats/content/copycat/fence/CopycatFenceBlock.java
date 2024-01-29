@@ -6,7 +6,6 @@ import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.CrossCollisionBlock.*;
 
@@ -47,12 +45,14 @@ public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock {
         super.createBlockStateDefinition(pBuilder.add(NORTH, SOUTH, EAST, WEST));
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-        BlockState state = fence.getStateForPlacement(pContext);
-        if (state == null) return super.getStateForPlacement(pContext);
-        return copyState(state, super.getStateForPlacement(pContext), false);
+    public BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
+        return to
+                .setValue(NORTH, from.getValue(NORTH))
+                .setValue(SOUTH, from.getValue(SOUTH))
+                .setValue(EAST, from.getValue(EAST))
+                .setValue(WEST, from.getValue(WEST))
+                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 
     @Override
@@ -166,15 +166,6 @@ public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock {
 
     public static BooleanProperty byDirection(Direction direction) {
         return PipeBlock.PROPERTY_BY_DIRECTION.get(direction);
-    }
-
-    public static BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
-        return to
-                .setValue(NORTH, from.getValue(NORTH))
-                .setValue(SOUTH, from.getValue(SOUTH))
-                .setValue(EAST, from.getValue(EAST))
-                .setValue(WEST, from.getValue(WEST))
-                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 }
 

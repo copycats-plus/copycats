@@ -19,8 +19,8 @@ public class RedStoneWireBlockMixin {
     )
     private BlockState getWrappedBlock(BlockGetter instance, BlockPos pos, Operation<BlockState> original) {
         BlockState state = original.call(instance, pos);
-        if (state.getBlock() instanceof CopycatTrapdoorBlock)
-            return CopycatTrapdoorBlock.copyState(state, ICopycatWithWrappedBlock.unwrap(state.getBlock()).defaultBlockState(), true);
+        if (state.getBlock() instanceof CopycatTrapdoorBlock trapdoor)
+            return trapdoor.copyState(state, ICopycatWithWrappedBlock.unwrap(state.getBlock()).defaultBlockState(), true);
         else
             return state;
     }

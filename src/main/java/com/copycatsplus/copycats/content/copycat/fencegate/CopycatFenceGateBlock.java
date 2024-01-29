@@ -4,7 +4,6 @@ import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.FenceGateBlock.*;
 
@@ -48,12 +46,14 @@ public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock {
         super.createBlockStateDefinition(pBuilder.add(OPEN, POWERED, IN_WALL, FACING));
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-        BlockState state = fenceGate.getStateForPlacement(pContext);
-        if (state == null) return super.getStateForPlacement(pContext);
-        return copyState(state, super.getStateForPlacement(pContext), false);
+    public BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
+        return to
+                .setValue(OPEN, from.getValue(OPEN))
+                .setValue(POWERED, from.getValue(POWERED))
+                .setValue(IN_WALL, from.getValue(IN_WALL))
+                .setValue(FACING, from.getValue(FACING))
+                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 
     @Override
@@ -130,15 +130,6 @@ public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock {
     @Override
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
-    }
-
-    public static BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
-        return to
-                .setValue(OPEN, from.getValue(OPEN))
-                .setValue(POWERED, from.getValue(POWERED))
-                .setValue(IN_WALL, from.getValue(IN_WALL))
-                .setValue(FACING, from.getValue(FACING))
-                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 }
 

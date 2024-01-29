@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -54,12 +52,15 @@ public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock {
         super.createBlockStateDefinition(pBuilder.add(UP, NORTH_WALL, SOUTH_WALL, EAST_WALL, WEST_WALL));
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-        BlockState state = wall.getStateForPlacement(pContext);
-        if (state == null) return super.getStateForPlacement(pContext);
-        return copyState(state, super.getStateForPlacement(pContext), false);
+    public BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
+        return to
+                .setValue(UP, from.getValue(UP))
+                .setValue(NORTH_WALL, from.getValue(NORTH_WALL))
+                .setValue(SOUTH_WALL, from.getValue(SOUTH_WALL))
+                .setValue(EAST_WALL, from.getValue(EAST_WALL))
+                .setValue(WEST_WALL, from.getValue(WEST_WALL))
+                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 
     @Override
@@ -227,16 +228,6 @@ public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock {
             case EAST -> EAST_WALL;
             default -> throw new IllegalArgumentException("Vertical directions not supported");
         };
-    }
-
-    public static BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
-        return to
-                .setValue(UP, from.getValue(UP))
-                .setValue(NORTH_WALL, from.getValue(NORTH_WALL))
-                .setValue(SOUTH_WALL, from.getValue(SOUTH_WALL))
-                .setValue(EAST_WALL, from.getValue(EAST_WALL))
-                .setValue(WEST_WALL, from.getValue(WEST_WALL))
-                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
     }
 }
 
