@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.config;
 
-import com.copycatsplus.copycats.compat.CreateConnectedJEI;
+import com.copycatsplus.copycats.compat.CopycatsJEI;
 import com.copycatsplus.copycats.compat.Mods;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -66,7 +66,7 @@ public class FeatureToggle {
     static void refreshItemVisibility() {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
                 LogicalSidedProvider.WORKQUEUE.get(LogicalSide.CLIENT).submit(() -> {
-                    Mods.JEI.executeIfInstalled(() -> CreateConnectedJEI::refreshItemList);
+                    Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
                 })
         );
     }

@@ -419,10 +419,10 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         }
     }
 
-//    @Override
-//    public String getName() {
-//        return "Create: Connected's Standard Recipes";
-//    }
+    @Override
+    public @NotNull String getName() {
+        return "Standard Recipes of Create: Copycats+";
+    }
 
     public CCStandardRecipes(DataGenerator generator) {
         super(generator);
