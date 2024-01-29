@@ -17,16 +17,16 @@ All the copycats you've ever wanted, combined into a single mod!
 ## Features
 
 - Copycat Beam
-  - A centered Copycat Step.
+    - A centered Copycat Step.
 - Copycat Block
 - Copycat Board
-  - A 1-pixel thick panel. Multiple boards can be placed in the same block space like glow lichen.
+    - A 1-pixel thick panel. Multiple boards can be placed in the same block space like glow lichen.
 - Copycat Byte
-  - A mini-block. Bytes can be placed/dismantled individually, 8 of which forms a full block.
+    - A mini-block. Bytes can be placed/dismantled individually, 8 of which forms a full block.
 - Copycat Fence
 - Copycat Fence Gate
 - Copycat Slab
-  - Supports all orientations and double slab variants.
+    - Supports all orientations and double slab variants.
 - Copycat Stairs
 - Copycat Trapdoor
 - Copycat Vertical Step
@@ -52,6 +52,12 @@ Find this mod on [**Modrinth**](https://modrinth.com/mod/copycats) or
 
 This mod is open to suggestions, so if you have made any modification to the mod, please leave an issue/PR so I can
 consider adding your use case to the mod.
+
+## Contributing
+
+For translations, please visit [our Crowdin page](https://crowdin.com/project/copycats) to contribute.
+
+For code contributions, please read [the wiki](https://github.com/copycats-plus/copycats/wiki) for more info.
 
 ## Support
 
