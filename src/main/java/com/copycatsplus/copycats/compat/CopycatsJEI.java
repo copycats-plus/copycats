@@ -31,6 +31,9 @@ public class CopycatsJEI implements IModPlugin {
         MANAGER = jeiRuntime.getIngredientManager();
     }
 
+    /**
+     * Add/remove items from JEI at runtime according to what features are enabled
+     */
     public static void refreshItemList() {
         if (MANAGER != null) {
             MANAGER.removeIngredientsAtRuntime(

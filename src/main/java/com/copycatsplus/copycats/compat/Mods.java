@@ -12,7 +12,13 @@ import java.util.function.Supplier;
  * For compatibility with and without another mod present, we have to define load conditions of the specific code
  */
 public enum Mods {
+    /**
+     * For the feature toggle system
+     */
     JEI("jei"),
+    /**
+     * For copycat fence compatibility (only prevents crash)
+     */
     DIAGONAL_FENCES("diagonalfences");
 
     private final String id;
