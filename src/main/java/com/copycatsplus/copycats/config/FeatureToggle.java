@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.config;
 
-import com.copycatsplus.copycats.compat.CreateConnectedJEI;
+import com.copycatsplus.copycats.compat.CopycatsJEI;
 import com.copycatsplus.copycats.compat.Mods;
 import com.copycatsplus.copycats.mixin.featuretoggle.CreativeModeTabsAccessor;
 import com.tterrag.registrate.builders.Builder;
@@ -72,7 +72,7 @@ public class FeatureToggle {
                     if (cachedParameters != null) {
                         CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);
                     }
-                    Mods.JEI.executeIfInstalled(() -> CreateConnectedJEI::refreshItemList);
+                    Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
                 })
         );
     }

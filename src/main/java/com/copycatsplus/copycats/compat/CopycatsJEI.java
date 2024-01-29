@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.stream.Collectors;
 
 @JeiPlugin
-public class CreateConnectedJEI implements IModPlugin {
+public class CopycatsJEI implements IModPlugin {
     private static final ResourceLocation ID = Copycats.asResource("jei_plugin");
 
     public static IIngredientManager MANAGER;
