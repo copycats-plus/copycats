@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.datagen.recipes;
 
 import com.copycatsplus.copycats.config.FeatureToggle;
-import com.copycatsplus.copycats.Copycats;
 import com.google.gson.JsonObject;
+import com.copycatsplus.copycats.Copycats;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;

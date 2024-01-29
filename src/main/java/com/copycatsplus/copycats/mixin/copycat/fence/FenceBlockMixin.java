@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.mixin.copycat.fence;
 
-import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.CCBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.FenceBlock;

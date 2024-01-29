@@ -14,6 +14,8 @@ import net.minecraftforge.client.model.data.ModelData;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.WEST;
 import static net.minecraft.world.level.block.FenceGateBlock.IN_WALL;
 import static net.minecraft.world.level.block.FenceGateBlock.OPEN;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
@@ -42,49 +44,49 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
                     templateQuads, quads, rot, false,
                     vec3(offsetX, 5 + offsetWall, 7),
                     aabb(1, 6, 1),
-                    cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                    cull(UP | SOUTH | EAST)
             );
             assemblePiece(
                     templateQuads, quads, rot, false,
                     vec3(offsetX + 1, 5 + offsetWall, 7),
                     aabb(1, 6, 1).move(15, 0, 0),
-                    cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                    cull(UP | SOUTH | WEST)
             );
             assemblePiece(
                     templateQuads, quads, rot, false,
                     vec3(offsetX, 5 + offsetWall, 8),
                     aabb(1, 6, 1).move(0, 0, 15),
-                    cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.EAST)
+                    cull(UP | NORTH | EAST)
             );
             assemblePiece(
                     templateQuads, quads, rot, false,
                     vec3(offsetX + 1, 5 + offsetWall, 8),
                     aabb(1, 6, 1).move(15, 0, 15),
-                    cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.WEST)
+                    cull(UP | NORTH | WEST)
             );
             assemblePiece(
                     templateQuads, quads, rot, false,
                     vec3(offsetX, 11 + offsetWall, 7),
                     aabb(1, 5, 1).move(0, 11, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                    cull(DOWN | SOUTH | EAST)
             );
             assemblePiece(
                     templateQuads, quads, rot, false,
                     vec3(offsetX + 1, 11 + offsetWall, 7),
                     aabb(1, 5, 1).move(15, 11, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                    cull(DOWN | SOUTH | WEST)
             );
             assemblePiece(
                     templateQuads, quads, rot, false,
                     vec3(offsetX, 11 + offsetWall, 8),
                     aabb(1, 5, 1).move(0, 11, 15),
-                    cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                    cull(DOWN | NORTH | EAST)
             );
             assemblePiece(
                     templateQuads, quads, rot, false,
                     vec3(offsetX + 1, 11 + offsetWall, 8),
                     aabb(1, 5, 1).move(15, 11, 15),
-                    cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                    cull(DOWN | NORTH | WEST)
             );
         }
 
@@ -96,19 +98,19 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
                             templateQuads, quads, rot, false,
                             vec3(offsetX, 12 + offsetWall, 9),
                             aabb(1, 3, 6).move(eastSide ? 15 : 0, 13, 10),
-                            cull(MutableCullFace.NORTH |  (eastSide ? MutableCullFace.WEST : MutableCullFace.EAST))
+                            cull(NORTH |  (eastSide ? WEST : EAST))
                     );
                     assemblePiece(
                             templateQuads, quads, rot, false,
                             vec3(offsetX, 9 + offsetWall, 13),
                             aabb(1, 3, 2).move(eastSide ? 15 : 0, 7, 14),
-                            cull(MutableCullFace.UP | MutableCullFace.DOWN | (eastSide ? MutableCullFace.WEST : MutableCullFace.EAST))
+                            cull(UP | DOWN | (eastSide ? WEST : EAST))
                     );
                     assemblePiece(
                             templateQuads, quads, rot, false,
                             vec3(offsetX, 6 + offsetWall, 9),
                             aabb(1, 3, 6).move(eastSide ? 15 : 0, 0, 10),
-                            cull(MutableCullFace.NORTH | (eastSide ? MutableCullFace.WEST : MutableCullFace.EAST))
+                            cull(NORTH | (eastSide ? WEST : EAST))
                     );
                 }
             }
@@ -119,37 +121,37 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
                         templateQuads, quads, rot2, false,
                         vec3(8, 12 + offsetWall, 7),
                         aabb(6, 3, 1).move(0, 13, 0),
-                        cull(MutableCullFace.SOUTH | MutableCullFace.EAST | MutableCullFace.WEST)
+                        cull(SOUTH | EAST | WEST)
                 );
                 assemblePiece(
                         templateQuads, quads, rot2, false,
                         vec3(8, 9 + offsetWall, 7),
                         aabb(2, 3, 1).move(0, 7, 0),
-                        cull(MutableCullFace.UP | MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                        cull(UP | DOWN | SOUTH | WEST)
                 );
                 assemblePiece(
                         templateQuads, quads, rot2, false,
                         vec3(8, 6 + offsetWall, 7),
                         aabb(6, 3, 1),
-                        cull(MutableCullFace.SOUTH | MutableCullFace.EAST | MutableCullFace.WEST)
+                        cull(SOUTH | EAST | WEST)
                 );
                 assemblePiece(
                         templateQuads, quads, rot2, false,
                         vec3(2, 12 + offsetWall, 7),
                         aabb(6, 3, 1).move(10, 13, 0),
-                        cull(MutableCullFace.SOUTH | MutableCullFace.EAST | MutableCullFace.WEST)
+                        cull(SOUTH | EAST | WEST)
                 );
                 assemblePiece(
                         templateQuads, quads, rot2, false,
                         vec3(6, 9 + offsetWall, 7),
                         aabb(2, 3, 1).move(14, 7, 0),
-                        cull(MutableCullFace.UP | MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                        cull(UP | DOWN | SOUTH | EAST)
                 );
                 assemblePiece(
                         templateQuads, quads, rot2, false,
                         vec3(2, 6 + offsetWall, 7),
                         aabb(6, 3, 1).move(10, 0, 0),
-                        cull(MutableCullFace.SOUTH | MutableCullFace.EAST | MutableCullFace.WEST)
+                        cull(SOUTH | EAST | WEST)
                 );
             }
         }

@@ -33,8 +33,7 @@
           "recipes": [
             "copycats:crafting/palettes/copycat_board"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

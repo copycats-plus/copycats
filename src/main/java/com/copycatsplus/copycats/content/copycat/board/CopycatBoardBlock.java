@@ -1,19 +1,18 @@
 package com.copycatsplus.copycats.content.copycat.board;
 
-import com.copycatsplus.copycats.CCShapes;
 import com.google.common.collect.ImmutableMap;
+import com.copycatsplus.copycats.CCItems;
+import com.copycatsplus.copycats.CCShapes;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
@@ -58,6 +57,13 @@ public class CopycatBoardBlock extends WaterloggedCopycatBlock implements ISpeci
                 .setValue(WEST, false)
         );
         this.shapesCache = this.getShapeForEachState(CopycatBoardBlock::calculateMultifaceShape);
+    }
+
+    @Override
+    public void fillItemCategory(@NotNull CreativeModeTab pTab, @NotNull NonNullList<ItemStack> pItems) {
+        super.fillItemCategory(pTab, pItems);
+        pItems.add(CCItems.COPYCAT_BOX.asStack());
+        pItems.add(CCItems.COPYCAT_CATWALK.asStack());
     }
 
     @Override

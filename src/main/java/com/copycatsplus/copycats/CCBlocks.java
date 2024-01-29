@@ -37,8 +37,6 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -130,7 +128,6 @@ public class CCBlocks {
     public static final BlockEntry<CopycatWallBlock> COPYCAT_WALL =
             REGISTRATE.block("copycat_wall", CopycatWallBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.forceSolidOn())
                     .tag(BlockTags.WALLS)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatWallModel::new))
@@ -149,7 +146,6 @@ public class CCBlocks {
     public static final BlockEntry<CopycatFenceGateBlock> COPYCAT_FENCE_GATE =
             REGISTRATE.block("copycat_fence_gate", CopycatFenceGateBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.forceSolidOn())
                     .tag(BlockTags.FENCE_GATES, Tags.Blocks.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatFenceGateModel::new))
@@ -158,7 +154,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedFenceGateBlock> WRAPPED_COPYCAT_FENCE_GATE =
-            REGISTRATE.block("wrapped_copycat_fence_gate", p -> new WrappedFenceGateBlock(p, WoodType.OAK))
+            REGISTRATE.block("wrapped_copycat_fence_gate", WrappedFenceGateBlock::new)
                     .initialProperties(() -> Blocks.OAK_FENCE_GATE)
                     .onRegister(b -> CopycatFenceGateBlock.fenceGate = b)
                     .tag(BlockTags.FENCE_GATES, Tags.Blocks.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
@@ -177,7 +173,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedTrapdoorBlock> WRAPPED_COPYCAT_TRAPDOOR =
-            REGISTRATE.block("wrapped_copycat_trapdoor", p -> new WrappedTrapdoorBlock(p, BlockSetType.OAK))
+            REGISTRATE.block("wrapped_copycat_trapdoor", WrappedTrapdoorBlock::new)
                     .initialProperties(() -> Blocks.OAK_TRAPDOOR)
                     .onRegister(b -> CopycatTrapdoorBlock.trapdoor = b)
                     .tag(BlockTags.TRAPDOORS)

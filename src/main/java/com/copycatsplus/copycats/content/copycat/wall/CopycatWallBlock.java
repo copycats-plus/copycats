@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
+import static com.copycatsplus.copycats.content.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.world.level.block.WallBlock.*;
 
@@ -133,7 +134,7 @@ public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             if (diff.distManhattan(Vec3i.ZERO) > 2) return false;
             if (diff.getY() == 0) return false;

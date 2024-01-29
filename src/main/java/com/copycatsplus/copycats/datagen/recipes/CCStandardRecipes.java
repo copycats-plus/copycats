@@ -10,22 +10,23 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.data.recipe.CreateRecipeProvider;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCookingSerializer;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -49,7 +50,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     GeneratedRecipe COPYCAT_SLAB_FROM_PANELS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_panels").unlockedBy(AllBlocks.COPYCAT_PANEL::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('p', AllBlocks.COPYCAT_PANEL)
+                    .define('p', AllBlocks.COPYCAT_PANEL.get())
                     .pattern("p")
                     .pattern("p")
             );
@@ -57,7 +58,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     GeneratedRecipe COPYCAT_SLAB_FROM_STEPS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_steps").unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('s', AllBlocks.COPYCAT_STEP)
+                    .define('s', AllBlocks.COPYCAT_STEP.get())
                     .pattern("ss")
             );
 
@@ -65,7 +66,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             .requiresResultFeature()
             .requiresFeature(CCBlocks.COPYCAT_BEAM)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_BEAM)
+                    .define('s', CCBlocks.COPYCAT_BEAM.get())
                     .pattern("ss")
             );
 
@@ -75,7 +76,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             .requiresResultFeature()
             .requiresFeature(CCBlocks.COPYCAT_SLAB)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_SLAB)
+                    .define('s', CCBlocks.COPYCAT_SLAB.get())
                     .pattern("s")
                     .pattern("s")
             );
@@ -105,7 +106,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     GeneratedRecipe COPYCAT_BOX = create(CCItems.COPYCAT_BOX).unlockedBy(CCBlocks.COPYCAT_BOARD::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_BOARD)
+                    .define('s', CCBlocks.COPYCAT_BOARD.get())
                     .pattern("ss ")
                     .pattern("s s")
                     .pattern(" ss")
@@ -114,7 +115,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     GeneratedRecipe COPYCAT_CATWALK = create(CCItems.COPYCAT_CATWALK).unlockedBy(CCBlocks.COPYCAT_BOARD::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_BOARD)
+                    .define('s', CCBlocks.COPYCAT_BOARD.get())
                     .pattern("s s")
                     .pattern(" s ")
             );
@@ -140,9 +141,9 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         return create(result::get);
     }
 
-    GeneratedRecipe createSpecial(Supplier<? extends SimpleCraftingRecipeSerializer<?>> serializer, String recipeType,
+    GeneratedRecipe createSpecial(Supplier<? extends SimpleRecipeSerializer<?>> serializer, String recipeType,
                                   String path) {
-        ResourceLocation location = Copycats.asResource(recipeType + "/" + currentFolder + "/" + path);
+        ResourceLocation location = Create.asResource(recipeType + "/" + currentFolder + "/" + path);
         return register(consumer -> {
             SpecialRecipeBuilder b = SpecialRecipeBuilder.special(serializer.get());
             b.save(consumer, location.toString());
@@ -179,7 +180,6 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         private final String path;
         private String suffix;
         private Supplier<? extends ItemLike> result;
-        private RecipeCategory category = null;
         private ResourceLocation compatDatagenOutput;
         List<ICondition> recipeConditions;
 
@@ -219,11 +219,6 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             this.unlockedBy = () -> ItemPredicate.Builder.item()
                     .of(tag.get())
                     .build();
-            return this;
-        }
-
-        GeneratedRecipeBuilder inCategory(RecipeCategory category) {
-            this.category = category;
             return this;
         }
 
@@ -269,7 +264,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         // FIXME 5.1 refactor - recipe categories as markers instead of sections?
         GeneratedRecipe viaShaped(UnaryOperator<ShapedRecipeBuilder> builder) {
             return handleConditions(consumer -> {
-                ShapedRecipeBuilder b = builder.apply(ShapedRecipeBuilder.shaped(category == null ? RecipeCategory.MISC : category, result.get(), amount));
+                ShapedRecipeBuilder b = builder.apply(ShapedRecipeBuilder.shaped(result.get(), amount));
                 if (unlockedBy != null)
                     b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
                 b.save(consumer, createLocation("crafting"));
@@ -278,7 +273,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
         GeneratedRecipe viaShapeless(UnaryOperator<ShapelessRecipeBuilder> builder) {
             return handleConditions(consumer -> {
-                ShapelessRecipeBuilder b = builder.apply(ShapelessRecipeBuilder.shapeless(category == null ? RecipeCategory.MISC : category, result.get(), amount));
+                ShapelessRecipeBuilder b = builder.apply(ShapelessRecipeBuilder.shapeless(result.get(), amount));
                 if (unlockedBy != null)
                     b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
                 b.save(consumer, createLocation("crafting"));
@@ -287,7 +282,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
         GeneratedRecipe viaStonecutting(Ingredient ingredient, int resultCount) {
             return handleConditions(consumer -> {
-                SingleItemRecipeBuilder b = SingleItemRecipeBuilder.stonecutting(ingredient, category == null ? RecipeCategory.BUILDING_BLOCKS : category, result.get(), resultCount);
+                SingleItemRecipeBuilder b = SingleItemRecipeBuilder.stonecutting(ingredient, result.get(), resultCount);
                 if (unlockedBy != null)
                     b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
                 b.save(consumer, createLocation("crafting"));
@@ -298,12 +293,12 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             return viaStonecutting(ingredient, 1);
         }
 
-        GeneratedRecipe viaNetheriteSmithing(Supplier<? extends Item> base, Supplier<Ingredient> upgradeMaterial) {
+
+        GeneratedRecipe viaSmithing(Supplier<? extends Item> base, Supplier<Ingredient> upgradeMaterial) {
             return handleConditions(consumer -> {
-                SmithingTransformRecipeBuilder b =
-                        SmithingTransformRecipeBuilder.smithing(Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.of(base.get()), upgradeMaterial.get(), category == null ? RecipeCategory.COMBAT : category, result.get()
-                                        .asItem());
+                UpgradeRecipeBuilder b =
+                        UpgradeRecipeBuilder.smithing(Ingredient.of(base.get()), upgradeMaterial.get(), result.get()
+                                .asItem());
                 b.unlocks("has_item", inventoryTrigger(ItemPredicate.Builder.item()
                         .of(base.get())
                         .build()));
@@ -356,7 +351,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             private float exp;
             private int cookingTime;
 
-            private final RecipeSerializer<? extends AbstractCookingRecipe> FURNACE = RecipeSerializer.SMELTING_RECIPE,
+            private final SimpleCookingSerializer<?> FURNACE = RecipeSerializer.SMELTING_RECIPE,
                     SMOKER = RecipeSerializer.SMOKING_RECIPE, BLAST = RecipeSerializer.BLASTING_RECIPE,
                     CAMPFIRE = RecipeSerializer.CAMPFIRE_COOKING_RECIPE;
 
@@ -403,21 +398,21 @@ public class CCStandardRecipes extends CreateRecipeProvider {
                 return create(BLAST, builder, .5f);
             }
 
-            private GeneratedRecipe create(RecipeSerializer<? extends AbstractCookingRecipe> serializer,
+            private GeneratedRecipe create(SimpleCookingSerializer<?> serializer,
                                            UnaryOperator<SimpleCookingRecipeBuilder> builder, float cookingTimeModifier) {
                 return register(consumer -> {
                     boolean isOtherMod = compatDatagenOutput != null;
 
-                    SimpleCookingRecipeBuilder b = builder.apply(SimpleCookingRecipeBuilder.generic(ingredient.get(),
-                            RecipeCategory.MISC, isOtherMod ? Items.DIRT : result.get(), exp,
-                            (int) (cookingTime * cookingTimeModifier), serializer));
-
+                    SimpleCookingRecipeBuilder b = builder.apply(
+                            SimpleCookingRecipeBuilder.cooking(ingredient.get(), isOtherMod ? Items.DIRT : result.get(),
+                                    exp, (int) (cookingTime * cookingTimeModifier), serializer));
                     if (unlockedBy != null)
                         b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
-
-                    b.save(result -> consumer.accept(
-                            isOtherMod ? new ModdedCookingRecipeResult(result, compatDatagenOutput, recipeConditions)
-                                    : result), createSimpleLocation(RegisteredObjects.getKeyOrThrow(serializer)
+                    b.save(result -> {
+                        consumer.accept(
+                                isOtherMod ? new CCStandardRecipes.ModdedCookingRecipeResult(result, compatDatagenOutput, recipeConditions)
+                                        : result);
+                    }, createSimpleLocation(RegisteredObjects.getKeyOrThrow(serializer)
                             .getPath()));
                 });
             }
@@ -429,8 +424,8 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 //        return "Create: Connected's Standard Recipes";
 //    }
 
-    public CCStandardRecipes(PackOutput p_i48262_1_) {
-        super(p_i48262_1_);
+    public CCStandardRecipes(DataGenerator generator) {
+        super(generator);
     }
 
     private static class ModdedCookingRecipeResult implements FinishedRecipe {

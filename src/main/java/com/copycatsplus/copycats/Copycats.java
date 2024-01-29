@@ -44,11 +44,11 @@ public class Copycats {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        REGISTRATE.setCreativeTab(CCCreativeTabs.MAIN);
+        REGISTRATE.creativeModeTab(() -> CCCreativeTabs.MAIN);
         CCBlocks.register();
         CCItems.register();
         CCBlockEntityTypes.register();
-        CCCreativeTabs.register(modEventBus);
+        CCCreativeTabs.register();
 
         CCConfigs.register(ModLoadingContext.get());
         CCConfigs.common().register();

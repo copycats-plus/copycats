@@ -12,7 +12,7 @@ public class CCItems {
     private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
 
     static {
-        REGISTRATE.setCreativeTab(CCCreativeTabs.MAIN);
+        REGISTRATE.creativeModeTab(() -> CCCreativeTabs.MAIN);
     }
 
     public static final ItemEntry<CopycatBoxItem> COPYCAT_BOX =

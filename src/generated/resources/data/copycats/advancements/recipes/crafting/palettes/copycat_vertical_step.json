@@ -33,8 +33,7 @@
           "recipes": [
             "copycats:crafting/palettes/copycat_vertical_step"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

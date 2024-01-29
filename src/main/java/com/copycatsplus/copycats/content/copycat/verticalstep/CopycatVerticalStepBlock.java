@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.verticalstep;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.content.MathHelper;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -94,7 +95,7 @@ public class CopycatVerticalStepBlock extends WaterloggedCopycatBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = MathHelper.DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }
