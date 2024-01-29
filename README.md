@@ -3,6 +3,9 @@
 <h1 align="center">Create: Copycats+</h1>
 
 <p align="center">
+<a title="Supported versions" target="_blank" href="https://modrinth.com/project/copycats"><img src="https://cf.way2muchnoise.eu/versions/968398_all.svg"></a>
+<a title="Modrinth" target="_blank" href="https://modrinth.com/project/copycats"><img src="https://img.shields.io/modrinth/dt/UT2M39wf?style=flat&label=Modrinth"></a>
+<a title="CurseForge" target="_blank" href="https://legacy.curseforge.com/minecraft/mc-mods/copycats"><img src="https://img.shields.io/curseforge/dt/968398?style=flat&label=CurseForge"></a>
 <a title="Discord" target="_blank" href="https://discord.gg/3AvrppcgG3"><img src="https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white"></a>
 </p>
 
