@@ -1,1 +1,13 @@
-{}
+{
+  "block.copycats.copycat_beam.tooltip.behaviour1": "Dacă este posibil, aplică _obiectului ținut în mână_ ca _material_. _Faceți din nou clic_ pentru a schimba starea de _orientare_ sau _alimentare_. Folosiți o _cheie_ pentru a _reseta_ materialul.",
+  "block.copycats.copycat_beam.tooltip.condition1": "Când se face Clic R",
+  "block.copycats.copycat_beam.tooltip.summary": "_Transformă_ orice _bloc complet_ într-o grindă decorativă.",
+  "block.copycats.copycat_block.tooltip.behaviour1": "Dacă este posibil, aplică _obiectului ținut în mână_ ca _material_. _Faceți din nou clic_ pentru a schimba starea de _orientare_ sau _alimentare_. Folosiți o _cheie_ pentru a _reseta_ materialul.",
+  "block.copycats.copycat_block.tooltip.condition1": "Când se face Clic R",
+  "block.copycats.copycat_block.tooltip.summary": "_Transformă_ orice _bloc complet_ într-o grindă decorativă.",
+  "block.copycats.copycat_board.tooltip.behaviour1": "Dacă este posibil, aplică _obiectului ținut în mână_ ca _material_. _Faceți din nou clic_ pentru a schimba starea de _orientare_ sau _alimentare_. Folosiți o _cheie_ pentru a _reseta_ materialul.",
+  "block.copycats.copycat_board.tooltip.condition1": "Când se face Clic R",
+  "block.copycats.copycat_board.tooltip.summary": "_Transformă_ orice _bloc complet_ într-o placă decorativă. Mai multe plăci pot fi plasate în același spațiu bloc.",
+  "block.copycats.copycat_fence.tooltip.behaviour1": "Dacă este posibil, aplică _obiectului ținut în mână_ ca _material_. _Faceți din nou clic_ pentru a schimba starea de _orientare_ sau _alimentare_. Folosiți o _cheie_ pentru a _reseta_ materialul.",
+  "block.copycats.copycat_fence.tooltip.summary": "_Transformă_ orice _bloc complet_ într-un gard decorativ."
+}
