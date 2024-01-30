@@ -20,7 +20,8 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_TRAPDOOR,
                             CCBlocks.COPYCAT_WALL,
                             CCBlocks.COPYCAT_BOARD,
-                            CCBlocks.COPYCAT_BYTE
+                            CCBlocks.COPYCAT_BYTE,
+                            CCBlocks.COPYCAT_LAYER
                     )
                     .register();
 
