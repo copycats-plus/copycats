@@ -15,6 +15,8 @@ import com.copycatsplus.copycats.content.copycat.fence.WrappedFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateModel;
 import com.copycatsplus.copycats.content.copycat.fencegate.WrappedFenceGateBlock;
+import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
+import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
@@ -230,6 +232,15 @@ public class CCBlocks {
                     })
                     .item()
                     .transform(customItemModel("copycat_base", "byte"))
+                    .register();
+
+    public static final BlockEntry<CopycatLayerBlock> COPYCAT_LAYER =
+            REGISTRATE.block("copycat_layer", CopycatLayerBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatLayerModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "layer"))
                     .register();
 
     public static void register() {

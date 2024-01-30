@@ -25,6 +25,8 @@ All the copycats you've ever wanted, combined into a single mod!
     - A mini-block. Bytes can be placed/dismantled individually, 8 of which forms a full block.
 - Copycat Fence
 - Copycat Fence Gate
+- Copycat Layer
+    - Can be placed in any orientation and stacks to full block size.
 - Copycat Slab
     - Supports all orientations and double slab variants.
 - Copycat Stairs

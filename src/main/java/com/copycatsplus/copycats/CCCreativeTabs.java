@@ -35,7 +35,8 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_BOARD,
             CCItems.COPYCAT_BOX,
             CCItems.COPYCAT_CATWALK,
-            CCBlocks.COPYCAT_BYTE
+            CCBlocks.COPYCAT_BYTE,
+            CCBlocks.COPYCAT_LAYER
     );
 
     public static final RegistryObject<CreativeModeTab> MAIN = CREATIVE_MODE_TABS.register("main", () -> CreativeModeTab.builder()
