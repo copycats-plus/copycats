@@ -169,18 +169,6 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
         return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
     }
 
-    public @NotNull VoxelShape getCollisionShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
-    }
-
-    public @NotNull VoxelShape getBlockSupportShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
-    }
-
-    public @NotNull VoxelShape getVisualShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
-    }
-
     @Override
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
