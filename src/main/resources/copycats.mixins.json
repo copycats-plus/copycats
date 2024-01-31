@@ -6,6 +6,8 @@
   "refmap": "copycats.refmap.json",
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "mixins": [
+    "copycat.CopycatBlockEntityMixin",
+    "copycat.CopycatModelMixin",
     "copycat.TrackPlacementMixin",
     "copycat.fence.COMPATFenceBlockMixin",
     "copycat.fence.FenceBlockMixin",
