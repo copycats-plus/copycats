@@ -44,6 +44,7 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -239,6 +240,21 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatLayerModel::new))
+                    .loot((lt, block) -> {
+                        LootTable.Builder builder = LootTable.lootTable();
+                        for (int i = 1; i <= 8; i++) {
+                            builder.withPool(
+                                    LootPool.lootPool()
+                                            .setRolls(ConstantValue.exactly(1.0F))
+                                            .when(ExplosionCondition.survivesExplosion())
+                                            .when(LootItemBlockStatePropertyCondition
+                                                    .hasBlockStateProperties(block)
+                                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatLayerBlock.LAYERS, i)))
+                                            .add(LootItem.lootTableItem(block).apply(SetItemCountFunction.setCount(ConstantValue.exactly(i))))
+                            );
+                        }
+                        lt.add(block, builder);
+                    })
                     .item()
                     .transform(customItemModel("copycat_base", "layer"))
                     .register();

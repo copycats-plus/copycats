@@ -2,14 +2,13 @@ package com.copycatsplus.copycats.content.copycat.layer;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -34,9 +33,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.List;
 
-import static net.minecraft.core.Direction.*;
+import static net.minecraft.core.Direction.UP;
 
 public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
 
@@ -75,16 +74,26 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
 
     @Override
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
-        if (state.getValue(LAYERS) > 1) {
-            BlockState newState = state;
-            newState = newState.setValue(LAYERS, state.getValue(LAYERS) - 1);
-            context.getLevel().setBlock(context.getClickedPos(), newState, Block.UPDATE_ALL);
-            assert context.getPlayer() != null;
-            if (!context.getPlayer().isCreative())
-                context.getPlayer().getInventory().placeItemBackInInventory(CCBlocks.COPYCAT_LAYER.asStack());
-            return InteractionResult.SUCCESS;
+        if (state.getValue(LAYERS) <= 1)
+            return super.onSneakWrenched(state, context);
+
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Player player = context.getPlayer();
+        if (world instanceof ServerLevel serverLevel) {
+            if (player != null && !player.isCreative()) {
+                // Respect loot tables
+                List<ItemStack> drops = Block.getDrops(state.setValue(LAYERS, 1), serverLevel, pos, world.getBlockEntity(pos), player, context.getItemInHand());
+                for (ItemStack drop : drops) {
+                    player.getInventory().placeItemBackInInventory(drop);
+                }
+            }
+            BlockPos up = pos.relative(Direction.UP);
+            // need to call updateShape before setBlock to schedule a tick for water
+            world.setBlockAndUpdate(pos, state.setValue(LAYERS, state.getValue(LAYERS) - 1).updateShape(Direction.UP, world.getBlockState(up), world, pos, up));
+            playRemoveSound(world, pos);
         }
-        return super.onSneakWrenched(state, context);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
