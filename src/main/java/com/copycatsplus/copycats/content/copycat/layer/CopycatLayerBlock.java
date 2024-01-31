@@ -155,11 +155,6 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
     }
 
     @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !canFaceBeOccluded(state, face);
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder.add(FACING).add(LAYERS));
     }
@@ -189,12 +184,19 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
 
     @Override
     public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir) {
+        Direction facing = state.getValue(FACING);
+        int layers = state.getValue(LAYERS);
         if (state.is(this) == neighborState.is(this)) {
+            Direction neighborFacing = neighborState.getValue(FACING);
+            int neighborLayers = neighborState.getValue(LAYERS);
             if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite())) {
-                return dir.getAxis().isVertical() && neighborState.getValue(FACING) == state.getValue(FACING);
+                return neighborFacing == facing && neighborLayers == layers || // cull the sides if two copycats of the same height are next to each other
+                        // cull if both sides have a square block face
+                        (neighborFacing == facing.getOpposite() || neighborLayers == 8) && facing == dir.getOpposite() ||
+                        (neighborFacing == facing.getOpposite() || layers == 8) && neighborFacing == dir ||
+                        layers == 8 && neighborLayers == 8;
             }
         }
-
         return false;
     }
 
