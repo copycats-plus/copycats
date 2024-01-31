@@ -2,7 +2,7 @@ package com.copycatsplus.copycats.content.copycat.layer;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
-import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.ShimWaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.VoxelShaper;
@@ -35,7 +35,7 @@ import java.util.List;
 
 import static net.minecraft.core.Direction.UP;
 
-public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatLayerBlock extends ShimWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
 
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
