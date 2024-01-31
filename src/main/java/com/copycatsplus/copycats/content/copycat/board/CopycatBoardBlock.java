@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.content.copycat.board;
 
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.google.common.collect.ImmutableMap;
-import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Function;
 
-public class CopycatBoardBlock extends WaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
     public static BooleanProperty UP = BlockStateProperties.UP;
     public static BooleanProperty DOWN = BlockStateProperties.DOWN;
     public static BooleanProperty NORTH = BlockStateProperties.NORTH;
