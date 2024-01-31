@@ -76,7 +76,7 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean canBeReplaced(BlockState pState, BlockPlaceContext pUseContext) {
+    public boolean canBeReplaced(@NotNull BlockState pState, BlockPlaceContext pUseContext) {
         ItemStack itemstack = pUseContext.getItemInHand();
         if (!itemstack.is(this.asItem())) return false;
         if (pState.getValue(LAYERS) == 8) return false;
@@ -141,14 +141,15 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
         return pDirection.getAxis() != facing.getAxis();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirrorIn) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirrorIn) {
         return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
