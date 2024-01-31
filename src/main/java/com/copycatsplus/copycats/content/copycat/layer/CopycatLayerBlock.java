@@ -1,16 +1,14 @@
 package com.copycatsplus.copycats.content.copycat.layer;
 
-import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.simibubi.create.AllShapes;
+import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,14 +27,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.List;
 
-import static net.minecraft.core.Direction.*;
+import static net.minecraft.core.Direction.UP;
 
 public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
 
@@ -60,38 +57,30 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pPlayer.getItemInHand(pHand).getItem().equals(CCBlocks.COPYCAT_LAYER.asStack().getItem())) {
-            if (pState.getValue(LAYERS) < 8) {
-                BlockState newState = pState;
-                newState = newState.setValue(LAYERS, pState.getValue(LAYERS) + 1);
-                pLevel.setBlock(pPos, newState, Block.UPDATE_ALL);
-                if (!pPlayer.isCreative()) pPlayer.getItemInHand(pHand).shrink(1);
-                return InteractionResult.SUCCESS;
-            }
-        }
-        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
-    }
-
-    @Override
-    public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
-        if (state.getValue(LAYERS) > 1) {
-            BlockState newState = state;
-            newState = newState.setValue(LAYERS, state.getValue(LAYERS) - 1);
-            context.getLevel().setBlock(context.getClickedPos(), newState, Block.UPDATE_ALL);
-            assert context.getPlayer() != null;
-            if (!context.getPlayer().isCreative())
-                context.getPlayer().getInventory().placeItemBackInInventory(CCBlocks.COPYCAT_LAYER.asStack());
-            return InteractionResult.SUCCESS;
-        }
-        return super.onSneakWrenched(state, context);
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
         assert stateForPlacement != null;
-        return stateForPlacement.setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        BlockPos blockPos = context.getClickedPos();
+        BlockState state = context.getLevel().getBlockState(blockPos);
+        if (state.is(this)) {
+            if (state.getValue(LAYERS) < 8)
+                return state.cycle(LAYERS);
+            else {
+                Copycats.LOGGER.warn("Can't figure out where to place a layer! Please file an issue if you see this.");
+                return state;
+            }
+        } else {
+            return stateForPlacement.setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean canBeReplaced(@NotNull BlockState pState, BlockPlaceContext pUseContext) {
+        ItemStack itemstack = pUseContext.getItemInHand();
+        if (!itemstack.is(this.asItem())) return false;
+        if (pState.getValue(LAYERS) == 8) return false;
+        return pState.getValue(FACING) == pUseContext.getClickedFace();
     }
 
     @Override
@@ -100,6 +89,30 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
                 ItemRequirement.ItemUseType.CONSUME,
                 new ItemStack(asItem(), state.getValue(LAYERS))
         );
+    }
+
+    @Override
+    public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+        if (state.getValue(LAYERS) <= 1)
+            return super.onSneakWrenched(state, context);
+
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Player player = context.getPlayer();
+        if (world instanceof ServerLevel serverLevel) {
+            if (player != null && !player.isCreative()) {
+                // Respect loot tables
+                List<ItemStack> drops = Block.getDrops(state.setValue(LAYERS, 1), serverLevel, pos, world.getBlockEntity(pos), player, context.getItemInHand());
+                for (ItemStack drop : drops) {
+                    player.getInventory().placeItemBackInInventory(drop);
+                }
+            }
+            BlockPos up = pos.relative(UP);
+            // need to call updateShape before setBlock to schedule a tick for water
+            world.setBlockAndUpdate(pos, state.setValue(LAYERS, state.getValue(LAYERS) - 1).updateShape(UP, world.getBlockState(up), world, pos, up));
+            playRemoveSound(world, pos);
+        }
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -128,14 +141,15 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
         return pDirection.getAxis() != facing.getAxis();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirrorIn) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirrorIn) {
         return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
@@ -143,11 +157,6 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
     @Override
     public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
         return false;
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !canFaceBeOccluded(state, face);
     }
 
     @Override
@@ -161,18 +170,6 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
         return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
     }
 
-    public @NotNull VoxelShape getCollisionShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
-    }
-
-    public @NotNull VoxelShape getBlockSupportShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
-    }
-
-    public @NotNull VoxelShape getVisualShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
-    }
-
     @Override
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
@@ -180,12 +177,19 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
 
     @Override
     public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir) {
+        Direction facing = state.getValue(FACING);
+        int layers = state.getValue(LAYERS);
         if (state.is(this) == neighborState.is(this)) {
+            Direction neighborFacing = neighborState.getValue(FACING);
+            int neighborLayers = neighborState.getValue(LAYERS);
             if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite())) {
-                return dir.getAxis().isVertical() && neighborState.getValue(FACING) == state.getValue(FACING);
+                return neighborFacing == facing && neighborLayers == layers || // cull the sides if two copycats of the same height are next to each other
+                        // cull if both sides have a square block face
+                        (neighborFacing == facing.getOpposite() || neighborLayers == 8) && facing == dir.getOpposite() ||
+                        (neighborFacing == facing.getOpposite() || layers == 8) && neighborFacing == dir ||
+                        layers == 8 && neighborLayers == 8;
             }
         }
-
         return false;
     }
 
