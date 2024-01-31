@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.layer;
 
-import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -9,7 +9,6 @@ import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
@@ -59,17 +57,30 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pPlayer.getItemInHand(pHand).getItem().equals(CCBlocks.COPYCAT_LAYER.asStack().getItem())) {
-            if (pState.getValue(LAYERS) < 8) {
-                BlockState newState = pState;
-                newState = newState.setValue(LAYERS, pState.getValue(LAYERS) + 1);
-                pLevel.setBlock(pPos, newState, Block.UPDATE_ALL);
-                if (!pPlayer.isCreative()) pPlayer.getItemInHand(pHand).shrink(1);
-                return InteractionResult.SUCCESS;
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockState stateForPlacement = super.getStateForPlacement(context);
+        assert stateForPlacement != null;
+        BlockPos blockPos = context.getClickedPos();
+        BlockState state = context.getLevel().getBlockState(blockPos);
+        if (state.is(this)) {
+            if (state.getValue(LAYERS) < 8)
+                return state.cycle(LAYERS);
+            else {
+                Copycats.LOGGER.warn("Can't figure out where to place a layer! Please file an issue if you see this.");
+                return state;
             }
+        } else {
+            return stateForPlacement.setValue(FACING, context.getNearestLookingDirection().getOpposite());
         }
-        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean canBeReplaced(BlockState pState, BlockPlaceContext pUseContext) {
+        ItemStack itemstack = pUseContext.getItemInHand();
+        if (!itemstack.is(this.asItem())) return false;
+        if (pState.getValue(LAYERS) == 8) return false;
+        return pState.getValue(FACING) == pUseContext.getClickedFace();
     }
 
     @Override
@@ -94,13 +105,6 @@ public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpeci
             playRemoveSound(world, pos);
         }
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
-        return stateForPlacement.setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
