@@ -122,6 +122,9 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
     GeneratedRecipe COPYCAT_BYTE = copycat(CCBlocks.COPYCAT_BYTE, 8);
 
+    GeneratedRecipe COPYCAT_LAYER = copycat(CCBlocks.COPYCAT_LAYER, 8);
+
+
     String currentFolder = "";
 
     Marker enterFolder(String folder) {

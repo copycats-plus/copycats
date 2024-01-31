@@ -37,5 +37,8 @@
   "item.copycats.copycat_box.tooltip.summary": "_Copycat boards_ pre-assembled into a box for convenient placement.",
   "item.copycats.copycat_catwalk.tooltip.behaviour1": "Applies _held item_ as its _material_ if possible. _Click again_ to cycle _orientation_ or _powered_ state. Use a _Wrench_ to _reset_ the material.",
   "item.copycats.copycat_catwalk.tooltip.condition1": "When R-Clicked",
-  "item.copycats.copycat_catwalk.tooltip.summary": "_Copycat boards_ pre-assembled into a catwalk for convenient placement."
+  "item.copycats.copycat_catwalk.tooltip.summary": "_Copycat boards_ pre-assembled into a catwalk for convenient placement.",
+  "block.copycats.copycat_layer.tooltip.behaviour1": "Applies _held item_ as its _material_ if possible. _Click again_ to cycle _orientation_ or _powered_ state. Use a _Wrench_ to _reset_ the material.",
+  "block.copycats.copycat_layer.tooltip.condition1": "When R-Clicked",
+  "block.copycats.copycat_layer.tooltip.summary": "_Converts_ any _full block_ into decorative layers. Layers can be stacked till it reaches a full block in size."
 }

@@ -15,6 +15,8 @@ import com.copycatsplus.copycats.content.copycat.fence.WrappedFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateModel;
 import com.copycatsplus.copycats.content.copycat.fencegate.WrappedFenceGateBlock;
+import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
+import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
@@ -40,6 +42,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -226,6 +229,30 @@ public class CCBlocks {
                     })
                     .item()
                     .transform(customItemModel("copycat_base", "byte"))
+                    .register();
+
+    public static final BlockEntry<CopycatLayerBlock> COPYCAT_LAYER =
+            REGISTRATE.block("copycat_layer", CopycatLayerBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatLayerModel::new))
+                    .loot((lt, block) -> {
+                        LootTable.Builder builder = LootTable.lootTable();
+                        for (int i = 1; i <= 8; i++) {
+                            builder.withPool(
+                                    LootPool.lootPool()
+                                            .setRolls(ConstantValue.exactly(1.0F))
+                                            .when(ExplosionCondition.survivesExplosion())
+                                            .when(LootItemBlockStatePropertyCondition
+                                                    .hasBlockStateProperties(block)
+                                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatLayerBlock.LAYERS, i)))
+                                            .add(LootItem.lootTableItem(block).apply(SetItemCountFunction.setCount(ConstantValue.exactly(i))))
+                            );
+                        }
+                        lt.add(block, builder);
+                    })
+                    .item()
+                    .transform(customItemModel("copycat_base", "layer"))
                     .register();
 
     public static void register() {

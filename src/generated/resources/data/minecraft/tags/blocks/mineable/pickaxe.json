@@ -11,6 +11,7 @@
     "copycats:copycat_fence_gate",
     "copycats:copycat_trapdoor",
     "copycats:copycat_board",
-    "copycats:copycat_byte"
+    "copycats:copycat_byte",
+    "copycats:copycat_layer"
   ]
 }
