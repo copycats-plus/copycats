@@ -2,7 +2,6 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.simibubi.create.AllCreativeModeTabs;
-import com.tterrag.registrate.util.CreativeModeTabModifier;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
@@ -12,14 +11,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class CCCreativeTabs {
 

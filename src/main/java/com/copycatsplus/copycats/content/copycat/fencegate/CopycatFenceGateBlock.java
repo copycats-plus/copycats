@@ -3,7 +3,6 @@ package com.copycatsplus.copycats.content.copycat.fencegate;
 import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;

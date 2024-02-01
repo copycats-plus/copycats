@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.CCConfigs;
-import com.copycatsplus.copycats.datagen.CCDatagen;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -45,9 +44,8 @@ public class Copycats implements ModInitializer {
 
         REGISTRATE.register();
         CCCreativeTabs.register();
-/*        CCCreativeTabs.register(modEventBus);*/
 
         CCConfigs.register();
-/*        CCConfigs.common().register();*/
+        CCConfigs.common().register();
     }
 }

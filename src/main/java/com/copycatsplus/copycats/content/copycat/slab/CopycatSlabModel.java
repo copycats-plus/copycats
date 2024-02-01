@@ -2,7 +2,6 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.model.BakedModelHelper;
-import com.simibubi.create.foundation.model.BakedQuadHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -30,6 +29,7 @@ import java.util.function.Supplier;
 public class CopycatSlabModel extends CopycatModel {
 
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
+    private static final SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
 
     public CopycatSlabModel(BakedModel originalModel) {
         super(originalModel);
@@ -38,7 +38,6 @@ public class CopycatSlabModel extends CopycatModel {
     @Override
     protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
-        SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
         MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
@@ -77,32 +76,6 @@ public class CopycatSlabModel extends CopycatModel {
         context.meshConsumer().accept(meshBuilder.build());
     }
 
-/*    @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material,
-                                              ModelData wrappedData, RenderType renderType) {
-        Direction facing = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).isPresent() ? CopycatSlabBlock.getApparentDirection(state) : Direction.UP;
-
-        BakedModel model = getModelOf(material);
-        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-
-        List<BakedQuad> quads = new ArrayList<>();
-        boolean isDouble = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).orElse(SlabType.BOTTOM) == SlabType.DOUBLE;
-
-        // 2 pieces
-        for (boolean front : Iterate.trueAndFalse) {
-            assemblePiece(facing, templateQuads, quads, front, false, isDouble);
-        }
-
-        // 2 more pieces for double slabs
-        if (isDouble) {
-            for (boolean front : Iterate.trueAndFalse) {
-                assemblePiece(facing, templateQuads, quads, front, true, isDouble);
-            }
-        }
-
-        return quads;
-    }*/
-
     private static void assemblePiece(Direction facing, MutableQuadView quad, QuadEmitter emitter, List<BakedQuad> templateQuads, boolean front, boolean topSlab, boolean isDouble) {
         int size = templateQuads.size();
         Vec3 normal = Vec3.atLowerCornerOf(facing.getNormal());
@@ -126,12 +99,10 @@ public class CopycatSlabModel extends CopycatModel {
             if (isDouble && !topSlab && direction == facing.getOpposite())
                 continue;
 
-            SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
-
             RenderMaterial quadMaterial = quad.material();
             quad.copyTo(emitter);
             emitter.material(quadMaterial);
-            BakedModelHelper.cropAndMove(quad, spriteFinder.find(quad), bb, normalScaledN8);
+            BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), bb, normalScaledN8);
             emitter.emit();
 
         }

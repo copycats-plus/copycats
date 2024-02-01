@@ -1,6 +1,5 @@
 package com.copycatsplus.copycats.config;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.jetbrains.annotations.ApiStatus;

@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.content.copycat.slab;
 
-import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;

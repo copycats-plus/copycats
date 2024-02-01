@@ -1,13 +1,9 @@
 package com.copycatsplus.copycats.config;
 
-import com.copycatsplus.copycats.compat.CopycatsJEI;
-import com.copycatsplus.copycats.compat.Mods;
-import com.copycatsplus.copycats.mixin.featuretoggle.CreativeModeTabsAccessor;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -2,11 +2,9 @@ package com.copycatsplus.copycats.content.copycat.layer;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,9 +32,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-
-import static net.minecraft.core.Direction.*;
+import static net.minecraft.core.Direction.UP;
 
 public class CopycatLayerBlock extends WaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
 

@@ -132,9 +132,9 @@ dependencies {
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compile against the JEI API but do not include it at runtime
     modCompileOnly("mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}")
-    modCompileOnly("mezz.jei:jei-${jei_minecraft_version}-forge-api:${jei_version}")
+    modCompileOnly("mezz.jei:jei-${jei_minecraft_version}-fabric-api:${jei_version}")
     // at runtime, use the full JEI jar for fabric
-    modRuntimeOnly("mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}")
+    modRuntimeOnly("mezz.jei:jei-${jei_minecraft_version}-fabric:${jei_version}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

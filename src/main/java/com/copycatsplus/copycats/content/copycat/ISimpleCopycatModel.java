@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats.content.copycat;
 
 import com.simibubi.create.foundation.model.BakedModelHelper;
-import com.simibubi.create.foundation.model.BakedQuadHelper;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
@@ -11,9 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-
-import java.util.List;
 
 public interface ISimpleCopycatModel {
 
@@ -22,28 +18,21 @@ public interface ISimpleCopycatModel {
     /**
      * Assemble the quads of a piece of copycat material.
      *
-     * @param quad        The source model to copy from.
-     * @param emitter     The destination model to copy to.
-     * @param rotation    Number of degrees to rotate the whole operation for. Only supports multiples of 90. A value of 0 corresponds to a model facing south.
-     * @param flipY       Whether to flip the whole operation vertically.
-     * @param offset      In voxel space, the final position of the assembled piece.
-     * @param select      In voxel space, the selection on the source model to copy from.
-     * @param cull        Faces to skip rendering in the destination model. Changed automatically according to `rotation` and `flipY`.
+     * @param quad     The source model to copy from.
+     * @param emitter  The destination model to copy to.
+     * @param rotation Number of degrees to rotate the whole operation for. Only supports multiples of 90. A value of 0 corresponds to a model facing south.
+     * @param flipY    Whether to flip the whole operation vertically.
+     * @param offset   In voxel space, the final position of the assembled piece.
+     * @param select   In voxel space, the selection on the source model to copy from.
+     * @param cull     Faces to skip rendering in the destination model. Changed automatically according to `rotation` and `flipY`.
      */
     default void assemblePiece(MutableQuadView quad, QuadEmitter emitter, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull) {
         select.rotate(rotation).flipY(flipY);
         offset.rotate(rotation).flipY(flipY);
         cull.rotate(rotation).flipY(flipY);
-/*            if (cull.isCulled(quad.getDirection())) {
-                continue;
-            }*/
-/*            destQuads.add(BakedQuadHelper.cloneWithCustomGeometry(quad,
-                    BakedModelHelper.cropAndMove(quad., quad.getSprite(), select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f))));
-                                RenderMaterial quadMaterial = quad.material();
-                        quad.copyTo(emitter);
-                        emitter.material(quadMaterial);
-                        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
-                        emitter.emit();*/
+        if (cull.isCulled(quad.lightFace())) {
+            return;
+        }
         RenderMaterial quadMaterial = quad.material();
         quad.copyTo(emitter);
         emitter.material(quadMaterial);

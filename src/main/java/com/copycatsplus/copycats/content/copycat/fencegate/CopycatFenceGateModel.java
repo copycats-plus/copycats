@@ -19,9 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Supplier;
 
-import static net.minecraft.world.level.block.FenceGateBlock.IN_WALL;
-import static net.minecraft.world.level.block.FenceGateBlock.OPEN;
-import static net.minecraft.world.level.block.FenceGateBlock.FACING;
+import static net.minecraft.world.level.block.FenceGateBlock.*;
 
 public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopycatModel {
 
@@ -37,17 +35,17 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
         MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
         context.pushTransform(quad -> {
-                    if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
-                        quad.cullFace(null);
-                    } else if (occlusionData.isOccluded(quad.cullFace())) {
-                        // Add quad to mesh and do not render original quad to preserve quad render order
-                        // copyTo does not copy the material
-                        RenderMaterial quadMaterial = quad.material();
-                        quad.copyTo(emitter);
-                        emitter.material(quadMaterial);
-                        emitter.emit();
-                        return false;
-                    }
+            if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
+                quad.cullFace(null);
+            } else if (occlusionData.isOccluded(quad.cullFace())) {
+                // Add quad to mesh and do not render original quad to preserve quad render order
+                // copyTo does not copy the material
+                RenderMaterial quadMaterial = quad.material();
+                quad.copyTo(emitter);
+                emitter.material(quadMaterial);
+                emitter.emit();
+                return false;
+            }
             int offsetWall = state.getValue(IN_WALL) ? -3 : 0;
             int rot = (int) state.getValue(FACING).toYRot();
 
@@ -112,7 +110,7 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
                                 quad, emitter, rot, false,
                                 vec3(offsetX, 12 + offsetWall, 9),
                                 aabb(1, 3, 6).move(eastSide ? 15 : 0, 13, 10),
-                                cull(MutableCullFace.NORTH |  (eastSide ? MutableCullFace.WEST : MutableCullFace.EAST))
+                                cull(MutableCullFace.NORTH | (eastSide ? MutableCullFace.WEST : MutableCullFace.EAST))
                         );
                         assemblePiece(
                                 quad, emitter, rot, false,
