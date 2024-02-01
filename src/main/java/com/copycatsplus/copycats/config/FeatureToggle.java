@@ -8,10 +8,6 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.LogicalSide;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -87,7 +83,7 @@ public class FeatureToggle {
      * Refresh item visibility in all places when the list of enabled features has changed
      */
     static void refreshItemVisibility() {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
+/*        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
                 LogicalSidedProvider.WORKQUEUE.get(LogicalSide.CLIENT).submit(() -> {
                     CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();
                     if (cachedParameters != null) {
@@ -95,6 +91,6 @@ public class FeatureToggle {
                     }
                     Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
                 })
-        );
+        );*/
     }
 }

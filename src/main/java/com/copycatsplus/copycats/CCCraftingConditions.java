@@ -1,11 +1,12 @@
 package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.datagen.recipes.FeatureEnabledCondition;
-import net.minecraftforge.common.crafting.CraftingHelper;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 
 @SuppressWarnings("unused")
 public class CCCraftingConditions {
+
     public static void register() {
-        CraftingHelper.register(FeatureEnabledCondition.Serializer.INSTANCE);
+        ResourceConditions.register(FeatureEnabledCondition.NAME, object -> FeatureEnabledCondition.read(object).test());
     }
 }

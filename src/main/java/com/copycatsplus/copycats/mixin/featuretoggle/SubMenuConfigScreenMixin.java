@@ -5,11 +5,6 @@ import com.copycatsplus.copycats.config.CCConfigs;
 import com.simibubi.create.foundation.config.ui.ConfigScreen;
 import com.simibubi.create.foundation.config.ui.SubMenuConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.util.thread.EffectiveSide;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,9 +17,9 @@ public class SubMenuConfigScreenMixin {
             at = @At("TAIL")
     )
     private void saveChangesAndRefresh(CallbackInfo ci) {
-        if (ConfigScreen.modID.equals(Copycats.MODID)) {
+/*        if (ConfigScreen.modID.equals(Copycats.MODID)) {
             if (EffectiveSide.get().isServer() || FMLEnvironment.dist == Dist.CLIENT && Minecraft.getInstance().hasSingleplayerServer())
                 LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER).submit(() -> CCConfigs.common().syncToAllPlayers());
-        }
+        }*/
     }
 }

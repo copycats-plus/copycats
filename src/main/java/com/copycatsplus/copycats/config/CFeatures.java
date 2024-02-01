@@ -57,7 +57,7 @@ public class CFeatures extends SyncConfigBase {
         FeatureToggle.refreshItemVisibility();
     }
 
-    @Override
+/*    @Override
     protected void readSyncConfig(CompoundTag nbt) {
         synchronizedToggles = new HashMap<>();
         for (String key : nbt.getAllKeys()) {
@@ -70,5 +70,5 @@ public class CFeatures extends SyncConfigBase {
     @Override
     protected void writeSyncConfig(CompoundTag nbt) {
         toggles.forEach((key, value) -> nbt.putBoolean(key.toString(), value.get()));
-    }
+    }*/
 }

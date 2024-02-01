@@ -1,0 +1,31 @@
+{
+  "type": "porting_lib:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "create:copycat_step",
+          "invert": false
+        },
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_vertical_step",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:copycat_step"
+          }
+        ],
+        "result": {
+          "item": "copycats:copycat_vertical_step"
+        }
+      }
+    }
+  ]
+}

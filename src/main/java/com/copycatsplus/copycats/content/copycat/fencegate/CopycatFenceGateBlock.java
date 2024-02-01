@@ -57,11 +57,6 @@ public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public boolean collisionExtendsVertically(BlockState state, BlockGetter level, BlockPos pos, Entity collidingEntity) {
-        return true;
-    }
-
-    @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return fenceGate.getShape(pState, pLevel, pPos, pContext);
     }

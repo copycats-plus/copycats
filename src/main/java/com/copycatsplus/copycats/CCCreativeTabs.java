@@ -2,25 +2,26 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.simibubi.create.AllCreativeModeTabs;
+import com.tterrag.registrate.util.CreativeModeTabModifier;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class CCCreativeTabs {
-    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "copycats" namespace
-    private static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Copycats.MODID);
 
     public static final List<ItemProviderEntry<?>> ITEMS = List.of(
             CCBlocks.COPYCAT_BLOCK,
@@ -39,15 +40,26 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_LAYER
     );
 
-    public static final RegistryObject<CreativeModeTab> MAIN = CREATIVE_MODE_TABS.register("main", () -> CreativeModeTab.builder()
+    public static final AllCreativeModeTabs.TabInfo MAIN = register("main", () -> FabricItemGroup.builder()
             .title(Component.translatable("itemGroup.copycats.main"))
-            .withTabsBefore(AllCreativeModeTabs.PALETTES_CREATIVE_TAB.getKey())
             .icon(CCBlocks.COPYCAT_SLAB::asStack)
             .displayItems(new DisplayItemsGenerator(ITEMS))
             .build());
 
-    public static void hideItems(BuildCreativeModeTabContentsEvent event) {
-        if (Objects.equals(event.getTabKey(), MAIN.getKey()) || Objects.equals(event.getTabKey(), CreativeModeTabs.SEARCH)) {
+    private static AllCreativeModeTabs.TabInfo register(String name, Supplier<CreativeModeTab> supplier) {
+        ResourceLocation id = Copycats.asResource(name);
+        ResourceKey<CreativeModeTab> key = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id);
+        CreativeModeTab tab = supplier.get();
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, key, tab);
+        return new AllCreativeModeTabs.TabInfo(key, tab);
+    }
+
+    public static void register() {
+        // fabric: just load the class
+    }
+
+/*    public static void hideItems(CreativeModeTabModifier event) {
+        if (Objects.equals(event.getTabKey(), MAIN.key()) || Objects.equals(event.getTabKey(), CreativeModeTabs.SEARCH)) {
             Set<Item> hiddenItems = ITEMS.stream()
                     .filter(x -> !FeatureToggle.isEnabled(x.getId()))
                     .map(ItemProviderEntry::asItem)
@@ -58,15 +70,9 @@ public class CCCreativeTabs {
                     iterator.remove();
             }
         }
-    }
+    }*/
 
-    public static void register(IEventBus modEventBus) {
-        CREATIVE_MODE_TABS.register(modEventBus);
-        modEventBus.addListener(CCCreativeTabs::hideItems);
-    }
-
-    private record DisplayItemsGenerator(
-            List<ItemProviderEntry<?>> items) implements CreativeModeTab.DisplayItemsGenerator {
+    private record DisplayItemsGenerator(List<ItemProviderEntry<?>> items) implements CreativeModeTab.DisplayItemsGenerator {
         @Override
         public void accept(@NotNull CreativeModeTab.ItemDisplayParameters params, @NotNull CreativeModeTab.Output output) {
             for (ItemProviderEntry<?> item : items) {

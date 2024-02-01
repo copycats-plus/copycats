@@ -13,22 +13,22 @@ public class CCommon extends SyncConfigBase {
 
     public final CFeatures toggle = nested(0, CFeatures::new, Comments.toggle);
 
-    public void register() {
-        registerAsSyncRoot(
+   public void register() {
+ /*        registerAsSyncRoot(
                 VERSION,
                 SyncConfig.class,
                 SyncConfig::encode,
                 SyncConfig::new,
                 SyncConfig::handle,
                 SyncConfig::new
-        );
+        );*/
     }
 
     private static class Comments {
         static String toggle = "Enable/disable features. Values on server override clients";
     }
 
-    private class SyncConfig extends SyncConfigBase.SyncConfig {
+/*    private class SyncConfig extends SyncConfigBase.SyncConfig {
 
         protected SyncConfig(FriendlyByteBuf buf) {
             this(decode(buf));
@@ -42,5 +42,5 @@ public class CCommon extends SyncConfigBase {
         protected SyncConfigBase configInstance() {
             return CCommon.this;
         }
-    }
+    }*/
 }

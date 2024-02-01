@@ -75,11 +75,6 @@ public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity) {
-        return trapdoor.isLadder(state, level, pos, entity);
-    }
-
-    @Override
     public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
         return trapdoor.rotate(pState, pRotation);
     }

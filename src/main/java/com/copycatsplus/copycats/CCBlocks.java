@@ -35,6 +35,7 @@ import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -47,7 +48,6 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.common.Tags;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 

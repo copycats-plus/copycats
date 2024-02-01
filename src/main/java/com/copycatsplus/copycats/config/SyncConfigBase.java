@@ -2,18 +2,10 @@ package com.copycatsplus.copycats.config;
 
 import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.foundation.config.ConfigBase;
+import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent.Context;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -23,6 +15,7 @@ import java.util.function.Supplier;
  * Base class for all configs that require custom synchronization from server to clients.
  */
 public abstract class SyncConfigBase extends ConfigBase {
+/*
 
     private SimpleChannel syncChannel;
     private Function<CompoundTag, ? extends SyncConfig> messageSupplier;
@@ -41,11 +34,13 @@ public abstract class SyncConfigBase extends ConfigBase {
         return nbt;
     }
 
-    /**
+    */
+/**
      * Serialize all configs into the provided `nbt` tag to be synced to clients.
      *
      * @param nbt Accepts any value.
-     */
+     *//*
+
     protected void writeSyncConfig(CompoundTag nbt) {
     }
 
@@ -60,22 +55,26 @@ public abstract class SyncConfigBase extends ConfigBase {
         readSyncConfig(config);
     }
 
-    /**
+    */
+/**
      * Deserialize all configs from the provided `nbt` tag to a custom data storage.
      * The implementing class is responsible for data storage. No storage/config overwrite mechanism is provided here.
      *
      * @param nbt The configs sent from server.
-     */
+     *//*
+
     protected void readSyncConfig(CompoundTag nbt) {
     }
 
-    /**
+    */
+/**
      * Sets up all aspects of network communication. The implementing class is expected to expose a parameterless
      * register function for consumers, and to call this function inside the register function with all parameters
      * provided by the implementing class.
      * <p>
      * Most parameters should come from an inherited version of {@link SyncConfig}.
-     */
+     *//*
+
     public <T extends SyncConfig> void registerAsSyncRoot(
             String configVersion,
             Class<T> messageType,
@@ -132,10 +131,12 @@ public abstract class SyncConfigBase extends ConfigBase {
         syncChannel.send(PacketDistributor.PLAYER.with(() -> player), this.messageSupplier.apply(getSyncConfig()));
     }
 
-    /**
+    */
+/**
      * A helper class to handle network messages. All children of {@link SyncConfigBase} should have a corresponding
      * child of {@link SyncConfig}, with its methods provided to {@link SyncConfigBase#registerAsSyncRoot}.
      */
+
     public abstract static class SyncConfig {
 
         private final CompoundTag nbt;
@@ -154,14 +155,15 @@ public abstract class SyncConfigBase extends ConfigBase {
             return buf.readAnySizeNbt();
         }
 
-        void handle(Supplier<Context> context) {
-            Context ctx = context.get();
+        void handle(Supplier<SimplePacketBase.Context> context) {
+/*            Context ctx = context.get();
             ctx.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 configInstance().setSyncConfig(nbt);
                 Copycats.LOGGER.debug("Sync Config: Received and applied server config " + nbt.toString());
             }));
-            ctx.setPacketHandled(true);
+            ctx.setPacketHandled(true);*/
         }
     }
+
 
 }

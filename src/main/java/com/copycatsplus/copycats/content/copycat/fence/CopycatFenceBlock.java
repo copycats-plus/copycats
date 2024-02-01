@@ -56,11 +56,6 @@ public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public boolean collisionExtendsVertically(BlockState state, BlockGetter level, BlockPos pos, Entity collidingEntity) {
-        return true;
-    }
-
-    @Override
     public boolean propagatesSkylightDown(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos) {
         return fence.propagatesSkylightDown(pState, pLevel, pPos);
     }

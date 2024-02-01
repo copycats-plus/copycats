@@ -1,0 +1,31 @@
+{
+  "type": "porting_lib:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_slab",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "p": {
+            "item": "create:copycat_panel"
+          }
+        },
+        "pattern": [
+          "p",
+          "p"
+        ],
+        "result": {
+          "item": "copycats:copycat_slab"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

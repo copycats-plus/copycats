@@ -7,31 +7,25 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
+import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public class CCDatagen {
+public class CCDatagen implements DataGeneratorEntrypoint {
 
     private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
 
-    public static void gatherData(GatherDataEvent event) {
+    @Override
+    public void onInitializeDataGenerator(FabricDataGenerator generator) {
         addExtraRegistrateData();
+        ExistingFileHelper helper = ExistingFileHelper.withResourcesFromArg();
+        FabricDataGenerator.Pack pack = generator.createPack();
+        Copycats.getRegistrate().setupDatagen(pack, helper);
 
-        DataGenerator generator = event.getGenerator();
-        PackOutput output = generator.getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-
-        if (event.includeServer()) {
-            generator.addProvider(true, new CCStandardRecipes(output));
-        }
+        generator.createPack().addProvider(CCStandardRecipes::new);
     }
 
     private static void addExtraRegistrateData() {
