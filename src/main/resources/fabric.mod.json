@@ -22,6 +22,8 @@
   ],
   "depends": {
     "fabricloader": ">=0.15.3",
-    "minecraft": ">=1.20.1"
+    "minecraft": ">=1.20.1",
+    "create": "${create_version_range}",
+    "forgeconfigapiport": "${forge_config_range}"
   }
 }

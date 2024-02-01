@@ -47,7 +47,6 @@ public class Copycats implements ModInitializer {
         CCCreativeTabs.register();
 
         CCConfigs.register();
-        SyncConfigBase.init();
         CCConfigs.common().register();
     }
 }

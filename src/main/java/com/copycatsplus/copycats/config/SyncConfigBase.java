@@ -26,10 +26,6 @@ public abstract class SyncConfigBase extends ConfigBase {
     public static SimpleChannel syncChannel;
     private Function<CompoundTag, ? extends SyncConfig> messageSupplier;
 
-    public static void init() {
-
-    }
-
     public final CompoundTag getSyncConfig() {
         CompoundTag nbt = new CompoundTag();
         writeSyncConfig(nbt);
@@ -87,8 +83,16 @@ public abstract class SyncConfigBase extends ConfigBase {
     public <T extends SyncConfig> void registerAsSyncRoot(String configVersion, Class<T> messageType, Function<FriendlyByteBuf, T> decoder, Function<CompoundTag, T> messageSupplier) {
         syncChannel = new SimpleChannel(Copycats.asResource("config_" + getName()));
         syncChannel.registerS2CPacket(messageType, 0, decoder);
-        this.messageSupplier = messageSupplier;
+        setMessageSupplier(messageSupplier);
         ServerPlayConnectionEvents.JOIN.register((listener, sender, server) -> syncToPlayer(listener.getPlayer()));
+    }
+
+    private <T extends SyncConfig> void setMessageSupplier(Function<CompoundTag, T> messageSupplier) {
+        this.messageSupplier = messageSupplier;
+    }
+
+    private Function<CompoundTag, ? extends SyncConfig> messageSupplier() {
+        return messageSupplier;
     }
 
     @Override
@@ -104,7 +108,7 @@ public abstract class SyncConfigBase extends ConfigBase {
     }
 
     public void syncToAllPlayers() {
-        if (this.syncChannel == null) {
+        if (syncChannel == null) {
             return; // not sync root
         }
         if (ServerLifecycleHooks.getCurrentServer() == null) {
@@ -112,13 +116,13 @@ public abstract class SyncConfigBase extends ConfigBase {
             return;
         }
         Copycats.LOGGER.debug("Sync Config: Sending server config to all players on reload");
-        syncChannel.sendToClients(this.messageSupplier.apply(getSyncConfig()), ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers());
+        syncChannel.sendToClients(messageSupplier().apply(getSyncConfig()), ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers());
     }
 
     private void syncToPlayer(ServerPlayer player) {
         if (player == null) return;
         Copycats.LOGGER.debug("Sync Config: Sending server config to " + player.getScoreboardName());
-        syncChannel.sendToClient(this.messageSupplier.apply(getSyncConfig()), player);
+        syncChannel.sendToClient(messageSupplier().apply(getSyncConfig()), player);
     }
 
     /**

@@ -32,7 +32,7 @@ public class CCommon extends SyncConfigBase {
             super(buf);
         }
 
-        protected SyncConfig(CompoundTag nbt) {
+        public SyncConfig(CompoundTag nbt) {
             super(nbt);
         }
 

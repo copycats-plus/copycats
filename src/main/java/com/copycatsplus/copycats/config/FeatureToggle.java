@@ -1,9 +1,16 @@
 package com.copycatsplus.copycats.config;
 
+import com.copycatsplus.copycats.compat.CopycatsJEI;
+import com.copycatsplus.copycats.compat.Mods;
+import com.copycatsplus.copycats.mixin.featuretoggle.CreativeModeTabsAccessor;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import io.github.fabricators_of_create.porting_lib.util.LogicalSidedProvider;
+import net.fabricmc.api.EnvType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,14 +86,14 @@ public class FeatureToggle {
      * Refresh item visibility in all places when the list of enabled features has changed
      */
     static void refreshItemVisibility() {
-/*        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                LogicalSidedProvider.WORKQUEUE.get(LogicalSide.CLIENT).submit(() -> {
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () ->
+                LogicalSidedProvider.WORKQUEUE.get(EnvType.CLIENT).submit(() -> {
                     CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();
                     if (cachedParameters != null) {
                         CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);
                     }
                     Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
                 })
-        );*/
+        );
     }
 }

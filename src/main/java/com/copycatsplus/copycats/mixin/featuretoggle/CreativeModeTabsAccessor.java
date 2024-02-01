@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(CreativeModeTabs.class)
 public interface CreativeModeTabsAccessor {
     @Invoker
-    static void callBuildAllTabContents(CreativeModeTab.ItemDisplayParameters pParameters) {
+    static void callBuildAllTabContents(CreativeModeTab.ItemDisplayParameters displayParameters) {
         throw new UnsupportedOperationException();
     }
 

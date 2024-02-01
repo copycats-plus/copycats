@@ -56,8 +56,9 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 sourceSets {
     main {
         resources {
-            srcDir("src/generated/resources")
-            exclude("src/generated/resources/.cache")
+            srcDirs += [
+                    'src/main/generated'
+            ]
         }
     }
 }
@@ -158,6 +159,7 @@ tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             minecraft_version      : minecraft_version,
             create_version_range   : create_version_range,
+            forge_config_range     : forge_config_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
@@ -188,9 +190,6 @@ tasks.named('jar', Jar).configure {
                 "MixinConfigs"            : "copycats.mixins.json"
         ])
     }
-
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
 }
 
 tasks.jar.configure {
