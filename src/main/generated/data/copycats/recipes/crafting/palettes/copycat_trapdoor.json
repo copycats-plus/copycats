@@ -1,0 +1,22 @@
+{
+  "type": "porting_lib:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_trapdoor",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "count": 4,
+        "ingredient": {
+          "tag": "c:ingots/zinc"
+        },
+        "result": "copycats:copycat_trapdoor"
+      }
+    }
+  ]
+}
