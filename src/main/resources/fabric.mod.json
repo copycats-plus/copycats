@@ -14,7 +14,8 @@
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": ["com.copycatsplus.copycats.datagen.CCDatagen"],
-    "main": ["com.copycatsplus.copycats.Copycats"]
+    "main": ["com.copycatsplus.copycats.Copycats"],
+    "client": ["com.copycatsplus.copycats.CopycatsClient"]
   },
   "mixins": [
     "copycats.mixins.json"

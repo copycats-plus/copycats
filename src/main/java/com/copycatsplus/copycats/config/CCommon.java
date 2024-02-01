@@ -17,6 +17,7 @@ public class CCommon extends SyncConfigBase {
         registerAsSyncRoot(
                 VERSION,
                 SyncConfig.class,
+                SyncConfig::new,
                 SyncConfig::new
         );
     }
@@ -25,7 +26,7 @@ public class CCommon extends SyncConfigBase {
         static String toggle = "Enable/disable features. Values on server override clients";
     }
 
-    private class SyncConfig extends SyncConfigBase.SyncConfig {
+    public class SyncConfig extends SyncConfigBase.SyncConfig {
 
         public SyncConfig(FriendlyByteBuf buf) {
             super(buf);
