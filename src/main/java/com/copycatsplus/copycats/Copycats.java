@@ -34,17 +34,17 @@ public class Copycats implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        CCCreativeTabs.register();
 
         // Register the commonSetup method for mod loading
         CCCraftingConditions.register();
 
-        REGISTRATE.useCreativeTab(CCCreativeTabs.MAIN.key());
+        REGISTRATE.creativeModeTab(() -> CCCreativeTabs.MAIN);
         CCBlocks.register();
         CCItems.register();
         CCBlockEntityTypes.register();
 
         REGISTRATE.register();
-        CCCreativeTabs.register();
 
         CCConfigs.register();
         CCConfigs.common().register();

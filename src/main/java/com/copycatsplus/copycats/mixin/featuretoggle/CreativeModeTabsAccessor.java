@@ -1,14 +1,13 @@
 package com.copycatsplus.copycats.mixin.featuretoggle;
 
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(CreativeModeTabs.class)
+@Mixin(CreativeModeTab.class)
 public interface CreativeModeTabsAccessor {
-    @Invoker
+
+    //Doesnt exist in 1.19.2
+/*    @Invoker
     static void callBuildAllTabContents(CreativeModeTab.ItemDisplayParameters displayParameters) {
         throw new UnsupportedOperationException();
     }
@@ -16,5 +15,5 @@ public interface CreativeModeTabsAccessor {
     @Accessor
     static CreativeModeTab.ItemDisplayParameters getCACHED_PARAMETERS() {
         throw new UnsupportedOperationException();
-    }
+    }*/
 }

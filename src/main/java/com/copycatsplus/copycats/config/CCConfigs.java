@@ -2,8 +2,8 @@ package com.copycatsplus.copycats.config;
 
 import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.foundation.config.ConfigBase;
-import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
-import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
+import net.minecraftforge.api.ModLoadingContext;
+import net.minecraftforge.api.fml.event.config.ModConfigEvents;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
@@ -55,7 +55,7 @@ public class CCConfigs {
         common = register(CCommon::new, ModConfig.Type.COMMON);
 
         for (Map.Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet())
-            ForgeConfigRegistry.INSTANCE.register(Copycats.MODID, pair.getKey(), pair.getValue().specification);
+            ModLoadingContext.registerConfig(Copycats.MODID, pair.getKey(), pair.getValue().specification);
 
         ModConfigEvents.loading(Copycats.MODID).register(CCConfigs::onLoad);
         ModConfigEvents.reloading(Copycats.MODID).register(CCConfigs::onReload);

@@ -35,12 +35,10 @@ import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -54,6 +52,10 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 @SuppressWarnings("removal")
 public class CCBlocks {
     private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
+
+    static {
+        REGISTRATE.creativeModeTab(() -> CCCreativeTabs.MAIN);
+    }
 
     public static final BlockEntry<CopycatSlabBlock> COPYCAT_SLAB =
             REGISTRATE.block("copycat_slab", CopycatSlabBlock::new)
@@ -114,7 +116,7 @@ public class CCBlocks {
     public static final BlockEntry<CopycatFenceBlock> COPYCAT_FENCE =
             REGISTRATE.block("copycat_fence", CopycatFenceBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .tag(BlockTags.FENCES, Tags.Blocks.FENCES)
+                    .tag(BlockTags.FENCES)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatFenceModel::new))
                     .item()
@@ -125,14 +127,14 @@ public class CCBlocks {
             REGISTRATE.block("wrapped_copycat_fence", WrappedFenceBlock::new)
                     .initialProperties(() -> Blocks.OAK_FENCE)
                     .onRegister(b -> CopycatFenceBlock.fence = b)
-                    .tag(BlockTags.FENCES, Tags.Blocks.FENCES)
+                    .tag(BlockTags.FENCES)
                     .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_fence", "block/barrier")))
                     .register();
 
     public static final BlockEntry<CopycatWallBlock> COPYCAT_WALL =
             REGISTRATE.block("copycat_wall", CopycatWallBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.forceSolidOn())
+                    .properties(p -> p.noOcclusion())
                     .tag(BlockTags.WALLS)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatWallModel::new))
@@ -151,8 +153,8 @@ public class CCBlocks {
     public static final BlockEntry<CopycatFenceGateBlock> COPYCAT_FENCE_GATE =
             REGISTRATE.block("copycat_fence_gate", CopycatFenceGateBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.forceSolidOn())
-                    .tag(BlockTags.FENCE_GATES, Tags.Blocks.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
+                    .properties(p -> p.noOcclusion())
+                    .tag(BlockTags.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatFenceGateModel::new))
                     .item()
@@ -160,10 +162,10 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedFenceGateBlock> WRAPPED_COPYCAT_FENCE_GATE =
-            REGISTRATE.block("wrapped_copycat_fence_gate", p -> new WrappedFenceGateBlock(p, WoodType.OAK))
+            REGISTRATE.block("wrapped_copycat_fence_gate", p -> new WrappedFenceGateBlock(p))
                     .initialProperties(() -> Blocks.OAK_FENCE_GATE)
                     .onRegister(b -> CopycatFenceGateBlock.fenceGate = b)
-                    .tag(BlockTags.FENCE_GATES, Tags.Blocks.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
+                    .tag(BlockTags.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
                     .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_fence_gate", "block/barrier")))
                     .register();
 
@@ -179,7 +181,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedTrapdoorBlock> WRAPPED_COPYCAT_TRAPDOOR =
-            REGISTRATE.block("wrapped_copycat_trapdoor", p -> new WrappedTrapdoorBlock(p, BlockSetType.OAK))
+            REGISTRATE.block("wrapped_copycat_trapdoor", p -> new WrappedTrapdoorBlock(p))
                     .initialProperties(() -> Blocks.OAK_TRAPDOOR)
                     .onRegister(b -> CopycatTrapdoorBlock.trapdoor = b)
                     .tag(BlockTags.TRAPDOORS)

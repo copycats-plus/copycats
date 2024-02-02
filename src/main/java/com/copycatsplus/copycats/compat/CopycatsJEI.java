@@ -9,6 +9,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,14 +40,12 @@ public class CopycatsJEI implements IModPlugin {
             MANAGER.removeIngredientsAtRuntime(
                     VanillaTypes.ITEM_STACK,
                     CCCreativeTabs.ITEMS.stream()
-                            .map(ItemProviderEntry::asStack)
                             .collect(Collectors.toList())
             );
             MANAGER.addIngredientsAtRuntime(
                     VanillaTypes.ITEM_STACK,
                     CCCreativeTabs.ITEMS.stream()
-                            .filter(x -> FeatureToggle.isEnabled(x.getId()))
-                            .map(ItemProviderEntry::asStack)
+                            .filter(x -> FeatureToggle.isEnabled(Registry.ITEM.getKey(x.getItem())))
                             .collect(Collectors.toList())
             );
         }

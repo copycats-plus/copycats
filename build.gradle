@@ -30,6 +30,17 @@ loom {
 
             runDir "build/datagen"
         }
+        server {
+            runDir "run/server"
+        }
+
+        gametestServer {
+            server()
+            name "Headlesss GameTests"
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+            runDir "run/gametest"
+        }
     }
 }
 
@@ -119,15 +130,27 @@ dependencies {
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5"))
     implementation("io.github.llamalad7:mixinextras-forge:0.3.5")
 
-    modImplementation("com.tterrag.registrate_fabric:Registrate:${registrate_version}")
-    modImplementation("com.jozufozu.flywheel:flywheel-fabric-${flywheel_minecraft_version}:${flywheel_version}")
-    modCompileOnly("com.simibubi.create:create-fabric-${create_minecraft_version}:${create_version}") { transitive = false }
-    modRuntimeOnly("com.simibubi.create:create-fabric-${create_minecraft_version}:${create_version}")
-    for (String module in port_lib_modules.split(",")) {
-        modImplementation("io.github.fabricators_of_create.Porting-Lib:$module:$port_lib_version")
+    modImplementation("com.tterrag.registrate_fabric:Registrate:${registrate_version}") {
+        exclude group: "io.github.fabricators_of_create"
     }
+    modImplementation("com.jozufozu.flywheel:flywheel-fabric-${flywheel_minecraft_version}:${flywheel_version}")
+    modCompileOnly("com.simibubi.create:create-fabric-${create_minecraft_version}:${create_version}") {
+        transitive = true
+        exclude group: "maven.modrinth"
+    }
+    modRuntimeOnly("com.simibubi.create:create-fabric-${create_minecraft_version}:${create_version}") {
+        exclude group: "maven.modrinth"
+    }
+/*    for (String module in port_lib_modules.split(",")) {
+        modImplementation("io.github.fabricators_of_create.Porting-Lib:$module:$port_lib_version")
+    }*/
 
-    modImplementation("curse.maven:forge-config-api-port-fabric-547434:$config_api_id")
+    modApi("com.electronwill.night-config:core:$night_config_version")
+    modApi("com.electronwill.night-config:toml:$night_config_version")
+    modApi("curse.maven:forge-config-api-port-fabric-547434:$config_api_id")
+
+    modImplementation("com.github.AlphaMode:fakeconfig:master-SNAPSHOT") { exclude(group: "net.fabricmc.fabric-api") }
+    modImplementation("com.github.AlphaMode:fakeconfigtoml:master-SNAPSHOT") { exclude(group: "net.fabricmc.fabric-api") }
 
     // Example mod dependency with JEI - using the mod prefix ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

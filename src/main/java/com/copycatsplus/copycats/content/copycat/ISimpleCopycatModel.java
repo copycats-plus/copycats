@@ -36,7 +36,7 @@ public interface ISimpleCopycatModel {
         RenderMaterial quadMaterial = quad.material();
         quad.copyTo(emitter);
         emitter.material(quadMaterial);
-        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
+        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter, 0), select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
         emitter.emit();
     }
 

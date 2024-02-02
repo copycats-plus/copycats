@@ -7,9 +7,9 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
-import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
@@ -22,10 +22,9 @@ public class CCDatagen implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         addExtraRegistrateData();
         ExistingFileHelper helper = ExistingFileHelper.withResourcesFromArg();
-        FabricDataGenerator.Pack pack = generator.createPack();
-        Copycats.getRegistrate().setupDatagen(pack, helper);
+        Copycats.getRegistrate().setupDatagen(generator, helper);
 
-        generator.createPack().addProvider(CCStandardRecipes::new);
+        generator.addProvider(CCStandardRecipes::new);
     }
 
     private static void addExtraRegistrateData() {

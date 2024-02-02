@@ -14,12 +14,14 @@ public class CCItems {
     public static final ItemEntry<CopycatBoxItem> COPYCAT_BOX =
             REGISTRATE.item("copycat_box", CopycatBoxItem::new)
                     .model(AssetLookup.customBlockItemModel("copycat_base", "box"))
+                    .tab(() -> CCCreativeTabs.MAIN)
                     .transform(FeatureToggle.registerDependent(CCBlocks.COPYCAT_BOARD))
                     .register();
 
     public static final ItemEntry<CopycatCatwalkItem> COPYCAT_CATWALK =
             REGISTRATE.item("copycat_catwalk", CopycatCatwalkItem::new)
                     .model(AssetLookup.customBlockItemModel("copycat_base", "catwalk"))
+                    .tab(() -> CCCreativeTabs.MAIN)
                     .transform(FeatureToggle.registerDependent(CCBlocks.COPYCAT_BOARD))
                     .register();
 

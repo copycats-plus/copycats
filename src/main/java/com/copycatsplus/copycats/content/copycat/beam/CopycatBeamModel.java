@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.Minecraft;
@@ -95,7 +96,7 @@ public class CopycatBeamModel extends CopycatModel {
                         RenderMaterial quadMaterial = quad.material();
                         quad.copyTo(emitter);
                         emitter.material(quadMaterial);
-                        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), bb1, offset);
+                        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter, 0), bb1, offset);
                         emitter.emit();
                     }
 
@@ -103,7 +104,7 @@ public class CopycatBeamModel extends CopycatModel {
             }
             return false;
         });
-        model.emitBlockQuads(blockView, material, pos, randomSupplier, context);
+        ((FabricBakedModel) model).emitBlockQuads(blockView, material, pos, randomSupplier, context);
         context.popTransform();
         context.meshConsumer().accept(meshBuilder.build());
     }

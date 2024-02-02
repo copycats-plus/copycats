@@ -103,7 +103,7 @@ public class CopycatSlabBlock extends WaterloggedCopycatBlock implements ICopyca
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = Direction.fromNormal(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             boolean correctAxis = switch (axis) {
                 case X -> diff.getX() == 0;
@@ -311,7 +311,8 @@ public class CopycatSlabBlock extends WaterloggedCopycatBlock implements ICopyca
             List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
                     state.getValue(AXIS),
                     dir -> world.getBlockState(pos.relative(dir))
-                            .canBeReplaced());
+                            .canBeReplaced(new BlockPlaceContext(world, player, player.getUsedItemHand(), player.getItemInHand(player.getUsedItemHand()),  ray))
+            );
 
             if (directions.isEmpty())
                 return PlacementOffset.fail();
