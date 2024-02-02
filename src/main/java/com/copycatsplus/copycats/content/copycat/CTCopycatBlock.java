@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.content.copycat;
 
-import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
+import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -11,8 +11,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public abstract class CTWaterloggedCopycatBlock extends WaterloggedCopycatBlock implements ICTCopycatBlock {
-    public CTWaterloggedCopycatBlock(Properties pProperties) {
+public abstract class CTCopycatBlock extends CopycatBlock implements ICTCopycatBlock {
+    public CTCopycatBlock(Properties pProperties) {
         super(pProperties);
     }
 
