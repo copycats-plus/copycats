@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.block;
 
+import com.copycatsplus.copycats.content.copycat.CTCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -14,7 +14,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class CopycatBlockBlock extends CopycatBlock implements ICopycatWithWrappedBlock {
+public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWrappedBlock {
 
     public CopycatBlockBlock(Properties properties) {
         super(properties);
