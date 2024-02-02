@@ -9,6 +9,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class CCShapes {
     public static final VoxelShaper CASING_1PX = shape(0, 15, 0, 16, 16, 16).forDirectional();
     public static final VoxelShaper CASING_8PX = shape(0, 0, 0, 16, 8, 16).forAxis();
+    public static final VoxelShaper CASING_3PX = shape(0, 0, 0, 8, 3, 16).forAxis();
     public static final VoxelShaper CASING_8PX_TOP = shape(0, 8, 0, 16, 16, 16).forAxis();
     public static final VoxelShaper CASING_8PX_CENTERED = shape(4, 0, 4, 12, 16, 12).forAxis();
     public static final VoxelShaper CASING_8PX_VERTICAL = shape(0, 0, 0, 8, 16, 8).forHorizontal(Direction.NORTH);
