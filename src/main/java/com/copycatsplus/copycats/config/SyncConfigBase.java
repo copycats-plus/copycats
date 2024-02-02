@@ -13,9 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Base class for all configs that require custom synchronization from server to clients.
@@ -23,7 +21,7 @@ import java.util.function.Supplier;
 public abstract class SyncConfigBase extends ConfigBase {
 
 
-    public static SimpleChannel syncChannel;
+    public SimpleChannel syncChannel;
     private Function<CompoundTag, ? extends SyncConfig> messageSupplier;
 
     public final CompoundTag getSyncConfig() {

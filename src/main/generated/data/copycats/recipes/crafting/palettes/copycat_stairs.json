@@ -13,7 +13,7 @@
         "type": "minecraft:stonecutting",
         "count": 1,
         "ingredient": {
-          "tag": "c:ingots/zinc"
+          "item": "create:zinc_ingot"
         },
         "result": "copycats:copycat_stairs"
       }

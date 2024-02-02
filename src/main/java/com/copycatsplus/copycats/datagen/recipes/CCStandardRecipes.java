@@ -167,7 +167,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         return create(result)
                 .unlockedBy(AllItems.ZINC_INGOT::get)
                 .requiresResultFeature()
-                .viaStonecutting(DataIngredient.tag(AllTags.forgeItemTag("ingots/zinc")), resultCount);
+                .viaStonecutting(DataIngredient.items(AllItems.ZINC_INGOT.get()), resultCount);
     }
 
     protected static class Marker {

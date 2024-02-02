@@ -1,12 +1,12 @@
 package com.copycatsplus.copycats;
 
-import com.copycatsplus.copycats.config.SyncConfigBase;
+import com.copycatsplus.copycats.config.CCConfigs;
 import net.fabricmc.api.ClientModInitializer;
 
 public class CopycatsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        SyncConfigBase.syncChannel.initClientListener();
+        CCConfigs.common().syncChannel.initClientListener();
     }
 }
