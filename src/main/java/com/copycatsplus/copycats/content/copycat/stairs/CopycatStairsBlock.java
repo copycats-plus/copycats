@@ -23,9 +23,9 @@ import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
 
 @SuppressWarnings("deprecation")
-public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock {
+public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedStairsBlock> {
 
-    public static StairBlock stairs;
+    public static WrappedStairsBlock stairs;
 
     public CopycatStairsBlock(Properties properties) {
         super(properties);
@@ -37,7 +37,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedStairsBlock getWrappedBlock() {
         return stairs;
     }
 

@@ -34,26 +34,26 @@ public class CopycatButtonModel extends CopycatModel implements ISimpleCopycatMo
         List<BakedQuad> quads = new ArrayList<>();
         switch (face) {
             case WALL -> {
-                    assemblePiece(templateQuads, quads, rot, false,
-                            vec3(5, 6, (pressed ? 0 : 1)),
-                            aabb(3, 2, 1).move(1, 1, 1),
-                            cull(0)
-                    );
-                    assemblePiece(templateQuads, quads, rot, false,
-                            vec3(5, 8, (pressed ? 0 : 1)),
-                            aabb(3, 2, 1).move(1, 13, 1),
-                            cull(0)
-                    );
-                    assemblePiece(templateQuads, quads, rot, false,
-                            vec3(8, 8, (pressed ? 0 : 1)),
-                            aabb(3, 2, 1).move(12, 13, 1),
-                            cull(0)
-                    );
-                    assemblePiece(templateQuads, quads, rot, false,
-                            vec3(8, 6, (pressed ? 0 : 1)),
-                            aabb(3, 2, 1).move(12, 1, 1),
-                            cull(0)
-                    );
+                assemblePiece(templateQuads, quads, rot, false,
+                        vec3(5, 6, (pressed ? 0 : 1)),
+                        aabb(3, 2, 1).move(1, 1, 1),
+                        cull(0)
+                );
+                assemblePiece(templateQuads, quads, rot, false,
+                        vec3(5, 8, (pressed ? 0 : 1)),
+                        aabb(3, 2, 1).move(1, 13, 1),
+                        cull(0)
+                );
+                assemblePiece(templateQuads, quads, rot, false,
+                        vec3(8, 8, (pressed ? 0 : 1)),
+                        aabb(3, 2, 1).move(12, 13, 1),
+                        cull(0)
+                );
+                assemblePiece(templateQuads, quads, rot, false,
+                        vec3(8, 6, (pressed ? 0 : 1)),
+                        aabb(3, 2, 1).move(12, 1, 1),
+                        cull(0)
+                );
                 if (!pressed) {
                     assemblePiece(templateQuads, quads, rot, false,
                             vec3(5, 6, 0),
@@ -77,49 +77,49 @@ public class CopycatButtonModel extends CopycatModel implements ISimpleCopycatMo
                     );
                 }
             }
-            case FLOOR -> {
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(5, 0, 6),
-                        aabb(3, (pressed ? 1 : 2), 2),
+            case CEILING, FLOOR -> {
+                assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                        vec3(5, (pressed ? 0 : 1), 6),
+                        aabb(3, 1, 2).move(1, 0, 1),
                         cull(0)
                 );
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(5, 0, 8),
-                        aabb(3, (pressed ? 1 : 2), 2),
+                assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                        vec3(5, (pressed ? 0 : 1), 8),
+                        aabb(3, 1, 2).move(1, 0, 13),
                         cull(0)
                 );
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(8, 0, 6),
-                        aabb(3, (pressed ? 1 : 2), 2),
+                assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                        vec3(8, (pressed ? 0 : 1), 6),
+                        aabb(3, 1, 2).move(12, 0, 1),
                         cull(0)
                 );
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(8, 0, 8),
-                        aabb(3, (pressed ? 1 : 2), 2),
+                assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                        vec3(8, (pressed ? 0 : 1), 8),
+                        aabb(3, 1, 2).move(12, 0, 13),
                         cull(0)
                 );
-            }
-            case CEILING -> {
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(5, 16, 6),
-                        aabb(3, (pressed ? -1 : -2), 2).move(0, 2, 0),
-                        cull(0)
-                );
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(5, 16, 8),
-                        aabb(3, (pressed ? -1 : -2), 2).move(0, 2, 0),
-                        cull(0)
-                );
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(8, 16, 6),
-                        aabb(3, (pressed ? -1 : -2), 2).move(0, 2, 0),
-                        cull(0)
-                );
-                assemblePiece(templateQuads, quads, rot, false,
-                        vec3(8, 16, 8),
-                        aabb(3, (pressed ? -1 : -2), 2).move(0, 2, 0),
-                        cull(0)
-                );
+                if (!pressed) {
+                    assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                            vec3(5, 0, 6),
+                            aabb(3, 1, 2).move(0, 0, 0),
+                            cull(UP | DOWN)
+                    );
+                    assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                            vec3(5, 0, 8),
+                            aabb(3, 1, 2).move(0, 0, 14),
+                            cull(UP | DOWN)
+                    );
+                    assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                            vec3(8, 0, 6),
+                            aabb(3, 1, 2).move(13, 0, 0),
+                            cull(UP | DOWN)
+                    );
+                    assemblePiece(templateQuads, quads, rot, (face != AttachFace.FLOOR),
+                            vec3(8, 0, 8),
+                            aabb(3, 1, 2).move(13, 0, 14),
+                            cull(UP | DOWN)
+                    );
+                }
             }
         }
         return quads;

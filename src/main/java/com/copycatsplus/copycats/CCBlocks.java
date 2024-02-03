@@ -7,9 +7,7 @@ import com.copycatsplus.copycats.content.copycat.block.CopycatBlockBlock;
 import com.copycatsplus.copycats.content.copycat.block.CopycatBlockModel;
 import com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock;
 import com.copycatsplus.copycats.content.copycat.board.CopycatBoardModel;
-import com.copycatsplus.copycats.content.copycat.button.CopycatButtonBlock;
-import com.copycatsplus.copycats.content.copycat.button.CopycatButtonModel;
-import com.copycatsplus.copycats.content.copycat.button.WrappedButtonBlock;
+import com.copycatsplus.copycats.content.copycat.button.*;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteModel;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -273,26 +271,48 @@ public class CCBlocks {
                     .transform(customItemModel("copycat_base", "half"))
                     .register();
 
-    public static final BlockEntry<CopycatButtonBlock> COPYCAT_BUTTON =
-            REGISTRATE.block("copycat_button", CopycatButtonBlock::new)
+    public static final BlockEntry<CopycatWoodButtonBlock> COPYCAT_WOOD_BUTTON =
+            REGISTRATE.block("copycat_wood_button", CopycatWoodButtonBlock::new)
                     .transform(BuilderTransformers.copycat())
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
                     .tag(BlockTags.BUTTONS)
+                    .tag(BlockTags.WOODEN_BUTTONS)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatButtonModel::new))
                     .item()
                     .transform(customItemModel("copycat_base", "button"))
                     .register();
 
-    public static final BlockEntry<WrappedButtonBlock> WRAPPED_COPYCAT_BUTTON =
-            REGISTRATE.block("wrapped_copycat_button", p -> new WrappedButtonBlock(p, BlockSetType.OAK, 30, true))
-                    .initialProperties(() -> Blocks.OAK_BUTTON)
-                    .onRegister(b -> CopycatButtonBlock.button = b)
+    public static final BlockEntry<CopycatStoneButtonBlock> COPYCAT_STONE_BUTTON =
+            REGISTRATE.block("copycat_stone_button", CopycatStoneButtonBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
                     .tag(BlockTags.BUTTONS)
-                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_button", "block/barrier")))
+                    .tag(BlockTags.STONE_BUTTONS)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatButtonModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "button"))
+                    .register();
+
+    public static final BlockEntry<WrappedWoodButtonBlock> WRAPPED_COPYCAT_WOOD_BUTTON =
+            REGISTRATE.block("wrapped_copycat_wood_button", p -> new WrappedWoodButtonBlock(p, BlockSetType.OAK, 30, true))
+                    .initialProperties(() -> Blocks.OAK_BUTTON)
+                    .onRegister(b -> CopycatWoodButtonBlock.button = b)
+                    .tag(BlockTags.BUTTONS)
+                    .tag(BlockTags.WOODEN_BUTTONS)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_wood_button", "block/barrier")))
+                    .register();
+
+    public static final BlockEntry<WrappedStoneButtonBlock> WRAPPED_COPYCAT_STONE_BUTTON =
+            REGISTRATE.block("wrapped_copycat_stone_button", p -> new WrappedStoneButtonBlock(p, BlockSetType.STONE, 20, false))
+                    .initialProperties(() -> Blocks.STONE_BUTTON)
+                    .onRegister(b -> CopycatStoneButtonBlock.button = b)
+                    .tag(BlockTags.BUTTONS)
+                    .tag(BlockTags.STONE_BUTTONS)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_stone_button", "block/barrier")))
                     .register();
 
     public static void register() {
-
     }
 }

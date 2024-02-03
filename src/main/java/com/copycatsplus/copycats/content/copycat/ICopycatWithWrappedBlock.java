@@ -2,17 +2,17 @@ package com.copycatsplus.copycats.content.copycat;
 
 import net.minecraft.world.level.block.Block;
 
-public interface ICopycatWithWrappedBlock {
+public interface ICopycatWithWrappedBlock<B extends Block> {
     /**
      * Returns any non-copycat block that has the same behavior as the copycat.
      */
-    Block getWrappedBlock();
+    B getWrappedBlock();
 
     /**
      * Returns the wrapped block if the provided block is an instance of {@link ICopycatWithWrappedBlock}.
      * Otherwise, return the provided block unmodified.
      */
-    static Block unwrap(Block block) {
+    static <B extends Block> Block unwrap(B block) {
         if (block instanceof ICopycatWithWrappedBlock wrapper) {
             return wrapper.getWrappedBlock();
         }
