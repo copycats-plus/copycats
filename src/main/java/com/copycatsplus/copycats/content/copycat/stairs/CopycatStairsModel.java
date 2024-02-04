@@ -21,7 +21,7 @@ public class CopycatStairsModel extends SimpleCopycatModel {
     }
 
     @Override
-    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material) {
+    protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
         int facing = (int) state.getValue(StairBlock.FACING).toYRot();
         boolean top = state.getValue(StairBlock.HALF) == Half.TOP;
         StairsShape shape = state.getValue(StairBlock.SHAPE);

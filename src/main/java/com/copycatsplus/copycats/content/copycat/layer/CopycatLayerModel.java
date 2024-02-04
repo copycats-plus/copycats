@@ -19,7 +19,7 @@ public class CopycatLayerModel extends SimpleCopycatModel {
     }
 
     @Override
-    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material) {
+    protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
         int layer = state.getValue(CopycatLayerBlock.LAYERS);
         Direction facing = state.getValue(CopycatLayerBlock.FACING);
 

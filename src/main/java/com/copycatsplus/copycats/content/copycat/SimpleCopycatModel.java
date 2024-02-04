@@ -37,7 +37,7 @@ public abstract class SimpleCopycatModel extends CopycatModel implements ISimple
                 return false;
             }
 
-            emitCopycatQuads(blockView, state, pos, context, material);
+            emitCopycatQuads(state, context, material);
             return false;
         });
         model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
@@ -46,5 +46,5 @@ public abstract class SimpleCopycatModel extends CopycatModel implements ISimple
         meshBuilder.build().outputTo(renderContext.getEmitter());
     }
 
-    protected abstract void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material);
+    protected abstract void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material);
 }

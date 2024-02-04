@@ -20,7 +20,7 @@ public class CopycatFenceGateModel extends SimpleCopycatModel {
     }
 
     @Override
-    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material) {
+    protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
         int offsetWall = state.getValue(IN_WALL) ? -3 : 0;
         int rot = (int) state.getValue(FACING).toYRot();
 
