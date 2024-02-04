@@ -22,7 +22,6 @@ public class CopycatSlabModel extends SimpleCopycatModel {
     @Override
     protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
         Direction facing = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).isPresent() ? CopycatSlabBlock.getApparentDirection(state) : Direction.UP;
-
         boolean isDouble = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).orElse(SlabType.BOTTOM) == SlabType.DOUBLE;
 
         // 2 pieces
@@ -39,7 +38,6 @@ public class CopycatSlabModel extends SimpleCopycatModel {
     }
 
     private void assemblePiece(Direction facing, CopycatRenderContext context, boolean front, boolean topSlab, boolean isDouble) {
-        int size = context.src().size();
         Vec3 normal = Vec3.atLowerCornerOf(facing.getNormal());
         Vec3 normalScaled12 = normal.scale(12 / 16f);
         Vec3 normalScaledN8 = topSlab ? normal.scale((front ? 0 : -8) / 16f) : normal.scale((front ? 8 : 0) / 16f);
@@ -48,7 +46,7 @@ public class CopycatSlabModel extends SimpleCopycatModel {
         if (!front)
             bb = bb.move(normalScaled12);
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < context.src().size(); i++) {
             BakedQuad quad = context.src().get(i);
             Direction direction = quad.getDirection();
 

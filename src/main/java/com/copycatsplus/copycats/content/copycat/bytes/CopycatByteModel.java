@@ -14,7 +14,7 @@ public class CopycatByteModel extends SimpleCopycatModel {
 
     @Override
     protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
-        for (CopycatByteBlock.Byte bite : CopycatByteBlock.allBytes){
+        for (CopycatByteBlock.Byte bite : CopycatByteBlock.allBytes) {
             if (!state.getValue(CopycatByteBlock.byByte(bite))) continue;
 
             int offsetX = bite.x() ? 8 : 0;

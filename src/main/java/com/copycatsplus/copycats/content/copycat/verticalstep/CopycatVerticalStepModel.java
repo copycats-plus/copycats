@@ -11,8 +11,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import static net.minecraft.core.Direction.Axis;
-
 public class CopycatVerticalStepModel extends SimpleCopycatModel {
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
 
@@ -25,15 +23,11 @@ public class CopycatVerticalStepModel extends SimpleCopycatModel {
         Direction facing = state.getOptionalValue(CopycatVerticalStepBlock.FACING).orElse(Direction.NORTH);
         Direction perpendicular = facing.getCounterClockWise();
 
-        int xOffset = (facing.getAxis() == Axis.X ? facing : perpendicular).getAxisDirection().getStep();
-        int zOffset = (facing.getAxis() == Axis.Z ? facing : perpendicular).getAxisDirection().getStep();
-
-        int size = context.src().size();
-
+        int xOffset = (facing.getAxis() == Direction.Axis.X ? facing : perpendicular).getAxisDirection().getStep();
+        int zOffset = (facing.getAxis() == Direction.Axis.Z ? facing : perpendicular).getAxisDirection().getStep();
         Vec3 rowNormal = new Vec3(1, 0, 0);
         Vec3 columnNormal = new Vec3(0, 0, 1);
         AABB bb = CUBE_AABB.contract(12 / 16.0, 0, 12 / 16.0);
-
         // 4 Pieces
         for (boolean row : Iterate.trueAndFalse) {
             for (boolean column : Iterate.trueAndFalse) {
@@ -56,13 +50,13 @@ public class CopycatVerticalStepModel extends SimpleCopycatModel {
                 offset = offset.add(rowShift);
                 offset = offset.add(columnShift);
 
-                for (int i = 0; i < size; i++) {
+                for (int i = 0; i < context.src().size(); i++) {
                     BakedQuad quad = context.src().get(i);
                     Direction direction = quad.getDirection();
 
-                    if (direction.getAxis() == Axis.X && row == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
+                    if (direction.getAxis() == Direction.Axis.X && row == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                         continue;
-                    if (direction.getAxis() == Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
+                    if (direction.getAxis() == Direction.Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                         continue;
 
                     assembleQuad(quad, context.dest(), bb1, offset);

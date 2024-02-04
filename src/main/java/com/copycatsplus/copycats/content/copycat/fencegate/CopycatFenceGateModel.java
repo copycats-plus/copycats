@@ -6,9 +6,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
-import static net.minecraft.world.level.block.FenceGateBlock.IN_WALL;
-import static net.minecraft.world.level.block.FenceGateBlock.OPEN;
-import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
+import static net.minecraft.world.level.block.FenceGateBlock.*;
 
 public class CopycatFenceGateModel extends SimpleCopycatModel {
 
