@@ -1,8 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.slab;
 
+import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import com.simibubi.create.foundation.model.BakedModelHelper;
-import com.simibubi.create.foundation.model.BakedQuadHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -19,7 +18,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CopycatSlabModel extends CopycatModel {
+public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatModel {
 
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
 
@@ -53,7 +52,7 @@ public class CopycatSlabModel extends CopycatModel {
         return quads;
     }
 
-    private static void assemblePiece(Direction facing, List<BakedQuad> templateQuads, List<BakedQuad> quads, boolean front, boolean topSlab, boolean isDouble) {
+    private void assemblePiece(Direction facing, List<BakedQuad> templateQuads, List<BakedQuad> quads, boolean front, boolean topSlab, boolean isDouble) {
         int size = templateQuads.size();
         Vec3 normal = Vec3.atLowerCornerOf(facing.getNormal());
         Vec3 normalScaled12 = normal.scale(12 / 16f);
@@ -76,8 +75,7 @@ public class CopycatSlabModel extends CopycatModel {
             if (isDouble && !topSlab && direction == facing.getOpposite())
                 continue;
 
-            quads.add(BakedQuadHelper.cloneWithCustomGeometry(quad,
-                    BakedModelHelper.cropAndMove(quad.getVertices(), quad.getSprite(), bb, normalScaledN8)));
+            assembleQuad(quad, quads, bb, normalScaledN8);
         }
     }
 }

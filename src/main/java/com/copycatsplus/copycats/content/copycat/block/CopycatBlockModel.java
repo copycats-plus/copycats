@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.block;
 
+import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import com.simibubi.create.foundation.model.BakedQuadHelper;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -13,7 +13,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CopycatBlockModel extends CopycatModel {
+public class CopycatBlockModel extends CopycatModel implements ISimpleCopycatModel {
 
     public CopycatBlockModel(BakedModel originalModel) {
         super(originalModel);
@@ -28,7 +28,7 @@ public class CopycatBlockModel extends CopycatModel {
         List<BakedQuad> quads = new ArrayList<>();
 
         for (BakedQuad quad : templateQuads) {
-            quads.add(BakedQuadHelper.clone(quad));
+            assembleQuad(quad, quads);
         }
 
         return quads;

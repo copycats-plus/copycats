@@ -1,8 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.verticalstep;
 
+import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import com.simibubi.create.foundation.model.BakedModelHelper;
-import com.simibubi.create.foundation.model.BakedQuadHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -22,7 +21,7 @@ import java.util.List;
 
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatVerticalStepModel extends CopycatModel {
+public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCopycatModel {
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
 
     public CopycatVerticalStepModel(BakedModel originalModel) {
@@ -84,8 +83,7 @@ public class CopycatVerticalStepModel extends CopycatModel {
                     if (direction.getAxis() == Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                         continue;
 
-                    quads.add(BakedQuadHelper.cloneWithCustomGeometry(quad,
-                            BakedModelHelper.cropAndMove(quad.getVertices(), quad.getSprite(), bb1, offset)));
+                    assembleQuad(quad, quads, bb1, offset);
                 }
 
             }
