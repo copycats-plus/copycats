@@ -9,8 +9,10 @@ plugins {
 }
 
 def secrets = new Properties()
-file("./secrets.properties").withInputStream {
-    stream -> secrets.load(stream)
+if (file("./secrets.properties").exists()) {
+    file("./secrets.properties").withInputStream {
+        stream -> secrets.load(stream)
+    }
 }
 
 version = mod_version
