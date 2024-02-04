@@ -76,17 +76,14 @@ public class CopycatBeamModel extends CopycatModel implements ISimpleCopycatMode
                     Vec3i rowShiftNormal = new Vec3i((int) rowShift.x, (int) rowShift.y, (int) rowShift.z);
                     Vec3i columnShiftNormal = new Vec3i((int) columnShift.x, (int) columnShift.y, (int) columnShift.z);
 
-                    for (int i = 0; i < size; i++) {
-                        Direction direction = quad.lightFace();
+                    Direction direction = quad.lightFace();
 
-                        if (rowShiftNormal.equals(direction.getNormal()))
-                            continue;
-                        if (columnShiftNormal.equals(direction.getNormal()))
-                            continue;
+                    if (rowShiftNormal.equals(direction.getNormal()))
+                        continue;
+                    if (columnShiftNormal.equals(direction.getNormal()))
+                        continue;
 
-                        assembleQuad(context, bb1, offset);
-                    }
-
+                    assembleQuad(context, bb1, offset);
                 }
             }
             return false;

@@ -9,11 +9,9 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -22,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCopycatModel {
@@ -58,7 +55,6 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
             Vec3 rowNormal = new Vec3(1, 0, 0);
             Vec3 columnNormal = new Vec3(0, 0, 1);
             AABB bb = CUBE_AABB.contract(12 / 16.0, 0, 12 / 16.0);
-            List<BakedQuad> templateQuads = model.getQuads(state, quad.lightFace(), randomSupplier.get());
             // 4 Pieces
             for (boolean row : Iterate.trueAndFalse) {
                 for (boolean column : Iterate.trueAndFalse) {
@@ -81,23 +77,14 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
                     offset = offset.add(rowShift);
                     offset = offset.add(columnShift);
 
-                    rowShift = rowShift.normalize();
-                    columnShift = columnShift.normalize();
-                    Vec3i rowShiftNormal = new Vec3i((int) rowShift.x, (int) rowShift.y, (int) rowShift.z);
-                    Vec3i columnShiftNormal = new Vec3i((int) columnShift.x, (int) columnShift.y, (int) columnShift.z);
+                    Direction direction = context.src().lightFace();
 
-                    for (int i = 0; i < templateQuads.size(); i++) {
-                        BakedQuad bakedQuad = templateQuads.get(i);
-                        Direction direction = bakedQuad.getDirection();
+                    if (direction.getAxis() == Direction.Axis.X && row == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
+                        continue;
+                    if (direction.getAxis() == Direction.Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
+                        continue;
 
-                        if (direction.getAxis() == Direction.Axis.X && row == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
-                            continue;
-                        if (direction.getAxis() == Direction.Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
-                            continue;
-
-                        assembleQuad(context, bb1, offset);
-                    }
-
+                    assembleQuad(context, bb1, offset);
                 }
             }
             return false;

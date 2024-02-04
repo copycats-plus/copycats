@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatModel {
@@ -45,19 +43,18 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
                 assembleQuad(context);
                 return false;
             }
-            List<BakedQuad> templateQuads = model.getQuads(state, quad.lightFace(), randomSupplier.get());
             Direction facing = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).isPresent() ? CopycatSlabBlock.getApparentDirection(state) : Direction.UP;
             boolean isDouble = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).orElse(SlabType.BOTTOM) == SlabType.DOUBLE;
 
             // 2 pieces
             for (boolean front : Iterate.trueAndFalse) {
-                assemblePiece(facing, context, templateQuads, front, false, isDouble);
+                assemblePiece(facing, context, front, false, isDouble);
             }
 
             // 2 more pieces for double slabs
             if (isDouble) {
                 for (boolean front : Iterate.trueAndFalse) {
-                    assemblePiece(facing, context, templateQuads, front, true, isDouble);
+                    assemblePiece(facing, context, front, true, isDouble);
                 }
             }
             return false;
@@ -67,8 +64,7 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
         meshBuilder.build().outputTo(renderContext.getEmitter());
     }
 
-    private void assemblePiece(Direction facing, CopycatRenderContext context, List<BakedQuad> templateQuads, boolean front, boolean topSlab, boolean isDouble) {
-        int size = templateQuads.size();
+    private void assemblePiece(Direction facing, CopycatRenderContext context, boolean front, boolean topSlab, boolean isDouble) {
         Vec3 normal = Vec3.atLowerCornerOf(facing.getNormal());
         Vec3 normalScaled12 = normal.scale(12 / 16f);
         Vec3 normalScaledN8 = topSlab ? normal.scale((front ? 0 : -8) / 16f) : normal.scale((front ? 8 : 0) / 16f);
@@ -77,20 +73,17 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
         if (!front)
             bb = bb.move(normalScaled12);
 
-        for (int i = 0; i < size; i++) {
-            BakedQuad bakedQuad = templateQuads.get(i);
-            Direction direction = context.src().lightFace();
+        Direction direction = context.src().lightFace();
 
-            if (front && direction == facing)
-                continue;
-            if (!front && direction == facing.getOpposite())
-                continue;
-            if (isDouble && topSlab && direction == facing)
-                continue;
-            if (isDouble && !topSlab && direction == facing.getOpposite())
-                continue;
+        if (front && direction == facing)
+            return;
+        if (!front && direction == facing.getOpposite())
+            return;
+        if (isDouble && topSlab && direction == facing)
+            return;
+        if (isDouble && !topSlab && direction == facing.getOpposite())
+            return;
 
-            assembleQuad(context, bb, normalScaledN8);
-        }
+        assembleQuad(context, bb, normalScaledN8);
     }
 }
