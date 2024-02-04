@@ -2,13 +2,8 @@ package com.copycatsplus.copycats.content.copycat.trapdoor;
 
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
-
-import java.util.function.Supplier;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 import static net.minecraft.world.level.block.TrapDoorBlock.*;

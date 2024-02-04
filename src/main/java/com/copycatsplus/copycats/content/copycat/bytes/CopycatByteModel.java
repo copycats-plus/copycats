@@ -2,12 +2,7 @@ package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.function.Supplier;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 
