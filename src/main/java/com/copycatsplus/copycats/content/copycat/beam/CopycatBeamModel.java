@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import static net.minecraft.core.Direction.Axis;
@@ -36,7 +35,7 @@ public class CopycatBeamModel extends CopycatModel implements ISimpleCopycatMode
         BakedModel model = getModelOf(material);
         Axis axis = state.getOptionalValue(CopycatBeamBlock.AXIS).orElse(Axis.Y);
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
-        MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
+        MeshBuilder meshBuilder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
         renderContext.pushTransform(quad -> {
             CopycatRenderContext context = context(quad, emitter);
@@ -47,8 +46,6 @@ public class CopycatBeamModel extends CopycatModel implements ISimpleCopycatMode
                 assembleQuad(context);
                 return false;
             }
-            List<BakedQuad> templateQuads = model.getQuads(state, quad.lightFace(), randomSupplier.get());
-            int size = templateQuads.size();
 
             Vec3 normal = Vec3.atLowerCornerOf(Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE).getNormal());
             Vec3 rowNormal = axis.isVertical() ? new Vec3(1, 0, 0) : new Vec3(0, 1, 0);

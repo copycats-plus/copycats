@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatModel {
@@ -31,7 +32,7 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
     protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
-        MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
+        MeshBuilder meshBuilder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
 
         renderContext.pushTransform(quad -> {

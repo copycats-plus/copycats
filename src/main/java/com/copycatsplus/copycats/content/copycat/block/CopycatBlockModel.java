@@ -12,6 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class CopycatBlockModel extends CopycatModel implements ISimpleCopycatModel {
@@ -24,7 +25,7 @@ public class CopycatBlockModel extends CopycatModel implements ISimpleCopycatMod
     protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
-        MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
+        MeshBuilder meshBuilder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
         renderContext.pushTransform(quad -> {
             CopycatRenderContext context = context(quad, emitter);
