@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 import static com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock.byDirection;
 
 public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatModel {
@@ -71,7 +72,7 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                         assemblePiece(context, 0, direction == Direction.UP,
                                 vec3(1 - west, 0, 1 - north),
                                 aabb(14 + east + west, 1, 14 + north + south).move(1 - west, 0, 1 - north),
-                                cull(MutableCullFace.NORTH * (1 - north) | MutableCullFace.SOUTH * (1 - south) | MutableCullFace.EAST * (1 - east) | MutableCullFace.WEST * (1 - west))
+                                cull(NORTH * (1 - north) | SOUTH * (1 - south) | EAST * (1 - east) | WEST * (1 - west))
                         );
                     } else {
                         int up = !topEdges.get(direction) ? 1 : 0;
@@ -85,7 +86,7 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                         assemblePiece(context, (int) direction.toYRot() + 180, false,
                                 vec3(1 - right, 1 - down, 0),
                                 aabb(14 + left + right, 14 + up + down, 1).move(1 - right, 1 - down, 0),
-                                cull(MutableCullFace.UP * (1 - up) | MutableCullFace.DOWN * (1 - down) | MutableCullFace.EAST * (1 - left) | MutableCullFace.WEST * (1 - right))
+                                cull(UP * (1 - up) | DOWN * (1 - down) | EAST * (1 - left) | WEST * (1 - right))
                         );
                     }
             }

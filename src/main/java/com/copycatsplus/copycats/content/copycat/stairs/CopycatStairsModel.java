@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 
 import java.util.function.Supplier;
 
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
+
 public class CopycatStairsModel extends CopycatModel implements ISimpleCopycatModel {
 
     public CopycatStairsModel(BakedModel originalModel) {
@@ -52,215 +54,215 @@ public class CopycatStairsModel extends CopycatModel implements ISimpleCopycatMo
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 0),
                             aabb(16, 4, 8),
-                            cull(MutableCullFace.UP | MutableCullFace.SOUTH)
+                            cull(UP | SOUTH)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 4, 0),
                             aabb(16, 4, 8).move(0, 12, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH)
+                            cull(DOWN | SOUTH)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 8),
                             aabb(16, 8, 8).move(0, 0, 8),
-                            cull(MutableCullFace.UP | MutableCullFace.NORTH)
+                            cull(UP | NORTH)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 8),
                             aabb(16, 8, 4).move(0, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH)
+                            cull(DOWN | SOUTH)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 12),
                             aabb(16, 8, 4).move(0, 8, 12),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH)
+                            cull(DOWN | NORTH)
                     );
                 }
                 case INNER_LEFT -> {
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 0),
                             aabb(8, 4, 8),
-                            cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(UP | SOUTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 4, 0),
                             aabb(8, 4, 8).move(0, 12, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(DOWN | SOUTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 8),
                             aabb(16, 8, 8).move(0, 0, 8),
-                            cull(MutableCullFace.UP | MutableCullFace.NORTH)
+                            cull(UP | NORTH)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 8, 8),
                             aabb(8, 8, 8).move(8, 8, 8),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                            cull(DOWN | NORTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 12),
                             aabb(8, 8, 4).move(0, 8, 12),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                            cull(DOWN | NORTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 8),
                             aabb(8, 8, 4).move(0, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(DOWN | SOUTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(12, 8, 0),
                             aabb(4, 8, 8).move(12, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(DOWN | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 8, 0),
                             aabb(4, 8, 8).move(0, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(DOWN | SOUTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 0, 0),
                             aabb(8, 8, 8).move(8, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(UP | SOUTH | WEST)
                     );
                 }
                 case INNER_RIGHT -> {
                     assemblePiece(context, facing, top,
                             vec3(8, 0, 0),
                             aabb(8, 4, 8).move(8, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(UP | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 4, 0),
                             aabb(8, 4, 8).move(8, 12, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(DOWN | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 8),
                             aabb(16, 8, 8).move(0, 0, 8),
-                            cull(MutableCullFace.UP | MutableCullFace.NORTH)
+                            cull(UP | NORTH)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 8),
                             aabb(8, 8, 8).move(0, 8, 8),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                            cull(DOWN | NORTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 8, 12),
                             aabb(8, 8, 4).move(8, 8, 12),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                            cull(DOWN | NORTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 8, 8),
                             aabb(8, 8, 4).move(8, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(DOWN | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(4, 8, 0),
                             aabb(4, 8, 8).move(12, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(DOWN | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 0),
                             aabb(4, 8, 8).move(0, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(DOWN | SOUTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 0),
                             aabb(8, 8, 8).move(0, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(UP | SOUTH | EAST)
                     );
                 }
                 case OUTER_LEFT -> {
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 0),
                             aabb(8, 4, 16).move(0, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.EAST)
+                            cull(UP | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 4, 0),
                             aabb(8, 4, 16).move(0, 12, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.EAST)
+                            cull(DOWN | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 0, 0),
                             aabb(8, 4, 8).move(8, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(UP | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 4, 0),
                             aabb(8, 4, 8).move(8, 12, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(DOWN | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 0, 8),
                             aabb(8, 8, 8).move(8, 0, 8),
-                            cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.WEST)
+                            cull(UP | NORTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(12, 8, 12),
                             aabb(4, 8, 4).move(12, 8, 12),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                            cull(DOWN | NORTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 8, 12),
                             aabb(4, 8, 4).move(0, 8, 12),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                            cull(DOWN | NORTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(12, 8, 8),
                             aabb(4, 8, 4).move(12, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(DOWN | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 8, 8),
                             aabb(4, 8, 4).move(0, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(DOWN | SOUTH | EAST)
                     );
                 }
                 case OUTER_RIGHT -> {
                     assemblePiece(context, facing, top,
                             vec3(8, 0, 0),
                             aabb(8, 4, 16).move(8, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.WEST)
+                            cull(UP | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(8, 4, 0),
                             aabb(8, 4, 16).move(8, 12, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.WEST)
+                            cull(DOWN | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 0),
                             aabb(8, 4, 8).move(0, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.EAST)
+                            cull(UP | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 4, 0),
                             aabb(8, 4, 8).move(0, 12, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.EAST)
+                            cull(DOWN | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 0, 8),
                             aabb(8, 8, 8).move(0, 0, 8),
-                            cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.EAST)
+                            cull(UP | NORTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(4, 8, 12),
                             aabb(4, 8, 4).move(12, 8, 12),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                            cull(DOWN | NORTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 12),
                             aabb(4, 8, 4).move(0, 8, 12),
-                            cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                            cull(DOWN | NORTH | EAST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(4, 8, 8),
                             aabb(4, 8, 4).move(12, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.WEST)
+                            cull(DOWN | SOUTH | WEST)
                     );
                     assemblePiece(context, facing, top,
                             vec3(0, 8, 8),
                             aabb(4, 8, 4).move(0, 8, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST)
+                            cull(DOWN | SOUTH | EAST)
                     );
                 }
             }
