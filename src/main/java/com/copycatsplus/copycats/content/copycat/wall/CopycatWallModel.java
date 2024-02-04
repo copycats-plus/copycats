@@ -43,11 +43,7 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                // copyTo does not copy the material
-                RenderMaterial quadMaterial = quad.material();
-                quad.copyTo(emitter);
-                emitter.material(quadMaterial);
-                emitter.emit();
+                assembleQuad(quad, emitter);
                 return false;
             }
             boolean pole = state.getValue(WallBlock.UP);

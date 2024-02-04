@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.block;
 
+import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.model.BakedQuadHelper;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
@@ -18,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Supplier;
 
-public class CopycatBlockModel extends CopycatModel {
+public class CopycatBlockModel extends CopycatModel implements ISimpleCopycatModel {
 
     public CopycatBlockModel(BakedModel originalModel) {
         super(originalModel);
@@ -27,7 +28,6 @@ public class CopycatBlockModel extends CopycatModel {
     @Override
     protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
-        SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
         MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
@@ -36,18 +36,10 @@ public class CopycatBlockModel extends CopycatModel {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                // copyTo does not copy the material
-                RenderMaterial quadMaterial = quad.material();
-                quad.copyTo(emitter);
-                emitter.material(quadMaterial);
-                emitter.emit();
+                assembleQuad(quad, emitter);
                 return false;
             }
-            RenderMaterial quadMaterial = quad.material();
-            quad.copyTo(emitter);
-            emitter.material(quadMaterial);
-            BakedQuadHelper.clone(quad.toBakedQuad(spriteFinder.find(quad)));
-            emitter.emit();
+            assembleQuad(quad, emitter);
             return false;
         });
         model.emitBlockQuads(blockView, material, pos, randomSupplier, context);

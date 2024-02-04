@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.beam;
 
+import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.core.Direction.AxisDirection;
 
-public class CopycatBeamModel extends CopycatModel {
+public class CopycatBeamModel extends CopycatModel implements ISimpleCopycatModel {
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
 
     public CopycatBeamModel(BakedModel originalModel) {
@@ -39,7 +40,6 @@ public class CopycatBeamModel extends CopycatModel {
     protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
         Axis axis = state.getOptionalValue(CopycatBeamBlock.AXIS).orElse(Axis.Y);
-        SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
         MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
@@ -48,11 +48,7 @@ public class CopycatBeamModel extends CopycatModel {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                // copyTo does not copy the material
-                RenderMaterial quadMaterial = quad.material();
-                quad.copyTo(emitter);
-                emitter.material(quadMaterial);
-                emitter.emit();
+                assembleQuad(quad, emitter);
                 return false;
             }
             List<BakedQuad> templateQuads = model.getQuads(state, quad.lightFace(), randomSupplier.get());
@@ -92,11 +88,7 @@ public class CopycatBeamModel extends CopycatModel {
                         if (columnShiftNormal.equals(direction.getNormal()))
                             continue;
 
-                        RenderMaterial quadMaterial = quad.material();
-                        quad.copyTo(emitter);
-                        emitter.material(quadMaterial);
-                        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), bb1, offset);
-                        emitter.emit();
+                        assembleQuad(quad, emitter, bb1, offset);
                     }
 
                 }

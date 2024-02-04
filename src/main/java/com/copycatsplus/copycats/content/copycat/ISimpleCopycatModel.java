@@ -18,26 +18,33 @@ public interface ISimpleCopycatModel {
     /**
      * Assemble the quads of a piece of copycat material.
      *
-     * @param quad     The source model to copy from.
-     * @param emitter  The destination model to copy to.
+     * @param src      The source model to copy from.
+     * @param dest     The destination model to copy to.
      * @param rotation Number of degrees to rotate the whole operation for. Only supports multiples of 90. A value of 0 corresponds to a model facing south.
      * @param flipY    Whether to flip the whole operation vertically.
      * @param offset   In voxel space, the final position of the assembled piece.
      * @param select   In voxel space, the selection on the source model to copy from.
      * @param cull     Faces to skip rendering in the destination model. Changed automatically according to `rotation` and `flipY`.
      */
-    default void assemblePiece(MutableQuadView quad, QuadEmitter emitter, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull) {
+    default void assemblePiece(MutableQuadView src, QuadEmitter dest, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull) {
         select.rotate(rotation).flipY(flipY);
         offset.rotate(rotation).flipY(flipY);
         cull.rotate(rotation).flipY(flipY);
-        if (cull.isCulled(quad.lightFace())) {
+        if (cull.isCulled(src.lightFace())) {
             return;
         }
-        RenderMaterial quadMaterial = quad.material();
-        quad.copyTo(emitter);
-        emitter.material(quadMaterial);
-        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
-        emitter.emit();
+        assembleQuad(src, dest, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
+    }
+
+    default void assembleQuad(MutableQuadView src, QuadEmitter dest) {
+        dest.copyFrom(src);
+        dest.emit();
+    }
+
+    default void assembleQuad(MutableQuadView src, QuadEmitter dest, AABB crop, Vec3 move) {
+        dest.copyFrom(src);
+        BakedModelHelper.cropAndMove(src, spriteFinder.find(dest), crop, move);
+        dest.emit();
     }
 
     default MutableCullFace cull(int mask) {

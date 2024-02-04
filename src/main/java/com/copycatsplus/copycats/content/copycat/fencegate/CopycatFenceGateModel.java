@@ -39,11 +39,7 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                // copyTo does not copy the material
-                RenderMaterial quadMaterial = quad.material();
-                quad.copyTo(emitter);
-                emitter.material(quadMaterial);
-                emitter.emit();
+                assembleQuad(quad, emitter);
                 return false;
             }
             int offsetWall = state.getValue(IN_WALL) ? -3 : 0;

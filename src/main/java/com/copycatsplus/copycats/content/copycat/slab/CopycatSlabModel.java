@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.slab;
 
+import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -26,10 +27,9 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class CopycatSlabModel extends CopycatModel {
+public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatModel {
 
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
-    private static final SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
 
     public CopycatSlabModel(BakedModel originalModel) {
         super(originalModel);
@@ -47,11 +47,7 @@ public class CopycatSlabModel extends CopycatModel {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                // copyTo does not copy the material
-                RenderMaterial quadMaterial = quad.material();
-                quad.copyTo(emitter);
-                emitter.material(quadMaterial);
-                emitter.emit();
+                assembleQuad(quad, emitter);
                 return false;
             }
             List<BakedQuad> templateQuads = model.getQuads(state, quad.lightFace(), randomSupplier.get());
@@ -76,7 +72,7 @@ public class CopycatSlabModel extends CopycatModel {
         context.meshConsumer().accept(meshBuilder.build());
     }
 
-    private static void assemblePiece(Direction facing, MutableQuadView quad, QuadEmitter emitter, List<BakedQuad> templateQuads, boolean front, boolean topSlab, boolean isDouble) {
+    private void assemblePiece(Direction facing, MutableQuadView quad, QuadEmitter emitter, List<BakedQuad> templateQuads, boolean front, boolean topSlab, boolean isDouble) {
         int size = templateQuads.size();
         Vec3 normal = Vec3.atLowerCornerOf(facing.getNormal());
         Vec3 normalScaled12 = normal.scale(12 / 16f);
@@ -99,12 +95,7 @@ public class CopycatSlabModel extends CopycatModel {
             if (isDouble && !topSlab && direction == facing.getOpposite())
                 continue;
 
-            RenderMaterial quadMaterial = quad.material();
-            quad.copyTo(emitter);
-            emitter.material(quadMaterial);
-            BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), bb, normalScaledN8);
-            emitter.emit();
-
+            assembleQuad(quad, emitter, bb, normalScaledN8);
         }
     }
 }

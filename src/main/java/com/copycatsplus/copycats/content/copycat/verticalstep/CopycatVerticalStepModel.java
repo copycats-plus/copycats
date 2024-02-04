@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.verticalstep;
 
+import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -26,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class CopycatVerticalStepModel extends CopycatModel {
+public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCopycatModel {
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
 
     public CopycatVerticalStepModel(BakedModel originalModel) {
@@ -46,11 +47,7 @@ public class CopycatVerticalStepModel extends CopycatModel {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                // copyTo does not copy the material
-                RenderMaterial quadMaterial = quad.material();
-                quad.copyTo(emitter);
-                emitter.material(quadMaterial);
-                emitter.emit();
+                assembleQuad(quad, emitter);
                 return false;
             }
 
@@ -98,11 +95,8 @@ public class CopycatVerticalStepModel extends CopycatModel {
                             continue;
                         if (direction.getAxis() == Direction.Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                             continue;
-                        RenderMaterial quadMaterial = quad.material();
-                        quad.copyTo(emitter);
-                        emitter.material(quadMaterial);
-                        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), bb1, offset);
-                        emitter.emit();
+
+                        assembleQuad(quad, emitter, bb1, offset);
                     }
 
                 }
