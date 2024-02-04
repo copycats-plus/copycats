@@ -33,27 +33,28 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
 
         BakedModel model = getModelOf(material);
         List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-
         List<BakedQuad> quads = new ArrayList<>();
+        CopycatRenderContext context = context(templateQuads, quads);
+
         boolean isDouble = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).orElse(SlabType.BOTTOM) == SlabType.DOUBLE;
 
         // 2 pieces
         for (boolean front : Iterate.trueAndFalse) {
-            assemblePiece(facing, templateQuads, quads, front, false, isDouble);
+            assemblePiece(facing, context, front, false, isDouble);
         }
 
         // 2 more pieces for double slabs
         if (isDouble) {
             for (boolean front : Iterate.trueAndFalse) {
-                assemblePiece(facing, templateQuads, quads, front, true, isDouble);
+                assemblePiece(facing, context, front, true, isDouble);
             }
         }
 
         return quads;
     }
 
-    private void assemblePiece(Direction facing, List<BakedQuad> templateQuads, List<BakedQuad> quads, boolean front, boolean topSlab, boolean isDouble) {
-        int size = templateQuads.size();
+    private void assemblePiece(Direction facing, CopycatRenderContext context, boolean front, boolean topSlab, boolean isDouble) {
+        int size = context.src().size();
         Vec3 normal = Vec3.atLowerCornerOf(facing.getNormal());
         Vec3 normalScaled12 = normal.scale(12 / 16f);
         Vec3 normalScaledN8 = topSlab ? normal.scale((front ? 0 : -8) / 16f) : normal.scale((front ? 8 : 0) / 16f);
@@ -63,7 +64,7 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
             bb = bb.move(normalScaled12);
 
         for (int i = 0; i < size; i++) {
-            BakedQuad quad = templateQuads.get(i);
+            BakedQuad quad = context.src().get(i);
             Direction direction = quad.getDirection();
 
             if (front && direction == facing)
@@ -75,7 +76,7 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
             if (isDouble && !topSlab && direction == facing.getOpposite())
                 continue;
 
-            assembleQuad(quad, quads, bb, normalScaledN8);
+            assembleQuad(quad, context.dest(), bb, normalScaledN8);
         }
     }
 }

@@ -27,6 +27,7 @@ public class CopycatLayerModel extends CopycatModel implements ISimpleCopycatMod
         BakedModel model = getModelOf(material);
         List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
         List<BakedQuad> quads = new ArrayList<>();
+        CopycatRenderContext context = context(templateQuads, quads);
 
         int layer = state.getValue(CopycatLayerBlock.LAYERS);
         Direction facing = state.getValue(CopycatLayerBlock.FACING);
@@ -34,13 +35,13 @@ public class CopycatLayerModel extends CopycatModel implements ISimpleCopycatMod
         if (facing.getAxis().isVertical()) {
             boolean flipY = facing == Direction.DOWN;
             assemblePiece(
-                    templateQuads, quads, 0, flipY,
+                    context, 0, flipY,
                     vec3(0, 0, 0),
                     aabb(16, layer, 16),
                     cull(UP)
             );
             assemblePiece(
-                    templateQuads, quads, 0, flipY,
+                    context, 0, flipY,
                     vec3(0, layer, 0),
                     aabb(16, layer, 16).move(0, 16 - layer, 0),
                     cull(DOWN)
@@ -48,13 +49,13 @@ public class CopycatLayerModel extends CopycatModel implements ISimpleCopycatMod
         } else {
             int rot = (int) facing.toYRot();
             assemblePiece(
-                    templateQuads, quads, rot, false,
+                    context, rot, false,
                     vec3(0, 0, 0),
                     aabb(16, 16, layer),
                     cull(SOUTH)
             );
             assemblePiece(
-                    templateQuads, quads, rot, false,
+                    context, rot, false,
                     vec3(0, 0, layer),
                     aabb(16, 16, layer).move(0, 0, 16 - layer),
                     cull(NORTH)

@@ -29,8 +29,8 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                                               ModelData wrappedData, RenderType renderType) {
         BakedModel model = getModelOf(material);
         List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-
         List<BakedQuad> quads = new ArrayList<>();
+        CopycatRenderContext context = context(templateQuads, quads);
 
         Map<Direction, Boolean> topEdges = new HashMap<>();
         Map<Direction, Boolean> bottomEdges = new HashMap<>();
@@ -54,7 +54,7 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                     if (south == 1) edges.put(Direction.SOUTH, true);
                     if (east == 1) edges.put(Direction.EAST, true);
                     if (west == 1) edges.put(Direction.WEST, true);
-                    assemblePiece(templateQuads, quads, 0, direction == Direction.UP,
+                    assemblePiece(context, 0, direction == Direction.UP,
                             vec3(1 - west, 0, 1 - north),
                             aabb(14 + east + west, 1, 14 + north + south).move(1 - west, 0, 1 - north),
                             cull(MutableCullFace.NORTH * (1 - north) | MutableCullFace.SOUTH * (1 - south) | MutableCullFace.EAST * (1 - east) | MutableCullFace.WEST * (1 - west))
@@ -68,7 +68,7 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                     if (down == 1) bottomEdges.put(direction, true);
                     if (left == 1) leftEdges.put(direction, true);
                     if (right == 1) leftEdges.put(direction.getCounterClockWise(), true);
-                    assemblePiece(templateQuads, quads, (int) direction.toYRot() + 180, false,
+                    assemblePiece(context, (int) direction.toYRot() + 180, false,
                             vec3(1 - right, 1 - down, 0),
                             aabb(14 + left + right, 14 + up + down, 1).move(1 - right, 1 - down, 0),
                             cull(MutableCullFace.UP * (1 - up) | MutableCullFace.DOWN * (1 - down) | MutableCullFace.EAST * (1 - left) | MutableCullFace.WEST * (1 - right))

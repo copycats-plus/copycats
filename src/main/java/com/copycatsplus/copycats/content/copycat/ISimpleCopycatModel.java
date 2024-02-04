@@ -14,42 +14,53 @@ public interface ISimpleCopycatModel {
     /**
      * Assemble the quads of a piece of copycat material.
      *
-     * @param src      The source model to copy from.
-     * @param dest     The destination model to copy to.
+     * @param context  Source and destination quads.
      * @param rotation Number of degrees to rotate the whole operation for. Only supports multiples of 90. A value of 0 corresponds to a model facing south.
      * @param flipY    Whether to flip the whole operation vertically.
      * @param offset   In voxel space, the final position of the assembled piece.
      * @param select   In voxel space, the selection on the source model to copy from.
      * @param cull     Faces to skip rendering in the destination model. Changed automatically according to `rotation` and `flipY`.
      */
-    default void assemblePiece(List<BakedQuad> src, List<BakedQuad> dest, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull) {
+    default void assemblePiece(CopycatRenderContext context, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull) {
         select.rotate(rotation).flipY(flipY);
         offset.rotate(rotation).flipY(flipY);
         cull.rotate(rotation).flipY(flipY);
-        for (BakedQuad quad : src) {
+        for (BakedQuad quad : context.src) {
             if (cull.isCulled(quad.getDirection())) {
                 continue;
             }
-            assembleQuad(quad, dest, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
+            assembleQuad(quad, context.dest, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
         }
     }
 
+    /**
+     * Copy ALL quads from source to destination without modification.
+     */
     default void assembleQuad(CopycatRenderContext context) {
         for (BakedQuad quad : context.src) {
             assembleQuad(quad, context.dest);
         }
     }
 
+    /**
+     * Copy a quad from source to destination without modification.
+     */
     default void assembleQuad(BakedQuad src, List<BakedQuad> dest) {
         dest.add(BakedQuadHelper.clone(src));
     }
 
+    /**
+     * Copy ALL quads from source to destination while applying the specified crop and move.
+     */
     default void assembleQuad(CopycatRenderContext context, AABB crop, Vec3 move) {
         for (BakedQuad quad : context.src) {
             assembleQuad(quad, context.dest, crop, move);
         }
     }
 
+    /**
+     * Copy a quad from source to destination while applying the specified crop and move.
+     */
     default void assembleQuad(BakedQuad src, List<BakedQuad> dest, AABB crop, Vec3 move) {
         dest.add(BakedQuadHelper.cloneWithCustomGeometry(src,
                 BakedModelHelper.cropAndMove(src.getVertices(), src.getSprite(), crop, move)));

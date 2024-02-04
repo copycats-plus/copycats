@@ -24,8 +24,8 @@ public class CopycatByteModel extends CopycatModel implements ISimpleCopycatMode
                                               ModelData wrappedData, RenderType renderType) {
         BakedModel model = getModelOf(material);
         List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-
         List<BakedQuad> quads = new ArrayList<>();
+        CopycatRenderContext context = context(templateQuads, quads);
 
         for (CopycatByteBlock.Byte bite : CopycatByteBlock.allBytes){
             if (!state.getValue(CopycatByteBlock.byByte(bite))) continue;
@@ -35,49 +35,49 @@ public class CopycatByteModel extends CopycatModel implements ISimpleCopycatMode
             int offsetZ = bite.z() ? 8 : 0;
 
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX, offsetY, offsetZ),
                     aabb(4, 4, 4),
                     cull(MutableCullFace.UP | MutableCullFace.EAST | MutableCullFace.SOUTH)
             );
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX + 4, offsetY, offsetZ),
                     aabb(4, 4, 4).move(12, 0, 0),
                     cull(MutableCullFace.UP | MutableCullFace.WEST | MutableCullFace.SOUTH)
             );
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX, offsetY, offsetZ + 4),
                     aabb(4, 4, 4).move(0, 0, 12),
                     cull(MutableCullFace.UP | MutableCullFace.EAST | MutableCullFace.NORTH)
             );
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX + 4, offsetY, offsetZ + 4),
                     aabb(4, 4, 4).move(12, 0, 12),
                     cull(MutableCullFace.UP | MutableCullFace.WEST | MutableCullFace.NORTH)
             );
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX, offsetY + 4, offsetZ),
                     aabb(4, 4, 4).move(0, 12, 0),
                     cull(MutableCullFace.DOWN | MutableCullFace.EAST | MutableCullFace.SOUTH)
             );
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX + 4, offsetY + 4, offsetZ),
                     aabb(4, 4, 4).move(12, 12, 0),
                     cull(MutableCullFace.DOWN | MutableCullFace.WEST | MutableCullFace.SOUTH)
             );
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX, offsetY + 4, offsetZ + 4),
                     aabb(4, 4, 4).move(0, 12, 12),
                     cull(MutableCullFace.DOWN | MutableCullFace.EAST | MutableCullFace.NORTH)
             );
             assemblePiece(
-                    templateQuads, quads, 0, false,
+                    context, 0, false,
                     vec3(offsetX + 4, offsetY + 4, offsetZ + 4),
                     aabb(4, 4, 4).move(12, 12, 12),
                     cull(MutableCullFace.DOWN | MutableCullFace.WEST | MutableCullFace.NORTH)

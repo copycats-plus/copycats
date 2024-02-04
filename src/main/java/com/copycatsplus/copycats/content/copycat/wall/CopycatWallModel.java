@@ -29,8 +29,8 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                                               ModelData wrappedData, RenderType renderType) {
         BakedModel model = getModelOf(material);
         List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-
         List<BakedQuad> quads = new ArrayList<>();
+        CopycatRenderContext context = context(templateQuads, quads);
 
         boolean pole = state.getValue(WallBlock.UP);
         if (pole) {
@@ -38,7 +38,7 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
 
             // Assemble the central pole
             for (Direction direction : Iterate.horizontalDirections) {
-                assemblePiece(templateQuads, quads, (int) direction.toYRot(), false,
+                assemblePiece(context, (int) direction.toYRot(), false,
                         vec3(4, 0, 4),
                         aabb(4, 16, 4),
                         cull(MutableCullFace.SOUTH | MutableCullFace.EAST)
@@ -53,34 +53,34 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                         continue;
                     }
                     case LOW -> {
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 0, 12),
                                 aabb(3, 7, 4),
                                 cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.EAST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(8, 0, 12),
                                 aabb(3, 7, 4).move(13, 0, 0),
                                 cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.WEST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 7, 12),
                                 aabb(3, 7, 4).move(0, 9, 0),
                                 cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(8, 7, 12),
                                 aabb(3, 7, 4).move(13, 9, 0),
                                 cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
                         );
                     }
                     case TALL -> {
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 0, 12),
                                 aabb(3, 16, 4),
                                 cull(MutableCullFace.NORTH | MutableCullFace.EAST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(8, 0, 12),
                                 aabb(3, 16, 4).move(13, 0, 0),
                                 cull(MutableCullFace.NORTH | MutableCullFace.WEST)
@@ -107,33 +107,33 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                 int rot = sides.get(Direction.SOUTH) == WallSide.NONE ? 90 : 0;
 
                 if (!tall) {
-                    assemblePiece(templateQuads, quads, rot, false,
+                    assemblePiece(context, rot, false,
                             vec3(5, 0, 0),
                             aabb(3, 7, 16),
                             cull(MutableCullFace.UP | MutableCullFace.EAST)
                     );
-                    assemblePiece(templateQuads, quads, rot, false,
+                    assemblePiece(context, rot, false,
                             vec3(8, 0, 0),
                             aabb(3, 7, 16).move(13, 0, 0),
                             cull(MutableCullFace.UP | MutableCullFace.WEST)
                     );
-                    assemblePiece(templateQuads, quads, rot, false,
+                    assemblePiece(context, rot, false,
                             vec3(5, 7, 0),
                             aabb(3, 7, 16).move(0, 9, 0),
                             cull(MutableCullFace.DOWN | MutableCullFace.EAST)
                     );
-                    assemblePiece(templateQuads, quads, rot, false,
+                    assemblePiece(context, rot, false,
                             vec3(8, 7, 0),
                             aabb(3, 7, 16).move(13, 9, 0),
                             cull(MutableCullFace.DOWN | MutableCullFace.WEST)
                     );
                 } else {
-                    assemblePiece(templateQuads, quads, rot, false,
+                    assemblePiece(context, rot, false,
                             vec3(5, 0, 0),
                             aabb(3, 16, 16).move(0, 0, 0),
                             cull(MutableCullFace.EAST)
                     );
-                    assemblePiece(templateQuads, quads, rot, false,
+                    assemblePiece(context, rot, false,
                             vec3(8, 0, 0),
                             aabb(3, 16, 16).move(13, 0, 0),
                             cull(MutableCullFace.WEST)
@@ -154,7 +154,7 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                     if (tall) {
                         boolean cullCurrent = sides.get(direction.getOpposite()) == WallSide.TALL;
                         boolean cullAdjacent = sides.get(direction.getClockWise()) == WallSide.TALL;
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 0, 5),
                                 aabb(3, 16, 3).move(0, 0, 0),
                                 cull(MutableCullFace.SOUTH | MutableCullFace.EAST | (cullCurrent ? MutableCullFace.NORTH : 0) | (cullAdjacent ? MutableCullFace.WEST : 0))
@@ -162,12 +162,12 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                     } else {
                         boolean cullCurrent = sides.get(direction.getOpposite()) != WallSide.NONE;
                         boolean cullAdjacent = sides.get(direction.getClockWise()) != WallSide.NONE;
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 0, 5),
                                 aabb(3, 7, 3).move(0, 0, 0),
                                 cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.EAST | (cullCurrent ? MutableCullFace.NORTH : 0) | (cullAdjacent ? MutableCullFace.WEST : 0))
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 7, 5),
                                 aabb(3, 7, 3).move(0, 9, 0),
                                 cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST | (cullCurrent ? MutableCullFace.NORTH : 0) | (cullAdjacent ? MutableCullFace.WEST : 0))
@@ -188,34 +188,34 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                         continue;
                     }
                     case LOW -> {
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 0, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(0, 0, 0),
                                 cull(MutableCullFace.UP | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.EAST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(8, 0, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(13, 0, 0),
                                 cull(MutableCullFace.UP | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.WEST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 7, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(0, 9, 0),
                                 cull(MutableCullFace.DOWN | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.EAST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(8, 7, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(13, 9, 0),
                                 cull(MutableCullFace.DOWN | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.WEST)
                         );
                     }
                     case TALL -> {
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(5, 0, extend ? 5 : 11),
                                 aabb(3, 16, extend ? 11 : 5).move(0, 0, 0),
                                 cull((cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.EAST)
                         );
-                        assemblePiece(templateQuads, quads, rot, false,
+                        assemblePiece(context, rot, false,
                                 vec3(8, 0, extend ? 5 : 11),
                                 aabb(3, 16, extend ? 11 : 5).move(13, 0, 0),
                                 cull((cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.WEST)

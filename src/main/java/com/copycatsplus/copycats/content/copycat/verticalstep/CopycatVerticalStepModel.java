@@ -39,9 +39,9 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
 
         BakedModel model = getModelOf(material);
         List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-        int size = templateQuads.size();
-
         List<BakedQuad> quads = new ArrayList<>();
+        CopycatRenderContext context = context(templateQuads, quads);
+        int size = templateQuads.size();
 
         Vec3 rowNormal = new Vec3(1, 0, 0);
         Vec3 columnNormal = new Vec3(0, 0, 1);
@@ -75,7 +75,7 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
                 Vec3i columnShiftNormal = new Vec3i((int) columnShift.x, (int) columnShift.y, (int) columnShift.z);
 
                 for (int i = 0; i < size; i++) {
-                    BakedQuad quad = templateQuads.get(i);
+                    BakedQuad quad = context.src().get(i);
                     Direction direction = quad.getDirection();
 
                     if (direction.getAxis() == Axis.X && row == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
@@ -83,7 +83,7 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
                     if (direction.getAxis() == Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                         continue;
 
-                    assembleQuad(quad, quads, bb1, offset);
+                    assembleQuad(quad, context.dest(), bb1, offset);
                 }
 
             }
