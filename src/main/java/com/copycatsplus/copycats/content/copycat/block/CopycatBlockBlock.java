@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.block;
 
+import com.copycatsplus.copycats.content.copycat.CTCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
 import com.copycatsplus.copycats.content.copycat.ShimCopycatBlock;
 import net.minecraft.core.BlockPos;
@@ -14,7 +15,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class CopycatBlockBlock extends ShimCopycatBlock implements ICopycatWithWrappedBlock {
+public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWrappedBlock {
 
     public CopycatBlockBlock(Properties properties) {
         super(properties);

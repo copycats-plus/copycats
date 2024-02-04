@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.beam;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.ShimWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
@@ -36,7 +37,7 @@ import java.util.function.Predicate;
 import static com.copycatsplus.copycats.content.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatBeamBlock extends ShimWaterloggedCopycatBlock {
+public class CopycatBeamBlock extends CTWaterloggedCopycatBlock {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
 

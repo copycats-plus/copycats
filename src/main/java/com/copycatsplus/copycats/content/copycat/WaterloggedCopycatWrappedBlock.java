@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public abstract class WaterloggedCopycatWrappedBlock extends ShimWaterloggedCopycatBlock implements ICopycatWithWrappedBlock {
+public abstract class WaterloggedCopycatWrappedBlock extends CTWaterloggedCopycatBlock implements ICopycatWithWrappedBlock {
 
     public WaterloggedCopycatWrappedBlock(Properties properties) {
         super(properties);

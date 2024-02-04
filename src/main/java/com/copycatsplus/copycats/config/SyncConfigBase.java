@@ -144,6 +144,10 @@ public abstract class SyncConfigBase extends ConfigBase {
             this.nbt = nbt;
         }
 
+        protected SyncConfig(FriendlyByteBuf buf) {
+            this(decode(buf));
+        }
+
         protected abstract SyncConfigBase configInstance();
 
         void encode(FriendlyByteBuf buf) {

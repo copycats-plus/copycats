@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.bytes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.MathHelper;
 import com.copycatsplus.copycats.content.copycat.ShimWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-public class CopycatByteBlock extends ShimWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatByteBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
     public static BooleanProperty TOP_NE = BooleanProperty.create("top_northeast");
     public static BooleanProperty TOP_NW = BooleanProperty.create("top_northwest");
     public static BooleanProperty TOP_SE = BooleanProperty.create("top_southeast");

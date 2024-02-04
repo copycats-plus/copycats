@@ -124,7 +124,6 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
     GeneratedRecipe COPYCAT_LAYER = copycat(CCBlocks.COPYCAT_LAYER, 8);
 
-
     String currentFolder = "";
 
     Marker enterFolder(String folder) {
@@ -427,8 +426,8 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         return "Standard Recipes of Create: Copycats+";
     }
 
-    public CCStandardRecipes(DataGenerator generator) {
-        super(generator);
+    public CCStandardRecipes(DataGenerator output) {
+        super(output);
     }
 
     private static class ModdedCookingRecipeResult implements FinishedRecipe {
