@@ -1,4 +1,4 @@
-package com.copycatsplus.copycats.content.copycat.step;
+package com.copycatsplus.copycats.content.copycat.step.half_panel;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
