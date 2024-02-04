@@ -28,7 +28,7 @@ public interface ICTCopycatBlock extends IBE<CopycatBlockEntity> {
         return true;
     }
 
-    default InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    default InteractionResult toggleCT(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pPlayer.isCrouching() && pPlayer.getItemInHand(pHand).equals(ItemStack.EMPTY)) {
             CopycatBlockEntity be = getBlockEntity(pLevel, pPos);
             if (be instanceof CTCopycatBlockEntity ctbe) {

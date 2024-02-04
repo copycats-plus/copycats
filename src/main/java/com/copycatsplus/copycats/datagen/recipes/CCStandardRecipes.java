@@ -429,8 +429,8 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         return "Standard Recipes of Create: Copycats+";
     }
 
-    public CCStandardRecipes(PackOutput p_i48262_1_) {
-        super(p_i48262_1_);
+    public CCStandardRecipes(PackOutput output) {
+        super(output);
     }
 
     private static class ModdedCookingRecipeResult implements FinishedRecipe {

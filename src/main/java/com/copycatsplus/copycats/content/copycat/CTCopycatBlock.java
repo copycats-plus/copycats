@@ -25,7 +25,7 @@ public abstract class CTCopycatBlock extends CopycatBlock implements ICTCopycatB
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        InteractionResult toggleResult = ICTCopycatBlock.super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+        InteractionResult toggleResult = ICTCopycatBlock.super.toggleCT(pState, pLevel, pPos, pPlayer, pHand, pHit);
         if (toggleResult.consumesAction()) return toggleResult;
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
