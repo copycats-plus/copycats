@@ -18,7 +18,7 @@ public class CopycatByteModel extends SimpleCopycatModel {
     }
 
     @Override
-    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, CopycatRenderContext context, BlockState material) {
+    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material) {
         for (CopycatByteBlock.Byte bite : CopycatByteBlock.allBytes) {
             if (!state.getValue(CopycatByteBlock.byByte(bite))) continue;
 

@@ -20,7 +20,7 @@ public class CopycatFenceModel extends SimpleCopycatModel {
     }
 
     @Override
-    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, CopycatRenderContext context, BlockState material) {
+    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material) {
         for (Direction direction : Iterate.horizontalDirections) {
             assemblePiece(context, (int) direction.toYRot(), false,
                     vec3(6, 0, 6),

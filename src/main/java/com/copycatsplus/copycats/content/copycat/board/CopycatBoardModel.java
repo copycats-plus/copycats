@@ -23,7 +23,7 @@ public class CopycatBoardModel extends SimpleCopycatModel {
     }
 
     @Override
-    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, CopycatRenderContext context, BlockState material) {
+    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material) {
         Map<Direction, Boolean> topEdges = new HashMap<>();
         Map<Direction, Boolean> bottomEdges = new HashMap<>();
         Map<Direction, Boolean> leftEdges = new HashMap<>();

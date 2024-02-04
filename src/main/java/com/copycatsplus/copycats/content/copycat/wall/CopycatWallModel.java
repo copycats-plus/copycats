@@ -5,7 +5,6 @@ import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,7 +12,6 @@ import net.minecraft.world.level.block.state.properties.WallSide;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 
@@ -24,7 +22,7 @@ public class CopycatWallModel extends SimpleCopycatModel {
     }
 
     @Override
-    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, CopycatRenderContext context, BlockState material) {
+    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, CopycatRenderContext context, BlockState material) {
         boolean pole = state.getValue(WallBlock.UP);
         if (pole) {
             // Assemble piece by piece if the central pole exists
