@@ -1,12 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.slab;
 
-import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
+import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,10 +12,9 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
-public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatModel {
+public class CopycatSlabModel extends SimpleCopycatModel {
 
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
 
@@ -29,40 +23,21 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
     }
 
     @Override
-    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
-        BakedModel model = getModelOf(material);
-        // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
-        MeshBuilder meshBuilder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).meshBuilder();
-        QuadEmitter emitter = meshBuilder.getEmitter();
+    protected void emitCopycatQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, CopycatRenderContext context, BlockState material) {
+        Direction facing = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).isPresent() ? CopycatSlabBlock.getApparentDirection(state) : Direction.UP;
+        boolean isDouble = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).orElse(SlabType.BOTTOM) == SlabType.DOUBLE;
 
-        renderContext.pushTransform(quad -> {
-            CopycatRenderContext context = context(quad, emitter);
-            if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
-                quad.cullFace(null);
-            } else if (occlusionData.isOccluded(quad.cullFace())) {
-                // Add quad to mesh and do not render original quad to preserve quad render order
-                assembleQuad(context);
-                return false;
-            }
-            Direction facing = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).isPresent() ? CopycatSlabBlock.getApparentDirection(state) : Direction.UP;
-            boolean isDouble = state.getOptionalValue(CopycatSlabBlock.SLAB_TYPE).orElse(SlabType.BOTTOM) == SlabType.DOUBLE;
+        // 2 pieces
+        for (boolean front : Iterate.trueAndFalse) {
+            assemblePiece(facing, context, front, false, isDouble);
+        }
 
-            // 2 pieces
+        // 2 more pieces for double slabs
+        if (isDouble) {
             for (boolean front : Iterate.trueAndFalse) {
-                assemblePiece(facing, context, front, false, isDouble);
+                assemblePiece(facing, context, front, true, isDouble);
             }
-
-            // 2 more pieces for double slabs
-            if (isDouble) {
-                for (boolean front : Iterate.trueAndFalse) {
-                    assemblePiece(facing, context, front, true, isDouble);
-                }
-            }
-            return false;
-        });
-        model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
-        renderContext.popTransform();
-        meshBuilder.build().outputTo(renderContext.getEmitter());
+        }
     }
 
     private void assemblePiece(Direction facing, CopycatRenderContext context, boolean front, boolean topSlab, boolean isDouble) {
