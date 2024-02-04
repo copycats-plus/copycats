@@ -22,8 +22,7 @@
     "copycat.trapdoor.DismountHelperMixin",
     "copycat.trapdoor.RedStoneWireBlockMixin",
     "copycat.wall.TrackPaverMixin",
-    "copycat.wall.WallBlockMixin",
-    "featuretoggle.CreativeModeTabsAccessor"
+    "copycat.wall.WallBlockMixin"
   ],
   "client": [
     "featuretoggle.SubMenuConfigScreenMixin"

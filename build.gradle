@@ -35,16 +35,14 @@ loom {
 
             runDir "run-server"
         }
-        server {
-            runDir "run/server"
-        }
-
-        gametestServer {
+        gameTestServer {
             server()
+
             name "Headlesss GameTests"
             vmArg "-Dfabric-api.gametest"
             vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-            runDir "run/gametest"
+
+            runDir "run-gametest"
         }
     }
 }

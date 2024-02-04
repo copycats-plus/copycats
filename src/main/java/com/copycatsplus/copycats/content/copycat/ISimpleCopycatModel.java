@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.content.copycat;
 
 import com.simibubi.create.foundation.model.BakedModelHelper;
+import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
@@ -45,7 +46,9 @@ public interface ISimpleCopycatModel {
      * Copy a quad from source to destination without modification.
      */
     default void assembleQuad(MutableQuadView quad, QuadEmitter emitter) {
-        emitter.copyFrom(quad);
+        RenderMaterial quadMaterial = quad.material();
+        quad.copyTo(emitter);
+        emitter.material(quadMaterial);
         emitter.emit();
     }
 
@@ -60,8 +63,10 @@ public interface ISimpleCopycatModel {
      * Copy a quad from source to destination while applying the specified crop and move.
      */
     default void assembleQuad(MutableQuadView quad, QuadEmitter emitter, AABB crop, Vec3 move) {
-        emitter.copyFrom(quad);
-        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), crop, move);
+        RenderMaterial quadMaterial = quad.material();
+        quad.copyTo(emitter);
+        emitter.material(quadMaterial);
+        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter, 0), crop, move);
         emitter.emit();
     }
 

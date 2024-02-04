@@ -4,8 +4,10 @@ import com.copycatsplus.copycats.CCBlocks;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -26,6 +28,10 @@ public class CopycatBoxItem extends BlockItem {
     @Override
     public @NotNull String getDescriptionId() {
         return "item.copycats.copycat_box";
+    }
+
+    @Override
+    public void fillItemCategory(@NotNull CreativeModeTab pGroup, @NotNull NonNullList<ItemStack> pItems) {
     }
 
     @Override
