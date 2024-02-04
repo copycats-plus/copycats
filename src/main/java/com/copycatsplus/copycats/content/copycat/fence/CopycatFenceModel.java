@@ -101,7 +101,7 @@ public class CopycatFenceModel extends CopycatModel implements ISimpleCopycatMod
         });
         model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
         renderContext.popTransform();
-        renderContext.meshConsumer().accept(meshBuilder.build());
+        meshBuilder.build().outputTo(renderContext.getEmitter());
     }
 
 }

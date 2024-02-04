@@ -168,7 +168,7 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
         });
         model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
         renderContext.popTransform();
-        renderContext.meshConsumer().accept(meshBuilder.build());
+        meshBuilder.build().outputTo(renderContext.getEmitter());
     }
 
 

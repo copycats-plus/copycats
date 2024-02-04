@@ -64,7 +64,7 @@ public class CopycatSlabModel extends CopycatModel implements ISimpleCopycatMode
         });
         model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
         renderContext.popTransform();
-        renderContext.meshConsumer().accept(meshBuilder.build());
+        meshBuilder.build().outputTo(renderContext.getEmitter());
     }
 
     private void assemblePiece(Direction facing, CopycatRenderContext context, List<BakedQuad> templateQuads, boolean front, boolean topSlab, boolean isDouble) {

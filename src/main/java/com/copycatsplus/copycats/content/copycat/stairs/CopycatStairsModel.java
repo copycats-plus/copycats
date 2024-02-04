@@ -270,7 +270,7 @@ public class CopycatStairsModel extends CopycatModel implements ISimpleCopycatMo
         });
         model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
         renderContext.popTransform();
-        renderContext.meshConsumer().accept(meshBuilder.build());
+        meshBuilder.build().outputTo(renderContext.getEmitter());
     }
 
 }
