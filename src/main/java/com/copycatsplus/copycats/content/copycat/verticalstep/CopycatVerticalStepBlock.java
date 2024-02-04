@@ -3,7 +3,7 @@ package com.copycatsplus.copycats.content.copycat.verticalstep;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.MathHelper;
-import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
@@ -41,7 +41,7 @@ import java.util.function.Predicate;
 
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatVerticalStepBlock extends WaterloggedCopycatBlock {
+public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 

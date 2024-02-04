@@ -2,9 +2,9 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
-import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
@@ -37,10 +37,11 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.copycatsplus.copycats.content.MathHelper.DirectionFromDelta;
+
 import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.core.Direction.AxisDirection;
 
-public class CopycatSlabBlock extends WaterloggedCopycatBlock implements ICopycatWithWrappedBlock {
+public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopycatWithWrappedBlock {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
     public static final EnumProperty<SlabType> SLAB_TYPE = BlockStateProperties.SLAB_TYPE;

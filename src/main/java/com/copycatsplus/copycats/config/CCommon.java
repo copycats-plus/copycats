@@ -31,7 +31,7 @@ public class CCommon extends SyncConfigBase {
     private class SyncConfig extends SyncConfigBase.SyncConfig {
 
         protected SyncConfig(FriendlyByteBuf buf) {
-            this(decode(buf));
+            super(buf);
         }
 
         protected SyncConfig(CompoundTag nbt) {
