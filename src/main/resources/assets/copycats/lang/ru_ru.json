@@ -53,7 +53,7 @@
   "block.copycats.copycat_slab.tooltip.condition1": "ПКМ",
   "block.copycats.copycat_slab.tooltip.condition2": "ПКМ в приседе пустой рукой",
   "block.copycats.copycat_slab.tooltip.summary": "_Преобразует_ любой _твёрдый блок_ в декоративную плиту. Может быть размещена _вертикально_.",
-  "block.copycats.copycat_stairs": "Заполняемый ступеньки",
+  "block.copycats.copycat_stairs": "Заполняемые ступеньки",
   "block.copycats.copycat_stairs.tooltip.behaviour1": "Применяет _предмет в руке_ как его _материал_, если это возможно. _Кликните снова_, чтобы изменить _ориентацию_ или _состояние_. Используйте _ключ_, чтобы сбросить материал.",
   "block.copycats.copycat_stairs.tooltip.behaviour2": "Переключает _соединение текстур_ _материала_.",
   "block.copycats.copycat_stairs.tooltip.condition1": "ПКМ",
