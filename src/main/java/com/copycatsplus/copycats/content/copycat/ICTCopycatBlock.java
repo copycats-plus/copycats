@@ -16,7 +16,7 @@ import net.minecraft.world.phys.BlockHitResult;
 /**
  * Copycat blocks that support toggling connected textures should implement this interface.
  */
-public interface ICTCopycatBlock extends IBE<CopycatBlockEntity> {
+public interface ICTCopycatBlock extends IBE<CopycatBlockEntity>, IShimCopycatBlock {
 
     default boolean allowCTAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, BlockState queryState, BlockPos queryPos) {
         CopycatBlockEntity be = getBlockEntity(level, pos);

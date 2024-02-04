@@ -8,7 +8,6 @@
   "mixins": [
     "copycat.ConnectedTextureBehaviourMixin",
     "copycat.CopycatBlockEntityMixin",
-    "copycat.CopycatModelMixin",
     "copycat.TrackPlacementMixin",
     "copycat.fence.COMPATFenceBlockMixin",
     "copycat.fence.FenceBlockMixin",
