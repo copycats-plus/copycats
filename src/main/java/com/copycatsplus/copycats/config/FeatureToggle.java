@@ -87,10 +87,7 @@ public class FeatureToggle {
      */
     static void refreshItemVisibility() {
         EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () ->
-                LogicalSidedProvider
-                        .WORKQUEUE
-                        .get(EnvType.CLIENT)
-                        .submit(() -> {
+                LogicalSidedProvider.WORKQUEUE.get(EnvType.CLIENT).submit(() -> {
                     CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();
                     if (cachedParameters != null) {
                         CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);

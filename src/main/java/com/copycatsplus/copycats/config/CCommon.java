@@ -26,13 +26,13 @@ public class CCommon extends SyncConfigBase {
         static String toggle = "Enable/disable features. Values on server override clients";
     }
 
-    public class SyncConfig extends SyncConfigBase.SyncConfig {
+    private class SyncConfig extends SyncConfigBase.SyncConfig {
 
-        public SyncConfig(FriendlyByteBuf buf) {
+        protected SyncConfig(FriendlyByteBuf buf) {
             super(buf);
         }
 
-        public SyncConfig(CompoundTag nbt) {
+        protected SyncConfig(CompoundTag nbt) {
             super(nbt);
         }
 

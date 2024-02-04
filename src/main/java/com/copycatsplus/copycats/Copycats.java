@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.CCConfigs;
-import com.copycatsplus.copycats.config.SyncConfigBase;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -17,19 +16,12 @@ public class Copycats implements ModInitializer {
     public static final String MODID = "copycats";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
+
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
 
     static {
         REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
                 .andThen(TooltipModifier.mapNull(KineticStats.create(item))));
-    }
-
-    public static CreateRegistrate getRegistrate() {
-        return REGISTRATE;
-    }
-
-    public static ResourceLocation asResource(String path) {
-        return new ResourceLocation(MODID, path);
     }
 
     @Override
@@ -48,5 +40,13 @@ public class Copycats implements ModInitializer {
 
         CCConfigs.register();
         CCConfigs.common().register();
+    }
+
+    public static CreateRegistrate getRegistrate() {
+        return REGISTRATE;
+    }
+
+    public static ResourceLocation asResource(String path) {
+        return new ResourceLocation(MODID, path);
     }
 }

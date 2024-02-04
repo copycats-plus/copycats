@@ -14,12 +14,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -49,6 +46,15 @@ public class CCCreativeTabs {
             .displayItems(new DisplayItemsGenerator(ITEMS))
             .build());
 
+    public static void hideItems(FabricItemGroupEntries event) {
+        Set<Item> hiddenItems = ITEMS.stream()
+                .filter(x -> !FeatureToggle.isEnabled(x.getId()))
+                .map(ItemProviderEntry::asItem)
+                .collect(Collectors.toSet());
+        event.getDisplayStacks().removeIf(entry -> hiddenItems.contains(entry.getItem()));
+        event.getSearchTabStacks().removeIf(entry -> hiddenItems.contains(entry.getItem()));
+    }
+
     private static AllCreativeModeTabs.TabInfo register(String name, Supplier<CreativeModeTab> supplier) {
         ResourceLocation id = Copycats.asResource(name);
         ResourceKey<CreativeModeTab> key = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id);
@@ -59,15 +65,6 @@ public class CCCreativeTabs {
 
     public static void register() {
         ItemGroupEvents.modifyEntriesEvent(CCCreativeTabs.MAIN.key()).register(CCCreativeTabs::hideItems);
-    }
-
-    public static void hideItems(FabricItemGroupEntries event) {
-        Set<Item> hiddenItems = ITEMS.stream()
-                .filter(x -> !FeatureToggle.isEnabled(x.getId()))
-                .map(ItemProviderEntry::asItem)
-                .collect(Collectors.toSet());
-        event.getDisplayStacks().removeIf(entry -> hiddenItems.contains(entry.getItem()));
-        event.getSearchTabStacks().removeIf(entry -> hiddenItems.contains(entry.getItem()));
     }
 
     private record DisplayItemsGenerator(

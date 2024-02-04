@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.recipe.CreateRecipeProvider;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.DataIngredient;
@@ -38,11 +37,8 @@ import java.util.function.UnaryOperator;
 
 @SuppressWarnings("unused")
 public class CCStandardRecipes extends CreateRecipeProvider {
-    public CCStandardRecipes(FabricDataOutput output) {
-        super(output);
-    }
 
-   private final Marker PALETTES = enterFolder("palettes");
+    private final Marker PALETTES = enterFolder("palettes");
 
     GeneratedRecipe COPYCAT_SLAB = copycat(CCBlocks.COPYCAT_SLAB, 2);
 
@@ -427,6 +423,10 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     @Override
     public @NotNull String getName() {
         return "Standard Recipes of Create: Copycats+";
+    }
+
+    public CCStandardRecipes(FabricDataOutput output) {
+        super(output);
     }
 
     private static class ModdedCookingRecipeResult implements FinishedRecipe {
