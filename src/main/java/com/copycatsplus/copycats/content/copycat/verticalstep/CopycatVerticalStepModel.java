@@ -1,26 +1,19 @@
 package com.copycatsplus.copycats.content.copycat.verticalstep;
 
-import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
+import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.ModelData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCopycatModel {
+public class CopycatVerticalStepModel extends SimpleCopycatModel {
     protected static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
 
     public CopycatVerticalStepModel(BakedModel originalModel) {
@@ -28,19 +21,14 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material,
-                                              ModelData wrappedData, RenderType renderType) {
+    protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
         Direction facing = state.getOptionalValue(CopycatVerticalStepBlock.FACING).orElse(Direction.NORTH);
         Direction perpendicular = facing.getCounterClockWise();
 
         int xOffset = (facing.getAxis() == Axis.X ? facing : perpendicular).getAxisDirection().getStep();
         int zOffset = (facing.getAxis() == Axis.Z ? facing : perpendicular).getAxisDirection().getStep();
 
-        BakedModel model = getModelOf(material);
-        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-        List<BakedQuad> quads = new ArrayList<>();
-        CopycatRenderContext context = context(templateQuads, quads);
-        int size = templateQuads.size();
+        int size = context.src().size();
 
         Vec3 rowNormal = new Vec3(1, 0, 0);
         Vec3 columnNormal = new Vec3(0, 0, 1);
@@ -82,8 +70,5 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
 
             }
         }
-
-        return quads;
     }
-
 }

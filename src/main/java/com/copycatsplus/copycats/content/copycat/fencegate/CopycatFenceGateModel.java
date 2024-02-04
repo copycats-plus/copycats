@@ -1,37 +1,22 @@
 package com.copycatsplus.copycats.content.copycat.fencegate;
 
-import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
+import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.minecraft.world.level.block.FenceGateBlock.IN_WALL;
 import static net.minecraft.world.level.block.FenceGateBlock.OPEN;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
-public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopycatModel {
+public class CopycatFenceGateModel extends SimpleCopycatModel {
 
     public CopycatFenceGateModel(BakedModel originalModel) {
         super(originalModel);
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material,
-                                              ModelData wrappedData, RenderType renderType) {
-        BakedModel model = getModelOf(material);
-        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-        List<BakedQuad> quads = new ArrayList<>();
-        CopycatRenderContext context = context(templateQuads, quads);
-
+    protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
         int offsetWall = state.getValue(IN_WALL) ? -3 : 0;
         int rot = (int) state.getValue(FACING).toYRot();
 
@@ -153,8 +138,5 @@ public class CopycatFenceGateModel extends CopycatModel implements ISimpleCopyca
                 );
             }
         }
-
-        return quads;
     }
-
 }

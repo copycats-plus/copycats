@@ -1,37 +1,24 @@
 package com.copycatsplus.copycats.content.copycat.wall;
 
-import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
+import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WallSide;
-import net.minecraftforge.client.model.data.ModelData;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class CopycatWallModel extends CopycatModel implements ISimpleCopycatModel {
+public class CopycatWallModel extends SimpleCopycatModel {
 
     public CopycatWallModel(BakedModel originalModel) {
         super(originalModel);
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material,
-                                              ModelData wrappedData, RenderType renderType) {
-        BakedModel model = getModelOf(material);
-        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-        List<BakedQuad> quads = new ArrayList<>();
-        CopycatRenderContext context = context(templateQuads, quads);
-
+    protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
         boolean pole = state.getValue(WallBlock.UP);
         if (pole) {
             // Assemble piece by piece if the central pole exists
@@ -140,7 +127,7 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                     );
                 }
 
-                return quads;
+                return;
             }
 
             // Assemble the center if needed
@@ -224,8 +211,5 @@ public class CopycatWallModel extends CopycatModel implements ISimpleCopycatMode
                 }
             }
         }
-
-        return quads;
     }
-
 }
