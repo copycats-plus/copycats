@@ -9,25 +9,25 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.data.recipe.CreateRecipeProvider;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
+import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
-import io.github.fabricators_of_create.porting_lib.data.ConditionalRecipe;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import io.github.fabricators_of_create.porting_lib.data.ConditionalRecipe;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
-import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.client.RecipeBookCategories;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCookingSerializer;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
@@ -39,11 +39,8 @@ import java.util.function.UnaryOperator;
 
 @SuppressWarnings("unused")
 public class CCStandardRecipes extends CreateRecipeProvider {
-    public CCStandardRecipes(FabricDataGenerator output) {
-        super(output);
-    }
 
-   private final Marker PALETTES = enterFolder("palettes");
+    private final Marker PALETTES = enterFolder("palettes");
 
     GeneratedRecipe COPYCAT_SLAB = copycat(CCBlocks.COPYCAT_SLAB, 2);
 
@@ -427,6 +424,9 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     @Override
     public @NotNull String getName() {
         return "Standard Recipes of Create: Copycats+";
+    }
+    public CCStandardRecipes(FabricDataGenerator output) {
+        super(output);
     }
 
     private static class ModdedCookingRecipeResult implements FinishedRecipe {

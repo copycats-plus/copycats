@@ -21,6 +21,7 @@ public class CCDatagen implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         addExtraRegistrateData();
+
         ExistingFileHelper helper = ExistingFileHelper.withResourcesFromArg();
         Copycats.getRegistrate().setupDatagen(generator, helper);
 

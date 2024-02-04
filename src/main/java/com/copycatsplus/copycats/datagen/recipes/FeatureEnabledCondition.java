@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 
 public class FeatureEnabledCondition implements ConditionJsonProvider {
-
     public static final ResourceLocation NAME = Copycats.asResource("feature_enabled");
     private final ResourceLocation feature;
     private final boolean invert;
@@ -27,14 +26,14 @@ public class FeatureEnabledCondition implements ConditionJsonProvider {
         return NAME;
     }
 
+    public boolean test() {
+       return FeatureToggle.isEnabled(feature) != invert;
+    }
+
     @Override
     public void writeParameters(JsonObject object) {
         object.addProperty("feature", feature.toString());
         object.addProperty("invert", invert);
-    }
-
-    public boolean test() {
-       return FeatureToggle.isEnabled(feature) != invert;
     }
 
     public static FeatureEnabledCondition read(JsonObject object) {
@@ -43,33 +42,4 @@ public class FeatureEnabledCondition implements ConditionJsonProvider {
                 GsonHelper.getAsBoolean(object, "invert")
         );
     }
-
-/*
-    @Override
-    public boolean test(IContext context) {
-        return FeatureToggle.isEnabled(feature) != invert;
-    }
-
-    public static class Serializer implements IConditionSerializer<FeatureEnabledCondition> {
-        public static final Serializer INSTANCE = new Serializer();
-
-        @Override
-        public void write(JsonObject json, FeatureEnabledCondition value) {
-            json.addProperty("feature", value.feature.toString());
-            json.addProperty("invert", value.invert);
-        }
-
-        @Override
-        public FeatureEnabledCondition read(JsonObject json) {
-            return new FeatureEnabledCondition(
-                    new ResourceLocation(GsonHelper.getAsString(json, "feature")),
-                    GsonHelper.getAsBoolean(json, "invert")
-            );
-        }
-
-        @Override
-        public ResourceLocation getID() {
-            return NAME;
-        }
-    }*/
 }

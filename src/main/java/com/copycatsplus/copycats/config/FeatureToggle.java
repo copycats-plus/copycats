@@ -91,11 +91,6 @@ public class FeatureToggle {
                         .WORKQUEUE
                         .get(EnvType.CLIENT)
                         .submit(() -> {
-                            //Not possible on 1.19.2
-/*                    CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();
-                    if (cachedParameters != null) {
-                        CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);
-                    }*/
                     Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
                 })
         );

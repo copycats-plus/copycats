@@ -1,56 +1,26 @@
 package com.copycatsplus.copycats.content.copycat.board;
 
-import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
+import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 import static com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock.byDirection;
 
-public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatModel {
+public class CopycatBoardModel extends SimpleCopycatModel {
 
     public CopycatBoardModel(BakedModel originalModel) {
         super(originalModel);
     }
 
     @Override
-    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
-        BakedModel model = getModelOf(material);
-        SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
-        // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
-        MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
-        QuadEmitter emitter = meshBuilder.getEmitter();
-
-        context.pushTransform(quad -> {
-            if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
-                quad.cullFace(null);
-            } else if (occlusionData.isOccluded(quad.cullFace())) {
-                // Add quad to mesh and do not render original quad to preserve quad render order
-                // copyTo does not copy the material
-                RenderMaterial quadMaterial = quad.material();
-                quad.copyTo(emitter);
-                emitter.material(quadMaterial);
-                emitter.emit();
-                return false;
-            }
+    protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
             Map<Direction, Boolean> topEdges = new HashMap<>();
             Map<Direction, Boolean> bottomEdges = new HashMap<>();
             Map<Direction, Boolean> leftEdges = new HashMap<>();
@@ -73,10 +43,10 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                         if (south == 1) edges.put(Direction.SOUTH, true);
                         if (east == 1) edges.put(Direction.EAST, true);
                         if (west == 1) edges.put(Direction.WEST, true);
-                        assemblePiece(quad, emitter, 0, direction == Direction.UP,
+                    assemblePiece(context, 0, direction == Direction.UP,
                                 vec3(1 - west, 0, 1 - north),
                                 aabb(14 + east + west, 1, 14 + north + south).move(1 - west, 0, 1 - north),
-                                cull(MutableCullFace.NORTH * (1 - north) | MutableCullFace.SOUTH * (1 - south) | MutableCullFace.EAST * (1 - east) | MutableCullFace.WEST * (1 - west))
+                            cull(NORTH * (1 - north) | SOUTH * (1 - south) | EAST * (1 - east) | WEST * (1 - west))
                         );
                     } else {
                         int up = !topEdges.get(direction) ? 1 : 0;
@@ -87,18 +57,12 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                         if (down == 1) bottomEdges.put(direction, true);
                         if (left == 1) leftEdges.put(direction, true);
                         if (right == 1) leftEdges.put(direction.getCounterClockWise(), true);
-                        assemblePiece(quad, emitter, (int) direction.toYRot() + 180, false,
+                    assemblePiece(context, (int) direction.toYRot() + 180, false,
                                 vec3(1 - right, 1 - down, 0),
                                 aabb(14 + left + right, 14 + up + down, 1).move(1 - right, 1 - down, 0),
-                                cull(MutableCullFace.UP * (1 - up) | MutableCullFace.DOWN * (1 - down) | MutableCullFace.EAST * (1 - left) | MutableCullFace.WEST * (1 - right))
+                            cull(UP * (1 - up) | DOWN * (1 - down) | EAST * (1 - left) | WEST * (1 - right))
                         );
                     }
             }
-            return false;
-        });
-        ((FabricBakedModel) model).emitBlockQuads(blockView, material, pos, randomSupplier, context);
-        context.popTransform();
-        context.meshConsumer().accept(meshBuilder.build());
     }
-
 }

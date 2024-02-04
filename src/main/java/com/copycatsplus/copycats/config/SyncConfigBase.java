@@ -20,7 +20,6 @@ import java.util.function.Function;
  */
 public abstract class SyncConfigBase extends ConfigBase {
 
-
     public SimpleChannel syncChannel;
     private Function<CompoundTag, ? extends SyncConfig> messageSupplier;
 
@@ -43,7 +42,6 @@ public abstract class SyncConfigBase extends ConfigBase {
      *
      * @param nbt Accepts any value.
      */
-
     protected void writeSyncConfig(CompoundTag nbt) {
     }
 
@@ -58,17 +56,14 @@ public abstract class SyncConfigBase extends ConfigBase {
         readSyncConfig(config);
     }
 
-
     /**
      * Deserialize all configs from the provided `nbt` tag to a custom data storage.
      * The implementing class is responsible for data storage. No storage/config overwrite mechanism is provided here.
      *
      * @param nbt The configs sent from server.
      */
-
     protected void readSyncConfig(CompoundTag nbt) {
     }
-
 
     /**
      * Sets up all aspects of network communication. The implementing class is expected to expose a parameterless
@@ -77,8 +72,12 @@ public abstract class SyncConfigBase extends ConfigBase {
      * <p>
      * Most parameters should come from an inherited version of {@link SyncConfig}.
      */
-
-    public <T extends SyncConfig> void registerAsSyncRoot(String configVersion, Class<T> messageType, Function<FriendlyByteBuf, T> decoder, Function<CompoundTag, T> messageSupplier) {
+    public <T extends SyncConfig> void registerAsSyncRoot(
+            String configVersion,
+            Class<T> messageType,
+            Function<FriendlyByteBuf, T> decoder,
+            Function<CompoundTag, T> messageSupplier
+    ) {
         syncChannel = new SimpleChannel(Copycats.asResource("config_" + getName()));
         syncChannel.registerS2CPacket(messageType, 0, decoder);
         setMessageSupplier(messageSupplier);
@@ -106,7 +105,7 @@ public abstract class SyncConfigBase extends ConfigBase {
     }
 
     public void syncToAllPlayers() {
-        if (syncChannel == null) {
+        if (this.syncChannel == null) {
             return; // not sync root
         }
         if (ServerLifecycleHooks.getCurrentServer() == null) {
@@ -127,7 +126,6 @@ public abstract class SyncConfigBase extends ConfigBase {
      * A helper class to handle network messages. All children of {@link SyncConfigBase} should have a corresponding
      * child of {@link SyncConfig}, with its methods provided to {@link SyncConfigBase#registerAsSyncRoot}.
      */
-
     public abstract static class SyncConfig extends SimplePacketBase {
 
         private final CompoundTag nbt;
@@ -136,7 +134,7 @@ public abstract class SyncConfigBase extends ConfigBase {
             this.nbt = nbt;
         }
 
-        public SyncConfig(FriendlyByteBuf buf) {
+        protected SyncConfig(FriendlyByteBuf buf) {
             this(decode(buf));
         }
 
@@ -163,6 +161,5 @@ public abstract class SyncConfigBase extends ConfigBase {
             Copycats.LOGGER.debug("Sync Config: Received and applied server config " + nbt.toString());
         }
     }
-
 
 }
