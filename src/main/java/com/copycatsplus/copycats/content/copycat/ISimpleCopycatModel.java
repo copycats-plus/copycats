@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats.content.copycat;
 
 import com.simibubi.create.foundation.model.BakedModelHelper;
-import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
@@ -51,7 +50,7 @@ public interface ISimpleCopycatModel {
 
     default void assembleQuad(MutableQuadView quad, QuadEmitter emitter, AABB crop, Vec3 move) {
         emitter.copyFrom(quad);
-        BakedModelHelper.cropAndMove(quad, spriteFinder.find(emitter), crop, move);
+        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), crop, move);
         emitter.emit();
     }
 
