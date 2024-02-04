@@ -17,8 +17,7 @@ public interface ISimpleCopycatModel {
     /**
      * Assemble the quads of a piece of copycat material.
      *
-     * @param src      The source model to copy from.
-     * @param dest     The destination model to copy to.
+     * @param context  Source and destination quads.
      * @param rotation Number of degrees to rotate the whole operation for. Only supports multiples of 90. A value of 0 corresponds to a model facing south.
      * @param flipY    Whether to flip the whole operation vertically.
      * @param offset   In voxel space, the final position of the assembled piece.
@@ -35,19 +34,31 @@ public interface ISimpleCopycatModel {
         assembleQuad(context, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
     }
 
+    /**
+     * Copy a quad from source to destination without modification.
+     */
     default void assembleQuad(CopycatRenderContext context) {
         assembleQuad(context.src, context.dest);
     }
 
+    /**
+     * Copy a quad from source to destination without modification.
+     */
     default void assembleQuad(MutableQuadView quad, QuadEmitter emitter) {
         emitter.copyFrom(quad);
         emitter.emit();
     }
 
+    /**
+     * Copy a quad from source to destination while applying the specified crop and move.
+     */
     default void assembleQuad(CopycatRenderContext context, AABB crop, Vec3 move) {
         assembleQuad(context.src, context.dest, crop, move);
     }
 
+    /**
+     * Copy a quad from source to destination while applying the specified crop and move.
+     */
     default void assembleQuad(MutableQuadView quad, QuadEmitter emitter, AABB crop, Vec3 move) {
         emitter.copyFrom(quad);
         BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), crop, move);
