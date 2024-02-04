@@ -27,9 +27,9 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.ButtonBlock.*;
 
-public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedStoneButtonBlock> {
+public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Stone> {
 
-    public static WrappedStoneButtonBlock button;
+    public static WrappedButton.Stone button;
 
     public CopycatStoneButtonBlock(Properties pProperties) {
         super(pProperties);
@@ -40,7 +40,7 @@ public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWit
     }
 
     @Override
-    public WrappedStoneButtonBlock getWrappedBlock() {
+    public WrappedButton.Stone getWrappedBlock() {
         return button;
     }
 
