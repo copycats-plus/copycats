@@ -4,7 +4,6 @@ import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
@@ -31,19 +30,20 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
     }
 
     @Override
-    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
+    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
         SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
         MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
 
-        context.pushTransform(quad -> {
+        renderContext.pushTransform(quad -> {
+            CopycatRenderContext context = context(quad, emitter);
             if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                assembleQuad(quad, emitter);
+                assembleQuad(context);
                 return false;
             }
             Map<Direction, Boolean> topEdges = new HashMap<>();
@@ -68,7 +68,7 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                         if (south == 1) edges.put(Direction.SOUTH, true);
                         if (east == 1) edges.put(Direction.EAST, true);
                         if (west == 1) edges.put(Direction.WEST, true);
-                        assemblePiece(quad, emitter, 0, direction == Direction.UP,
+                        assemblePiece(context, 0, direction == Direction.UP,
                                 vec3(1 - west, 0, 1 - north),
                                 aabb(14 + east + west, 1, 14 + north + south).move(1 - west, 0, 1 - north),
                                 cull(MutableCullFace.NORTH * (1 - north) | MutableCullFace.SOUTH * (1 - south) | MutableCullFace.EAST * (1 - east) | MutableCullFace.WEST * (1 - west))
@@ -82,7 +82,7 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
                         if (down == 1) bottomEdges.put(direction, true);
                         if (left == 1) leftEdges.put(direction, true);
                         if (right == 1) leftEdges.put(direction.getCounterClockWise(), true);
-                        assemblePiece(quad, emitter, (int) direction.toYRot() + 180, false,
+                        assemblePiece(context, (int) direction.toYRot() + 180, false,
                                 vec3(1 - right, 1 - down, 0),
                                 aabb(14 + left + right, 14 + up + down, 1).move(1 - right, 1 - down, 0),
                                 cull(MutableCullFace.UP * (1 - up) | MutableCullFace.DOWN * (1 - down) | MutableCullFace.EAST * (1 - left) | MutableCullFace.WEST * (1 - right))
@@ -91,9 +91,9 @@ public class CopycatBoardModel extends CopycatModel implements ISimpleCopycatMod
             }
             return false;
         });
-        model.emitBlockQuads(blockView, material, pos, randomSupplier, context);
-        context.popTransform();
-        context.meshConsumer().accept(meshBuilder.build());
+        model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
+        renderContext.popTransform();
+        renderContext.meshConsumer().accept(meshBuilder.build());
     }
 
 }

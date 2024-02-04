@@ -2,10 +2,8 @@ package com.copycatsplus.copycats.content.copycat.verticalstep;
 
 import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import com.simibubi.create.foundation.model.BakedModelHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
@@ -35,19 +33,20 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
     }
 
     @Override
-    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
+    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
         SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
         MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
 
-        context.pushTransform(quad -> {
+        renderContext.pushTransform(quad -> {
+            CopycatRenderContext context = context(quad, emitter);
             if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                assembleQuad(quad, emitter);
+                assembleQuad(context);
                 return false;
             }
 
@@ -96,16 +95,16 @@ public class CopycatVerticalStepModel extends CopycatModel implements ISimpleCop
                         if (direction.getAxis() == Direction.Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                             continue;
 
-                        assembleQuad(quad, emitter, bb1, offset);
+                        assembleQuad(context, bb1, offset);
                     }
 
                 }
             }
             return false;
         });
-        model.emitBlockQuads(blockView, material, pos, randomSupplier, context);
-        context.popTransform();
-        context.meshConsumer().accept(meshBuilder.build());
+        model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
+        renderContext.popTransform();
+        renderContext.meshConsumer().accept(meshBuilder.build());
     }
 
 }

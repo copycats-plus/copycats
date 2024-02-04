@@ -26,25 +26,37 @@ public interface ISimpleCopycatModel {
      * @param select   In voxel space, the selection on the source model to copy from.
      * @param cull     Faces to skip rendering in the destination model. Changed automatically according to `rotation` and `flipY`.
      */
-    default void assemblePiece(MutableQuadView src, QuadEmitter dest, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull) {
+    default void assemblePiece(CopycatRenderContext context, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull) {
         select.rotate(rotation).flipY(flipY);
         offset.rotate(rotation).flipY(flipY);
         cull.rotate(rotation).flipY(flipY);
-        if (cull.isCulled(src.lightFace())) {
+        if (cull.isCulled(context.src().lightFace())) {
             return;
         }
-        assembleQuad(src, dest, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
+        assembleQuad(context, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
     }
 
-    default void assembleQuad(MutableQuadView src, QuadEmitter dest) {
-        dest.copyFrom(src);
-        dest.emit();
+    default void assembleQuad(CopycatRenderContext context) {
+        assembleQuad(context.src, context.dest);
     }
 
-    default void assembleQuad(MutableQuadView src, QuadEmitter dest, AABB crop, Vec3 move) {
-        dest.copyFrom(src);
-        BakedModelHelper.cropAndMove(src, spriteFinder.find(dest), crop, move);
-        dest.emit();
+    default void assembleQuad(MutableQuadView quad, QuadEmitter emitter) {
+        emitter.copyFrom(quad);
+        emitter.emit();
+    }
+
+    default void assembleQuad(CopycatRenderContext context, AABB crop, Vec3 move) {
+        assembleQuad(context.src, context.dest, crop, move);
+    }
+
+    default void assembleQuad(MutableQuadView quad, QuadEmitter emitter, AABB crop, Vec3 move) {
+        emitter.copyFrom(quad);
+        BakedModelHelper.cropAndMove(quad, spriteFinder.find(emitter), crop, move);
+        emitter.emit();
+    }
+
+    default CopycatRenderContext context(MutableQuadView src, QuadEmitter dest) {
+        return new CopycatRenderContext(src, dest);
     }
 
     default MutableCullFace cull(int mask) {
@@ -57,6 +69,10 @@ public interface ISimpleCopycatModel {
 
     default MutableAABB aabb(float sizeX, float sizeY, float sizeZ) {
         return new MutableAABB(sizeX, sizeY, sizeZ);
+    }
+
+    record CopycatRenderContext(MutableQuadView src, QuadEmitter dest) {
+
     }
 
     class MutableCullFace {

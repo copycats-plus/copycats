@@ -3,7 +3,6 @@ package com.copycatsplus.copycats.content.copycat.trapdoor;
 import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
@@ -28,19 +27,20 @@ public class CopycatTrapdoorModel extends CopycatModel implements ISimpleCopycat
     }
 
     @Override
-    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
+    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
         SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
         MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         QuadEmitter emitter = meshBuilder.getEmitter();
 
-        context.pushTransform(quad -> {
+        renderContext.pushTransform(quad -> {
+            CopycatRenderContext context = context(quad, emitter);
             if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {
                 // Add quad to mesh and do not render original quad to preserve quad render order
-                assembleQuad(quad, emitter);
+                assembleQuad(context);
                 return false;
             }
             int rot = (int) state.getValue(FACING).toYRot();
@@ -49,26 +49,26 @@ public class CopycatTrapdoorModel extends CopycatModel implements ISimpleCopycat
 
             if (!open) {
                 assemblePiece(
-                        quad, emitter, rot, flipY,
+                        context, rot, flipY,
                         vec3(0, 0, 0),
                         aabb(16, 1, 16),
                         cull(MutableCullFace.UP)
                 );
                 assemblePiece(
-                        quad, emitter, rot, flipY,
+                        context, rot, flipY,
                         vec3(0, 1, 0),
                         aabb(16, 2, 16).move(0, 14, 0),
                         cull(MutableCullFace.DOWN)
                 );
             } else {
                 assemblePiece(
-                        quad, emitter, rot, flipY,
+                        context, rot, flipY,
                         vec3(0, 0, 0),
                         aabb(16, 16, 1),
                         cull(MutableCullFace.SOUTH)
                 );
                 assemblePiece(
-                        quad, emitter, rot, flipY,
+                        context, rot, flipY,
                         vec3(0, 0, 1),
                         aabb(16, 16, 2).move(0, 0, 14),
                         cull(MutableCullFace.NORTH)
@@ -76,9 +76,9 @@ public class CopycatTrapdoorModel extends CopycatModel implements ISimpleCopycat
             }
             return false;
         });
-        model.emitBlockQuads(blockView, material, pos, randomSupplier, context);
-        context.popTransform();
-        context.meshConsumer().accept(meshBuilder.build());
+        model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
+        renderContext.popTransform();
+        renderContext.meshConsumer().accept(meshBuilder.build());
     }
 
 }
