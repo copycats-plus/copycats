@@ -6,6 +6,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
+
 public class CopycatFenceModel extends SimpleCopycatModel {
 
     public CopycatFenceModel(BakedModel originalModel) {
@@ -18,7 +20,7 @@ public class CopycatFenceModel extends SimpleCopycatModel {
             assemblePiece(context, (int) direction.toYRot(), false,
                     vec3(6, 0, 6),
                     aabb(2, 16, 2),
-                    cull(MutableCullFace.SOUTH | MutableCullFace.EAST)
+                    cull(SOUTH | EAST)
             );
         }
 
@@ -29,43 +31,43 @@ public class CopycatFenceModel extends SimpleCopycatModel {
             assemblePiece(context, rot, false,
                     vec3(7, 6, 10),
                     aabb(1, 1, 6),
-                    cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.EAST)
+                    cull(UP | NORTH | EAST)
             );
             assemblePiece(context, rot, false,
                     vec3(8, 6, 10),
                     aabb(1, 1, 6).move(15, 0, 0),
-                    cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.WEST)
+                    cull(UP | NORTH | WEST)
             );
             assemblePiece(context, rot, false,
                     vec3(7, 7, 10),
                     aabb(1, 2, 6).move(0, 14, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                    cull(DOWN | NORTH | EAST)
             );
             assemblePiece(context, rot, false,
                     vec3(8, 7, 10),
                     aabb(1, 2, 6).move(15, 14, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                    cull(DOWN | NORTH | WEST)
             );
 
             assemblePiece(context, rot, false,
                     vec3(7, 12, 10),
                     aabb(1, 1, 6),
-                    cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.EAST)
+                    cull(UP | NORTH | EAST)
             );
             assemblePiece(context, rot, false,
                     vec3(8, 12, 10),
                     aabb(1, 1, 6).move(15, 0, 0),
-                    cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.WEST)
+                    cull(UP | NORTH | WEST)
             );
             assemblePiece(context, rot, false,
                     vec3(7, 13, 10),
                     aabb(1, 2, 6).move(0, 14, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                    cull(DOWN | NORTH | EAST)
             );
             assemblePiece(context, rot, false,
                     vec3(8, 13, 10),
                     aabb(1, 2, 6).move(15, 14, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                    cull(DOWN | NORTH | WEST)
             );
         }
     }

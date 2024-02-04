@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.state.properties.WallSide;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
+
 public class CopycatWallModel extends SimpleCopycatModel {
 
     public CopycatWallModel(BakedModel originalModel) {
@@ -28,7 +30,7 @@ public class CopycatWallModel extends SimpleCopycatModel {
                 assemblePiece(context, (int) direction.toYRot(), false,
                         vec3(4, 0, 4),
                         aabb(4, 16, 4),
-                        cull(MutableCullFace.SOUTH | MutableCullFace.EAST)
+                        cull(SOUTH | EAST)
                 );
             }
 
@@ -43,34 +45,34 @@ public class CopycatWallModel extends SimpleCopycatModel {
                         assemblePiece(context, rot, false,
                                 vec3(5, 0, 12),
                                 aabb(3, 7, 4),
-                                cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.EAST)
+                                cull(UP | NORTH | EAST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(8, 0, 12),
                                 aabb(3, 7, 4).move(13, 0, 0),
-                                cull(MutableCullFace.UP | MutableCullFace.NORTH | MutableCullFace.WEST)
+                                cull(UP | NORTH | WEST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(5, 7, 12),
                                 aabb(3, 7, 4).move(0, 9, 0),
-                                cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.EAST)
+                                cull(DOWN | NORTH | EAST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(8, 7, 12),
                                 aabb(3, 7, 4).move(13, 9, 0),
-                                cull(MutableCullFace.DOWN | MutableCullFace.NORTH | MutableCullFace.WEST)
+                                cull(DOWN | NORTH | WEST)
                         );
                     }
                     case TALL -> {
                         assemblePiece(context, rot, false,
                                 vec3(5, 0, 12),
                                 aabb(3, 16, 4),
-                                cull(MutableCullFace.NORTH | MutableCullFace.EAST)
+                                cull(NORTH | EAST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(8, 0, 12),
                                 aabb(3, 16, 4).move(13, 0, 0),
-                                cull(MutableCullFace.NORTH | MutableCullFace.WEST)
+                                cull(NORTH | WEST)
                         );
                     }
                 }
@@ -97,33 +99,33 @@ public class CopycatWallModel extends SimpleCopycatModel {
                     assemblePiece(context, rot, false,
                             vec3(5, 0, 0),
                             aabb(3, 7, 16),
-                            cull(MutableCullFace.UP | MutableCullFace.EAST)
+                            cull(UP | EAST)
                     );
                     assemblePiece(context, rot, false,
                             vec3(8, 0, 0),
                             aabb(3, 7, 16).move(13, 0, 0),
-                            cull(MutableCullFace.UP | MutableCullFace.WEST)
+                            cull(UP | WEST)
                     );
                     assemblePiece(context, rot, false,
                             vec3(5, 7, 0),
                             aabb(3, 7, 16).move(0, 9, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.EAST)
+                            cull(DOWN | EAST)
                     );
                     assemblePiece(context, rot, false,
                             vec3(8, 7, 0),
                             aabb(3, 7, 16).move(13, 9, 0),
-                            cull(MutableCullFace.DOWN | MutableCullFace.WEST)
+                            cull(DOWN | WEST)
                     );
                 } else {
                     assemblePiece(context, rot, false,
                             vec3(5, 0, 0),
                             aabb(3, 16, 16).move(0, 0, 0),
-                            cull(MutableCullFace.EAST)
+                            cull(EAST)
                     );
                     assemblePiece(context, rot, false,
                             vec3(8, 0, 0),
                             aabb(3, 16, 16).move(13, 0, 0),
-                            cull(MutableCullFace.WEST)
+                            cull(WEST)
                     );
                 }
 
@@ -144,7 +146,7 @@ public class CopycatWallModel extends SimpleCopycatModel {
                         assemblePiece(context, rot, false,
                                 vec3(5, 0, 5),
                                 aabb(3, 16, 3).move(0, 0, 0),
-                                cull(MutableCullFace.SOUTH | MutableCullFace.EAST | (cullCurrent ? MutableCullFace.NORTH : 0) | (cullAdjacent ? MutableCullFace.WEST : 0))
+                                cull(SOUTH | EAST | (cullCurrent ? NORTH : 0) | (cullAdjacent ? WEST : 0))
                         );
                     } else {
                         boolean cullCurrent = sides.get(direction.getOpposite()) != WallSide.NONE;
@@ -152,12 +154,12 @@ public class CopycatWallModel extends SimpleCopycatModel {
                         assemblePiece(context, rot, false,
                                 vec3(5, 0, 5),
                                 aabb(3, 7, 3).move(0, 0, 0),
-                                cull(MutableCullFace.UP | MutableCullFace.SOUTH | MutableCullFace.EAST | (cullCurrent ? MutableCullFace.NORTH : 0) | (cullAdjacent ? MutableCullFace.WEST : 0))
+                                cull(UP | SOUTH | EAST | (cullCurrent ? NORTH : 0) | (cullAdjacent ? WEST : 0))
                         );
                         assemblePiece(context, rot, false,
                                 vec3(5, 7, 5),
                                 aabb(3, 7, 3).move(0, 9, 0),
-                                cull(MutableCullFace.DOWN | MutableCullFace.SOUTH | MutableCullFace.EAST | (cullCurrent ? MutableCullFace.NORTH : 0) | (cullAdjacent ? MutableCullFace.WEST : 0))
+                                cull(DOWN | SOUTH | EAST | (cullCurrent ? NORTH : 0) | (cullAdjacent ? WEST : 0))
                         );
                     }
                 }
@@ -178,34 +180,34 @@ public class CopycatWallModel extends SimpleCopycatModel {
                         assemblePiece(context, rot, false,
                                 vec3(5, 0, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(0, 0, 0),
-                                cull(MutableCullFace.UP | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.EAST)
+                                cull(UP | (cullEnd ? NORTH : 0) | EAST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(8, 0, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(13, 0, 0),
-                                cull(MutableCullFace.UP | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.WEST)
+                                cull(UP | (cullEnd ? NORTH : 0) | WEST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(5, 7, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(0, 9, 0),
-                                cull(MutableCullFace.DOWN | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.EAST)
+                                cull(DOWN | (cullEnd ? NORTH : 0) | EAST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(8, 7, extend ? 5 : 11),
                                 aabb(3, 7, extend ? 11 : 5).move(13, 9, 0),
-                                cull(MutableCullFace.DOWN | (cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.WEST)
+                                cull(DOWN | (cullEnd ? NORTH : 0) | WEST)
                         );
                     }
                     case TALL -> {
                         assemblePiece(context, rot, false,
                                 vec3(5, 0, extend ? 5 : 11),
                                 aabb(3, 16, extend ? 11 : 5).move(0, 0, 0),
-                                cull((cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.EAST)
+                                cull((cullEnd ? NORTH : 0) | EAST)
                         );
                         assemblePiece(context, rot, false,
                                 vec3(8, 0, extend ? 5 : 11),
                                 aabb(3, 16, extend ? 11 : 5).move(13, 0, 0),
-                                cull((cullEnd ? MutableCullFace.NORTH : 0) | MutableCullFace.WEST)
+                                cull((cullEnd ? NORTH : 0) | WEST)
                         );
                     }
                 }

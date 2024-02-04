@@ -4,6 +4,8 @@ import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
+
 public class CopycatByteModel extends SimpleCopycatModel {
 
     public CopycatByteModel(BakedModel originalModel) {
@@ -23,49 +25,49 @@ public class CopycatByteModel extends SimpleCopycatModel {
                     context, 0, false,
                     vec3(offsetX, offsetY, offsetZ),
                     aabb(4, 4, 4),
-                    cull(MutableCullFace.UP | MutableCullFace.EAST | MutableCullFace.SOUTH)
+                    cull(UP | EAST | SOUTH)
             );
             assemblePiece(
                     context, 0, false,
                     vec3(offsetX + 4, offsetY, offsetZ),
                     aabb(4, 4, 4).move(12, 0, 0),
-                    cull(MutableCullFace.UP | MutableCullFace.WEST | MutableCullFace.SOUTH)
+                    cull(UP | WEST | SOUTH)
             );
             assemblePiece(
                     context, 0, false,
                     vec3(offsetX, offsetY, offsetZ + 4),
                     aabb(4, 4, 4).move(0, 0, 12),
-                    cull(MutableCullFace.UP | MutableCullFace.EAST | MutableCullFace.NORTH)
+                    cull(UP | EAST | NORTH)
             );
             assemblePiece(
                     context, 0, false,
                     vec3(offsetX + 4, offsetY, offsetZ + 4),
                     aabb(4, 4, 4).move(12, 0, 12),
-                    cull(MutableCullFace.UP | MutableCullFace.WEST | MutableCullFace.NORTH)
+                    cull(UP | WEST | NORTH)
             );
             assemblePiece(
                     context, 0, false,
                     vec3(offsetX, offsetY + 4, offsetZ),
                     aabb(4, 4, 4).move(0, 12, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.EAST | MutableCullFace.SOUTH)
+                    cull(DOWN | EAST | SOUTH)
             );
             assemblePiece(
                     context, 0, false,
                     vec3(offsetX + 4, offsetY + 4, offsetZ),
                     aabb(4, 4, 4).move(12, 12, 0),
-                    cull(MutableCullFace.DOWN | MutableCullFace.WEST | MutableCullFace.SOUTH)
+                    cull(DOWN | WEST | SOUTH)
             );
             assemblePiece(
                     context, 0, false,
                     vec3(offsetX, offsetY + 4, offsetZ + 4),
                     aabb(4, 4, 4).move(0, 12, 12),
-                    cull(MutableCullFace.DOWN | MutableCullFace.EAST | MutableCullFace.NORTH)
+                    cull(DOWN | EAST | NORTH)
             );
             assemblePiece(
                     context, 0, false,
                     vec3(offsetX + 4, offsetY + 4, offsetZ + 4),
                     aabb(4, 4, 4).move(12, 12, 12),
-                    cull(MutableCullFace.DOWN | MutableCullFace.WEST | MutableCullFace.NORTH)
+                    cull(DOWN | WEST | NORTH)
             );
         }
     }
