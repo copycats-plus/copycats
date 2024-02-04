@@ -22,8 +22,6 @@ import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
-import com.copycatsplus.copycats.content.copycat.step.half_panel.CopycatHalfBlock;
-import com.copycatsplus.copycats.content.copycat.step.half_panel.CopycatHalfModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.WrappedTrapdoorBlock;
@@ -259,15 +257,6 @@ public class CCBlocks {
                     })
                     .item()
                     .transform(customItemModel("copycat_base", "layer"))
-                    .register();
-
-    public static final BlockEntry<CopycatHalfBlock> COPYCAT_HALF_PANEL =
-            REGISTRATE.block("copycat_beam", CopycatHalfBlock::new)
-                    .transform(BuilderTransformers.copycat())
-                    .transform(FeatureToggle.register())
-                    .onRegister(CreateRegistrate.blockModel(() -> CopycatHalfModel::new))
-                    .item()
-                    .transform(customItemModel("copycat_base", "half"))
                     .register();
 
     public static void register() {
