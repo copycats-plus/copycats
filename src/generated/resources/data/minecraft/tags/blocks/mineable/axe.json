@@ -2,6 +2,7 @@
   "values": [
     "copycats:copycat_slab",
     "copycats:copycat_block",
+    "copycats:copycat_beam",
     "copycats:copycat_vertical_step",
     "copycats:copycat_stairs",
     "copycats:copycat_fence",
@@ -11,7 +12,6 @@
     "copycats:copycat_board",
     "copycats:copycat_byte",
     "copycats:copycat_layer",
-    "copycats:copycat_beam",
     "copycats:copycat_wood_button",
     "copycats:copycat_stone_button",
     "copycats:copycat_wooden_pressure_plate"
