@@ -136,6 +136,8 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
     GeneratedRecipe COPYCAT_BYTE = copycat(CCBlocks.COPYCAT_BYTE, 8);
 
+    GeneratedRecipe COPYCAT_LAYER = copycat(CCBlocks.COPYCAT_LAYER, 8);
+
     GeneratedRecipe COPYCAT_SLICE = copycat(CCBlocks.COPYCAT_SLICE, 16);
 
     GeneratedRecipe COPYCAT_VERTICAL_SLICE = copycat(CCBlocks.COPYCAT_VERTICAL_SLICE, 16);
