@@ -3,29 +3,21 @@ package com.copycatsplus.copycats.content.copycat.pressure_plate;
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-
 import static net.minecraft.world.level.block.PressurePlateBlock.POWERED;
-import static net.minecraft.world.level.block.PressurePlateBlock.TOUCH_AABB;
 
+@SuppressWarnings("deprecation")
 public class CopycatWoodenPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.Wood> {
 
     public static WrappedPressurePlate.Wood pressurePlate;
@@ -51,93 +43,52 @@ public class CopycatWoodenPressurePlate extends CopycatBlock implements ICopycat
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public boolean isPossibleToRespawnInThis(@NotNull BlockState pState) {
+        return pressurePlate.isPossibleToRespawnInThis(pState);
+    }
+
+    @Override
+    public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return pressurePlate.getShape(pState, pLevel, pPos, pContext);
     }
 
     @Override
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        int i = this.getSignalForState(pState);
-        if (i > 0) {
-            this.checkPressed(null, pLevel, pPos, pState, i);
-        }
-
+    public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pDirection, @NotNull BlockState pNeighborState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pNeighborPos) {
+        return pressurePlate.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
     }
 
     @Override
-    public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-        if (!pLevel.isClientSide) {
-            int i = this.getSignalForState(pState);
-            if (i == 0) {
-                this.checkPressed(pEntity, pLevel, pPos, pState, i);
-            }
-
-        }
-    }
-
-    protected int getSignalForState(BlockState pState) {
-        return pState.getValue(POWERED) ? 15 : 0;
-    }
-
-    protected BlockState setSignalForState(BlockState pState, int pStrength) {
-        return pState.setValue(POWERED, pStrength > 0);
+    public boolean canSurvive(@NotNull BlockState pState, @NotNull LevelReader pLevel, @NotNull BlockPos pPos) {
+        return pressurePlate.canSurvive(pState, pLevel, pPos);
     }
 
     @Override
-    public boolean isSignalSource(BlockState pState) {
+    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+        pressurePlate.tick(pState, pLevel, pPos, pRandom);
+    }
+
+    @Override
+    public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
+        pressurePlate.entityInside(pState, pLevel, pPos, pEntity);
+    }
+
+    @Override
+    public int getSignal(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull Direction pDirection) {
+        return pressurePlate.getSignal(pState, pLevel, pPos, pDirection);
+    }
+
+    @Override
+    public int getDirectSignal(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull Direction pDirection) {
+        return pressurePlate.getDirectSignal(pState, pLevel, pPos, pDirection);
+    }
+
+    @Override
+    public boolean isSignalSource(@NotNull BlockState pState) {
         return pressurePlate.isSignalSource(pState);
-    }
-
-    protected int getSignalStrength(Level pLevel, BlockPos pPos) {
-        Class<? extends Entity> oclass1 = switch (pressurePlate.sensitivity) {
-            case EVERYTHING -> Entity.class;
-            case MOBS -> LivingEntity.class;
-            default -> throw new IncompatibleClassChangeError();
-        };
-        return getEntityCount(pLevel, TOUCH_AABB.move(pPos), oclass1) > 0 ? 15 : 0;
     }
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         pressurePlate.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
-    }
-
-    /**
-     * Notify block and block below of changes
-     */
-    protected void updateNeighbours(Level pLevel, BlockPos pPos) {
-        pLevel.updateNeighborsAt(pPos, this);
-        pLevel.updateNeighborsAt(pPos.below(), this);
-    }
-
-    private void checkPressed(@Nullable Entity pEntity, Level pLevel, BlockPos pPos, BlockState pState, int pCurrentSignal) {
-        int i = this.getSignalStrength(pLevel, pPos);
-        boolean flag = pCurrentSignal > 0;
-        boolean flag1 = i > 0;
-        if (pCurrentSignal != i) {
-            BlockState blockstate = this.setSignalForState(pState, i);
-            pLevel.setBlock(pPos, blockstate, 2);
-            this.updateNeighbours(pLevel, pPos);
-            pLevel.setBlocksDirty(pPos, pState, blockstate);
-        }
-
-        if (!flag1 && flag) {
-            pLevel.playSound((Player)null, pPos, pressurePlate.type.pressurePlateClickOff(), SoundSource.BLOCKS);
-            pLevel.gameEvent(pEntity, GameEvent.BLOCK_DEACTIVATE, pPos);
-        } else if (flag1 && !flag) {
-            pLevel.playSound((Player)null, pPos, pressurePlate.type.pressurePlateClickOn(), SoundSource.BLOCKS);
-            pLevel.gameEvent(pEntity, GameEvent.BLOCK_ACTIVATE, pPos);
-        }
-
-        if (flag1) {
-            pLevel.scheduleTick(new BlockPos(pPos), this, 20);
-        }
-
-    }
-
-    public static int getEntityCount(Level pLevel, net.minecraft.world.phys.AABB pBox, Class<? extends Entity> pEntityClass) {
-        return pLevel.getEntitiesOfClass(pEntityClass, pBox, EntitySelector.NO_SPECTATORS.and((p_289691_) -> {
-            return !p_289691_.isIgnoringBlockTriggers();
-        })).size();
     }
 }
