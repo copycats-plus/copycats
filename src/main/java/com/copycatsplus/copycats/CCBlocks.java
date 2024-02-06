@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureToggle;
+import com.copycatsplus.copycats.content.copycat.ToggleableCopycatModel;
 import com.copycatsplus.copycats.content.copycat.beam.CopycatBeamBlock;
 import com.copycatsplus.copycats.content.copycat.beam.CopycatBeamModel;
 import com.copycatsplus.copycats.content.copycat.block.CopycatBlockBlock;
@@ -21,6 +22,7 @@ import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsEnhancedModel;
+import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
@@ -99,7 +101,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .tag(BlockTags.STAIRS)
                     .transform(FeatureToggle.register())
-                    .onRegister(CreateRegistrate.blockModel(() -> CopycatStairsEnhancedModel::new))
+                    .onRegister(CreateRegistrate.blockModel(() -> ToggleableCopycatModel.with(CopycatStairsModel::new, CopycatStairsEnhancedModel::new)))
                     .item()
                     .transform(customItemModel("copycat_base", "stairs"))
                     .register();
