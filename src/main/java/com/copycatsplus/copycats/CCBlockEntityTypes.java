@@ -14,6 +14,7 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_SLAB,
                             CCBlocks.COPYCAT_BEAM,
                             CCBlocks.COPYCAT_VERTICAL_STEP,
+                            CCBlocks.COPYCAT_HALF_PANEL,
                             CCBlocks.COPYCAT_STAIRS,
                             CCBlocks.COPYCAT_FENCE,
                             CCBlocks.COPYCAT_FENCE_GATE,

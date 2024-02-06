@@ -87,6 +87,15 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
     GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
 
+    GeneratedRecipe COPYCAT_HALF_PANEL = copycat(CCBlocks.COPYCAT_HALF_PANEL, 8);
+
+    GeneratedRecipe COPYCAT_PANEL_FROM_HALF_PANELS = create(AllBlocks.COPYCAT_PANEL).withSuffix("_from_half_panels").unlockedBy(CCBlocks.COPYCAT_HALF_PANEL::get)
+            .requiresFeature(CCBlocks.COPYCAT_HALF_PANEL)
+            .viaShaped(b -> b
+                    .define('s', CCBlocks.COPYCAT_HALF_PANEL)
+                    .pattern("ss")
+            );
+
     GeneratedRecipe COPYCAT_STAIRS = copycat(CCBlocks.COPYCAT_STAIRS, 1);
 
     GeneratedRecipe COPYCAT_FENCE = copycat(CCBlocks.COPYCAT_FENCE, 1);

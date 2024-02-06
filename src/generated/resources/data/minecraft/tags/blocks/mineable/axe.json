@@ -4,6 +4,7 @@
     "copycats:copycat_block",
     "copycats:copycat_beam",
     "copycats:copycat_vertical_step",
+    "copycats:copycat_half_panel",
     "copycats:copycat_stairs",
     "copycats:copycat_fence",
     "copycats:copycat_wall",
