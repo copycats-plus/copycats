@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.data.recipe.CreateRecipeProvider;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.DataIngredient;
@@ -18,6 +19,7 @@ import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -27,20 +29,24 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class CCStandardRecipes extends CreateRecipeProvider {
+
+    private final Set<CopycatBlock> copycatsWithRecipes = new HashSet<>();
 
     private final Marker PALETTES = enterFolder("palettes");
 
@@ -180,10 +186,33 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     }
 
     GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
+        if (result.get() instanceof CopycatBlock copycat) {
+            copycatsWithRecipes.add(copycat);
+        }
         return create(result)
                 .unlockedBy(AllItems.ZINC_INGOT::get)
                 .requiresResultFeature()
                 .viaStonecutting(DataIngredient.tag(AllTags.forgeItemTag("ingots/zinc")), resultCount);
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return "Standard Recipes of Create: Copycats+";
+    }
+
+    public CCStandardRecipes(PackOutput output) {
+        super(output);
+
+        List<ResourceLocation> missingRecipes = new LinkedList<>();
+        for (Map.Entry<ResourceKey<Block>, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
+            if (entry.getKey().location().getNamespace().equals(Copycats.MODID) && entry.getValue() instanceof CopycatBlock) {
+                if (!copycatsWithRecipes.contains(entry.getValue()))
+                    missingRecipes.add(entry.getKey().location());
+            }
+        }
+        if (!missingRecipes.isEmpty()) {
+            throw new IllegalStateException("The following copycats do not have a crafting recipe: " + missingRecipes.stream().map(ResourceLocation::toString).collect(Collectors.joining(", ")));
+        }
     }
 
     protected static class Marker {
@@ -438,15 +467,6 @@ public class CCStandardRecipes extends CreateRecipeProvider {
                 });
             }
         }
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return "Standard Recipes of Create: Copycats+";
-    }
-
-    public CCStandardRecipes(PackOutput output) {
-        super(output);
     }
 
     private static class ModdedCookingRecipeResult implements FinishedRecipe {
