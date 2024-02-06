@@ -20,7 +20,7 @@ import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
-import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
+import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsEnhancedModel;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
@@ -99,7 +99,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .tag(BlockTags.STAIRS)
                     .transform(FeatureToggle.register())
-                    .onRegister(CreateRegistrate.blockModel(() -> CopycatStairsModel::new))
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatStairsEnhancedModel::new))
                     .item()
                     .transform(customItemModel("copycat_base", "stairs"))
                     .register();
