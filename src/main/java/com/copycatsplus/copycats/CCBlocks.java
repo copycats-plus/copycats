@@ -54,7 +54,6 @@ import net.minecraftforge.common.Tags;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
-@SuppressWarnings("removal")
 public class CCBlocks {
     private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
 
