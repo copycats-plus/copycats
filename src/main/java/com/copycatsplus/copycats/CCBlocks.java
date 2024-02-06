@@ -21,17 +21,22 @@ import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
+import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceBlock;
+import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.WrappedTrapdoorBlock;
+import com.copycatsplus.copycats.content.copycat.verticalslice.CopycatVerticalSliceBlock;
+import com.copycatsplus.copycats.content.copycat.verticalslice.CopycatVerticalSliceModel;
 import com.copycatsplus.copycats.content.copycat.verticalstep.CopycatVerticalStepBlock;
 import com.copycatsplus.copycats.content.copycat.verticalstep.CopycatVerticalStepModel;
 import com.copycatsplus.copycats.content.copycat.wall.CopycatWallBlock;
 import com.copycatsplus.copycats.content.copycat.wall.CopycatWallModel;
 import com.copycatsplus.copycats.content.copycat.wall.WrappedWallBlock;
+import com.copycatsplus.copycats.datagen.CCLootGen;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -46,7 +51,6 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -250,23 +254,29 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatLayerModel::new))
-                    .loot((lt, block) -> {
-                        LootTable.Builder builder = LootTable.lootTable();
-                        for (int i = 1; i <= 8; i++) {
-                            builder.withPool(
-                                    LootPool.lootPool()
-                                            .setRolls(ConstantValue.exactly(1.0F))
-                                            .when(ExplosionCondition.survivesExplosion())
-                                            .when(LootItemBlockStatePropertyCondition
-                                                    .hasBlockStateProperties(block)
-                                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatLayerBlock.LAYERS, i)))
-                                            .add(LootItem.lootTableItem(block).apply(SetItemCountFunction.setCount(ConstantValue.exactly(i))))
-                            );
-                        }
-                        lt.add(block, builder);
-                    })
+                    .loot(CCLootGen::lootByLayer)
                     .item()
                     .transform(customItemModel("copycat_base", "layer"))
+                    .register();
+
+    public static final BlockEntry<CopycatSliceBlock> COPYCAT_SLICE =
+            REGISTRATE.block("copycat_slice", CopycatSliceBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatSliceModel::new))
+                    .loot(CCLootGen::lootByLayer)
+                    .item()
+                    .transform(customItemModel("copycat_base", "slice"))
+                    .register();
+
+    public static final BlockEntry<CopycatVerticalSliceBlock> COPYCAT_VERTICAL_SLICE =
+            REGISTRATE.block("copycat_vertical_slice", CopycatVerticalSliceBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatVerticalSliceModel::new))
+                    .loot(CCLootGen::lootByLayer)
+                    .item()
+                    .transform(customItemModel("copycat_base", "vertical_slice"))
                     .register();
 
     public static void register() {

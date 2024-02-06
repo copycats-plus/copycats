@@ -38,6 +38,30 @@ public class CCShapes {
     public static final VoxelShaper HALF_PANEL_SOUTH = shape(0.0, 0.0, 8.0, 16.0, 3.0, 16.0).forOffsetDirectional(Direction.DOWN, Direction.SOUTH);
     public static final VoxelShaper HALF_PANEL_EAST = shape(8.0, 0.0, 0.0, 16.0, 3.0, 16.0).forOffsetDirectional(Direction.DOWN, Direction.EAST);
     public static final VoxelShaper HALF_PANEL_WEST = shape(0.0, 0.0, 0.0, 8.0, 3.0, 16.0).forOffsetDirectional(Direction.DOWN, Direction.WEST);
+    public static final VoxelShaper SLICE_BOTTOM_2PX = shape(0, 0, 14, 16, 2, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_BOTTOM_4PX = shape(0, 0, 12, 16, 4, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_BOTTOM_6PX = shape(0, 0, 10, 16, 6, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_BOTTOM_8PX = shape(0, 0, 8, 16, 8, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_BOTTOM_10PX = shape(0, 0, 6, 16, 10, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_BOTTOM_12PX = shape(0, 0, 4, 16, 12, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_BOTTOM_14PX = shape(0, 0, 2, 16, 14, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_BOTTOM_16PX = shape(0, 0, 0, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_2PX = shape(0, 14, 14, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_4PX = shape(0, 12, 12, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_6PX = shape(0, 10, 10, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_8PX = shape(0, 8, 8, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_10PX = shape(0, 6, 6, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_12PX = shape(0, 4, 4, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_14PX = shape(0, 2, 2, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_TOP_16PX = shape(0, 0, 0, 16, 16, 16).forHorizontal(Direction.SOUTH);
+    public static final VoxelShaper SLICE_VERTICAL_2PX = shape(0, 0, 0, 2, 16, 2).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper SLICE_VERTICAL_4PX = shape(0, 0, 0, 4, 16, 4).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper SLICE_VERTICAL_6PX = shape(0, 0, 0, 6, 16, 6).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper SLICE_VERTICAL_8PX = shape(0, 0, 0, 8, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper SLICE_VERTICAL_10PX = shape(0, 0, 0, 10, 16, 10).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper SLICE_VERTICAL_12PX = shape(0, 0, 0, 12, 16, 12).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper SLICE_VERTICAL_14PX = shape(0, 0, 0, 14, 16, 14).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper SLICE_VERTICAL_16PX = shape(0, 0, 0, 16, 16, 16).forHorizontal(Direction.NORTH);
 
     private static Builder shape(VoxelShape shape) {
         return new Builder(shape);
