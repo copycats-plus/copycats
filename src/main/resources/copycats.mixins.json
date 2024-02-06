@@ -24,6 +24,7 @@
     "copycat.trapdoor.RedStoneWireBlockMixin",
     "copycat.wall.TrackPaverMixin",
     "copycat.wall.WallBlockMixin",
+    "entity.CatMixin",
     "featuretoggle.CreativeModeTabsAccessor"
   ],
   "client": [

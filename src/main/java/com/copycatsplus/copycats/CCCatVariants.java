@@ -34,7 +34,9 @@ public class CCCatVariants {
     private static void onRegister(RegisterEvent event) {
         event.register(BuiltInRegistries.CAT_VARIANT.key(), helper -> {
             for (Pair<Holder.Reference<CatVariant>, ResourceLocation> entry : ENTRIES) {
-                helper.register(entry.getFirst().key(), new CatVariant(entry.getSecond()));
+                CatVariant instance = new CatVariant(entry.getSecond());
+                helper.register(entry.getFirst().key(), instance);
+                entry.getFirst().bindValue(instance);
             }
         });
     }
