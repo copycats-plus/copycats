@@ -19,6 +19,7 @@ import com.copycatsplus.copycats.content.copycat.fencegate.WrappedFenceGateBlock
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatPressurePlateModel;
+import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatStonePressurePlate;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatWoodenPressurePlate;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.WrappedPressurePlate;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
@@ -306,6 +307,15 @@ public class CCBlocks {
                     .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_stone_button", "block/barrier")))
                     .register();
 
+    public static final BlockEntry<WrappedPressurePlate.Wood> WRAPPED_COPYCAT_WOOD_PRESSURE_PLATE =
+            REGISTRATE.block("wrapped_copycat_wood_pressure_plate", p -> new WrappedPressurePlate().wood(PressurePlateBlock.Sensitivity.EVERYTHING, p, BlockSetType.OAK))
+                    .initialProperties(() -> Blocks.OAK_BUTTON)
+                    .onRegister(b -> CopycatWoodenPressurePlate.pressurePlate = b)
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .tag(BlockTags.WOODEN_PRESSURE_PLATES)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_wood_pressure_plate", "block/barrier")))
+                    .register();
+
     public static final BlockEntry<CopycatWoodenPressurePlate> COPYCAT_WOODEN_PRESSURE_PLATE =
             REGISTRATE.block("copycat_wooden_pressure_plate", CopycatWoodenPressurePlate::new)
                     .transform(BuilderTransformers.copycat())
@@ -316,15 +326,6 @@ public class CCBlocks {
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatPressurePlateModel::new))
                     .item()
                     .transform(customItemModel("copycat_base", "pressure_plate"))
-                    .register();
-
-    public static final BlockEntry<WrappedPressurePlate.Wood> WRAPPED_COPYCAT_WOOD_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_wood_pressure_plate", p -> new WrappedPressurePlate().wood(PressurePlateBlock.Sensitivity.EVERYTHING, p, BlockSetType.OAK))
-                    .initialProperties(() -> Blocks.OAK_BUTTON)
-                    .onRegister(b -> CopycatWoodenPressurePlate.pressurePlate = b)
-                    .tag(BlockTags.PRESSURE_PLATES)
-                    .tag(BlockTags.WOODEN_PRESSURE_PLATES)
-                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_wood_pressure_plate", "block/barrier")))
                     .register();
 
     public static void register() {
