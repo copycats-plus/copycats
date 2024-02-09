@@ -8,6 +8,6 @@ considerations need to be made when you want your model to function as a copycat
   actual quad size.
 - No relying on different connective states for connected textures.
     - Custom connected texture logic is handled in code, and it affects every face on the entire model. There cannot be
-      parts in a model with different CT states, and they cannot appear connected if there is no blocks adjacent to
+      parts in a model with different CT states, and they cannot appear connected if there are no adjacent blocks to
       connect to.
 
