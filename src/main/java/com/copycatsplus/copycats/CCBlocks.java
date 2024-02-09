@@ -407,7 +407,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.Light> WRAPPED_COPYCAT_LIGHT_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_gold_pressure_plate", p -> new WrappedPressurePlate().light(15, p, BlockSetType.GOLD))
+            REGISTRATE.block("wrapped_copycat_light_pressure_plate", p -> new WrappedPressurePlate().light(15, p, BlockSetType.GOLD))
                     .initialProperties(() -> Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
                     .onRegister(b -> CopycatLightPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
