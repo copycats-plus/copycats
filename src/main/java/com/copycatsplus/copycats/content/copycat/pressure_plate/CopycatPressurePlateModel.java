@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.pressure_plate;
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
@@ -15,7 +16,9 @@ public class CopycatPressurePlateModel extends SimpleCopycatModel {
 
     @Override
     protected void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
-        boolean powered = state.getValue(PressurePlateBlock.POWERED);
+        boolean powered = state.getOptionalValue(PressurePlateBlock.POWERED)
+                .or(() -> state.getOptionalValue(WeightedPressurePlateBlock.POWER).map(power -> power > 0))
+                .orElse(false);
         if (powered) {
             assemblePiece(
                     context, 0, false,
