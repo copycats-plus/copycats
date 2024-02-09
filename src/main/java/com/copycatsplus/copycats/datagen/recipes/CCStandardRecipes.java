@@ -145,7 +145,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     GeneratedRecipe COPYCAT_SLICE_CYCLE =
             conversionCycle(ImmutableList.of(CCBlocks.COPYCAT_SLICE, CCBlocks.COPYCAT_VERTICAL_SLICE));
 
-    GeneratedRecipe COPYCAT_WOOD_BUTTON = copycat(CCBlocks.COPYCAT_WOOD_BUTTON, 4);
+    GeneratedRecipe COPYCAT_WOODEN_BUTTON = copycat(CCBlocks.COPYCAT_WOODEN_BUTTON, 4);
 
     GeneratedRecipe COPYCAT_STONE_BUTTON = copycat(CCBlocks.COPYCAT_STONE_BUTTON, 4);
 

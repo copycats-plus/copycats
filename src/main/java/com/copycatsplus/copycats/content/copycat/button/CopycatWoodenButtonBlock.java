@@ -30,11 +30,11 @@ import org.jetbrains.annotations.Nullable;
 import static net.minecraft.world.level.block.ButtonBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatWoodButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Wood> {
+public class CopycatWoodenButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Wood> {
 
     public static WrappedButton.Wood button;
 
-    public CopycatWoodButtonBlock(Properties pProperties) {
+    public CopycatWoodenButtonBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState()
                 .setValue(FACING, Direction.NORTH)

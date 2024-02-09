@@ -18,7 +18,7 @@ public class ButtonBlockMixin {
     )
     private Block copycats$checkPressed(Block original) {
         if (original instanceof WrappedButton.Wood) {
-            return CCBlocks.COPYCAT_WOOD_BUTTON.get();
+            return CCBlocks.COPYCAT_WOODEN_BUTTON.get();
         }
         if (original instanceof WrappedButton.Stone) {
             return CCBlocks.COPYCAT_STONE_BUTTON.get();
@@ -33,7 +33,7 @@ public class ButtonBlockMixin {
     )
     private Block copycats$press(Block original) {
         if (original instanceof WrappedButton.Wood) {
-            return CCBlocks.COPYCAT_WOOD_BUTTON.get();
+            return CCBlocks.COPYCAT_WOODEN_BUTTON.get();
         }
         if (original instanceof WrappedButton.Stone) {
             return CCBlocks.COPYCAT_STONE_BUTTON.get();
