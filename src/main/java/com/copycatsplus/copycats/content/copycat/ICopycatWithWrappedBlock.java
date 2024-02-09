@@ -13,7 +13,7 @@ public interface ICopycatWithWrappedBlock<B extends Block> {
      * Otherwise, return the provided block unmodified.
      */
     static <B extends Block> Block unwrap(B block) {
-        if (block instanceof ICopycatWithWrappedBlock wrapper) {
+        if (block instanceof ICopycatWithWrappedBlock<?> wrapper) {
             return wrapper.getWrappedBlock();
         }
         return block;
