@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureToggle;
+import com.copycatsplus.copycats.content.copycat.ToggleableCopycatModel;
 import com.copycatsplus.copycats.content.copycat.beam.CopycatBeamBlock;
 import com.copycatsplus.copycats.content.copycat.beam.CopycatBeamModel;
 import com.copycatsplus.copycats.content.copycat.block.CopycatBlockBlock;
@@ -29,6 +30,7 @@ import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
 import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceBlock;
 import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
+import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsEnhancedModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
@@ -45,22 +47,12 @@ import com.copycatsplus.copycats.datagen.CCLootGen;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.Tags;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
@@ -121,7 +113,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .tag(BlockTags.STAIRS)
                     .transform(FeatureToggle.register())
-                    .onRegister(CreateRegistrate.blockModel(() -> CopycatStairsModel::new))
+                    .onRegister(CreateRegistrate.blockModel(() -> ToggleableCopycatModel.with(CopycatStairsModel::new, CopycatStairsEnhancedModel::new)))
                     .item()
                     .transform(customItemModel("copycat_base", "stairs"))
                     .register();
@@ -214,21 +206,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatBoardModel::new))
-                    .loot((lt, block) -> {
-                        LootTable.Builder builder = LootTable.lootTable();
-                        for (Direction direction : Iterate.directions) {
-                            builder.withPool(
-                                    LootPool.lootPool()
-                                            .setRolls(ConstantValue.exactly(1.0F))
-                                            .when(ExplosionCondition.survivesExplosion())
-                                            .when(LootItemBlockStatePropertyCondition
-                                                    .hasBlockStateProperties(block)
-                                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatBoardBlock.byDirection(direction), true)))
-                                            .add(LootItem.lootTableItem(block))
-                            );
-                        }
-                        lt.add(block, builder);
-                    })
+                    .loot(CCLootGen::lootForDirections)
                     .item()
                     .transform(customItemModel("copycat_base", "board"))
                     .register();
@@ -238,21 +216,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatByteModel::new))
-                    .loot((lt, block) -> {
-                        LootTable.Builder builder = LootTable.lootTable();
-                        for (CopycatByteBlock.Byte bite : CopycatByteBlock.allBytes) {
-                            builder.withPool(
-                                    LootPool.lootPool()
-                                            .setRolls(ConstantValue.exactly(1.0F))
-                                            .when(ExplosionCondition.survivesExplosion())
-                                            .when(LootItemBlockStatePropertyCondition
-                                                    .hasBlockStateProperties(block)
-                                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatByteBlock.byByte(bite), true)))
-                                            .add(LootItem.lootTableItem(block))
-                            );
-                        }
-                        lt.add(block, builder);
-                    })
+                    .loot(CCLootGen::lootForBytes)
                     .item()
                     .transform(customItemModel("copycat_base", "byte"))
                     .register();
@@ -262,21 +226,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatLayerModel::new))
-                    .loot((lt, block) -> {
-                        LootTable.Builder builder = LootTable.lootTable();
-                        for (int i = 1; i <= 8; i++) {
-                            builder.withPool(
-                                    LootPool.lootPool()
-                                            .setRolls(ConstantValue.exactly(1.0F))
-                                            .when(ExplosionCondition.survivesExplosion())
-                                            .when(LootItemBlockStatePropertyCondition
-                                                    .hasBlockStateProperties(block)
-                                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatLayerBlock.LAYERS, i)))
-                                            .add(LootItem.lootTableItem(block).apply(SetItemCountFunction.setCount(ConstantValue.exactly(i))))
-                            );
-                        }
-                        lt.add(block, builder);
-                    })
+                    .loot(CCLootGen::lootForLayers)
                     .item()
                     .transform(customItemModel("copycat_base", "layer"))
                     .register();
