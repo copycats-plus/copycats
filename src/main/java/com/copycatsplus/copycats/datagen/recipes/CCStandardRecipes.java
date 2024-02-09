@@ -209,10 +209,10 @@ public class CCStandardRecipes extends CreateRecipeProvider {
                 .viaStonecutting(DataIngredient.tag(AllTags.forgeItemTag("ingots/zinc")), resultCount);
     }
 
-    @Override
-    public @NotNull String getName() {
-        return "Standard Recipes of Create: Copycats+";
-    }
+//    @Override
+//    public @NotNull String getName() {
+//        return "Standard Recipes of Create: Copycats+"; // Not really worth it to use access transformer on this insignificant change
+//    }
 
     public CCStandardRecipes(PackOutput output) {
         super(output);
