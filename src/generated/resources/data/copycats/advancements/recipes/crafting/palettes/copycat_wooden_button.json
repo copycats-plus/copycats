@@ -18,7 +18,7 @@
           },
           "has_the_recipe": {
             "conditions": {
-              "recipe": "copycats:crafting/palettes/copycat_wood_button"
+              "recipe": "copycats:crafting/palettes/copycat_wooden_button"
             },
             "trigger": "minecraft:recipe_unlocked"
           }
@@ -31,7 +31,7 @@
         ],
         "rewards": {
           "recipes": [
-            "copycats:crafting/palettes/copycat_wood_button"
+            "copycats:crafting/palettes/copycat_wooden_button"
           ]
         },
         "sends_telemetry_event": false
@@ -39,7 +39,7 @@
       "conditions": [
         {
           "type": "copycats:feature_enabled",
-          "feature": "copycats:copycat_wood_button",
+          "feature": "copycats:copycat_wooden_button",
           "invert": false
         }
       ]

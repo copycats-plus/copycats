@@ -5,7 +5,7 @@
       "conditions": [
         {
           "type": "copycats:feature_enabled",
-          "feature": "copycats:copycat_wood_button",
+          "feature": "copycats:copycat_wooden_button",
           "invert": false
         }
       ],
@@ -15,7 +15,7 @@
         "ingredient": {
           "tag": "forge:ingots/zinc"
         },
-        "result": "copycats:copycat_wood_button"
+        "result": "copycats:copycat_wooden_button"
       }
     }
   ]
