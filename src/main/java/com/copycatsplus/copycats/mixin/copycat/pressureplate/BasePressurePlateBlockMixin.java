@@ -23,10 +23,10 @@ public class BasePressurePlateBlockMixin {
             return CCBlocks.COPYCAT_STONE_PRESSURE_PLATE.get();
         }
         if (original instanceof WrappedPressurePlate.Heavy) {
-            return CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE.get();
+            return CCBlocks.COPYCAT_HEAVY_PRESSURE_PLATE.get();
         }
         if (original instanceof WrappedPressurePlate.Light) {
-            return CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE.get();
+            return CCBlocks.COPYCAT_LIGHT_PRESSURE_PLATE.get();
         }
         return original;
     }
