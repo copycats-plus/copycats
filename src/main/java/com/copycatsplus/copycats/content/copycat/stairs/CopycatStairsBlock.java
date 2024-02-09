@@ -1,11 +1,13 @@
 package com.copycatsplus.copycats.content.copycat.stairs;
 
+import com.copycatsplus.copycats.content.copycat.ICustomCTBlocking;
 import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
@@ -19,11 +21,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
+import static net.minecraft.world.level.block.StairBlock.SHAPE;
 
 @SuppressWarnings("deprecation")
-public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock {
+public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implements ICustomCTBlocking {
 
     public static StairBlock stairs;
 
@@ -146,7 +151,6 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction side = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         if (toState.is(this)) {
             return false;
@@ -154,12 +158,27 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock {
             if (diff.getY() == 0) {
                 // if target is level with this block,
                 // only allows it to connect if it's adjacent to a full face of this block
+                StairsShape shape = state.getValue(SHAPE);
                 int fullCount = 0;
-                if (diff.getX() != 0 && getFaceShape(state, Direction.fromAxisAndDirection(Axis.X, directionOf(diff.getX()))).isFull())
-                    fullCount++;
-                if (diff.getZ() != 0 && getFaceShape(state, Direction.fromAxisAndDirection(Axis.Z, directionOf(diff.getZ()))).isFull())
-                    fullCount++;
-                return fullCount == 0;
+                if (diff.getX() != 0) {
+                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.X, directionOf(diff.getX())));
+                    if (faceShape.isFull())
+                        fullCount++;
+                    else if (shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) {
+                        if (diff.getX() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getX() < 0 && faceShape.topPositive && faceShape.bottomPositive)
+                            fullCount++;
+                    }
+                }
+                if (diff.getZ() != 0) {
+                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.Z, directionOf(diff.getZ())));
+                    if (faceShape.isFull())
+                        fullCount++;
+                    else if (shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) {
+                        if (diff.getZ() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getZ() < 0 && faceShape.topPositive && faceShape.bottomPositive)
+                            fullCount++;
+                    }
+                }
+                return fullCount < Mth.abs(diff.getX()) + Mth.abs(diff.getZ());
             } else {
                 // if target is not level with this block,
                 // only allow connections below the base of this block
@@ -188,6 +207,29 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock {
         }
 
         return true;
+    }
+
+    @Override
+    public Optional<Boolean> isCTBlocked(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos connectingPos, BlockPos blockingPos, Direction face) {
+        if (!getFaceShape(state, face).canConnect())
+            return Optional.of(false);
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Boolean> blockCTTowards(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos ctPos, BlockPos connectingPos, Direction face) {
+        FaceShape sideShape = getFaceShape(state, face);
+        if (!sideShape.canConnect()) return Optional.of(false);
+        BlockState connectingState = reader.getBlockState(connectingPos);
+        if (connectingState.is(this)) {
+            if (sideShape.equals(getFaceShape(connectingState, face.getOpposite())))
+                return Optional.of(true);
+        } else if (sideShape.isFull()) {
+            BlockState ctState = reader.getBlockState(ctPos);
+            if (ctPos.getY() == pos.getY() || !ctState.is(this) || ctState.getValue(HALF) != state.getValue(HALF))
+                return Optional.of(true);
+        }
+        return Optional.empty();
     }
 
     @Override
