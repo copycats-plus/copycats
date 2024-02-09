@@ -8,10 +8,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FenceGateBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -22,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.FenceGateBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock {
+public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock<WrappedFenceGateBlock> {
 
-    public static FenceGateBlock fenceGate;
+    public static WrappedFenceGateBlock fenceGate;
 
     public CopycatFenceGateBlock(Properties properties) {
         super(properties);
@@ -37,7 +34,7 @@ public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedFenceGateBlock getWrappedBlock() {
         return fenceGate;
     }
 

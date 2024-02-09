@@ -8,6 +8,10 @@ import com.copycatsplus.copycats.content.copycat.block.CopycatBlockBlock;
 import com.copycatsplus.copycats.content.copycat.block.CopycatBlockModel;
 import com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock;
 import com.copycatsplus.copycats.content.copycat.board.CopycatBoardModel;
+import com.copycatsplus.copycats.content.copycat.button.CopycatButtonModel;
+import com.copycatsplus.copycats.content.copycat.button.CopycatStoneButtonBlock;
+import com.copycatsplus.copycats.content.copycat.button.CopycatWoodenButtonBlock;
+import com.copycatsplus.copycats.content.copycat.button.WrappedButton;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteModel;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -20,6 +24,7 @@ import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelBlock
 import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelModel;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
+import com.copycatsplus.copycats.content.copycat.pressure_plate.*;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
 import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceBlock;
@@ -45,12 +50,14 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.common.Tags;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
+@SuppressWarnings("removal")
 public class CCBlocks {
     private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
 
@@ -83,15 +90,6 @@ public class CCBlocks {
                     .transform(customItemModel("copycat_base", "beam"))
                     .register();
 
-    public static final BlockEntry<CopycatVerticalStepBlock> COPYCAT_VERTICAL_STEP =
-            REGISTRATE.block("copycat_vertical_step", CopycatVerticalStepBlock::new)
-                    .transform(BuilderTransformers.copycat())
-                    .transform(FeatureToggle.register())
-                    .onRegister(CreateRegistrate.blockModel(() -> CopycatVerticalStepModel::new))
-                    .item()
-                    .transform(customItemModel("copycat_base", "vertical_step"))
-                    .register();
-
     public static final BlockEntry<CopycatHalfPanelBlock> COPYCAT_HALF_PANEL =
             REGISTRATE.block("copycat_half_panel", CopycatHalfPanelBlock::new)
                     .transform(BuilderTransformers.copycat())
@@ -99,6 +97,15 @@ public class CCBlocks {
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatHalfPanelModel::new))
                     .item()
                     .transform(customItemModel("copycat_base", "half_panel"))
+                    .register();
+
+    public static final BlockEntry<CopycatVerticalStepBlock> COPYCAT_VERTICAL_STEP =
+            REGISTRATE.block("copycat_vertical_step", CopycatVerticalStepBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatVerticalStepModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "vertical_step"))
                     .register();
 
     public static final BlockEntry<CopycatStairsBlock> COPYCAT_STAIRS =
@@ -224,6 +231,7 @@ public class CCBlocks {
                     .transform(customItemModel("copycat_base", "layer"))
                     .register();
 
+
     public static final BlockEntry<CopycatSliceBlock> COPYCAT_SLICE =
             REGISTRATE.block("copycat_slice", CopycatSliceBlock::new)
                     .transform(BuilderTransformers.copycat())
@@ -242,6 +250,129 @@ public class CCBlocks {
                     .loot(CCLootGen::lootForLayers)
                     .item()
                     .transform(customItemModel("copycat_base", "vertical_slice"))
+                    .register();
+
+
+    public static final BlockEntry<CopycatWoodenButtonBlock> COPYCAT_WOODEN_BUTTON =
+            REGISTRATE.block("copycat_wooden_button", CopycatWoodenButtonBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .tag(BlockTags.BUTTONS)
+                    .tag(BlockTags.WOODEN_BUTTONS)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatButtonModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "button"))
+                    .register();
+
+    public static final BlockEntry<CopycatStoneButtonBlock> COPYCAT_STONE_BUTTON =
+            REGISTRATE.block("copycat_stone_button", CopycatStoneButtonBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .tag(BlockTags.BUTTONS)
+                    .tag(BlockTags.STONE_BUTTONS)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatButtonModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "button"))
+                    .register();
+
+    public static final BlockEntry<WrappedButton.Wood> WRAPPED_COPYCAT_WOODEN_BUTTON =
+            REGISTRATE.block("wrapped_copycat_wooden_button", p -> new WrappedButton().wood(p, BlockSetType.OAK, 30, true))
+                    .initialProperties(() -> Blocks.OAK_BUTTON)
+                    .onRegister(b -> CopycatWoodenButtonBlock.button = b)
+                    .tag(BlockTags.BUTTONS)
+                    .tag(BlockTags.WOODEN_BUTTONS)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_wooden_button", "block/barrier")))
+                    .register();
+
+    public static final BlockEntry<WrappedButton.Stone> WRAPPED_COPYCAT_STONE_BUTTON =
+            REGISTRATE.block("wrapped_copycat_stone_button", p -> new WrappedButton().stone(p, BlockSetType.STONE, 20, false))
+                    .initialProperties(() -> Blocks.STONE_BUTTON)
+                    .onRegister(b -> CopycatStoneButtonBlock.button = b)
+                    .tag(BlockTags.BUTTONS)
+                    .tag(BlockTags.STONE_BUTTONS)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_stone_button", "block/barrier")))
+                    .register();
+
+    public static final BlockEntry<WrappedPressurePlate.Wood> WRAPPED_COPYCAT_WOOD_PRESSURE_PLATE =
+            REGISTRATE.block("wrapped_copycat_wood_pressure_plate", p -> new WrappedPressurePlate().wood(PressurePlateBlock.Sensitivity.EVERYTHING, p, BlockSetType.OAK))
+                    .initialProperties(() -> Blocks.OAK_BUTTON)
+                    .onRegister(b -> CopycatWoodenPressurePlate.pressurePlate = b)
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .tag(BlockTags.WOODEN_PRESSURE_PLATES)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_wood_pressure_plate", "block/barrier")))
+                    .register();
+
+    public static final BlockEntry<CopycatWoodenPressurePlate> COPYCAT_WOODEN_PRESSURE_PLATE =
+            REGISTRATE.block("copycat_wooden_pressure_plate", CopycatWoodenPressurePlate::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .tag(BlockTags.WOODEN_PRESSURE_PLATES)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatPressurePlateModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "pressure_plate"))
+                    .register();
+
+    public static final BlockEntry<WrappedPressurePlate.Stone> WRAPPED_COPYCAT_STONE_PRESSURE_PLATE =
+            REGISTRATE.block("wrapped_copycat_stone_pressure_plate", p -> new WrappedPressurePlate().stone(PressurePlateBlock.Sensitivity.MOBS, p, BlockSetType.STONE))
+                    .initialProperties(() -> Blocks.STONE_BUTTON)
+                    .onRegister(b -> CopycatStonePressurePlate.pressurePlate = b)
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .tag(BlockTags.STONE_PRESSURE_PLATES)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_stone_pressure_plate", "block/barrier")))
+                    .register();
+
+    public static final BlockEntry<CopycatStonePressurePlate> COPYCAT_STONE_PRESSURE_PLATE =
+            REGISTRATE.block("copycat_stone_pressure_plate", CopycatStonePressurePlate::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .tag(BlockTags.STONE_PRESSURE_PLATES)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatPressurePlateModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "pressure_plate"))
+                    .register();
+
+    public static final BlockEntry<WrappedPressurePlate.Heavy> WRAPPED_COPYCAT_HEAVY_PRESSURE_PLATE =
+            REGISTRATE.block("wrapped_copycat_heavy_pressure_plate", p -> new WrappedPressurePlate().heavy(150, p, BlockSetType.IRON))
+                    .initialProperties(() -> Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
+                    .onRegister(b -> CopycatHeavyPressurePlate.pressurePlate = b)
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_heavy_pressure_plate", "block/barrier")))
+                    .register();
+
+    public static final BlockEntry<CopycatHeavyPressurePlate> COPYCAT_HEAVY_PRESSURE_PLATE =
+            REGISTRATE.block("copycat_heavy_pressure_plate", CopycatHeavyPressurePlate::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatPressurePlateModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "pressure_plate"))
+                    .register();
+
+    public static final BlockEntry<WrappedPressurePlate.Light> WRAPPED_COPYCAT_LIGHT_PRESSURE_PLATE =
+            REGISTRATE.block("wrapped_copycat_light_pressure_plate", p -> new WrappedPressurePlate().light(15, p, BlockSetType.GOLD))
+                    .initialProperties(() -> Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
+                    .onRegister(b -> CopycatLightPressurePlate.pressurePlate = b)
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_light_pressure_plate", "block/barrier")))
+                    .register();
+
+    public static final BlockEntry<CopycatLightPressurePlate> COPYCAT_LIGHT_PRESSURE_PLATE =
+            REGISTRATE.block("copycat_light_pressure_plate", CopycatLightPressurePlate::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .tag(BlockTags.PRESSURE_PLATES)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatPressurePlateModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "pressure_plate"))
                     .register();
 
     public static void register() {

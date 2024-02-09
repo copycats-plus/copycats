@@ -145,6 +145,18 @@ public class CCStandardRecipes extends CreateRecipeProvider {
     GeneratedRecipe COPYCAT_SLICE_CYCLE =
             conversionCycle(ImmutableList.of(CCBlocks.COPYCAT_SLICE, CCBlocks.COPYCAT_VERTICAL_SLICE));
 
+    GeneratedRecipe COPYCAT_WOODEN_BUTTON = copycat(CCBlocks.COPYCAT_WOODEN_BUTTON, 4);
+
+    GeneratedRecipe COPYCAT_STONE_BUTTON = copycat(CCBlocks.COPYCAT_STONE_BUTTON, 4);
+
+    GeneratedRecipe COPYCAT_WOOD_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE, 4);
+
+    GeneratedRecipe COPYCAT_STONE_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_STONE_PRESSURE_PLATE, 4);
+
+    GeneratedRecipe COPYCAT_HEAVY_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_HEAVY_PRESSURE_PLATE, 2);
+
+    GeneratedRecipe COPYCAT_LIGHT_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_LIGHT_PRESSURE_PLATE, 2);
+
     String currentFolder = "";
 
     Marker enterFolder(String folder) {
@@ -197,10 +209,10 @@ public class CCStandardRecipes extends CreateRecipeProvider {
                 .viaStonecutting(DataIngredient.tag(AllTags.forgeItemTag("ingots/zinc")), resultCount);
     }
 
-    @Override
-    public @NotNull String getName() {
-        return "Standard Recipes of Create: Copycats+";
-    }
+//    @Override
+//    public @NotNull String getName() {
+//        return "Standard Recipes of Create: Copycats+"; // Not really worth it to use access transformer on this insignificant change
+//    }
 
     public CCStandardRecipes(PackOutput output) {
         super(output);

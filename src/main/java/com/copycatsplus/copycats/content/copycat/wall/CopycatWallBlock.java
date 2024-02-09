@@ -26,9 +26,9 @@ import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.world.level.block.WallBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock {
+public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock<WrappedWallBlock> {
 
-    public static WallBlock wall;
+    public static WrappedWallBlock wall;
 
     public CopycatWallBlock(Properties properties) {
         super(properties);
@@ -42,7 +42,7 @@ public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedWallBlock getWrappedBlock() {
         return wall;
     }
 
