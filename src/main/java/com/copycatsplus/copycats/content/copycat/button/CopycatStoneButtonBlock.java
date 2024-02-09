@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -78,14 +79,7 @@ public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWit
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         InteractionResult result = super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         if (result == InteractionResult.PASS && !pPlayer.getItemInHand(pHand).is(AllTags.AllItemTags.WRENCH.tag)) {
-            if (pState.getValue(POWERED)) {
-                return InteractionResult.CONSUME;
-            } else {
-                this.press(pState, pLevel, pPos);
-                button.playSound(pPlayer, pLevel, pPos, true);
-                pLevel.gameEvent(pPlayer, GameEvent.BLOCK_ACTIVATE, pPos);
-                return InteractionResult.sidedSuccess(pLevel.isClientSide);
-            }
+            return button.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         }
         return result;
     }
@@ -98,29 +92,21 @@ public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWit
         return copyState(state, super.getStateForPlacement(pContext));
     }
 
-    private void updateNeighbours(BlockState pState, Level pLevel, BlockPos pPos) {
-        pLevel.updateNeighborsAt(pPos, this);
-        pLevel.updateNeighborsAt(pPos.relative(getConnectedDirection(pState).getOpposite()), this);
-    }
-
-    protected static Direction getConnectedDirection(BlockState pState) {
-        return switch (pState.getValue(FACE)) {
-            case CEILING -> Direction.DOWN;
-            case FLOOR -> Direction.UP;
-            default -> pState.getValue(FACING);
-        };
-    }
-
-    public void press(BlockState pState, Level pLevel, BlockPos pPos) {
-        pLevel.setBlock(pPos, pState.setValue(POWERED, Boolean.valueOf(true)), 3);
-        this.updateNeighbours(pState, pLevel, pPos);
-        pLevel.scheduleTick(pPos, this, button.ticksToStayPressed);
-    }
-
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         button.tick(pState, pLevel, pPos, pRandom);
     }
+
+    @Override
+    public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
+        button.entityInside(pState, pLevel, pPos, pEntity);
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        button.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+    }
+
 
     public BlockState copyState(BlockState from, BlockState to) {
         return to

@@ -12,6 +12,7 @@
     "copycat.CopycatModelMixin",
     "copycat.FilteredBlockAndTintGetterAccessor",
     "copycat.TrackPlacementMixin",
+    "copycat.button.ButtonBlockMixin",
     "copycat.fence.COMPATFenceBlockMixin",
     "copycat.fence.FenceBlockMixin",
     "copycat.fence.ValueBoxRendererMixin",

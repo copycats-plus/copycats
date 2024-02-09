@@ -11,7 +11,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -80,14 +78,7 @@ public class CopycatWoodButtonBlock extends CopycatBlock implements ICopycatWith
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         InteractionResult result = super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         if (result == InteractionResult.PASS && !pPlayer.getItemInHand(pHand).is(AllTags.AllItemTags.WRENCH.tag)) {
-            if (pState.getValue(POWERED)) {
-                return InteractionResult.CONSUME;
-            } else {
-                this.press(pState, pLevel, pPos);
-                button.playSound(pPlayer, pLevel, pPos, true);
-                pLevel.gameEvent(pPlayer, GameEvent.BLOCK_ACTIVATE, pPos);
-                return InteractionResult.sidedSuccess(pLevel.isClientSide);
-            }
+            return button.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         }
         return result;
     }
@@ -100,55 +91,23 @@ public class CopycatWoodButtonBlock extends CopycatBlock implements ICopycatWith
         return copyState(state, super.getStateForPlacement(pContext));
     }
 
-    private void updateNeighbours(BlockState pState, Level pLevel, BlockPos pPos) {
-        pLevel.updateNeighborsAt(pPos, this);
-        pLevel.updateNeighborsAt(pPos.relative(getConnectedDirection(pState).getOpposite()), this);
-    }
 
-    protected static Direction getConnectedDirection(BlockState pState) {
-        return switch (pState.getValue(FACE)) {
-            case CEILING -> Direction.DOWN;
-            case FLOOR -> Direction.UP;
-            default -> pState.getValue(FACING);
-        };
-    }
-
-    public void press(BlockState pState, Level pLevel, BlockPos pPos) {
-        pLevel.setBlock(pPos, pState.setValue(POWERED, Boolean.valueOf(true)), 3);
-        this.updateNeighbours(pState, pLevel, pPos);
-        pLevel.scheduleTick(pPos, this, button.ticksToStayPressed);
-    }
 
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (pState.getValue(POWERED)) {
-            checkPressed(pState, pLevel, pPos);
-        }
+        button.tick(pState, pLevel, pPos, pRandom);
     }
 
     @Override
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-        if (!pLevel.isClientSide && button.arrowsCanPress && !pState.getValue(POWERED)) {
-            checkPressed(pState, pLevel, pPos);
-        }
+        button.entityInside(pState, pLevel, pPos, pEntity);
     }
 
-    public void checkPressed(BlockState pState, Level pLevel, BlockPos pPos) {
-        AbstractArrow abstractarrow = button.arrowsCanPress ? pLevel.getEntitiesOfClass(AbstractArrow.class, pState.getShape(pLevel, pPos).bounds().move(pPos)).stream().findFirst().orElse(null) : null;
-        boolean arrow = abstractarrow != null;
-        boolean powered = pState.getValue(POWERED);
-        if (arrow != powered) {
-            pLevel.setBlock(pPos, pState.setValue(POWERED, arrow), Block.UPDATE_ALL);
-            this.updateNeighbours(pState, pLevel, pPos);
-            button.playSound(null, pLevel, pPos, arrow);
-            pLevel.gameEvent(abstractarrow, arrow ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, pPos);
-        }
-
-        if (arrow) {
-            pLevel.scheduleTick(pPos, this, button.ticksToStayPressed);
-        }
-
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        button.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
+
 
     public BlockState copyState(BlockState from, BlockState to) {
         return to

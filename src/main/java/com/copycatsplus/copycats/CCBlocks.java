@@ -19,6 +19,8 @@ import com.copycatsplus.copycats.content.copycat.fence.WrappedFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateModel;
 import com.copycatsplus.copycats.content.copycat.fencegate.WrappedFenceGateBlock;
+import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelBlock;
+import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelModel;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatPressurePlateModel;
@@ -96,6 +98,15 @@ public class CCBlocks {
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatBeamModel::new))
                     .item()
                     .transform(customItemModel("copycat_base", "beam"))
+                    .register();
+
+    public static final BlockEntry<CopycatHalfPanelBlock> COPYCAT_HALF_PANEL =
+            REGISTRATE.block("copycat_half_panel", CopycatHalfPanelBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatHalfPanelModel::new))
+                    .item()
+                    .transform(customItemModel("copycat_base", "half_panel"))
                     .register();
 
     public static final BlockEntry<CopycatVerticalStepBlock> COPYCAT_VERTICAL_STEP =
