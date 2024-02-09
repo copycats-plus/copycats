@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.datagen.recipes;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCItems;
+import com.copycatsplus.copycats.CCTags;
 import com.copycatsplus.copycats.Copycats;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
@@ -52,7 +53,8 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
     GeneratedRecipe COPYCAT_SLAB = copycat(CCBlocks.COPYCAT_SLAB, 2);
 
-    GeneratedRecipe COPYCAT_SLAB_FROM_PANELS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_panels").unlockedBy(AllBlocks.COPYCAT_PANEL::get)
+    GeneratedRecipe COPYCAT_SLAB_FROM_PANELS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_panels")
+            .unlockedBy(AllBlocks.COPYCAT_PANEL::get)
             .requiresResultFeature()
             .viaShaped(b -> b
                     .define('p', AllBlocks.COPYCAT_PANEL)
@@ -60,42 +62,57 @@ public class CCStandardRecipes extends CreateRecipeProvider {
                     .pattern("p")
             );
 
-    GeneratedRecipe COPYCAT_SLAB_FROM_STEPS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_steps").unlockedBy(AllBlocks.COPYCAT_STEP::get)
+    GeneratedRecipe COPYCAT_SLAB_FROM_STEPS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_steps")
+            .unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShaped(b -> b
                     .define('s', AllBlocks.COPYCAT_STEP)
                     .pattern("ss")
             );
 
-    GeneratedRecipe COPYCAT_SLAB_FROM_BEAMS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_beams").unlockedBy(CCBlocks.COPYCAT_BEAM::get)
+    GeneratedRecipe COPYCAT_SLAB_FROM_BEAMS = create(CCBlocks.COPYCAT_SLAB).withSuffix("_from_beams")
+            .unlockedByTag(() -> CCTags.Items.COPYCAT_BEAM.tag)
             .requiresResultFeature()
             .requiresFeature(CCBlocks.COPYCAT_BEAM)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_BEAM)
+                    .define('s', CCTags.Items.COPYCAT_BEAM.tag)
                     .pattern("ss")
             );
 
     GeneratedRecipe COPYCAT_BLOCK = copycat(CCBlocks.COPYCAT_BLOCK, 1);
 
-    GeneratedRecipe COPYCAT_BLOCK_FROM_SLABS = create(CCBlocks.COPYCAT_BLOCK).withSuffix("_from_slabs").unlockedBy(CCBlocks.COPYCAT_SLAB::get)
+    GeneratedRecipe COPYCAT_BLOCK_FROM_SLABS = create(CCBlocks.COPYCAT_BLOCK).withSuffix("_from_slabs")
+            .unlockedByTag(() -> CCTags.Items.COPYCAT_SLAB.tag)
             .requiresResultFeature()
             .requiresFeature(CCBlocks.COPYCAT_SLAB)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_SLAB)
+                    .define('s', CCTags.Items.COPYCAT_SLAB.tag)
                     .pattern("s")
                     .pattern("s")
             );
 
     GeneratedRecipe COPYCAT_BEAM = copycat(CCBlocks.COPYCAT_BEAM, 4);
 
-    GeneratedRecipe COPYCAT_STEP_CYCLE =
-            conversionCycle(ImmutableList.of(AllBlocks.COPYCAT_STEP, CCBlocks.COPYCAT_VERTICAL_STEP));
+    GeneratedRecipe COPYCAT_STEP_CYCLE_1 = create(AllBlocks.COPYCAT_STEP).withSuffix("_from_conversion")
+            .unlockedByTag(() -> CCTags.Items.COPYCAT_VERTICAL_STEP.tag)
+            .requiresFeature(CCBlocks.COPYCAT_VERTICAL_STEP)
+            .viaShapeless(b -> b
+                    .requires(CCTags.Items.COPYCAT_VERTICAL_STEP.tag)
+            );
+
+    GeneratedRecipe COPYCAT_STEP_CYCLE_2 = create(CCBlocks.COPYCAT_VERTICAL_STEP).withSuffix("_from_conversion")
+            .unlockedBy(AllBlocks.COPYCAT_STEP::get)
+            .requiresResultFeature()
+            .viaShapeless(b -> b
+                    .requires(AllBlocks.COPYCAT_STEP)
+            );
 
     GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
 
     GeneratedRecipe COPYCAT_HALF_PANEL = copycat(CCBlocks.COPYCAT_HALF_PANEL, 8);
 
-    GeneratedRecipe COPYCAT_PANEL_FROM_HALF_PANELS = create(AllBlocks.COPYCAT_PANEL).withSuffix("_from_half_panels").unlockedBy(CCBlocks.COPYCAT_HALF_PANEL::get)
+    GeneratedRecipe COPYCAT_PANEL_FROM_HALF_PANELS = create(AllBlocks.COPYCAT_PANEL).withSuffix("_from_half_panels")
+            .unlockedBy(CCBlocks.COPYCAT_HALF_PANEL::get)
             .requiresFeature(CCBlocks.COPYCAT_HALF_PANEL)
             .viaShaped(b -> b
                     .define('s', CCBlocks.COPYCAT_HALF_PANEL)
@@ -117,19 +134,21 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
     GeneratedRecipe COPYCAT_BOARD = copycat(CCBlocks.COPYCAT_BOARD, 8);
 
-    GeneratedRecipe COPYCAT_BOX = create(CCItems.COPYCAT_BOX).unlockedBy(CCBlocks.COPYCAT_BOARD::get)
+    GeneratedRecipe COPYCAT_BOX = create(CCItems.COPYCAT_BOX)
+            .unlockedByTag(() -> CCTags.Items.COPYCAT_BOARD.tag)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_BOARD)
+                    .define('s', CCTags.Items.COPYCAT_BOARD.tag)
                     .pattern("ss ")
                     .pattern("s s")
                     .pattern(" ss")
             );
 
-    GeneratedRecipe COPYCAT_CATWALK = create(CCItems.COPYCAT_CATWALK).unlockedBy(CCBlocks.COPYCAT_BOARD::get)
+    GeneratedRecipe COPYCAT_CATWALK = create(CCItems.COPYCAT_CATWALK)
+            .unlockedByTag(() -> CCTags.Items.COPYCAT_BOARD.tag)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_BOARD)
+                    .define('s', CCTags.Items.COPYCAT_BOARD.tag)
                     .pattern("s s")
                     .pattern(" s ")
             );
