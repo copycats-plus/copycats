@@ -28,7 +28,7 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_WOOD_BUTTON,
                             CCBlocks.COPYCAT_STONE_BUTTON,
                             CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
-                            CCBlocks.WRAPPED_COPYCAT_STONE_PRESSURE_PLATE,
+                            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
                             CCBlocks.COPYCAT_LIGHT_PRESSURE_PLATE,
                             CCBlocks.COPYCAT_HEAVY_PRESSURE_PLATE
                     )
