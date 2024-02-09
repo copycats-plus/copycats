@@ -15,14 +15,14 @@ public class WrappedButton {
     }
 
 
-    public class Wood extends ButtonBlock {
+    public static class Wood extends ButtonBlock {
 
         public Wood(Properties pProperties, BlockSetType pType, int pTicksToStayPressed, boolean pArrowsCanPress) {
             super(pProperties, pType, pTicksToStayPressed, pArrowsCanPress);
         }
     }
 
-    public class Stone extends ButtonBlock {
+    public static class Stone extends ButtonBlock {
 
         public Stone(Properties pProperties, BlockSetType pType, int pTicksToStayPressed, boolean pArrowsCanPress) {
             super(pProperties, pType, pTicksToStayPressed, pArrowsCanPress);

@@ -23,7 +23,7 @@ public class WrappedPressurePlate {
         return new Light(maxWeight, properties, type);
     }
 
-    public class Wood extends PressurePlateBlock {
+    public static class Wood extends PressurePlateBlock {
 
         public Wood(Sensitivity pSensitivity, Properties pProperties, BlockSetType pType) {
             super(pSensitivity, pProperties, pType);
@@ -31,7 +31,7 @@ public class WrappedPressurePlate {
 
     }
 
-    public class Stone extends PressurePlateBlock {
+    public static class Stone extends PressurePlateBlock {
 
         public Stone(Sensitivity pSensitivity, Properties pProperties, BlockSetType pType) {
             super(pSensitivity, pProperties, pType);
@@ -39,7 +39,7 @@ public class WrappedPressurePlate {
 
     }
 
-    public class Heavy extends WeightedPressurePlateBlock {
+    public static class Heavy extends WeightedPressurePlateBlock {
 
         public Heavy(int pMaxWeight, Properties pProperties, BlockSetType pType) {
             super(pMaxWeight, pProperties, pType);
@@ -47,7 +47,7 @@ public class WrappedPressurePlate {
 
     }
 
-    public class Light extends WeightedPressurePlateBlock {
+    public static class Light extends WeightedPressurePlateBlock {
 
         public Light(int pMaxWeight, Properties pProperties, BlockSetType pType) {
             super(pMaxWeight, pProperties, pType);
