@@ -118,7 +118,7 @@ public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock<WrappedFen
         if (toPos.getX() == fromPos.getX() && toPos.getZ() == fromPos.getZ()) {
             BlockState toState = reader.getBlockState(toPos);
             if (toState.is(this)) {
-                if (isPole(state) && isPole(toState)) return true;
+                return isPole(state) && isPole(toState);
             }
         }
         return false;
