@@ -10,4 +10,7 @@ considerations need to be made when you want your model to function as a copycat
     - Custom connected texture logic is handled in code, and it affects every face on the entire model. There cannot be
       parts in a model with different CT states, and they cannot appear connected if there are no adjacent blocks to
       connect to.
-
+- UVs on different faces of the same element must preserve their relative location to each other.
+    - Basically, this means that the element must appear to be cut from the same corner of a block on all faces, so you
+      cannot have an element which appears to come from the top of a block on one side, and the bottom of a block on the
+      opposite side.
