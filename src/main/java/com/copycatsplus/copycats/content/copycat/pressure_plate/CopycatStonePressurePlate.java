@@ -9,6 +9,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -85,6 +87,16 @@ public class CopycatStonePressurePlate extends CopycatBlock implements ICopycatW
     @Override
     public boolean isSignalSource(@NotNull BlockState pState) {
         return pressurePlate.isSignalSource(pState);
+    }
+
+    @Override
+    public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
+        return pressurePlate.rotate(pState, pRotation);
+    }
+
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
+        return pressurePlate.mirror(pState, pMirror);
     }
 
     @Override

@@ -16,6 +16,8 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -27,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.ButtonBlock.*;
 
+@SuppressWarnings("deprecation")
 public class CopycatWoodButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Wood> {
 
     public static WrappedButton.Wood button;
@@ -50,7 +53,7 @@ public class CopycatWoodButtonBlock extends CopycatBlock implements ICopycatWith
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return button.getShape(pState, pLevel, pPos, pContext);
     }
 
@@ -60,17 +63,17 @@ public class CopycatWoodButtonBlock extends CopycatBlock implements ICopycatWith
     }
 
     @Override
-    public boolean isSignalSource(BlockState pState) {
+    public boolean isSignalSource(@NotNull BlockState pState) {
         return button.isSignalSource(pState);
     }
 
     @Override
-    public int getSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    public int getSignal(@NotNull BlockState pBlockState, @NotNull BlockGetter pBlockAccess, @NotNull BlockPos pPos, @NotNull Direction pSide) {
         return button.getSignal(pBlockState, pBlockAccess, pPos, pSide);
     }
 
     @Override
-    public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
+    public int getDirectSignal(@NotNull BlockState pBlockState, @NotNull BlockGetter pBlockAccess, @NotNull BlockPos pPos, @NotNull Direction pSide) {
         return button.getDirectSignal(pBlockState, pBlockAccess, pPos, pSide);
     }
 
@@ -92,22 +95,30 @@ public class CopycatWoodButtonBlock extends CopycatBlock implements ICopycatWith
     }
 
 
-
     @Override
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
         button.tick(pState, pLevel, pPos, pRandom);
     }
 
     @Override
-    public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
+    public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
         button.entityInside(pState, pLevel, pPos, pEntity);
+    }
+
+    @Override
+    public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
+        return button.rotate(pState, pRotation);
+    }
+
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
+        return button.mirror(pState, pMirror);
     }
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         button.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
-
 
     public BlockState copyState(BlockState from, BlockState to) {
         return to
