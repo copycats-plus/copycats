@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "copycats:block/wrapped_copycat_gold_pressure_plate"
+      "model": "copycats:block/wrapped_copycat_light_pressure_plate"
     }
   }
 }

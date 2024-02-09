@@ -18,7 +18,7 @@
           },
           "has_the_recipe": {
             "conditions": {
-              "recipe": "copycats:crafting/palettes/copycat_iron_pressure_plate"
+              "recipe": "copycats:crafting/palettes/copycat_heavy_pressure_plate"
             },
             "trigger": "minecraft:recipe_unlocked"
           }
@@ -31,7 +31,7 @@
         ],
         "rewards": {
           "recipes": [
-            "copycats:crafting/palettes/copycat_iron_pressure_plate"
+            "copycats:crafting/palettes/copycat_heavy_pressure_plate"
           ]
         },
         "sends_telemetry_event": false
@@ -39,7 +39,7 @@
       "conditions": [
         {
           "type": "copycats:feature_enabled",
-          "feature": "copycats:copycat_iron_pressure_plate",
+          "feature": "copycats:copycat_heavy_pressure_plate",
           "invert": false
         }
       ]

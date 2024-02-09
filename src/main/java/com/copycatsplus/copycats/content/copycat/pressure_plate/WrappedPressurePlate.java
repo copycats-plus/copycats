@@ -15,12 +15,12 @@ public class WrappedPressurePlate {
         return new Stone(sensitivity, properties, type);
     }
 
-    public Iron iron(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
-        return new Iron(maxWeight, properties, type);
+    public Heavy heavy(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
+        return new Heavy(maxWeight, properties, type);
     }
 
-    public Gold gold(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
-        return new Gold(maxWeight, properties, type);
+    public Light light(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
+        return new Light(maxWeight, properties, type);
     }
 
     public class Wood extends PressurePlateBlock {
@@ -39,17 +39,17 @@ public class WrappedPressurePlate {
 
     }
 
-    public class Iron extends WeightedPressurePlateBlock {
+    public class Heavy extends WeightedPressurePlateBlock {
 
-        public Iron(int pMaxWeight, Properties pProperties, BlockSetType pType) {
+        public Heavy(int pMaxWeight, Properties pProperties, BlockSetType pType) {
             super(pMaxWeight, pProperties, pType);
         }
 
     }
 
-    public class Gold extends WeightedPressurePlateBlock {
+    public class Light extends WeightedPressurePlateBlock {
 
-        public Gold(int pMaxWeight, Properties pProperties, BlockSetType pType) {
+        public Light(int pMaxWeight, Properties pProperties, BlockSetType pType) {
             super(pMaxWeight, pProperties, pType);
 
         }

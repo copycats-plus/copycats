@@ -387,16 +387,16 @@ public class CCBlocks {
                     .transform(customItemModel("copycat_base", "pressure_plate"))
                     .register();
 
-    public static final BlockEntry<WrappedPressurePlate.Iron> WRAPPED_COPYCAT_IRON_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_iron_pressure_plate", p -> new WrappedPressurePlate().iron(150, p, BlockSetType.IRON))
+    public static final BlockEntry<WrappedPressurePlate.Heavy> WRAPPED_COPYCAT_HEAVY_PRESSURE_PLATE =
+            REGISTRATE.block("wrapped_copycat_heavy_pressure_plate", p -> new WrappedPressurePlate().heavy(150, p, BlockSetType.IRON))
                     .initialProperties(() -> Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
-                    .onRegister(b -> CopycatIronPressurePlate.pressurePlate = b)
+                    .onRegister(b -> CopycatHeavyPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
-                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_iron_pressure_plate", "block/barrier")))
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_heavy_pressure_plate", "block/barrier")))
                     .register();
 
-    public static final BlockEntry<CopycatIronPressurePlate> COPYCAT_IRON_PRESSURE_PLATE =
-            REGISTRATE.block("copycat_iron_pressure_plate", CopycatIronPressurePlate::new)
+    public static final BlockEntry<CopycatHeavyPressurePlate> COPYCAT_HEAVY_PRESSURE_PLATE =
+            REGISTRATE.block("copycat_heavy_pressure_plate", CopycatHeavyPressurePlate::new)
                     .transform(BuilderTransformers.copycat())
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -406,16 +406,16 @@ public class CCBlocks {
                     .transform(customItemModel("copycat_base", "pressure_plate"))
                     .register();
 
-    public static final BlockEntry<WrappedPressurePlate.Gold> WRAPPED_COPYCAT_GOLD_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_gold_pressure_plate", p -> new WrappedPressurePlate().gold(15, p, BlockSetType.GOLD))
+    public static final BlockEntry<WrappedPressurePlate.Light> WRAPPED_COPYCAT_LIGHT_PRESSURE_PLATE =
+            REGISTRATE.block("wrapped_copycat_gold_pressure_plate", p -> new WrappedPressurePlate().light(15, p, BlockSetType.GOLD))
                     .initialProperties(() -> Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
-                    .onRegister(b -> CopycatGoldPressurePlate.pressurePlate = b)
+                    .onRegister(b -> CopycatLightPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
-                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_gold_pressure_plate", "block/barrier")))
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_light_pressure_plate", "block/barrier")))
                     .register();
 
-    public static final BlockEntry<CopycatGoldPressurePlate> COPYCAT_GOLD_PRESSURE_PLATE =
-            REGISTRATE.block("copycat_gold_pressure_plate", CopycatGoldPressurePlate::new)
+    public static final BlockEntry<CopycatLightPressurePlate> COPYCAT_LIGHT_PRESSURE_PLATE =
+            REGISTRATE.block("copycat_light_pressure_plate", CopycatLightPressurePlate::new)
                     .transform(BuilderTransformers.copycat())
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
                     .tag(BlockTags.PRESSURE_PLATES)

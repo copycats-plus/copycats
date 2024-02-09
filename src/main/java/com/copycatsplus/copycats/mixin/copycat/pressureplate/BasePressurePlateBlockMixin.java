@@ -22,10 +22,10 @@ public class BasePressurePlateBlockMixin {
         if (original instanceof WrappedPressurePlate.Stone) {
             return CCBlocks.COPYCAT_STONE_PRESSURE_PLATE.get();
         }
-        if (original instanceof WrappedPressurePlate.Iron) {
+        if (original instanceof WrappedPressurePlate.Heavy) {
             return CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE.get();
         }
-        if (original instanceof WrappedPressurePlate.Gold) {
+        if (original instanceof WrappedPressurePlate.Light) {
             return CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE.get();
         }
         return original;

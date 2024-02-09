@@ -4,9 +4,9 @@
     "copycats:copycat_wooden_pressure_plate",
     "copycats:wrapped_copycat_stone_pressure_plate",
     "copycats:copycat_stone_pressure_plate",
-    "copycats:wrapped_copycat_iron_pressure_plate",
-    "copycats:copycat_iron_pressure_plate",
+    "copycats:wrapped_copycat_heavy_pressure_plate",
+    "copycats:copycat_heavy_pressure_plate",
     "copycats:wrapped_copycat_gold_pressure_plate",
-    "copycats:copycat_gold_pressure_plate"
+    "copycats:copycat_light_pressure_plate"
   ]
 }

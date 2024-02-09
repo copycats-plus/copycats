@@ -18,17 +18,17 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.WeightedPressurePlateBlock.POWER;
 
 @SuppressWarnings("deprecation")
-public class CopycatGoldPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.Gold> {
+public class CopycatLightPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.Light> {
 
-    public static WrappedPressurePlate.Gold pressurePlate;
+    public static WrappedPressurePlate.Light pressurePlate;
 
-    public CopycatGoldPressurePlate(Properties pProperties) {
+    public CopycatLightPressurePlate(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState().setValue(POWER, 0));
     }
 
     @Override
-    public WrappedPressurePlate.Gold getWrappedBlock() {
+    public WrappedPressurePlate.Light getWrappedBlock() {
         return pressurePlate;
     }
 

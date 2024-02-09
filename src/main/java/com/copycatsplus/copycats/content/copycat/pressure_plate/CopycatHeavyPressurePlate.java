@@ -15,21 +15,20 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import static net.minecraft.world.level.block.PressurePlateBlock.POWERED;
 import static net.minecraft.world.level.block.WeightedPressurePlateBlock.POWER;
 
 @SuppressWarnings("deprecation")
-public class CopycatIronPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.Iron> {
+public class CopycatHeavyPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.Heavy> {
 
-    public static WrappedPressurePlate.Iron pressurePlate;
+    public static WrappedPressurePlate.Heavy pressurePlate;
 
-    public CopycatIronPressurePlate(Properties pProperties) {
+    public CopycatHeavyPressurePlate(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState().setValue(POWER, 0));
     }
 
     @Override
-    public WrappedPressurePlate.Iron getWrappedBlock() {
+    public WrappedPressurePlate.Heavy getWrappedBlock() {
         return pressurePlate;
     }
 
