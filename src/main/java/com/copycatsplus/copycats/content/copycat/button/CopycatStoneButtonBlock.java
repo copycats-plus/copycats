@@ -58,6 +58,11 @@ public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWit
     }
 
     @Override
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
+        return true;
+    }
+
+    @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return false;
     }
