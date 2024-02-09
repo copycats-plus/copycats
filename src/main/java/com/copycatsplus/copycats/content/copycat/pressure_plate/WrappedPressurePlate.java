@@ -51,6 +51,7 @@ public class WrappedPressurePlate {
 
         public Gold(int pMaxWeight, Properties pProperties, BlockSetType pType) {
             super(pMaxWeight, pProperties, pType);
+
         }
 
     }

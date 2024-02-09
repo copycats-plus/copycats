@@ -40,7 +40,11 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_SLICE,
             CCBlocks.COPYCAT_VERTICAL_SLICE,
             CCBlocks.COPYCAT_WOOD_BUTTON,
-            CCBlocks.COPYCAT_STONE_BUTTON
+            CCBlocks.COPYCAT_STONE_BUTTON,
+            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_IRON_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_GOLD_PRESSURE_PLATE
     );
 
     public static final RegistryObject<CreativeModeTab> MAIN = CREATIVE_MODE_TABS.register("main", () -> CreativeModeTab.builder()
