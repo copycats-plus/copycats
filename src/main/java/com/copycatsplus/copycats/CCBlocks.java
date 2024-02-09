@@ -7,7 +7,10 @@ import com.copycatsplus.copycats.content.copycat.block.CopycatBlockBlock;
 import com.copycatsplus.copycats.content.copycat.block.CopycatBlockModel;
 import com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock;
 import com.copycatsplus.copycats.content.copycat.board.CopycatBoardModel;
-import com.copycatsplus.copycats.content.copycat.button.*;
+import com.copycatsplus.copycats.content.copycat.button.CopycatButtonModel;
+import com.copycatsplus.copycats.content.copycat.button.CopycatStoneButtonBlock;
+import com.copycatsplus.copycats.content.copycat.button.CopycatWoodButtonBlock;
+import com.copycatsplus.copycats.content.copycat.button.WrappedButton;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteModel;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -19,7 +22,6 @@ import com.copycatsplus.copycats.content.copycat.fencegate.WrappedFenceGateBlock
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatPressurePlateModel;
-import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatStonePressurePlate;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatWoodenPressurePlate;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.WrappedPressurePlate;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
@@ -264,6 +266,28 @@ public class CCBlocks {
                     .item()
                     .transform(customItemModel("copycat_base", "layer"))
                     .register();
+
+
+    public static final BlockEntry<CopycatSliceBlock> COPYCAT_SLICE =
+            REGISTRATE.block("copycat_slice", CopycatSliceBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatSliceModel::new))
+                    .loot(CCLootGen::lootForLayers)
+                    .item()
+                    .transform(customItemModel("copycat_base", "slice"))
+                    .register();
+
+    public static final BlockEntry<CopycatVerticalSliceBlock> COPYCAT_VERTICAL_SLICE =
+            REGISTRATE.block("copycat_vertical_slice", CopycatVerticalSliceBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatVerticalSliceModel::new))
+                    .loot(CCLootGen::lootForLayers)
+                    .item()
+                    .transform(customItemModel("copycat_base", "vertical_slice"))
+                    .register();
+
 
     public static final BlockEntry<CopycatWoodButtonBlock> COPYCAT_WOOD_BUTTON =
             REGISTRATE.block("copycat_wood_button", CopycatWoodButtonBlock::new)
