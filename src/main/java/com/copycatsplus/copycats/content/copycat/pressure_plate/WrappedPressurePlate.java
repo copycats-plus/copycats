@@ -7,25 +7,25 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 public class WrappedPressurePlate {
 
-    public Wood wood(PressurePlateBlock.Sensitivity sensitivity, BlockBehaviour.Properties properties, BlockSetType type) {
-        return new Wood(sensitivity, properties, type);
+    public Wooden wooden(PressurePlateBlock.Sensitivity sensitivity, BlockBehaviour.Properties properties, BlockSetType type) {
+        return new Wooden(sensitivity, properties, type);
     }
 
     public Stone stone(PressurePlateBlock.Sensitivity sensitivity, BlockBehaviour.Properties properties, BlockSetType type) {
         return new Stone(sensitivity, properties, type);
     }
 
-    public Heavy heavy(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
-        return new Heavy(maxWeight, properties, type);
+    public HeavyWeighted heavyWeighted(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
+        return new HeavyWeighted(maxWeight, properties, type);
     }
 
-    public Light light(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
-        return new Light(maxWeight, properties, type);
+    public LightWeighted lightWeighted(int maxWeight, BlockBehaviour.Properties properties, BlockSetType type) {
+        return new LightWeighted(maxWeight, properties, type);
     }
 
-    public static class Wood extends PressurePlateBlock {
+    public static class Wooden extends PressurePlateBlock {
 
-        public Wood(Sensitivity pSensitivity, Properties pProperties, BlockSetType pType) {
+        public Wooden(Sensitivity pSensitivity, Properties pProperties, BlockSetType pType) {
             super(pSensitivity, pProperties, pType);
         }
 
@@ -39,17 +39,17 @@ public class WrappedPressurePlate {
 
     }
 
-    public static class Heavy extends WeightedPressurePlateBlock {
+    public static class HeavyWeighted extends WeightedPressurePlateBlock {
 
-        public Heavy(int pMaxWeight, Properties pProperties, BlockSetType pType) {
+        public HeavyWeighted(int pMaxWeight, Properties pProperties, BlockSetType pType) {
             super(pMaxWeight, pProperties, pType);
         }
 
     }
 
-    public static class Light extends WeightedPressurePlateBlock {
+    public static class LightWeighted extends WeightedPressurePlateBlock {
 
-        public Light(int pMaxWeight, Properties pProperties, BlockSetType pType) {
+        public LightWeighted(int pMaxWeight, Properties pProperties, BlockSetType pType) {
             super(pMaxWeight, pProperties, pType);
 
         }

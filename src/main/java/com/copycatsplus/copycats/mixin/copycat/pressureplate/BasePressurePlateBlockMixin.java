@@ -16,17 +16,17 @@ public class BasePressurePlateBlockMixin {
             index = 1
     )
     private Block wrappedBlock(Block original) {
-        if (original instanceof WrappedPressurePlate.Wood) {
+        if (original instanceof WrappedPressurePlate.Wooden) {
             return CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE.get();
         }
         if (original instanceof WrappedPressurePlate.Stone) {
             return CCBlocks.COPYCAT_STONE_PRESSURE_PLATE.get();
         }
-        if (original instanceof WrappedPressurePlate.Heavy) {
-            return CCBlocks.COPYCAT_HEAVY_PRESSURE_PLATE.get();
+        if (original instanceof WrappedPressurePlate.HeavyWeighted) {
+            return CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE.get();
         }
-        if (original instanceof WrappedPressurePlate.Light) {
-            return CCBlocks.COPYCAT_LIGHT_PRESSURE_PLATE.get();
+        if (original instanceof WrappedPressurePlate.LightWeighted) {
+            return CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE.get();
         }
         return original;
     }

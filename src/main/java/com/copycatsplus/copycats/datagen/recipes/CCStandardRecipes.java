@@ -153,9 +153,9 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 
     GeneratedRecipe COPYCAT_STONE_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_STONE_PRESSURE_PLATE, 4);
 
-    GeneratedRecipe COPYCAT_HEAVY_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_HEAVY_PRESSURE_PLATE, 2);
+    GeneratedRecipe COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE, 2);
 
-    GeneratedRecipe COPYCAT_LIGHT_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_LIGHT_PRESSURE_PLATE, 2);
+    GeneratedRecipe COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE, 2);
 
     String currentFolder = "";
 

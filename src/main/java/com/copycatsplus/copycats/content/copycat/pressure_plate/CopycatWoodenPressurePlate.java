@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.PressurePlateBlock.POWERED;
 
 @SuppressWarnings("deprecation")
-public class CopycatWoodenPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.Wood> {
+public class CopycatWoodenPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.Wooden> {
 
-    public static WrappedPressurePlate.Wood pressurePlate;
+    public static WrappedPressurePlate.Wooden pressurePlate;
 
     public CopycatWoodenPressurePlate(Properties pProperties) {
         super(pProperties);
@@ -30,7 +30,7 @@ public class CopycatWoodenPressurePlate extends CopycatBlock implements ICopycat
     }
 
     @Override
-    public WrappedPressurePlate.Wood getWrappedBlock() {
+    public WrappedPressurePlate.Wooden getWrappedBlock() {
         return pressurePlate;
     }
 

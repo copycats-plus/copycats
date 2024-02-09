@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "copycats:copycat_heavy_pressure_plate"
+          "name": "minecraft:air"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "copycats:blocks/copycat_heavy_pressure_plate"
+  "random_sequence": "copycats:blocks/wrapped_copycat_wooden_pressure_plate"
 }

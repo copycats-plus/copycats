@@ -5,7 +5,7 @@
       "conditions": [
         {
           "type": "copycats:feature_enabled",
-          "feature": "copycats:copycat_heavy_pressure_plate",
+          "feature": "copycats:copycat_light_weighted_pressure_plate",
           "invert": false
         }
       ],
@@ -15,7 +15,7 @@
         "ingredient": {
           "tag": "forge:ingots/zinc"
         },
-        "result": "copycats:copycat_heavy_pressure_plate"
+        "result": "copycats:copycat_light_weighted_pressure_plate"
       }
     }
   ]
