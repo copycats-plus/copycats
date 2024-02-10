@@ -32,7 +32,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -94,12 +93,7 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         }
     }
 
-    @Nullable
     @Override
-    public BlockState getConnectiveMaterial(BlockAndTintGetter reader, BlockState otherState, Direction face, BlockPos fromPos, BlockPos toPos) {
-        return (canConnectTexturesToward(reader, fromPos, toPos, otherState) ? getMaterial(reader, toPos) : null);
-    }
-
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
         Axis axis = state.getValue(AXIS);
@@ -317,7 +311,7 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
             List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
                     state.getValue(AXIS),
                     dir -> world.getBlockState(pos.relative(dir))
-                            .canBeReplaced(new BlockPlaceContext(player, player.getUsedItemHand(), player.getItemInHand(player.getUsedItemHand()),  ray))
+                            .canBeReplaced(new BlockPlaceContext(world, player, player.getUsedItemHand(), player.getItemInHand(player.getUsedItemHand()),  ray))
             );
 
             if (directions.isEmpty())
