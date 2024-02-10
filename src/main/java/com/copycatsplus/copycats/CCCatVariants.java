@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.mixin.entity.HolderReferenceAccessor;
 import com.simibubi.create.foundation.utility.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -33,7 +34,8 @@ public class CCCatVariants {
     private static void onRegister() {
         for (Pair<Holder.Reference<CatVariant>, ResourceLocation> entry : ENTRIES) {
             CatVariant instance = new CatVariant(entry.getSecond());
-            Registry.register(BuiltInRegistries.CAT_VARIANT, entry.getFirst().key().location(), instance);
+            ((HolderReferenceAccessor) entry.getFirst())
+                    .callBindValue(Registry.register(BuiltInRegistries.CAT_VARIANT, entry.getFirst().key().location(), instance));
         }
     }
 }

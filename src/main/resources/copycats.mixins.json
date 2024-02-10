@@ -29,6 +29,7 @@
     "copycat.wall.TrackPaverMixin",
     "copycat.wall.WallBlockMixin",
     "entity.CatMixin",
+    "entity.HolderReferenceAccessor",
     "featuretoggle.CreativeModeTabsAccessor"
   ],
   "client": [
