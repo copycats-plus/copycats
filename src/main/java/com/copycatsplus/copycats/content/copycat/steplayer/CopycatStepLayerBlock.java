@@ -9,6 +9,7 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -184,13 +185,53 @@ public class CopycatStepLayerBlock extends CTWaterloggedCopycatBlock implements 
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        return true;
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
+                                             BlockPos fromPos, BlockPos toPos) {
+        BlockState toState = reader.getBlockState(toPos);
+
+        if (toState.is(this)) {
+            // connecting to another copycat beam
+            Axis axis = state.getValue(AXIS);
+            Half half = state.getValue(HALF);
+            int positiveLayers = state.getValue(POSITIVE_LAYERS);
+            int negativeLayers = state.getValue(NEGATIVE_LAYERS);
+            return toState.getValue(AXIS) != axis ||
+                    toState.getValue(HALF) != half ||
+                    toState.getValue(POSITIVE_LAYERS) != positiveLayers ||
+                    toState.getValue(NEGATIVE_LAYERS) != negativeLayers;
+        } else {
+            // doesn't connect to any other blocks
+            return true;
+        }
     }
 
     @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        return false;
+    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
+                                            BlockState state) {
+        BlockPos diff = toPos.subtract(fromPos);
+        if (diff.equals(Vec3i.ZERO)) {
+            return true;
+        }
+        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        if (face == null) {
+            return false;
+        }
+
+        Axis axis = state.getValue(AXIS);
+        Half half = state.getValue(HALF);
+        int positiveLayers = state.getValue(POSITIVE_LAYERS);
+        int negativeLayers = state.getValue(NEGATIVE_LAYERS);
+        BlockState toState = reader.getBlockState(toPos);
+
+        if (toState.is(this)) {
+            return toState.getValue(AXIS) == axis &&
+                    toState.getValue(HALF) == half &&
+                    toState.getValue(POSITIVE_LAYERS) == positiveLayers &&
+                    toState.getValue(NEGATIVE_LAYERS) == negativeLayers &&
+                    face.getClockWise().getAxis() == axis;
+        } else {
+            return false;
+        }
     }
 
     @SuppressWarnings("deprecation")
