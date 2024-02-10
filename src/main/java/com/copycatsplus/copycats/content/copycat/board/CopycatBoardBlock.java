@@ -2,8 +2,8 @@ package com.copycatsplus.copycats.content.copycat.board;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.ICustomCTBlocking;
 import com.google.common.collect.ImmutableMap;
+import com.copycatsplus.copycats.content.copycat.ICustomCTBlocking;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;

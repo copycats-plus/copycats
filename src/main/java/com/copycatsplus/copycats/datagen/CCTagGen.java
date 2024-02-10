@@ -13,7 +13,6 @@ import net.minecraft.tags.CatVariantTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class CCTagGen {
 
@@ -24,7 +23,7 @@ public class CCTagGen {
 
     private static void genBlockTags(RegistrateTagsProvider<Block> provIn) {
         TagGen.CreateTagsProvider<Block> prov = new TagGen.CreateTagsProvider<>(provIn, Block::builtInRegistryHolder);
-        prov.tag(TagKey.create(ForgeRegistries.Keys.BLOCKS, Mods.DIAGONAL_FENCES.rl("non_diagonal_fences")))
+        prov.tag(TagKey.create(BuiltInRegistries.BLOCK.key(), Mods.DIAGONAL_FENCES.rl("non_diagonal_fences")))
                 .add(CCBlocks.COPYCAT_FENCE.get())
                 .add(CCBlocks.WRAPPED_COPYCAT_FENCE.get());
     }

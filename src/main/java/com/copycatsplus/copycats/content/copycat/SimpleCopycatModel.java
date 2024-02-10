@@ -1,16 +1,10 @@
 package com.copycatsplus.copycats.content.copycat;
 
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class SimpleCopycatModel extends CopycatModel implements ISimpleCopycatModel {
     public SimpleCopycatModel(BakedModel originalModel) {
@@ -18,16 +12,30 @@ public abstract class SimpleCopycatModel extends CopycatModel implements ISimple
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand,
-                                              BlockState material, ModelData wrappedData, RenderType renderType) {
+    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
-        List<BakedQuad> templateQuads = model.getQuads(material, side, rand, wrappedData, renderType);
-        List<BakedQuad> quads = new ArrayList<>();
-        CopycatRenderContext context = context(templateQuads, quads);
 
-        emitCopycatQuads(state, context, material);
+        // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
+        MeshBuilder meshBuilder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).meshBuilder();
+        QuadEmitter emitter = meshBuilder.getEmitter();
 
-        return quads;
+        renderContext.pushTransform(quad -> {
+            CopycatRenderContext context = context(quad, emitter);
+            if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
+                quad.cullFace(null);
+            } else if (occlusionData.isOccluded(quad.cullFace())) {
+                // Add quad to mesh and do not render original quad to preserve quad render order
+                assembleQuad(context);
+                return false;
+            }
+
+            emitCopycatQuads(state, context, material);
+            return false;
+        });
+        model.emitBlockQuads(blockView, material, pos, randomSupplier, renderContext);
+        renderContext.popTransform();
+
+        meshBuilder.build().outputTo(renderContext.getEmitter());
     }
 
     protected abstract void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material);

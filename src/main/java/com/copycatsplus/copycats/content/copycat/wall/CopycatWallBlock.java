@@ -6,7 +6,6 @@ import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -60,11 +59,6 @@ public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock<WrappedWall
                 .setValue(EAST_WALL, from.getValue(EAST_WALL))
                 .setValue(WEST_WALL, from.getValue(WEST_WALL))
                 .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
-    }
-
-    @Override
-    public boolean collisionExtendsVertically(BlockState state, BlockGetter level, BlockPos pos, Entity collidingEntity) {
-        return true;
     }
 
     @Override

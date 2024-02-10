@@ -2,7 +2,6 @@ package com.copycatsplus.copycats.content.copycat.verticalstep;
 
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,19 +49,15 @@ public class CopycatVerticalStepModel extends SimpleCopycatModel {
                 offset = offset.add(rowShift);
                 offset = offset.add(columnShift);
 
-                for (int i = 0; i < context.src().size(); i++) {
-                    BakedQuad quad = context.src().get(i);
-                    Direction direction = quad.getDirection();
+                Direction direction = context.src().lightFace();
 
-                    if (direction.getAxis() == Direction.Axis.X && row == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
+                if (direction.getAxis() == Direction.Axis.X && row == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                         continue;
                     if (direction.getAxis() == Direction.Axis.Z && column == (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE))
                         continue;
 
-                    assembleQuad(quad, context.dest(), bb1, offset);
+                assembleQuad(context, bb1, offset);
                 }
-
             }
         }
-    }
 }

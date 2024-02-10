@@ -17,9 +17,7 @@ public class CCommon extends SyncConfigBase {
         registerAsSyncRoot(
                 VERSION,
                 SyncConfig.class,
-                SyncConfig::encode,
                 SyncConfig::new,
-                SyncConfig::handle,
                 SyncConfig::new
         );
     }

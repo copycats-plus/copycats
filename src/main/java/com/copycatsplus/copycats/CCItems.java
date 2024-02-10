@@ -11,10 +11,6 @@ public class CCItems {
 
     private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
 
-    static {
-        REGISTRATE.setCreativeTab(CCCreativeTabs.MAIN);
-    }
-
     public static final ItemEntry<CopycatBoxItem> COPYCAT_BOX =
             REGISTRATE.item("copycat_box", CopycatBoxItem::new)
                     .model(AssetLookup.customBlockItemModel("copycat_base", "box"))
