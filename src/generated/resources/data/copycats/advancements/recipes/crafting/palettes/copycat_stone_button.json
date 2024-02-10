@@ -33,8 +33,7 @@
           "recipes": [
             "copycats:crafting/palettes/copycat_stone_button"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {
