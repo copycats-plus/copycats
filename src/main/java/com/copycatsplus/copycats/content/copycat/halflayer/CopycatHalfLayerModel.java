@@ -1,4 +1,4 @@
-package com.copycatsplus.copycats.content.copycat.steplayer;
+package com.copycatsplus.copycats.content.copycat.halflayer;
 
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -7,11 +7,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
-import static com.copycatsplus.copycats.content.copycat.steplayer.CopycatStepLayerBlock.*;
+import static com.copycatsplus.copycats.content.copycat.halflayer.CopycatHalfLayerBlock.*;
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatStepLayerModel extends SimpleCopycatModel {
-    public CopycatStepLayerModel(BakedModel originalModel) {
+public class CopycatHalfLayerModel extends SimpleCopycatModel {
+    public CopycatHalfLayerModel(BakedModel originalModel) {
         super(originalModel);
     }
 

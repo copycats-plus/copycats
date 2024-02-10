@@ -1,4 +1,4 @@
-package com.copycatsplus.copycats.content.copycat.steplayer;
+package com.copycatsplus.copycats.content.copycat.halflayer;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
@@ -43,7 +43,7 @@ import java.util.function.Function;
 import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.core.Direction.AxisDirection;
 
-public class CopycatStepLayerBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatHalfLayerBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
 
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
@@ -54,28 +54,28 @@ public class CopycatStepLayerBlock extends CTWaterloggedCopycatBlock implements 
 
     private static final VoxelShaper[] TOP_BY_LAYER = new VoxelShaper[]{
             CCShapes.EMPTY,
-            CCShapes.STEP_LAYER_TOP_2PX,
-            CCShapes.STEP_LAYER_TOP_4PX,
-            CCShapes.STEP_LAYER_TOP_6PX,
-            CCShapes.STEP_LAYER_TOP_8PX,
-            CCShapes.STEP_LAYER_TOP_10PX,
-            CCShapes.STEP_LAYER_TOP_12PX,
-            CCShapes.STEP_LAYER_TOP_14PX,
-            CCShapes.STEP_LAYER_TOP_16PX
+            CCShapes.HALF_LAYER_TOP_2PX,
+            CCShapes.HALF_LAYER_TOP_4PX,
+            CCShapes.HALF_LAYER_TOP_6PX,
+            CCShapes.HALF_LAYER_TOP_8PX,
+            CCShapes.HALF_LAYER_TOP_10PX,
+            CCShapes.HALF_LAYER_TOP_12PX,
+            CCShapes.HALF_LAYER_TOP_14PX,
+            CCShapes.HALF_LAYER_TOP_16PX
     };
     private static final VoxelShaper[] BOTTOM_BY_LAYER = new VoxelShaper[]{
             CCShapes.EMPTY,
-            CCShapes.STEP_LAYER_BOTTOM_2PX,
-            CCShapes.STEP_LAYER_BOTTOM_4PX,
-            CCShapes.STEP_LAYER_BOTTOM_6PX,
-            CCShapes.STEP_LAYER_BOTTOM_8PX,
-            CCShapes.STEP_LAYER_BOTTOM_10PX,
-            CCShapes.STEP_LAYER_BOTTOM_12PX,
-            CCShapes.STEP_LAYER_BOTTOM_14PX,
-            CCShapes.STEP_LAYER_BOTTOM_16PX
+            CCShapes.HALF_LAYER_BOTTOM_2PX,
+            CCShapes.HALF_LAYER_BOTTOM_4PX,
+            CCShapes.HALF_LAYER_BOTTOM_6PX,
+            CCShapes.HALF_LAYER_BOTTOM_8PX,
+            CCShapes.HALF_LAYER_BOTTOM_10PX,
+            CCShapes.HALF_LAYER_BOTTOM_12PX,
+            CCShapes.HALF_LAYER_BOTTOM_14PX,
+            CCShapes.HALF_LAYER_BOTTOM_16PX
     };
 
-    public CopycatStepLayerBlock(Properties pProperties) {
+    public CopycatHalfLayerBlock(Properties pProperties) {
         super(pProperties);
         registerDefaultState(defaultBlockState()
                 .setValue(AXIS, Axis.X)
@@ -83,7 +83,7 @@ public class CopycatStepLayerBlock extends CTWaterloggedCopycatBlock implements 
                 .setValue(POSITIVE_LAYERS, 0)
                 .setValue(NEGATIVE_LAYERS, 0)
         );
-        this.shapesCache = this.getShapeForEachState(CopycatStepLayerBlock::calculateMultiFaceShape);
+        this.shapesCache = this.getShapeForEachState(CopycatHalfLayerBlock::calculateMultiFaceShape);
     }
 
     @Override

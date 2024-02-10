@@ -20,6 +20,7 @@ import com.copycatsplus.copycats.content.copycat.fence.WrappedFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateBlock;
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateModel;
 import com.copycatsplus.copycats.content.copycat.fencegate.WrappedFenceGateBlock;
+import com.copycatsplus.copycats.content.copycat.halflayer.CopycatHalfLayerBlock;
 import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelBlock;
 import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelModel;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
@@ -33,8 +34,7 @@ import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsEnhancedModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
-import com.copycatsplus.copycats.content.copycat.steplayer.CopycatStepLayerBlock;
-import com.copycatsplus.copycats.content.copycat.steplayer.CopycatStepLayerModel;
+import com.copycatsplus.copycats.content.copycat.halflayer.CopycatHalfLayerModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.WrappedTrapdoorBlock;
@@ -241,6 +241,19 @@ public class CCBlocks {
                     .transform(customItemModel("copycat_base", "layer"))
                     .register();
 
+    public static final BlockEntry<CopycatHalfLayerBlock> COPYCAT_HALF_LAYER =
+            REGISTRATE.block("copycat_half_layer", CopycatHalfLayerBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> CopycatHalfLayerModel::new))
+                    .loot(CCLootGen.build(
+                            CCLootGen.lootForLayers(CopycatHalfLayerBlock.NEGATIVE_LAYERS),
+                            CCLootGen.lootForLayers(CopycatHalfLayerBlock.POSITIVE_LAYERS)
+                    ))
+                    .item()
+                    .transform(customItemModel("copycat_base", "half_layer"))
+                    .register();
+
 
     public static final BlockEntry<CopycatSliceBlock> COPYCAT_SLICE =
             REGISTRATE.block("copycat_slice", CopycatSliceBlock::new)
@@ -260,19 +273,6 @@ public class CCBlocks {
                     .loot(CCLootGen.build(CCLootGen.lootForLayers()))
                     .item()
                     .transform(customItemModel("copycat_base", "vertical_slice"))
-                    .register();
-
-    public static final BlockEntry<CopycatStepLayerBlock> COPYCAT_STEP_LAYER =
-            REGISTRATE.block("copycat_step_layer", CopycatStepLayerBlock::new)
-                    .transform(BuilderTransformers.copycat())
-                    .transform(FeatureToggle.register())
-                    .onRegister(CreateRegistrate.blockModel(() -> CopycatStepLayerModel::new))
-                    .loot(CCLootGen.build(
-                            CCLootGen.lootForLayers(CopycatStepLayerBlock.NEGATIVE_LAYERS),
-                            CCLootGen.lootForLayers(CopycatStepLayerBlock.POSITIVE_LAYERS)
-                    ))
-                    .item()
-                    .transform(customItemModel("copycat_base", "step_layer"))
                     .register();
 
 

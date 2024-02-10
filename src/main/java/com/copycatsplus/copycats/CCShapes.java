@@ -62,22 +62,22 @@ public class CCShapes {
     public static final VoxelShaper SLICE_VERTICAL_12PX = shape(0, 0, 0, 12, 16, 12).forHorizontal(Direction.NORTH);
     public static final VoxelShaper SLICE_VERTICAL_14PX = shape(0, 0, 0, 14, 16, 14).forHorizontal(Direction.NORTH);
     public static final VoxelShaper SLICE_VERTICAL_16PX = shape(0, 0, 0, 16, 16, 16).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_2PX = shape(0, 0, 0, 16, 2, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_4PX = shape(0, 0, 0, 16, 4, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_6PX = shape(0, 0, 0, 16, 6, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_8PX = shape(0, 0, 0, 16, 8, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_10PX = shape(0, 0, 0, 16, 10, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_12PX = shape(0, 0, 0, 16, 12, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_14PX = shape(0, 0, 0, 16, 14, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_BOTTOM_16PX = shape(0, 0, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_2PX = shape(0, 14, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_4PX = shape(0, 12, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_6PX = shape(0, 10, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_8PX = shape(0, 8, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_10PX = shape(0, 6, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_12PX = shape(0, 4, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_14PX = shape(0, 2, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper STEP_LAYER_TOP_16PX = shape(0, 0, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_2PX = shape(0, 0, 0, 16, 2, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_4PX = shape(0, 0, 0, 16, 4, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_6PX = shape(0, 0, 0, 16, 6, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_8PX = shape(0, 0, 0, 16, 8, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_10PX = shape(0, 0, 0, 16, 10, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_12PX = shape(0, 0, 0, 16, 12, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_14PX = shape(0, 0, 0, 16, 14, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_BOTTOM_16PX = shape(0, 0, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_2PX = shape(0, 14, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_4PX = shape(0, 12, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_6PX = shape(0, 10, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_8PX = shape(0, 8, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_10PX = shape(0, 6, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_12PX = shape(0, 4, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_14PX = shape(0, 2, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
+    public static final VoxelShaper HALF_LAYER_TOP_16PX = shape(0, 0, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
 
     private static Builder shape(VoxelShape shape) {
         return new Builder(shape);

@@ -18,7 +18,7 @@
           },
           "has_the_recipe": {
             "conditions": {
-              "recipe": "copycats:crafting/palettes/copycat_step_layer"
+              "recipe": "copycats:crafting/palettes/copycat_half_layer"
             },
             "trigger": "minecraft:recipe_unlocked"
           }
@@ -31,7 +31,7 @@
         ],
         "rewards": {
           "recipes": [
-            "copycats:crafting/palettes/copycat_step_layer"
+            "copycats:crafting/palettes/copycat_half_layer"
           ]
         },
         "sends_telemetry_event": false
@@ -39,7 +39,7 @@
       "conditions": [
         {
           "type": "copycats:feature_enabled",
-          "feature": "copycats:copycat_step_layer",
+          "feature": "copycats:copycat_half_layer",
           "invert": false
         }
       ]
