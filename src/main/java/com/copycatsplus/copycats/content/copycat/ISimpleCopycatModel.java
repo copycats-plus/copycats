@@ -117,9 +117,19 @@ public interface ISimpleCopycatModel {
             };
         }
 
+        public MutableCullFace flipX(boolean flip) {
+            if (!flip) return this;
+            return set(up, down, north, south, west, east);
+        }
+
         public MutableCullFace flipY(boolean flip) {
             if (!flip) return this;
             return set(down, up, north, south, east, west);
+        }
+
+        public MutableCullFace flipZ(boolean flip) {
+            if (!flip) return this;
+            return set(up, down, south, north, east, west);
         }
 
         public boolean isCulled(Direction direction) {
@@ -164,9 +174,19 @@ public interface ISimpleCopycatModel {
             };
         }
 
+        public MutableVec3 flipX(boolean flip) {
+            if (!flip) return this;
+            return set(16 - x, y, z);
+        }
+
         public MutableVec3 flipY(boolean flip) {
             if (!flip) return this;
             return set(x, 16 - y, z);
+        }
+
+        public MutableVec3 flipZ(boolean flip) {
+            if (!flip) return this;
+            return set(x, y, 16 - z);
         }
 
         public Vec3 toVec3() {
@@ -214,9 +234,19 @@ public interface ISimpleCopycatModel {
             };
         }
 
+        public MutableAABB flipX(boolean flip) {
+            if (!flip) return this;
+            return set(16 - minX, minY, minZ, 16 - maxX, maxY, maxZ);
+        }
+
         public MutableAABB flipY(boolean flip) {
             if (!flip) return this;
             return set(minX, 16 - minY, minZ, maxX, 16 - maxY, maxZ);
+        }
+
+        public MutableAABB flipZ(boolean flip) {
+            if (!flip) return this;
+            return set(minX, minY, 16 - minZ, maxX, maxY, 16 - maxZ);
         }
 
         public AABB toAABB() {

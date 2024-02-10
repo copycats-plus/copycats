@@ -18,7 +18,7 @@
         "type": "minecraft:crafting_shaped",
         "key": {
           "s": {
-            "item": "copycats:copycat_slab"
+            "tag": "copycats:copycat_slab"
           }
         },
         "pattern": [

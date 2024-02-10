@@ -17,6 +17,7 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_SLAB,
             CCBlocks.COPYCAT_BEAM,
             CCBlocks.COPYCAT_VERTICAL_STEP,
+            CCBlocks.COPYCAT_HALF_PANEL,
             CCBlocks.COPYCAT_STAIRS,
             CCBlocks.COPYCAT_FENCE,
             CCBlocks.COPYCAT_FENCE_GATE,
@@ -26,7 +27,16 @@ public class CCCreativeTabs {
             CCItems.COPYCAT_BOX,
             CCItems.COPYCAT_CATWALK,
             CCBlocks.COPYCAT_BYTE,
-            CCBlocks.COPYCAT_LAYER
+            CCBlocks.COPYCAT_LAYER,
+            CCBlocks.COPYCAT_HALF_LAYER,
+            CCBlocks.COPYCAT_SLICE,
+            CCBlocks.COPYCAT_VERTICAL_SLICE,
+            CCBlocks.COPYCAT_WOODEN_BUTTON,
+            CCBlocks.COPYCAT_STONE_BUTTON,
+            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE
     );
 
     public static void register() {
