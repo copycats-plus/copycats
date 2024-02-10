@@ -16,10 +16,12 @@ import java.util.function.BiConsumer;
 
 public class CCDatagen implements DataGeneratorEntrypoint {
 
+    private static FabricDataGenerator generator;
     private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
+        CCDatagen.generator = generator;
         addExtraRegistrateData();
 
         ExistingFileHelper helper = ExistingFileHelper.withResourcesFromArg();
@@ -52,6 +54,10 @@ public class CCDatagen implements DataGeneratorEntrypoint {
             String value = entry.getValue().getAsString();
             consumer.accept(key, value);
         }
+    }
+
+    public static FabricDataGenerator generator() {
+        return generator;
     }
 }
 

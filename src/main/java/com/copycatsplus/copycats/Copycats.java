@@ -33,7 +33,7 @@ public class Copycats implements ModInitializer {
         REGISTRATE.useCreativeTab(CCCreativeTabs.MAIN.key());
         CCBlocks.register();
         CCItems.register();
-        CCCatVariants.register(modEventBus);
+        CCCatVariants.register();
         CCBlockEntityTypes.register();
 
         REGISTRATE.register();

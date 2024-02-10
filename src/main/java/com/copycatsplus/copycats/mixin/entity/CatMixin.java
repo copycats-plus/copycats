@@ -104,18 +104,18 @@ public abstract class CatMixin extends TamableAnimal {
         ItemStack stack = pPlayer.getItemInHand(pHand);
         if (stack.is(CCBlocks.COPYCAT_BLOCK.asItem())) {
             CatVariant currentVariant = getVariant();
-            if (currentVariant.equals(CCCatVariants.COPY_CAT.get())) return;
+            if (currentVariant.equals(CCCatVariants.COPY_CAT.value())) return;
 
             if (!level().isClientSide()) {
                 this.setNaturalVariant(currentVariant);
-                this.setVariant(CCCatVariants.COPY_CAT.get());
+                this.setVariant(CCCatVariants.COPY_CAT.value());
                 this.usePlayerItem(pPlayer, pHand, stack);
                 this.setPersistenceRequired();
             }
             cir.setReturnValue(InteractionResult.sidedSuccess(level().isClientSide()));
         } else if (stack.is(AllTags.AllItemTags.WRENCH.tag)) {
             CatVariant currentVariant = getVariant();
-            if (!currentVariant.equals(CCCatVariants.COPY_CAT.get())) return;
+            if (!currentVariant.equals(CCCatVariants.COPY_CAT.value())) return;
 
             if (!level().isClientSide()) {
                 this.setVariant(this.getNaturalVariant());

@@ -2,13 +2,12 @@ package com.copycatsplus.copycats;
 
 import com.simibubi.create.foundation.utility.Pair;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.RegisterEvent;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,17 +26,14 @@ public class CCCatVariants {
         return pair.getFirst();
     }
 
-    public static void register(IEventBus modEventBus) {
-        modEventBus.addListener(CCCatVariants::onRegister);
+    public static void register() {
+        onRegister();
     }
 
-    private static void onRegister(RegisterEvent event) {
-        event.register(BuiltInRegistries.CAT_VARIANT.key(), helper -> {
-            for (Pair<Holder.Reference<CatVariant>, ResourceLocation> entry : ENTRIES) {
-                CatVariant instance = new CatVariant(entry.getSecond());
-                helper.register(entry.getFirst().key(), instance);
-                entry.getFirst().bindValue(instance);
-            }
-        });
+    private static void onRegister() {
+        for (Pair<Holder.Reference<CatVariant>, ResourceLocation> entry : ENTRIES) {
+            CatVariant instance = new CatVariant(entry.getSecond());
+            Registry.register(BuiltInRegistries.CAT_VARIANT, entry.getFirst().key().location(), instance);
+        }
     }
 }
