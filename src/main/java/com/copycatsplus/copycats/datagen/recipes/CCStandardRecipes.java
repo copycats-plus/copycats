@@ -5,18 +5,19 @@ import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.Copycats;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.recipe.CreateRecipeProvider;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
+import io.github.fabricators_of_create.porting_lib.data.ConditionalRecipe;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -27,11 +28,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
-import net.minecraftforge.common.crafting.conditions.NotCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -167,7 +163,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         return create(result)
                 .unlockedBy(AllItems.ZINC_INGOT::get)
                 .requiresResultFeature()
-                .viaStonecutting(DataIngredient.tag(AllTags.forgeItemTag("ingots/zinc")), resultCount);
+                .viaStonecutting(DataIngredient.items(AllItems.ZINC_INGOT.get()), resultCount);
     }
 
     protected static class Marker {
@@ -181,7 +177,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         private Supplier<? extends ItemLike> result;
         private RecipeCategory category = null;
         private ResourceLocation compatDatagenOutput;
-        List<ICondition> recipeConditions;
+        List<ConditionJsonProvider> recipeConditions;
 
         private Supplier<ItemPredicate> unlockedBy;
         private int amount;
@@ -228,14 +224,14 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         }
 
         GeneratedRecipeBuilder whenModLoaded(String modid) {
-            return withCondition(new ModLoadedCondition(modid));
+            return withCondition(DefaultResourceConditions.allModsLoaded(modid));
         }
 
         GeneratedRecipeBuilder whenModMissing(String modid) {
-            return withCondition(new NotCondition(new ModLoadedCondition(modid)));
+            return withCondition(DefaultResourceConditions.not(DefaultResourceConditions.allModsLoaded(modid)));
         }
 
-        GeneratedRecipeBuilder withCondition(ICondition condition) {
+        GeneratedRecipeBuilder withCondition(ConditionJsonProvider condition) {
             recipeConditions.add(condition);
             return this;
         }
@@ -429,18 +425,18 @@ public class CCStandardRecipes extends CreateRecipeProvider {
         return "Standard Recipes of Create: Copycats+";
     }
 
-    public CCStandardRecipes(PackOutput p_i48262_1_) {
-        super(p_i48262_1_);
+    public CCStandardRecipes(FabricDataOutput output) {
+        super(output);
     }
 
     private static class ModdedCookingRecipeResult implements FinishedRecipe {
 
         private final FinishedRecipe wrapped;
         private final ResourceLocation outputOverride;
-        private final List<ICondition> conditions;
+        private final List<ConditionJsonProvider> conditions;
 
         public ModdedCookingRecipeResult(FinishedRecipe wrapped, ResourceLocation outputOverride,
-                                         List<ICondition> conditions) {
+                                         List<ConditionJsonProvider> conditions) {
             this.wrapped = wrapped;
             this.outputOverride = outputOverride;
             this.conditions = conditions;
@@ -471,9 +467,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             wrapped.serializeRecipeData(object);
             object.addProperty("result", outputOverride.toString());
 
-            JsonArray conds = new JsonArray();
-            conditions.forEach(c -> conds.add(CraftingHelper.serialize(c)));
-            object.add("conditions", conds);
+            ConditionJsonProvider.write(object, conditions.toArray(new ConditionJsonProvider[0]));
         }
 
     }

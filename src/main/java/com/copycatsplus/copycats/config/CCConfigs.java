@@ -1,20 +1,17 @@
 package com.copycatsplus.copycats.config;
 
+import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.foundation.config.ConfigBase;
+import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CCConfigs {
 
     private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
@@ -53,25 +50,27 @@ public class CCConfigs {
         return config;
     }
 
-    public static void register(ModLoadingContext context) {
+    public static void register() {
         common = register(CCommon::new, ModConfig.Type.COMMON);
 
         for (Map.Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet())
-            context.registerConfig(pair.getKey(), pair.getValue().specification);
+            ForgeConfigRegistry.INSTANCE.register(Copycats.MODID, pair.getKey(), pair.getValue().specification);
+
+        ModConfigEvents.loading(Copycats.MODID).register(CCConfigs::onLoad);
+        ModConfigEvents.reloading(Copycats.MODID).register(CCConfigs::onReload);
     }
 
-    @SubscribeEvent
-    public static void onLoad(ModConfigEvent.Loading event) {
+
+    public static void onLoad(ModConfig modConfig) {
         for (ConfigBase config : CONFIGS.values())
-            if (config.specification == event.getConfig()
+            if (config.specification == modConfig
                     .getSpec())
                 config.onLoad();
     }
 
-    @SubscribeEvent
-    public static void onReload(ModConfigEvent.Reloading event) {
+    public static void onReload(ModConfig modConfig) {
         for (ConfigBase config : CONFIGS.values())
-            if (config.specification == event.getConfig()
+            if (config.specification == modConfig
                     .getSpec())
                 config.onReload();
     }

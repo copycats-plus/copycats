@@ -3,7 +3,6 @@ package com.copycatsplus.copycats.content.copycat.fencegate;
 import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -54,11 +53,6 @@ public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock {
                 .setValue(IN_WALL, from.getValue(IN_WALL))
                 .setValue(FACING, from.getValue(FACING))
                 .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
-    }
-
-    @Override
-    public boolean collisionExtendsVertically(BlockState state, BlockGetter level, BlockPos pos, Entity collidingEntity) {
-        return true;
     }
 
     @Override

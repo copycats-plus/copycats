@@ -7,6 +7,6 @@ import java.util.function.Supplier;
 
 public class WrappedStairsBlock extends StairBlock {
     public WrappedStairsBlock(Supplier<BlockState> state, Properties properties) {
-        super(state, properties);
+        super(state.get(), properties);
     }
 }
