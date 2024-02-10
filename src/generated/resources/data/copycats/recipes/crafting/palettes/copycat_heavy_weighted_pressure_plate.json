@@ -4,18 +4,18 @@
     {
       "conditions": [
         {
-          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_heavy_weighted_pressure_plate",
-          "invert": false
+          "invert": false,
+          "type": "copycats:feature_enabled"
         }
       ],
       "recipe": {
         "type": "minecraft:stonecutting",
-        "count": 2,
         "ingredient": {
           "tag": "forge:ingots/zinc"
         },
-        "result": "copycats:copycat_heavy_weighted_pressure_plate"
+        "result": "copycats:copycat_heavy_weighted_pressure_plate",
+        "count": 2
       }
     }
   ]

@@ -7,18 +7,13 @@
           "feature": "copycats:copycat_vertical_step",
           "invert": false,
           "type": "copycats:feature_enabled"
-        },
-        {
-          "feature": "create:copycat_step",
-          "invert": false,
-          "type": "copycats:feature_enabled"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shapeless",
         "ingredients": [
           {
-            "item": "copycats:copycat_vertical_step"
+            "tag": "copycats:copycat_vertical_step"
           }
         ],
         "result": {
