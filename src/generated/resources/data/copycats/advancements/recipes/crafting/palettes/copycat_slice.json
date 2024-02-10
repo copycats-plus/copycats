@@ -1,0 +1,47 @@
+{
+  "advancements": [
+    {
+      "advancement": {
+        "parent": "minecraft:recipes/root",
+        "criteria": {
+          "has_the_recipe": {
+            "conditions": {
+              "recipe": "copycats:crafting/palettes/copycat_slice"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+          },
+          "has_zinc_ingot": {
+            "conditions": {
+              "items": [
+                {
+                  "items": [
+                    "create:zinc_ingot"
+                  ]
+                }
+              ]
+            },
+            "trigger": "minecraft:inventory_changed"
+          }
+        },
+        "requirements": [
+          [
+            "has_zinc_ingot",
+            "has_the_recipe"
+          ]
+        ],
+        "rewards": {
+          "recipes": [
+            "copycats:crafting/palettes/copycat_slice"
+          ]
+        }
+      },
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_slice",
+          "invert": false
+        }
+      ]
+    }
+  ]
+}

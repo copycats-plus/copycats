@@ -28,12 +28,13 @@ public class Copycats implements ModInitializer {
     public void onInitialize() {
         CCCreativeTabs.register();
 
-        // Register the commonSetup method for mod loading
+        CCDataProviderTypes.register();
         CCCraftingConditions.register();
 
         REGISTRATE.creativeModeTab(() -> CCCreativeTabs.MAIN);
         CCBlocks.register();
         CCItems.register();
+        CCCatVariants.register();
         CCBlockEntityTypes.register();
 
         REGISTRATE.register();

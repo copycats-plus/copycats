@@ -7,10 +7,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Half;
@@ -22,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.TrapDoorBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
+public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock<WrappedTrapdoorBlock> {
 
-    public static TrapDoorBlock trapdoor;
+    public static WrappedTrapdoorBlock trapdoor;
 
     public CopycatTrapdoorBlock(Properties properties) {
         super(properties);
@@ -37,7 +34,7 @@ public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedTrapdoorBlock getWrappedBlock() {
         return trapdoor;
     }
 

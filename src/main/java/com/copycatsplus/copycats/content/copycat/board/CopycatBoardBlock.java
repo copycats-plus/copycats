@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.google.common.collect.ImmutableMap;
+import com.copycatsplus.copycats.content.copycat.ICustomCTBlocking;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -36,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Function;
 
-public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, ICustomCTBlocking {
     public static BooleanProperty UP = BlockStateProperties.UP;
     public static BooleanProperty DOWN = BlockStateProperties.DOWN;
     public static BooleanProperty NORTH = BlockStateProperties.NORTH;
@@ -79,6 +80,11 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return reader.getBlockState(toPos).is(this);
+    }
+
+    @Override
+    public Optional<Boolean> blockCTTowards(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos ctPos, BlockPos connectingPos, Direction face) {
+        return Optional.of(!reader.getBlockState(ctPos).is(this));
     }
 
     @Override

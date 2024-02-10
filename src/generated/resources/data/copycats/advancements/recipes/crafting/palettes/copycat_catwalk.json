@@ -21,9 +21,7 @@
             "conditions": {
               "items": [
                 {
-                  "items": [
-                    "copycats:copycat_board"
-                  ]
+                  "tag": "copycats:copycat_board"
                 }
               ]
             }

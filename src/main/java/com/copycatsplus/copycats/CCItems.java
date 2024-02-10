@@ -16,6 +16,7 @@ public class CCItems {
                     .model(AssetLookup.customBlockItemModel("copycat_base", "box"))
                     .tab(() -> CCCreativeTabs.MAIN)
                     .transform(FeatureToggle.registerDependent(CCBlocks.COPYCAT_BOARD))
+                    .tag(CCTags.Items.COPYCAT_BOX.tag)
                     .register();
 
     public static final ItemEntry<CopycatCatwalkItem> COPYCAT_CATWALK =
@@ -23,6 +24,7 @@ public class CCItems {
                     .model(AssetLookup.customBlockItemModel("copycat_base", "catwalk"))
                     .tab(() -> CCCreativeTabs.MAIN)
                     .transform(FeatureToggle.registerDependent(CCBlocks.COPYCAT_BOARD))
+                    .tag(CCTags.Items.COPYCAT_CATWALK.tag)
                     .register();
 
     public static void register() {

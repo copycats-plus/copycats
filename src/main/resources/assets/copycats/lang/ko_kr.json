@@ -55,6 +55,5 @@
   "item.copycats.copycat_catwalk": "모방 캣워크",
   "item.copycats.copycat_catwalk.tooltip.behaviour1": "_들고 있는 아이템_이 _소재_로 적용될 수 있다면 적용합니다. 다시 클릭하여 _방향_ 및 _신호_ 상태를 바꿉니다. _렌치_를 들었을 경우 소재를 _제거_합니다.",
   "item.copycats.copycat_catwalk.tooltip.condition1": "우클릭",
-  "item.copycats.copycat_catwalk.tooltip.summary": "편리한 설치를 위해 캣워크 모양으로 미리 조립된 _모방 판_입니다.",
-  "itemGroup.copycats.main": "Create: Copycats+"
+  "item.copycats.copycat_catwalk.tooltip.summary": "편리한 설치를 위해 캣워크 모양으로 미리 조립된 _모방 판_입니다."
 }

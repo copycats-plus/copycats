@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_half_panel",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "key": {
+          "s": {
+            "item": "copycats:copycat_half_panel"
+          }
+        },
+        "pattern": [
+          "ss"
+        ],
+        "result": {
+          "item": "create:copycat_panel"
+        }
+      }
+    }
+  ]
+}

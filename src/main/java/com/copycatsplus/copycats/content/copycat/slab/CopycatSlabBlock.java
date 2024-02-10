@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -39,7 +40,7 @@ import java.util.function.Predicate;
 import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.core.Direction.AxisDirection;
 
-public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopycatWithWrappedBlock {
+public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopycatWithWrappedBlock<Block> {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
     public static final EnumProperty<SlabType> SLAB_TYPE = BlockStateProperties.SLAB_TYPE;
@@ -103,7 +104,7 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromNormal(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             boolean correctAxis = switch (axis) {
                 case X -> diff.getX() == 0;

@@ -1,0 +1,30 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_vertical_slice",
+          "invert": false
+        },
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_slice",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "item": "copycats:copycat_vertical_slice"
+          }
+        ],
+        "result": {
+          "item": "copycats:copycat_slice"
+        }
+      }
+    }
+  ]
+}

@@ -7,8 +7,10 @@ plugins {
 }
 
 def secrets = new Properties()
-file("./secrets.properties").withInputStream {
-    stream -> secrets.load(stream)
+if (file("./secrets.properties").exists()) {
+    file("./secrets.properties").withInputStream {
+        stream -> secrets.load(stream)
+    }
 }
 
 loom {
@@ -141,6 +143,7 @@ dependencies {
         exclude group: "io.github.fabricators_of_create"
     }
     modImplementation("com.jozufozu.flywheel:flywheel-fabric-${flywheel_minecraft_version}:${flywheel_version}")
+    modImplementation("com.jamieswhiteshirt:reach-entity-attributes:$reach_entity_attributes_version")
     modCompileOnly("com.simibubi.create:create-fabric-${create_minecraft_version}:${create_version}") {
         transitive = true
         exclude group: "maven.modrinth"

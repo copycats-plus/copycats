@@ -1,0 +1,22 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_vertical_slice",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "count": 16,
+        "ingredient": {
+          "item": "create:zinc_ingot"
+        },
+        "result": "copycats:copycat_vertical_slice"
+      }
+    }
+  ]
+}
