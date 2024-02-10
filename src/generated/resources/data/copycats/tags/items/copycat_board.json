@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "copycats:copycat_board"
   ]

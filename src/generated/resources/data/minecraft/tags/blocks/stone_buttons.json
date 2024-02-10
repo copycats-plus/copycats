@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "copycats:copycat_stone_button",
     "copycats:wrapped_copycat_stone_button"

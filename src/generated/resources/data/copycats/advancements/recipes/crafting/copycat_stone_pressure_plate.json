@@ -1,6 +1,13 @@
 {
   "advancements": [
     {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_stone_pressure_plate",
+          "invert": false
+        }
+      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
         "criteria": {
@@ -18,7 +25,7 @@
           },
           "has_the_recipe": {
             "conditions": {
-              "recipe": "copycats:crafting/palettes/copycat_light_weighted_pressure_plate"
+              "recipe": "copycats:crafting//copycat_stone_pressure_plate"
             },
             "trigger": "minecraft:recipe_unlocked"
           }
@@ -31,18 +38,11 @@
         ],
         "rewards": {
           "recipes": [
-            "copycats:crafting/palettes/copycat_light_weighted_pressure_plate"
+            "copycats:crafting//copycat_stone_pressure_plate"
           ]
         },
         "sends_telemetry_event": false
-      },
-      "conditions": [
-        {
-          "type": "copycats:feature_enabled",
-          "feature": "copycats:copycat_light_weighted_pressure_plate",
-          "invert": false
-        }
-      ]
+      }
     }
   ]
 }

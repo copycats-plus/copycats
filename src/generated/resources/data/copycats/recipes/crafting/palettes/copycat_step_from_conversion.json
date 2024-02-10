@@ -7,11 +7,6 @@
           "condition": "copycats:feature_enabled",
           "feature": "copycats:copycat_vertical_step",
           "invert": false
-        },
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "create:copycat_step",
-          "invert": false
         }
       ],
       "recipe": {
@@ -19,7 +14,7 @@
         "category": "misc",
         "ingredients": [
           {
-            "item": "copycats:copycat_vertical_step"
+            "tag": "copycats:copycat_vertical_step"
           }
         ],
         "result": {
