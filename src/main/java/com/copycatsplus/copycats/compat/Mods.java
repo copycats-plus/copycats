@@ -1,9 +1,9 @@
 package com.copycatsplus.copycats.compat;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -39,18 +39,18 @@ public enum Mods {
     }
 
     public Item getItem(String id) {
-        return BuiltInRegistries.ITEM.get(rl(id));
+        return ForgeRegistries.ITEMS.getValue(rl(id));
     }
 
     public Item getItem(ResourceLocation id) {
-        return BuiltInRegistries.ITEM.get(id);
+        return ForgeRegistries.ITEMS.getValue(id);
     }
 
     /**
      * @return a boolean of whether the mod is loaded or not based on mod id
      */
     public boolean isLoaded() {
-        return FabricLoader.getInstance().isModLoaded(id);
+        return ModList.get().isLoaded(id);
     }
 
     /**

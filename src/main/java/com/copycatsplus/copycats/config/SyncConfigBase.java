@@ -2,25 +2,29 @@ package com.copycatsplus.copycats.config;
 
 import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.foundation.config.ConfigBase;
-import com.simibubi.create.foundation.networking.SimplePacketBase;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
-import me.pepperbell.simplenetworking.SimpleChannel;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Base class for all configs that require custom synchronization from server to clients.
  */
 public abstract class SyncConfigBase extends ConfigBase {
 
-    public SimpleChannel syncChannel;
+    private SimpleChannel syncChannel;
     private Function<CompoundTag, ? extends SyncConfig> messageSupplier;
 
     public final CompoundTag getSyncConfig() {
@@ -75,21 +79,26 @@ public abstract class SyncConfigBase extends ConfigBase {
     public <T extends SyncConfig> void registerAsSyncRoot(
             String configVersion,
             Class<T> messageType,
+            BiConsumer<T, FriendlyByteBuf> encoder,
             Function<FriendlyByteBuf, T> decoder,
+            BiConsumer<T, Supplier<Context>> messageConsumer,
             Function<CompoundTag, T> messageSupplier
     ) {
-        syncChannel = new SimpleChannel(Copycats.asResource("config_" + getName()));
-        syncChannel.registerS2CPacket(messageType, 0, decoder);
-        setMessageSupplier(messageSupplier);
-        ServerPlayConnectionEvents.JOIN.register((listener, sender, server) -> syncToPlayer(listener.getPlayer()));
-    }
-
-    private <T extends SyncConfig> void setMessageSupplier(Function<CompoundTag, T> messageSupplier) {
+        syncChannel = NetworkRegistry.newSimpleChannel(
+                Copycats.asResource("config_" + getName()),
+                () -> configVersion,
+                configVersion::equals,
+                configVersion::equals
+        );
+        syncChannel.registerMessage(
+                0,
+                messageType,
+                encoder,
+                decoder,
+                messageConsumer
+        );
         this.messageSupplier = messageSupplier;
-    }
-
-    private Function<CompoundTag, ? extends SyncConfig> messageSupplier() {
-        return messageSupplier;
+        MinecraftForge.EVENT_BUS.addListener(this::syncToPlayer);
     }
 
     @Override
@@ -113,20 +122,21 @@ public abstract class SyncConfigBase extends ConfigBase {
             return;
         }
         Copycats.LOGGER.debug("Sync Config: Sending server config to all players on reload");
-        syncChannel.sendToClients(messageSupplier().apply(getSyncConfig()), ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers());
+        syncChannel.send(PacketDistributor.ALL.noArg(), this.messageSupplier.apply(getSyncConfig()));
     }
 
-    private void syncToPlayer(ServerPlayer player) {
+    private void syncToPlayer(PlayerEvent.PlayerLoggedInEvent event) {
+        ServerPlayer player = (ServerPlayer) event.getEntity();
         if (player == null) return;
         Copycats.LOGGER.debug("Sync Config: Sending server config to " + player.getScoreboardName());
-        syncChannel.sendToClient(messageSupplier().apply(getSyncConfig()), player);
+        syncChannel.send(PacketDistributor.PLAYER.with(() -> player), this.messageSupplier.apply(getSyncConfig()));
     }
 
     /**
      * A helper class to handle network messages. All children of {@link SyncConfigBase} should have a corresponding
      * child of {@link SyncConfig}, with its methods provided to {@link SyncConfigBase#registerAsSyncRoot}.
      */
-    public abstract static class SyncConfig extends SimplePacketBase {
+    public abstract static class SyncConfig {
 
         private final CompoundTag nbt;
 
@@ -140,8 +150,7 @@ public abstract class SyncConfigBase extends ConfigBase {
 
         protected abstract SyncConfigBase configInstance();
 
-        @Override
-        public void write(FriendlyByteBuf buf) {
+        void encode(FriendlyByteBuf buf) {
             buf.writeNbt(nbt);
         }
 
@@ -149,16 +158,13 @@ public abstract class SyncConfigBase extends ConfigBase {
             return buf.readAnySizeNbt();
         }
 
-        @Override
-        public boolean handle(SimplePacketBase.Context context) {
-            context.enqueueWork(() -> EnvExecutor.runWhenOn(EnvType.CLIENT, () -> this::handleOnClient));
-            return true;
-        }
-
-        @Environment(EnvType.CLIENT)
-        private void handleOnClient() {
-            configInstance().setSyncConfig(nbt);
-            Copycats.LOGGER.debug("Sync Config: Received and applied server config " + nbt.toString());
+        void handle(Supplier<Context> context) {
+            Context ctx = context.get();
+            ctx.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                configInstance().setSyncConfig(nbt);
+                Copycats.LOGGER.debug("Sync Config: Received and applied server config " + nbt.toString());
+            }));
+            ctx.setPacketHandled(true);
         }
     }
 

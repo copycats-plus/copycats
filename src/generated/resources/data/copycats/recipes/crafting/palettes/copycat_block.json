@@ -1,10 +1,10 @@
 {
-  "type": "porting_lib:conditional",
+  "type": "forge:conditional",
   "recipes": [
     {
-      "fabric:load_conditions": [
+      "conditions": [
         {
-          "condition": "copycats:feature_enabled",
+          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_block",
           "invert": false
         }
@@ -13,7 +13,7 @@
         "type": "minecraft:stonecutting",
         "count": 1,
         "ingredient": {
-          "item": "create:zinc_ingot"
+          "tag": "forge:ingots/zinc"
         },
         "result": "copycats:copycat_block"
       }

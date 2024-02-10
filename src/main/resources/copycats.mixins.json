@@ -3,11 +3,16 @@
   "package": "com.copycatsplus.copycats.mixin",
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.8",
-  "refmap": "copycats-refmap.json",
+  "refmap": "copycats.refmap.json",
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "mixins": [
+    "copycat.ConnectedTextureBehaviourMixin",
     "copycat.CopycatBlockEntityMixin",
+    "copycat.CopycatModelAccessor",
+    "copycat.CopycatModelMixin",
+    "copycat.FilteredBlockAndTintGetterAccessor",
     "copycat.TrackPlacementMixin",
+    "copycat.button.ButtonBlockMixin",
     "copycat.fence.COMPATFenceBlockMixin",
     "copycat.fence.FenceBlockMixin",
     "copycat.fence.ValueBoxRendererMixin",
@@ -15,6 +20,7 @@
     "copycat.fencegate.COMPATPathNodeDefaultsMixin",
     "copycat.fencegate.WalkNodeEvaluatorMixin",
     "copycat.panel.CopycatPanelBlockMixin",
+    "copycat.pressureplate.BasePressurePlateBlockMixin",
     "copycat.slab.SeatMovementBehaviourMixin",
     "copycat.stairs.StairBlockMixin",
     "copycat.stairs.StructureTransformMixin",
@@ -23,6 +29,7 @@
     "copycat.trapdoor.RedStoneWireBlockMixin",
     "copycat.wall.TrackPaverMixin",
     "copycat.wall.WallBlockMixin",
+    "entity.CatMixin",
     "featuretoggle.CreativeModeTabsAccessor"
   ],
   "client": [

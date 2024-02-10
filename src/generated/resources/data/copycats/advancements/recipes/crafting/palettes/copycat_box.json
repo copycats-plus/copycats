@@ -1,13 +1,6 @@
 {
   "advancements": [
     {
-      "fabric:load_conditions": [
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_box",
-          "invert": false
-        }
-      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
         "criteria": {
@@ -15,9 +8,7 @@
             "conditions": {
               "items": [
                 {
-                  "items": [
-                    "copycats:copycat_board"
-                  ]
+                  "tag": "copycats:copycat_board"
                 }
               ]
             },
@@ -42,7 +33,14 @@
           ]
         },
         "sends_telemetry_event": false
-      }
+      },
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_box",
+          "invert": false
+        }
+      ]
     }
   ]
 }

@@ -3,14 +3,9 @@ package com.copycatsplus.copycats.content.copycat.trapdoor;
 import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Half;
@@ -22,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.TrapDoorBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
+public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock<WrappedTrapdoorBlock> {
 
-    public static TrapDoorBlock trapdoor;
+    public static WrappedTrapdoorBlock trapdoor;
 
     public CopycatTrapdoorBlock(Properties properties) {
         super(properties);
@@ -37,7 +32,7 @@ public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedTrapdoorBlock getWrappedBlock() {
         return trapdoor;
     }
 
@@ -74,6 +69,11 @@ public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock {
     @Override
     public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
         return trapdoor.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
+    }
+
+    @Override
+    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity) {
+        return trapdoor.isLadder(state, level, pos, entity);
     }
 
     @Override

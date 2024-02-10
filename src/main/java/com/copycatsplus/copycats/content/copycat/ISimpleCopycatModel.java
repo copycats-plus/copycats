@@ -1,18 +1,15 @@
 package com.copycatsplus.copycats.content.copycat;
 
 import com.simibubi.create.foundation.model.BakedModelHelper;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
-import net.minecraft.client.Minecraft;
+import com.simibubi.create.foundation.model.BakedQuadHelper;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public interface ISimpleCopycatModel {
+import java.util.List;
 
-    SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));
+public interface ISimpleCopycatModel {
 
     /**
      * Assemble the quads of a piece of copycat material.
@@ -28,44 +25,48 @@ public interface ISimpleCopycatModel {
         select.rotate(rotation).flipY(flipY);
         offset.rotate(rotation).flipY(flipY);
         cull.rotate(rotation).flipY(flipY);
-        if (cull.isCulled(context.src().lightFace())) {
-            return;
+        for (BakedQuad quad : context.src) {
+            if (cull.isCulled(quad.getDirection())) {
+                continue;
+            }
+            assembleQuad(quad, context.dest, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
         }
-        assembleQuad(context, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
     }
 
     /**
-     * Copy a quad from source to destination without modification.
+     * Copy ALL quads from source to destination without modification.
      */
     default void assembleQuad(CopycatRenderContext context) {
-        assembleQuad(context.src, context.dest);
+        for (BakedQuad quad : context.src) {
+            assembleQuad(quad, context.dest);
+        }
     }
 
     /**
      * Copy a quad from source to destination without modification.
      */
-    default void assembleQuad(MutableQuadView quad, QuadEmitter emitter) {
-        emitter.copyFrom(quad);
-        emitter.emit();
+    default void assembleQuad(BakedQuad src, List<BakedQuad> dest) {
+        dest.add(BakedQuadHelper.clone(src));
     }
 
     /**
-     * Copy a quad from source to destination while applying the specified crop and move.
+     * Copy ALL quads from source to destination while applying the specified crop and move.
      */
     default void assembleQuad(CopycatRenderContext context, AABB crop, Vec3 move) {
-        assembleQuad(context.src, context.dest, crop, move);
+        for (BakedQuad quad : context.src) {
+            assembleQuad(quad, context.dest, crop, move);
+        }
     }
 
     /**
      * Copy a quad from source to destination while applying the specified crop and move.
      */
-    default void assembleQuad(MutableQuadView quad, QuadEmitter emitter, AABB crop, Vec3 move) {
-        emitter.copyFrom(quad);
-        BakedModelHelper.cropAndMove(emitter, spriteFinder.find(emitter), crop, move);
-        emitter.emit();
+    default void assembleQuad(BakedQuad src, List<BakedQuad> dest, AABB crop, Vec3 move) {
+        dest.add(BakedQuadHelper.cloneWithCustomGeometry(src,
+                BakedModelHelper.cropAndMove(src.getVertices(), src.getSprite(), crop, move)));
     }
 
-    default CopycatRenderContext context(MutableQuadView src, QuadEmitter dest) {
+    default CopycatRenderContext context(List<BakedQuad> src, List<BakedQuad> dest) {
         return new CopycatRenderContext(src, dest);
     }
 
@@ -81,7 +82,7 @@ public interface ISimpleCopycatModel {
         return new MutableAABB(sizeX, sizeY, sizeZ);
     }
 
-    record CopycatRenderContext(MutableQuadView src, QuadEmitter dest) {
+    record CopycatRenderContext(List<BakedQuad> src, List<BakedQuad> dest) {
 
     }
 
@@ -116,9 +117,19 @@ public interface ISimpleCopycatModel {
             };
         }
 
+        public MutableCullFace flipX(boolean flip) {
+            if (!flip) return this;
+            return set(up, down, north, south, west, east);
+        }
+
         public MutableCullFace flipY(boolean flip) {
             if (!flip) return this;
             return set(down, up, north, south, east, west);
+        }
+
+        public MutableCullFace flipZ(boolean flip) {
+            if (!flip) return this;
+            return set(up, down, south, north, east, west);
         }
 
         public boolean isCulled(Direction direction) {
@@ -163,9 +174,19 @@ public interface ISimpleCopycatModel {
             };
         }
 
+        public MutableVec3 flipX(boolean flip) {
+            if (!flip) return this;
+            return set(16 - x, y, z);
+        }
+
         public MutableVec3 flipY(boolean flip) {
             if (!flip) return this;
             return set(x, 16 - y, z);
+        }
+
+        public MutableVec3 flipZ(boolean flip) {
+            if (!flip) return this;
+            return set(x, y, 16 - z);
         }
 
         public Vec3 toVec3() {
@@ -213,9 +234,19 @@ public interface ISimpleCopycatModel {
             };
         }
 
+        public MutableAABB flipX(boolean flip) {
+            if (!flip) return this;
+            return set(16 - minX, minY, minZ, 16 - maxX, maxY, maxZ);
+        }
+
         public MutableAABB flipY(boolean flip) {
             if (!flip) return this;
             return set(minX, 16 - minY, minZ, maxX, 16 - maxY, maxZ);
+        }
+
+        public MutableAABB flipZ(boolean flip) {
+            if (!flip) return this;
+            return set(minX, minY, 16 - minZ, maxX, maxY, 16 - maxZ);
         }
 
         public AABB toAABB() {

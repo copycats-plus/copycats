@@ -1,15 +1,10 @@
 {
-  "type": "porting_lib:conditional",
+  "type": "forge:conditional",
   "recipes": [
     {
-      "fabric:load_conditions": [
+      "conditions": [
         {
-          "condition": "copycats:feature_enabled",
-          "feature": "create:copycat_step",
-          "invert": false
-        },
-        {
-          "condition": "copycats:feature_enabled",
+          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_vertical_step",
           "invert": false
         }

@@ -1,18 +1,6 @@
 {
   "advancements": [
     {
-      "fabric:load_conditions": [
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_slab",
-          "invert": false
-        },
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_beam",
-          "invert": false
-        }
-      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
         "criteria": {
@@ -20,9 +8,7 @@
             "conditions": {
               "items": [
                 {
-                  "items": [
-                    "copycats:copycat_beam"
-                  ]
+                  "tag": "copycats:copycat_beam"
                 }
               ]
             },
@@ -47,7 +33,19 @@
           ]
         },
         "sends_telemetry_event": false
-      }
+      },
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_slab",
+          "invert": false
+        },
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_beam",
+          "invert": false
+        }
+      ]
     }
   ]
 }

@@ -1,10 +1,10 @@
 {
-  "type": "porting_lib:conditional",
+  "type": "forge:conditional",
   "recipes": [
     {
-      "fabric:load_conditions": [
+      "conditions": [
         {
-          "condition": "copycats:feature_enabled",
+          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_catwalk",
           "invert": false
         }
@@ -14,7 +14,7 @@
         "category": "misc",
         "key": {
           "s": {
-            "item": "copycats:copycat_board"
+            "tag": "copycats:copycat_board"
           }
         },
         "pattern": [

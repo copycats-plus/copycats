@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.beam;
 
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,14 +51,17 @@ public class CopycatBeamModel extends SimpleCopycatModel {
                 Vec3i rowShiftNormal = new Vec3i((int) rowShift.x, (int) rowShift.y, (int) rowShift.z);
                 Vec3i columnShiftNormal = new Vec3i((int) columnShift.x, (int) columnShift.y, (int) columnShift.z);
 
-                Direction direction = context.src().lightFace();
+                for (int i = 0; i < context.src().size(); i++) {
+                    BakedQuad quad = context.src().get(i);
+                    Direction direction = quad.getDirection();
 
-                if (rowShiftNormal.equals(direction.getNormal()))
-                    continue;
-                if (columnShiftNormal.equals(direction.getNormal()))
-                    continue;
+                    if (rowShiftNormal.equals(direction.getNormal()))
+                        continue;
+                    if (columnShiftNormal.equals(direction.getNormal()))
+                        continue;
 
-                assembleQuad(context, bb1, offset);
+                    assembleQuad(quad, context.dest(), bb1, offset);
+                }
             }
         }
     }

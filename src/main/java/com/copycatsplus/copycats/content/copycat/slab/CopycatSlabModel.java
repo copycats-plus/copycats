@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,17 +46,20 @@ public class CopycatSlabModel extends SimpleCopycatModel {
         if (!front)
             bb = bb.move(normalScaled12);
 
-        Direction direction = context.src().lightFace();
+        for (int i = 0; i < context.src().size(); i++) {
+            BakedQuad quad = context.src().get(i);
+            Direction direction = quad.getDirection();
 
-        if (front && direction == facing)
-            return;
-        if (!front && direction == facing.getOpposite())
-            return;
-        if (isDouble && topSlab && direction == facing)
-            return;
-        if (isDouble && !topSlab && direction == facing.getOpposite())
-            return;
+            if (front && direction == facing)
+                continue;
+            if (!front && direction == facing.getOpposite())
+                continue;
+            if (isDouble && topSlab && direction == facing)
+                continue;
+            if (isDouble && !topSlab && direction == facing.getOpposite())
+                continue;
 
-        assembleQuad(context, bb, normalScaledN8);
+            assembleQuad(quad, context.dest(), bb, normalScaledN8);
+        }
     }
 }
