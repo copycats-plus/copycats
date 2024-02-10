@@ -1,16 +1,23 @@
 {
   "advancements": [
     {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_half_panel",
+          "invert": false
+        }
+      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "copycats:crafting/palettes/copycat_half_panel"
+          ]
+        },
         "criteria": {
-          "has_the_recipe": {
-            "conditions": {
-              "recipe": "copycats:crafting/palettes/copycat_half_panel"
-            },
-            "trigger": "minecraft:recipe_unlocked"
-          },
           "has_zinc_ingot": {
+            "trigger": "minecraft:inventory_changed",
             "conditions": {
               "items": [
                 {
@@ -19,8 +26,13 @@
                   ]
                 }
               ]
-            },
-            "trigger": "minecraft:inventory_changed"
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipe": "copycats:crafting/palettes/copycat_half_panel"
+            }
           }
         },
         "requirements": [
@@ -28,20 +40,8 @@
             "has_zinc_ingot",
             "has_the_recipe"
           ]
-        ],
-        "rewards": {
-          "recipes": [
-            "copycats:crafting/palettes/copycat_half_panel"
-          ]
-        }
-      },
-      "fabric:load_conditions": [
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_half_panel",
-          "invert": false
-        }
-      ]
+        ]
+      }
     }
   ]
 }

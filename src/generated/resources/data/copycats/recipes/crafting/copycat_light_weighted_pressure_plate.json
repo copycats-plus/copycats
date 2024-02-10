@@ -11,11 +11,11 @@
       ],
       "recipe": {
         "type": "minecraft:stonecutting",
-        "count": 2,
         "ingredient": {
           "item": "create:zinc_ingot"
         },
-        "result": "copycats:copycat_light_weighted_pressure_plate"
+        "result": "copycats:copycat_light_weighted_pressure_plate",
+        "count": 2
       }
     }
   ]

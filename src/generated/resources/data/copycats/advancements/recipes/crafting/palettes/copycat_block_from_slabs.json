@@ -26,9 +26,7 @@
             "conditions": {
               "items": [
                 {
-                  "items": [
-                    "copycats:copycat_slab"
-                  ]
+                  "tag": "copycats:copycat_slab"
                 }
               ]
             }
