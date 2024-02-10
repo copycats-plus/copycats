@@ -11,18 +11,17 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.data.recipe.CreateRecipeProvider;
-import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import io.github.fabricators_of_create.porting_lib.data.ConditionalRecipe;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.client.RecipeBookCategories;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -30,8 +29,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -102,7 +101,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShapeless(b -> b
-                    .requires(AllBlocks.COPYCAT_STEP)
+                    .requires(AllBlocks.COPYCAT_STEP.get())
             );
 
     GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
@@ -113,7 +112,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             .unlockedBy(CCBlocks.COPYCAT_HALF_PANEL::get)
             .requiresFeature(CCBlocks.COPYCAT_HALF_PANEL)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_HALF_PANEL)
+                    .define('s', CCBlocks.COPYCAT_HALF_PANEL.get())
                     .pattern("ss")
             );
 
@@ -236,11 +235,11 @@ public class CCStandardRecipes extends CreateRecipeProvider {
 //        return "Standard Recipes of Create: Copycats+"; // Not really worth it to use access transformer on this insignificant change
 //    }
 
-    public CCStandardRecipes(FabricDataOutput output) {
+    public CCStandardRecipes(FabricDataGenerator output) {
         super(output);
 
         List<ResourceLocation> missingRecipes = new LinkedList<>();
-        for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
+        for (Map.Entry<ResourceKey<Block>, Block> entry : Registry.BLOCK.entrySet()) {
             if (entry.getKey().location().getNamespace().equals(Copycats.MODID) && entry.getValue() instanceof CopycatBlock) {
                 if (!copycatsWithRecipes.contains(entry.getValue()))
                     missingRecipes.add(entry.getKey().location());

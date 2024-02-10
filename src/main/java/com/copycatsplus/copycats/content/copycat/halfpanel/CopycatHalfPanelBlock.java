@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.halfpanel;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItem;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
@@ -120,7 +121,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }
@@ -266,7 +267,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
         if (facingNormal.getZ() != 0 && offsetNormal.getZ() != 0) {
             offsetNormal = new Vec3i(offsetNormal.getX(), offsetNormal.getZ(), offsetNormal.getY());
         }
-        return Objects.requireNonNull(Direction.fromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ()));
+        return Objects.requireNonNull(DirectionUtils.fromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ()));
     }
 
     /**
@@ -309,7 +310,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
                 BlockPos newPos = pos.relative(dir, poles + 1);
                 BlockState newState = world.getBlockState(newPos);
 
-                if (newState.canBeReplaced())
+                if (newState.getMaterial().isReplaceable())
                     return PlacementOffset.success(newPos, bState -> bState.setValue(property, state.getValue(property)).setValue(OFFSET, state.getValue(OFFSET)));
 
             }

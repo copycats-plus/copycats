@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.wall;
 
 import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.BlockPos;
@@ -128,7 +129,7 @@ public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock<WrappedWall
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromNormal(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             if (diff.distManhattan(Vec3i.ZERO) > 2) return false;
             if (diff.getY() == 0) return false;

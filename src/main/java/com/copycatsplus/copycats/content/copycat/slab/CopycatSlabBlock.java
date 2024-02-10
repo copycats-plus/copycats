@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -103,7 +104,7 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromNormal(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             boolean correctAxis = switch (axis) {
                 case X -> diff.getX() == 0;

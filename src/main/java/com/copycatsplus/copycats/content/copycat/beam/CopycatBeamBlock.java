@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.beam;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
@@ -89,7 +90,7 @@ public class CopycatBeamBlock extends CTWaterloggedCopycatBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromNormal(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

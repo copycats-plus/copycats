@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.slice;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.VoxelShaper;
@@ -75,7 +76,7 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.stairs;
 
 import com.copycatsplus.copycats.content.copycat.ICustomCTBlocking;
 import com.copycatsplus.copycats.content.copycat.WaterloggedCopycatWrappedBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -151,7 +152,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implement
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction side = Direction.fromNormal(diff.getX(), diff.getY(), diff.getZ());
+        Direction side = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         if (toState.is(this)) {
             return false;
@@ -195,7 +196,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implement
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction side = Direction.fromNormal(diff.getX(), diff.getY(), diff.getZ());
+        Direction side = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         if (side != null) {
             FaceShape sideShape = getFaceShape(state, side);

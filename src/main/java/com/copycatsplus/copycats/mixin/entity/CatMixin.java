@@ -3,7 +3,7 @@ package com.copycatsplus.copycats.mixin.entity;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCCatVariants;
 import com.simibubi.create.AllTags;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,10 +33,10 @@ import java.util.Objects;
 @Mixin(Cat.class)
 public abstract class CatMixin extends TamableAnimal {
     @Shadow
-    public abstract CatVariant getVariant();
+    public abstract CatVariant getCatVariant();
 
     @Shadow
-    public abstract void setVariant(CatVariant pVariant);
+    public abstract void setCatVariant(CatVariant pVariant);
 
     @Shadow
     protected abstract void usePlayerItem(Player pPlayer, InteractionHand pHand, ItemStack pStack);
@@ -63,7 +63,7 @@ public abstract class CatMixin extends TamableAnimal {
             method = "defineSynchedData()V"
     )
     private void defineNaturalVariant(CallbackInfo ci) {
-        this.entityData.define(DATA_NATURAL_VARIANT_ID, BuiltInRegistries.CAT_VARIANT.getOrThrow(CatVariant.ALL_BLACK));
+        this.entityData.define(DATA_NATURAL_VARIANT_ID, CatVariant.ALL_BLACK);
     }
 
     @Inject(
@@ -71,7 +71,7 @@ public abstract class CatMixin extends TamableAnimal {
             method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"
     )
     private void addNaturalVariantData(CompoundTag pCompound, CallbackInfo ci) {
-        pCompound.putString("NaturalVariant", Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.getKey(this.getNaturalVariant())).toString());
+        pCompound.putString("NaturalVariant", Objects.requireNonNull(Registry.CAT_VARIANT.getKey(this.getNaturalVariant())).toString());
     }
 
     @Inject(
@@ -79,7 +79,7 @@ public abstract class CatMixin extends TamableAnimal {
             method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"
     )
     private void readNaturalVariantData(CompoundTag pCompound, CallbackInfo ci) {
-        CatVariant catvariant = BuiltInRegistries.CAT_VARIANT.get(ResourceLocation.tryParse(pCompound.getString("NaturalVariant")));
+        CatVariant catvariant = Registry.CAT_VARIANT.get(ResourceLocation.tryParse(pCompound.getString("NaturalVariant")));
         if (catvariant != null) {
             this.setNaturalVariant(catvariant);
         }
@@ -90,7 +90,7 @@ public abstract class CatMixin extends TamableAnimal {
             method = "usePlayerItem(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V"
     )
     private void useCopycat(Player pPlayer, InteractionHand pHand, ItemStack pStack, CallbackInfo ci) {
-        if (pStack.is(CCBlocks.COPYCAT_BLOCK.asItem())) {
+        if (pStack.is(CCBlocks.COPYCAT_BLOCK.get().asItem())) {
             this.playSound(SoundEvents.ITEM_FRAME_ADD_ITEM, 75f, .95f);
         }
     }
@@ -102,29 +102,29 @@ public abstract class CatMixin extends TamableAnimal {
     )
     private void copycatInteract(Player pPlayer, InteractionHand pHand, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack stack = pPlayer.getItemInHand(pHand);
-        if (stack.is(CCBlocks.COPYCAT_BLOCK.asItem())) {
-            CatVariant currentVariant = getVariant();
+        if (stack.is(CCBlocks.COPYCAT_BLOCK.get().asItem())) {
+            CatVariant currentVariant = getCatVariant();
             if (currentVariant.equals(CCCatVariants.COPY_CAT.value())) return;
 
-            if (!level().isClientSide()) {
+            if (!level.isClientSide()) {
                 this.setNaturalVariant(currentVariant);
-                this.setVariant(CCCatVariants.COPY_CAT.value());
+                this.setCatVariant(CCCatVariants.COPY_CAT.value());
                 this.usePlayerItem(pPlayer, pHand, stack);
                 this.setPersistenceRequired();
             }
-            cir.setReturnValue(InteractionResult.sidedSuccess(level().isClientSide()));
+            cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide()));
         } else if (stack.is(AllTags.AllItemTags.WRENCH.tag)) {
-            CatVariant currentVariant = getVariant();
+            CatVariant currentVariant = getCatVariant();
             if (!currentVariant.equals(CCCatVariants.COPY_CAT.value())) return;
 
-            if (!level().isClientSide()) {
-                this.setVariant(this.getNaturalVariant());
+            if (!level.isClientSide()) {
+                this.setCatVariant(this.getNaturalVariant());
                 this.setPersistenceRequired();
-                this.spawnAtLocation(CCBlocks.COPYCAT_BLOCK.asItem());
+                this.spawnAtLocation(CCBlocks.COPYCAT_BLOCK.get().asItem());
                 SoundType soundType = CCBlocks.COPYCAT_BLOCK.getDefaultState().getSoundType();
                 this.playSound(soundType.getBreakSound(), (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
             }
-            cir.setReturnValue(InteractionResult.sidedSuccess(level().isClientSide()));
+            cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide()));
         }
     }
 }

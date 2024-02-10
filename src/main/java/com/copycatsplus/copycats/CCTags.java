@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats;
 
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -22,15 +21,15 @@ public class CCTags {
     }
 
     public static TagKey<Block> forgeBlockTag(String path) {
-        return forgeTag(BuiltInRegistries.BLOCK, path);
+        return forgeTag(Registry.BLOCK, path);
     }
 
     public static TagKey<Item> forgeItemTag(String path) {
-        return forgeTag(BuiltInRegistries.ITEM, path);
+        return forgeTag(Registry.ITEM, path);
     }
 
     public static TagKey<Fluid> forgeFluidTag(String path) {
-        return forgeTag(BuiltInRegistries.FLUID, path);
+        return forgeTag(Registry.FLUID, path);
     }
 
     public enum NameSpace {
@@ -88,7 +87,7 @@ public class CCTags {
 
         Items(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
             ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
-            tag = optionalTag(BuiltInRegistries.ITEM, id);
+            tag = optionalTag(Registry.ITEM, id);
 
             this.alwaysDatagen = alwaysDatagen;
         }

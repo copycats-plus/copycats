@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.halflayer;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.util.DirectionUtils;
 import com.google.common.collect.ImmutableMap;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -212,7 +213,7 @@ public class CopycatHalfLayerBlock extends CTWaterloggedCopycatBlock implements 
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionUtils.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }
