@@ -7,12 +7,12 @@
 <a title="Modrinth" target="_blank" href="https://modrinth.com/project/copycats"><img src="https://img.shields.io/modrinth/dt/UT2M39wf?style=flat&label=Modrinth"></a>
 <a title="CurseForge" target="_blank" href="https://legacy.curseforge.com/minecraft/mc-mods/copycats"><img src="https://img.shields.io/curseforge/dt/968398?style=flat&label=CurseForge"></a>
 <a title="Crowdin" target="_blank" href="https://crowdin.com/project/copycats"><img src="https://badges.crowdin.net/copycats/localized.svg"></a>
-<a title="Discord" target="_blank" href="https://discord.gg/3AvrppcgG3"><img src="https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white"></a>
+<a title="Discord" target="_blank" href="https://discord.gg/YxPPFHn4SS"><img src="https://discordapp.com/api/guilds/1202240504809652365/widget.png?style=shield"></a>
 </p>
 
 All the copycats you've ever wanted, combined into a single mod!
 
-> Join us in the [Create: Addon Hub](https://discord.gg/3AvrppcgG3) server for a chat!
+![Discord Banner](https://discordapp.com/api/guilds/1202240504809652365/widget.png?style=banner2)
 
 ## Features
 
@@ -72,7 +72,7 @@ Enjoy a smoother download experience and support open source software with a sin
 **Translation**
 
 - Some translations are taken from Create: Connected.
-  Thanks [Crowdin contributors](https://crowdin.com/project/create-connected-mod/members) for providing those
+  Thanks [Crowdin contributors](https://crowdin.com/project/create-connected-mod) for providing those
   translations
 
 **Inspiration**
