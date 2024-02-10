@@ -20,20 +20,18 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.Random;
 
 import static com.copycatsplus.copycats.content.MathHelper.DirectionFromDelta;
-
-import java.util.Optional;
-
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
 import static net.minecraft.world.level.block.StairBlock.SHAPE;
 
 @SuppressWarnings("deprecation")
-public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implements ICustomCTBlocking {
+public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedStairsBlock> implements ICustomCTBlocking {
 
-    public static StairBlock stairs;
+    public static WrappedStairsBlock stairs;
 
     public CopycatStairsBlock(Properties properties) {
         super(properties);
@@ -45,7 +43,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implement
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedStairsBlock getWrappedBlock() {
         return stairs;
     }
 

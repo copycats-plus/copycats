@@ -9,8 +9,6 @@
     "copycat.ConnectedTextureBehaviourMixin",
     "copycat.CopycatBlockEntityMixin",
     "copycat.CopycatModelAccessor",
-    "copycat.CopycatModelMixin",
-    "copycat.FilteredBlockAndTintGetterAccessor",
     "copycat.TrackPlacementMixin",
     "copycat.button.ButtonBlockMixin",
     "copycat.fence.COMPATFenceBlockMixin",

@@ -38,7 +38,6 @@ public class Copycats {
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
         REGISTRATE.registerEventListeners(modEventBus);
 
-        CCDataProviderTypes.register();
         CCCraftingConditions.register();
 
         // Register ourselves for server and other game events we are interested in
@@ -47,7 +46,6 @@ public class Copycats {
         REGISTRATE.creativeModeTab(() -> CCCreativeTabs.MAIN);
         CCBlocks.register();
         CCItems.register();
-        CCCatVariants.register(modEventBus);
         CCBlockEntityTypes.register();
         CCCreativeTabs.register();
 

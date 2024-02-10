@@ -21,6 +21,7 @@ import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateBlock
 import com.copycatsplus.copycats.content.copycat.fencegate.CopycatFenceGateModel;
 import com.copycatsplus.copycats.content.copycat.fencegate.WrappedFenceGateBlock;
 import com.copycatsplus.copycats.content.copycat.halflayer.CopycatHalfLayerBlock;
+import com.copycatsplus.copycats.content.copycat.halflayer.CopycatHalfLayerModel;
 import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelBlock;
 import com.copycatsplus.copycats.content.copycat.halfpanel.CopycatHalfPanelModel;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
@@ -34,7 +35,6 @@ import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsEnhancedModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
-import com.copycatsplus.copycats.content.copycat.halflayer.CopycatHalfLayerModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.WrappedTrapdoorBlock;

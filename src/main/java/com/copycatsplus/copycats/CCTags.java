@@ -5,24 +5,28 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Collections;
 
 import static com.copycatsplus.copycats.CCTags.NameSpace.MOD;
 
 public class CCTags {
-    public static <T> TagKey<T> optionalTag(IForgeRegistry<T> registry, ResourceLocation id) {
-        return registry.tags().createOptionalTagKey(id, Collections.emptySet());
+    public static <T extends IForgeRegistryEntry<T>> TagKey<T> optionalTag(IForgeRegistry<T> registry,
+                                                                           ResourceLocation id) {
+        return registry.tags()
+                .createOptionalTagKey(id, Collections.emptySet());
     }
 
-    public static <T> TagKey<T> forgeTag(IForgeRegistry<T> registry, String path) {
+    public static <T extends IForgeRegistryEntry<T>> TagKey<T> forgeTag(IForgeRegistry<T> registry, String path) {
         return optionalTag(registry, new ResourceLocation("forge", path));
     }
 
-    public static TagKey<net.minecraft.world.level.block.Block> forgeBlockTag(String path) {
+    public static TagKey<Block> forgeBlockTag(String path) {
         return forgeTag(ForgeRegistries.BLOCKS, path);
     }
 

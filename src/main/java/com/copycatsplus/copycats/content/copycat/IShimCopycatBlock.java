@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface IShimCopycatBlock {
     default boolean isUnblockableConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        return true;
+        return false;
     }
 
     @Nullable

@@ -1,11 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.pressure_plate;
 
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
+import com.copycatsplus.copycats.content.copycat.ShimCopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -17,10 +16,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 import static net.minecraft.world.level.block.WeightedPressurePlateBlock.POWER;
 
 @SuppressWarnings("deprecation")
-public class CopycatLightWeightedPressurePlate extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.LightWeighted> {
+public class CopycatLightWeightedPressurePlate extends ShimCopycatBlock implements ICopycatWithWrappedBlock<WrappedPressurePlate.LightWeighted> {
 
     public static WrappedPressurePlate.LightWeighted pressurePlate;
 
@@ -70,7 +71,7 @@ public class CopycatLightWeightedPressurePlate extends CopycatBlock implements I
     }
 
     @Override
-    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         pressurePlate.tick(pState, pLevel, pPos, pRandom);
     }
 
