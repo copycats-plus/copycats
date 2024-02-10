@@ -215,7 +215,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatBoardModel::new))
-                    .loot(CCLootGen::lootForDirections)
+                    .loot(CCLootGen.build(CCLootGen.lootForDirections()))
                     .item()
                     .tag(CCTags.Items.COPYCAT_BOARD.tag)
                     .transform(customItemModel("copycat_base", "board"))
@@ -226,7 +226,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatByteModel::new))
-                    .loot(CCLootGen::lootForBytes)
+                    .loot(CCLootGen.build(CCLootGen.lootForBytes()))
                     .item()
                     .transform(customItemModel("copycat_base", "byte"))
                     .register();
@@ -236,7 +236,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatLayerModel::new))
-                    .loot(CCLootGen::lootForLayers)
+                    .loot(CCLootGen.build(CCLootGen.lootForLayers()))
                     .item()
                     .transform(customItemModel("copycat_base", "layer"))
                     .register();
@@ -247,7 +247,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatSliceModel::new))
-                    .loot(CCLootGen::lootForLayers)
+                    .loot(CCLootGen.build(CCLootGen.lootForLayers()))
                     .item()
                     .transform(customItemModel("copycat_base", "slice"))
                     .register();
@@ -257,7 +257,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatVerticalSliceModel::new))
-                    .loot(CCLootGen::lootForLayers)
+                    .loot(CCLootGen.build(CCLootGen.lootForLayers()))
                     .item()
                     .transform(customItemModel("copycat_base", "vertical_slice"))
                     .register();
@@ -267,10 +267,10 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatStepLayerModel::new))
-                    .loot((lt, b) -> {
-                        CCLootGen.lootForLayers(lt, b, CopycatStepLayerBlock.POSITIVE_LAYERS);
-                        CCLootGen.lootForLayers(lt, b, CopycatStepLayerBlock.NEGATIVE_LAYERS);
-                    })
+                    .loot(CCLootGen.build(
+                            CCLootGen.lootForLayers(CopycatStepLayerBlock.NEGATIVE_LAYERS),
+                            CCLootGen.lootForLayers(CopycatStepLayerBlock.POSITIVE_LAYERS)
+                    ))
                     .item()
                     .transform(customItemModel("copycat_base", "step_layer"))
                     .register();
