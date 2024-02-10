@@ -9,7 +9,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -23,15 +22,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.Random;
 
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
 import static net.minecraft.world.level.block.StairBlock.SHAPE;
 
 @SuppressWarnings("deprecation")
-public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implements ICustomCTBlocking {
+public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedStairsBlock> implements ICustomCTBlocking {
 
-    public static StairBlock stairs;
+    public static WrappedStairsBlock stairs;
 
     public CopycatStairsBlock(Properties properties) {
         super(properties);
@@ -43,7 +43,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implement
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedStairsBlock getWrappedBlock() {
         return stairs;
     }
 
@@ -72,7 +72,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implement
     }
 
     @Override
-    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         stairs.animateTick(pState, pLevel, pPos, pRandom);
     }
 
@@ -108,12 +108,12 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implement
     }
 
     @Override
-    public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         stairs.randomTick(pState, pLevel, pPos, pRandom);
     }
 
     @Override
-    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         stairs.tick(pState, pLevel, pPos, pRandom);
     }
 

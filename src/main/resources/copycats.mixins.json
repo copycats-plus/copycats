@@ -8,8 +8,6 @@
   "mixins": [
     "copycat.ConnectedTextureBehaviourMixin",
     "copycat.CopycatBlockEntityMixin",
-    "copycat.CopycatModelMixin",
-    "copycat.FilteredBlockAndTintGetterAccessor",
     "copycat.TrackPlacementMixin",
     "copycat.button.ButtonBlockMixin",
     "copycat.fence.COMPATFenceBlockMixin",
@@ -30,9 +28,6 @@
     "copycat.wall.WallBlockMixin",
     "entity.CatMixin",
     "entity.HolderReferenceAccessor"
-  ],
-  "client": [
-    "featuretoggle.SubMenuConfigScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,12 +1,11 @@
 package com.copycatsplus.copycats.content.copycat.button;
 
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.content.copycat.ShimCopycatBlock;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -27,10 +26,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 import static net.minecraft.world.level.block.ButtonBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Stone> {
+public class CopycatStoneButtonBlock extends ShimCopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Stone> {
 
     public static WrappedButton.Stone button;
 
@@ -100,7 +101,7 @@ public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWit
     }
 
     @Override
-    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         button.tick(pState, pLevel, pPos, pRandom);
     }
 
