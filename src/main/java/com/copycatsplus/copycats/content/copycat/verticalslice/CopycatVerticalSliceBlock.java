@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.copycatsplus.copycats.content.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
 public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
@@ -79,7 +80,7 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

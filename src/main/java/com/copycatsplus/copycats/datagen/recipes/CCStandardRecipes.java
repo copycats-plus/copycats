@@ -105,7 +105,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShapeless(b -> b
-                    .requires(AllBlocks.COPYCAT_STEP)
+                    .requires(AllBlocks.COPYCAT_STEP.get())
             );
 
     GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
@@ -116,7 +116,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             .unlockedBy(CCBlocks.COPYCAT_HALF_PANEL::get)
             .requiresFeature(CCBlocks.COPYCAT_HALF_PANEL)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_HALF_PANEL)
+                    .define('s', CCBlocks.COPYCAT_HALF_PANEL.get())
                     .pattern("ss")
             );
 
@@ -244,7 +244,7 @@ public class CCStandardRecipes extends CreateRecipeProvider {
             if (entry.getKey().location().getNamespace().equals(Copycats.MODID) && entry.getValue() instanceof CopycatBlock) {
                 if (!copycatsWithRecipes.contains(entry.getValue()))
                     missingRecipes.add(entry.getKey().location());
-    		}
+            }
         }
         if (!missingRecipes.isEmpty()) {
             throw new IllegalStateException("The following copycats do not have a crafting recipe: " + missingRecipes.stream().map(ResourceLocation::toString).collect(Collectors.joining(", ")));

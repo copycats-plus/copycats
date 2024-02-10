@@ -46,6 +46,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.content.MathHelper.DirectionFromDelta;
+
 public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
 
     /**
@@ -120,7 +122,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }
@@ -266,7 +268,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
         if (facingNormal.getZ() != 0 && offsetNormal.getZ() != 0) {
             offsetNormal = new Vec3i(offsetNormal.getX(), offsetNormal.getZ(), offsetNormal.getY());
         }
-        return Objects.requireNonNull(Direction.fromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ()));
+        return Objects.requireNonNull(DirectionFromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ()));
     }
 
     /**
@@ -298,7 +300,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
             for (Direction dir : directions) {
                 int range = AllConfigs.server().equipment.placementAssistRange.get();
                 if (player != null) {
-                    AttributeInstance reach = player.getAttribute(ForgeMod.BLOCK_REACH.get());
+                    AttributeInstance reach = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
                     if (reach != null && reach.hasModifier(ExtendoGripItem.singleRangeAttributeModifier))
                         range += 4;
                 }
@@ -309,7 +311,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
                 BlockPos newPos = pos.relative(dir, poles + 1);
                 BlockState newState = world.getBlockState(newPos);
 
-                if (newState.canBeReplaced())
+                if (newState.getMaterial().isReplaceable())
                     return PlacementOffset.success(newPos, bState -> bState.setValue(property, state.getValue(property)).setValue(OFFSET, state.getValue(OFFSET)));
 
             }

@@ -289,7 +289,6 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
                     .tag(BlockTags.BUTTONS)
-                    .tag(BlockTags.STONE_BUTTONS)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatButtonModel::new))
                     .item()
@@ -297,7 +296,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedButton.Wood> WRAPPED_COPYCAT_WOODEN_BUTTON =
-            REGISTRATE.block("wrapped_copycat_wooden_button", p -> new WrappedButton().wood(p, BlockSetType.OAK, 30, true))
+            REGISTRATE.block("wrapped_copycat_wooden_button", p -> new WrappedButton().wood(p))
                     .initialProperties(() -> Blocks.OAK_BUTTON)
                     .onRegister(b -> CopycatWoodenButtonBlock.button = b)
                     .tag(BlockTags.BUTTONS)
@@ -306,16 +305,15 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedButton.Stone> WRAPPED_COPYCAT_STONE_BUTTON =
-            REGISTRATE.block("wrapped_copycat_stone_button", p -> new WrappedButton().stone(p, BlockSetType.STONE, 20, false))
+            REGISTRATE.block("wrapped_copycat_stone_button", p -> new WrappedButton().stone(p))
                     .initialProperties(() -> Blocks.STONE_BUTTON)
                     .onRegister(b -> CopycatStoneButtonBlock.button = b)
                     .tag(BlockTags.BUTTONS)
-                    .tag(BlockTags.STONE_BUTTONS)
                     .blockstate((c, p) -> p.simpleBlock(c.getEntry(), p.models().withExistingParent("wrapped_copycat_stone_button", "block/barrier")))
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.Wooden> WRAPPED_COPYCAT_WOODEN_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_wooden_pressure_plate", p -> new WrappedPressurePlate().wooden(PressurePlateBlock.Sensitivity.EVERYTHING, p, BlockSetType.OAK))
+            REGISTRATE.block("wrapped_copycat_wooden_pressure_plate", p -> new WrappedPressurePlate().wooden(PressurePlateBlock.Sensitivity.EVERYTHING, p))
                     .initialProperties(() -> Blocks.OAK_BUTTON)
                     .onRegister(b -> CopycatWoodenPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -336,7 +334,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.Stone> WRAPPED_COPYCAT_STONE_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_stone_pressure_plate", p -> new WrappedPressurePlate().stone(PressurePlateBlock.Sensitivity.MOBS, p, BlockSetType.STONE))
+            REGISTRATE.block("wrapped_copycat_stone_pressure_plate", p -> new WrappedPressurePlate().stone(PressurePlateBlock.Sensitivity.MOBS, p))
                     .initialProperties(() -> Blocks.STONE_BUTTON)
                     .onRegister(b -> CopycatStonePressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -357,7 +355,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.HeavyWeighted> WRAPPED_COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_heavy_weighted_pressure_plate", p -> new WrappedPressurePlate().heavyWeighted(150, p, BlockSetType.IRON))
+            REGISTRATE.block("wrapped_copycat_heavy_weighted_pressure_plate", p -> new WrappedPressurePlate().heavyWeighted(150, p))
                     .initialProperties(() -> Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
                     .onRegister(b -> CopycatHeavyWeightedPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -376,7 +374,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.LightWeighted> WRAPPED_COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_light_weighted_pressure_plate", p -> new WrappedPressurePlate().lightWeighted(15, p, BlockSetType.GOLD))
+            REGISTRATE.block("wrapped_copycat_light_weighted_pressure_plate", p -> new WrappedPressurePlate().lightWeighted(15, p))
                     .initialProperties(() -> Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
                     .onRegister(b -> CopycatLightWeightedPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)

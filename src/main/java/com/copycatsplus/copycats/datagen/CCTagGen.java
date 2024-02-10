@@ -7,7 +7,6 @@ import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.compat.Mods;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.CatVariantTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -27,8 +26,7 @@ public class CCTagGen {
                 .add(CCBlocks.WRAPPED_COPYCAT_FENCE.get());
     }
 
-    private static void genCatVariantTags(RegistrateTagsProvider<CatVariant> provIn) {
-        TagGen.CreateTagsProvider<CatVariant> prov = new TagGen.CreateTagsProvider<>(provIn, variant -> BuiltInRegistries.CAT_VARIANT.getResourceKey(variant).flatMap(BuiltInRegistries.CAT_VARIANT::getHolder).orElse(null));
+    private static void genCatVariantTags(RegistrateTagsProvider<CatVariant> prov) {
         prov.tag(CatVariantTags.FULL_MOON_SPAWNS)
                 .add(CCCatVariants.COPY_CAT.key());
     }
