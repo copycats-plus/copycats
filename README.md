@@ -16,23 +16,42 @@ All the copycats you've ever wanted, combined into a single mod!
 
 ## Features
 
-- Copycat Beam
-    - A centered Copycat Step.
+![All copycats](https://cdn.modrinth.com/data/UT2M39wf/images/e20c128b7c0e000e904584811d20f753d846af80.png)
+
+**All copycats can be toggled on/off using the feature toggle**
+
 - Copycat Block
-- Copycat Board
-    - A 1-pixel thick panel. Multiple boards can be placed in the same block space like glow lichen.
-- Copycat Byte
-    - A mini-block. Bytes can be placed/dismantled individually, 8 of which forms a full block.
-- Copycat Fence
-- Copycat Fence Gate
-- Copycat Layer
-    - Can be placed in any orientation and stacks to full block size.
 - Copycat Slab
     - Supports all orientations and double slab variants.
-- Copycat Stairs
-- Copycat Trapdoor
+- Copycat Beam
+    - A centered Copycat Step.
 - Copycat Vertical Step
+- Copycat Half Panel
+    - Supports 4 orientations on each block face
+- Copycat Stairs
+- Copycat Fence
+- Copycat Fence Gate
+- Copycat Trapdoor
 - Copycat Wall
+- Copycat Board
+    - A 1-pixel thick panel. Multiple boards can be placed in the same block space like glow lichen.
+- Copycat Box
+    - A pre-assembled copycat board.
+- Copycat Catwalk
+    - A pre-assembled copycat board.
+- Copycat Byte
+    - A mini-block. Bytes can be placed/dismantled individually, 8 of which forms a full block.
+- Copycat Layer
+    - Can be placed in any orientation and stacks to full block size.
+- Copycat Half Layer
+    - Can be stacked to full block size with 2 columns of half layers in one block space.
+- Copycat Slice
+    - Can be resized to 8 different sizes.
+- Copycat Vertical Slice
+    - Can be resized to 8 different sizes.
+- Copycat Wooden/Stone Button
+- Copycat Wooden/Stone Pressure Plate
+- Copycat Light/Heavy Weighted Pressure Plate
 
 ## Download
 
