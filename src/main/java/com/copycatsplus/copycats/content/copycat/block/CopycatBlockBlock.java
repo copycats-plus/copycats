@@ -15,7 +15,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWrappedBlock {
+public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWrappedBlock<Block> {
 
     public CopycatBlockBlock(Properties properties) {
         super(properties);
