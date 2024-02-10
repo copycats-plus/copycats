@@ -16,7 +16,13 @@ public class CCConfigs {
 
     private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
 
+    private static CClient client;
+
     private static CCommon common;
+
+    public static CClient client() {
+        return client;
+    }
 
     public static CCommon common() {
         return common;
@@ -51,6 +57,7 @@ public class CCConfigs {
     }
 
     public static void register() {
+        client = register(CClient::new, ModConfig.Type.CLIENT);
         common = register(CCommon::new, ModConfig.Type.COMMON);
 
         for (Map.Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet())

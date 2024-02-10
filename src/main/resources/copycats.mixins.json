@@ -6,8 +6,12 @@
   "refmap": "copycats-refmap.json",
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "mixins": [
+    "copycat.ConnectedTextureBehaviourMixin",
     "copycat.CopycatBlockEntityMixin",
+    "copycat.CopycatModelMixin",
+    "copycat.FilteredBlockAndTintGetterAccessor",
     "copycat.TrackPlacementMixin",
+    "copycat.button.ButtonBlockMixin",
     "copycat.fence.COMPATFenceBlockMixin",
     "copycat.fence.FenceBlockMixin",
     "copycat.fence.ValueBoxRendererMixin",
@@ -15,6 +19,7 @@
     "copycat.fencegate.COMPATPathNodeDefaultsMixin",
     "copycat.fencegate.WalkNodeEvaluatorMixin",
     "copycat.panel.CopycatPanelBlockMixin",
+    "copycat.pressureplate.BasePressurePlateBlockMixin",
     "copycat.slab.SeatMovementBehaviourMixin",
     "copycat.stairs.StairBlockMixin",
     "copycat.stairs.StructureTransformMixin",
@@ -22,7 +27,9 @@
     "copycat.trapdoor.DismountHelperMixin",
     "copycat.trapdoor.RedStoneWireBlockMixin",
     "copycat.wall.TrackPaverMixin",
-    "copycat.wall.WallBlockMixin"
+    "copycat.wall.WallBlockMixin",
+    "entity.CatMixin",
+    "entity.HolderReferenceAccessor"
   ],
   "client": [
     "featuretoggle.SubMenuConfigScreenMixin"

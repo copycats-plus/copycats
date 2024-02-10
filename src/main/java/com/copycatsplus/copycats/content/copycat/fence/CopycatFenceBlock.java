@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.CrossCollisionBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock {
+public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock<WrappedFenceBlock> {
 
-    public static FenceBlock fence;
+    public static WrappedFenceBlock fence;
 
     public CopycatFenceBlock(Properties properties) {
         super(properties);
@@ -35,7 +35,7 @@ public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock {
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedFenceBlock getWrappedBlock() {
         return fence;
     }
 
@@ -112,7 +112,7 @@ public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock {
         if (toPos.getX() == fromPos.getX() && toPos.getZ() == fromPos.getZ()) {
             BlockState toState = reader.getBlockState(toPos);
             if (toState.is(this)) {
-                if (isPole(state) && isPole(toState)) return true;
+                return isPole(state) && isPole(toState);
             }
         }
         return false;

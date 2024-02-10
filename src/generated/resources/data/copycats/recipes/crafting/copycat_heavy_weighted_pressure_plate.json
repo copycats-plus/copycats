@@ -1,0 +1,22 @@
+{
+  "type": "porting_lib:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_heavy_weighted_pressure_plate",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "count": 2,
+        "ingredient": {
+          "item": "create:zinc_ingot"
+        },
+        "result": "copycats:copycat_heavy_weighted_pressure_plate"
+      }
+    }
+  ]
+}

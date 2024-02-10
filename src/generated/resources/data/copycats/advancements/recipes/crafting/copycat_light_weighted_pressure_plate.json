@@ -1,0 +1,48 @@
+{
+  "advancements": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_light_weighted_pressure_plate",
+          "invert": false
+        }
+      ],
+      "advancement": {
+        "parent": "minecraft:recipes/root",
+        "criteria": {
+          "has_item": {
+            "conditions": {
+              "items": [
+                {
+                  "items": [
+                    "create:zinc_ingot"
+                  ]
+                }
+              ]
+            },
+            "trigger": "minecraft:inventory_changed"
+          },
+          "has_the_recipe": {
+            "conditions": {
+              "recipe": "copycats:crafting//copycat_light_weighted_pressure_plate"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+          }
+        },
+        "requirements": [
+          [
+            "has_item",
+            "has_the_recipe"
+          ]
+        ],
+        "rewards": {
+          "recipes": [
+            "copycats:crafting//copycat_light_weighted_pressure_plate"
+          ]
+        },
+        "sends_telemetry_event": false
+      }
+    }
+  ]
+}

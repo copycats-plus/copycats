@@ -13,7 +13,7 @@
         "type": "minecraft:crafting_shaped",
         "key": {
           "s": {
-            "item": "copycats:copycat_board"
+            "tag": "copycats:copycat_board"
           }
         },
         "pattern": [
