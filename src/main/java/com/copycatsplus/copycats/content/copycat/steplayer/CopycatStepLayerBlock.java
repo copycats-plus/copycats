@@ -123,6 +123,10 @@ public class CopycatStepLayerBlock extends CTWaterloggedCopycatBlock implements 
     public boolean canBeReplaced(@NotNull BlockState pState, BlockPlaceContext pUseContext) {
         ItemStack itemstack = pUseContext.getItemInHand();
         if (!itemstack.is(this.asItem())) return false;
+        Direction clickFace = pUseContext.getClickedFace();
+        if (clickFace.getAxis().isVertical() && (pState.getValue(HALF) == Half.TOP) == (clickFace == Direction.UP)) {
+            return false;
+        }
         Vec3 clickPosition = pUseContext.getClickLocation()
                 .add(Vec3.atLowerCornerOf(pUseContext.getClickedFace().getNormal()).scale(1 / 16f))
                 .subtract(Vec3.atLowerCornerOf(pUseContext.getClickedPos()));
