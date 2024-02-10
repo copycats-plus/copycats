@@ -16,15 +16,15 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "s",
+          "s"
+        ],
         "key": {
           "s": {
             "item": "copycats:copycat_slab"
           }
         },
-        "pattern": [
-          "s",
-          "s"
-        ],
         "result": {
           "item": "copycats:copycat_block"
         }

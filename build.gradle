@@ -115,6 +115,7 @@ repositories {
         url = "https://maven.jamieswhiteshirt.com/libs-release"
         content { includeGroup("com.jamieswhiteshirt") }
     }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
@@ -132,7 +133,6 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${loader_version}"
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    modImplementation("net.fabricmc.fabric-api:fabric-api-deprecated:$fabric_version")
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5"))
     implementation("io.github.llamalad7:mixinextras-forge:0.3.5")

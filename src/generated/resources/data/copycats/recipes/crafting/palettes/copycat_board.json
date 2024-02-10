@@ -11,11 +11,11 @@
       ],
       "recipe": {
         "type": "minecraft:stonecutting",
-        "count": 8,
         "ingredient": {
           "item": "create:zinc_ingot"
         },
-        "result": "copycats:copycat_board"
+        "result": "copycats:copycat_board",
+        "count": 8
       }
     }
   ]
