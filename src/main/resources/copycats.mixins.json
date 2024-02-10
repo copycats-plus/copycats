@@ -6,6 +6,7 @@
   "refmap": "copycats.refmap.json",
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "mixins": [
+    "compat.AdditionalPlacementsCommonEventHandlerMixin",
     "copycat.ConnectedTextureBehaviourMixin",
     "copycat.CopycatBlockEntityMixin",
     "copycat.CopycatModelAccessor",
