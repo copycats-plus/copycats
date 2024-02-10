@@ -30,15 +30,8 @@ public interface ISimpleCopycatModel {
         cull.rotate(rotation).flipY(flipY);
         if (cull.isCulled(context.src().lightFace())) {
             return;
-            }
-        assembleQuad(context, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
         }
-
-    /**
-     * Copy a quad from source to destination without modification.
-     */
-    default void assembleQuad(BakedQuad src, List<BakedQuad> dest) {
-        dest.add(BakedQuadHelper.clone(src));
+        assembleQuad(context, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
     }
 
     /**
@@ -72,22 +65,6 @@ public interface ISimpleCopycatModel {
         emitter.emit();
     }
 
-    default CopycatRenderContext context(MutableQuadView src, QuadEmitter dest) {
-        return new CopycatRenderContext(src, dest);
-    }
-
-    default MutableCullFace cull(int mask) {
-        return new MutableCullFace(mask);
-    }
-
-    /**
-     * Copy a quad from source to destination while applying the specified crop and move.
-     */
-    default void assembleQuad(BakedQuad src, List<BakedQuad> dest, AABB crop, Vec3 move) {
-        dest.add(BakedQuadHelper.cloneWithCustomGeometry(src,
-                BakedModelHelper.cropAndMove(src.getVertices(), src.getSprite(), crop, move)));
-    }
-
     default MutableVec3 vec3(float x, float y, float z) {
         return new MutableVec3(x, y, z);
     }
@@ -96,7 +73,11 @@ public interface ISimpleCopycatModel {
         return new MutableAABB(sizeX, sizeY, sizeZ);
     }
 
-    default CopycatRenderContext context(List<BakedQuad> src, List<BakedQuad> dest) {
+    default MutableCullFace cull(int mask) {
+        return new MutableCullFace(mask);
+    }
+
+    default CopycatRenderContext context(MutableQuadView src, QuadEmitter dest) {
         return new CopycatRenderContext(src, dest);
     }
 
@@ -217,10 +198,6 @@ public interface ISimpleCopycatModel {
             this.z = z;
             return this;
         }
-    }
-
-    record CopycatRenderContext(List<BakedQuad> src, List<BakedQuad> dest) {
-
     }
 
     class MutableAABB {

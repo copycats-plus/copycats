@@ -1,19 +1,17 @@
 package com.copycatsplus.copycats.content.copycat;
 
 import com.copycatsplus.copycats.config.CCConfigs;
-import com.copycatsplus.copycats.mixin.copycat.CopycatModelAccessor;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
 
-import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ToggleableCopycatModel extends CopycatModel {
     private final CopycatModel base;
@@ -30,7 +28,12 @@ public class ToggleableCopycatModel extends CopycatModel {
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material, ModelData wrappedData, RenderType renderType) {
-        return ((CopycatModelAccessor) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).callGetCroppedQuads(state, side, rand, material, wrappedData, renderType);
+    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+        (CCConfigs.client().useEnhancedModels.get() ? enhanced : base).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+    }
+
+    @Override
+    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
+        throw new RuntimeException("emitBlockQuadsInner should not be reachable in ToggleableCopycatModel");
     }
 }

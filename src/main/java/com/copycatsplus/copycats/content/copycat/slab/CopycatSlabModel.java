@@ -47,15 +47,15 @@ public class CopycatSlabModel extends SimpleCopycatModel {
 
         Direction direction = context.src().lightFace();
 
-            if (front && direction == facing)
+        if (front && direction == facing)
             return;
-            if (!front && direction == facing.getOpposite())
+        if (!front && direction == facing.getOpposite())
             return;
-            if (isDouble && topSlab && direction == facing)
+        if (isDouble && topSlab && direction == facing)
             return;
-            if (isDouble && !topSlab && direction == facing.getOpposite())
+        if (isDouble && !topSlab && direction == facing.getOpposite())
             return;
 
         assembleQuad(context, bb, normalScaledN8);
-        }
+    }
 }

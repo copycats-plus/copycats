@@ -132,6 +132,7 @@ dependencies {
 
     modImplementation("com.tterrag.registrate_fabric:Registrate:${registrate_version}")
     modImplementation("com.jozufozu.flywheel:flywheel-fabric-${flywheel_minecraft_version}:${flywheel_version}")
+    modImplementation("com.jamieswhiteshirt:reach-entity-attributes:$reach_entity_attributes_version")
     modCompileOnly("com.simibubi.create:create-fabric-${create_minecraft_version}:${create_version}") { transitive = false }
     modRuntimeOnly("com.simibubi.create:create-fabric-${create_minecraft_version}:${create_version}")
     for (String module in port_lib_modules.split(",")) {

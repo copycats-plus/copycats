@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.halfpanel;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.CTWaterloggedCopycatBlock;
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItem;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -37,7 +38,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -298,7 +298,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
             for (Direction dir : directions) {
                 int range = AllConfigs.server().equipment.placementAssistRange.get();
                 if (player != null) {
-                    AttributeInstance reach = player.getAttribute(ForgeMod.BLOCK_REACH.get());
+                    AttributeInstance reach = player.getAttribute(ReachEntityAttributes.REACH);
                     if (reach != null && reach.hasModifier(ExtendoGripItem.singleRangeAttributeModifier))
                         range += 4;
                 }

@@ -1,22 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.button;
 
-import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.ModelData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 

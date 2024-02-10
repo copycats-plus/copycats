@@ -2,9 +2,17 @@ package com.copycatsplus.copycats.content.copycat;
 
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public abstract class SimpleCopycatModel extends CopycatModel implements ISimpleCopycatModel {
     public SimpleCopycatModel(BakedModel originalModel) {

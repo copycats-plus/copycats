@@ -6,9 +6,9 @@
   "refmap": "copycats-refmap.json",
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "mixins": [
+    "entity.DataInfoAccessor",
     "copycat.ConnectedTextureBehaviourMixin",
     "copycat.CopycatBlockEntityMixin",
-    "copycat.CopycatModelAccessor",
     "copycat.CopycatModelMixin",
     "copycat.FilteredBlockAndTintGetterAccessor",
     "copycat.TrackPlacementMixin",
