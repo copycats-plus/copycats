@@ -98,6 +98,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        url = "https://cursemaven.com"
+    }
 
     // Fabric-specific
     mavenCentral()
@@ -169,6 +172,9 @@ dependencies {
     modCompileOnly("mezz.jei:jei-${jei_minecraft_version}-fabric-api:${jei_version}")
     // at runtime, use the full JEI jar for fabric
     modRuntimeOnly("mezz.jei:jei-${jei_minecraft_version}-fabric:${jei_version}")
+
+    // For compatibility mixins
+    compileOnly("curse.maven:additional-placements-930469:${additionalplacements_curse_id}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
@@ -251,14 +257,14 @@ tasks.publishMods.mustRunAfter(tasks.build)
 
 publishMods {
     changelog = "Check out the detailed changelog at https://github.com/copycats-plus/copycats/blob/main/CHANGELOG.md"
-    type = BETA
+    type = STABLE
     file = tasks.jar.archiveFile
     modLoaders.add("fabric")
 
     github {
         accessToken = secrets.GITHUB_TOKEN
         repository = "copycats-plus/copycats"
-        commitish = "main"
+        commitish = "mc1.19.2/fabric"
     }
 
     modrinth {

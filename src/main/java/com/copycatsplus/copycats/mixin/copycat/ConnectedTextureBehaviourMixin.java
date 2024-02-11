@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-@Mixin(value = ConnectedTextureBehaviour.class, remap = false)
+@Mixin(value = ConnectedTextureBehaviour.class)
 public class ConnectedTextureBehaviourMixin {
     @WrapOperation(
             method = "testConnection(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;Lnet/minecraft/core/Direction;Lnet/minecraft/core/Direction;II)Z",
