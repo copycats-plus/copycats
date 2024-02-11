@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import java.util.List;
 import java.util.Random;
 
-@Mixin(CopycatModel.class)
+@Mixin(value = CopycatModel.class, remap = false)
 public interface CopycatModelAccessor {
     @Invoker
     List<BakedQuad> callGetCroppedQuads(BlockState state, Direction side, Random rand,
