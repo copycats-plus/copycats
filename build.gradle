@@ -198,9 +198,8 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}"))
 
-    //Compile both so that the mixin will build and be compatible with fabric and forge with no changes
+    // For compatibility mixins
     compileOnly("curse.maven:additional-placements-674852:${additionalplacements_curse_id}")
-    compileOnly("curse.maven:additional-placements-fabric-930469:${additionalplacements_fabric_id}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
