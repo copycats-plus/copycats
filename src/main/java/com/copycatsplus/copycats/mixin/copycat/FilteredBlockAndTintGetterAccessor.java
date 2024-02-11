@@ -5,7 +5,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(FilteredBlockAndTintGetter.class)
+@Mixin(value = FilteredBlockAndTintGetter.class, remap = false)
 public interface FilteredBlockAndTintGetterAccessor {
     @Accessor
     BlockAndTintGetter getWrapped();
