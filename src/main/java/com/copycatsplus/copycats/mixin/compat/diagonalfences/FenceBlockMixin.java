@@ -1,4 +1,4 @@
-package com.copycatsplus.copycats.mixin.copycat.fence;
+package com.copycatsplus.copycats.mixin.compat.diagonalfences;
 
 import com.copycatsplus.copycats.content.copycat.ICopycatWithWrappedBlock;
 import com.copycatsplus.copycats.content.copycat.fence.WrappedFenceBlock;
@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * This patch has to be applied after Diagonal Fences modifies the FenceBlock class
  */
 @Mixin(value = FenceBlock.class, priority = 1100)
-public abstract class COMPATFenceBlockMixin extends CrossCollisionBlock {
+public abstract class FenceBlockMixin extends CrossCollisionBlock {
 
-    public COMPATFenceBlockMixin(float pNodeWidth, float pExtensionWidth, float pNodeHeight, float pExtensionHeight, float pCollisionHeight, Properties pProperties) {
+    public FenceBlockMixin(float pNodeWidth, float pExtensionWidth, float pNodeHeight, float pExtensionHeight, float pCollisionHeight, Properties pProperties) {
         super(pNodeWidth, pExtensionWidth, pNodeHeight, pExtensionHeight, pCollisionHeight, pProperties);
     }
 
