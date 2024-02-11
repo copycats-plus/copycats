@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-@Mixin(value = ConnectedTextureBehaviour.class, remap = false)
+@Mixin(value = ConnectedTextureBehaviour.class)
 public class ConnectedTextureBehaviourMixin {
     @Inject(
             at = @At("HEAD"),

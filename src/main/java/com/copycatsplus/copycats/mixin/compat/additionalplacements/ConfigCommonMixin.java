@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Pseudo
-@Mixin(value = {ConfigCommon.class}, remap = false)
+@Mixin(value = {ConfigCommon.class})
 public class ConfigCommonMixin {
 
     //Will appear to error but works and builds fine.

@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = CopycatBlockEntity.class, remap = false)
+@Mixin(value = CopycatBlockEntity.class)
 public abstract class CopycatBlockEntityMixin extends SmartBlockEntity implements CTCopycatBlockEntity {
     public CopycatBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
