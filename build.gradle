@@ -264,7 +264,7 @@ publishMods {
     github {
         accessToken = secrets.GITHUB_TOKEN
         repository = "copycats-plus/copycats"
-        commitish = "fabric"
+        commitish = "mc1.19.2/fabric"
     }
 
     modrinth {
