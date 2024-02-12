@@ -2,11 +2,15 @@ package com.copycatsplus.copycats.content.copycat;
 
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import com.simibubi.create.foundation.model.BakedQuadHelper;
+import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public interface ISimpleCopycatModel {
@@ -30,6 +34,32 @@ public interface ISimpleCopycatModel {
                 continue;
             }
             assembleQuad(quad, context.dest, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f));
+        }
+    }
+
+    /**
+     * Assemble the quads of a piece of copycat material.
+     *
+     * @param context    Source and destination quads.
+     * @param rotation   Number of degrees to rotate the whole operation for. Only supports multiples of 90. A value of 0 corresponds to a model facing south.
+     * @param flipY      Whether to flip the whole operation vertically.
+     * @param offset     In voxel space, the final position of the assembled piece.
+     * @param select     In voxel space, the selection on the source model to copy from.
+     * @param cull       Faces to skip rendering in the destination model. Changed automatically according to `rotation` and `flipY`.
+     * @param transforms Additional transforms to apply to the quads.
+     */
+    default void assemblePiece(CopycatRenderContext context, int rotation, boolean flipY, MutableVec3 offset, MutableAABB select, MutableCullFace cull, QuadTransform... transforms) {
+        select.rotate(rotation).flipY(flipY);
+        offset.rotate(rotation).flipY(flipY);
+        cull.rotate(rotation).flipY(flipY);
+        for (QuadTransform transform : transforms) {
+            transform.rotate(rotation).flipY(flipY);
+        }
+        for (BakedQuad quad : context.src) {
+            if (cull.isCulled(quad.getDirection())) {
+                continue;
+            }
+            assembleQuad(quad, context.dest, select.toAABB(), offset.toVec3().subtract(select.minX / 16f, select.minY / 16f, select.minZ / 16f), transforms);
         }
     }
 
@@ -59,11 +89,31 @@ public interface ISimpleCopycatModel {
     }
 
     /**
+     * Copy ALL quads from source to destination while applying the specified transforms.
+     */
+    default void assembleQuad(CopycatRenderContext context, AABB crop, Vec3 move, QuadTransform... transforms) {
+        for (BakedQuad quad : context.src) {
+            assembleQuad(quad, context.dest, crop, move, transforms);
+        }
+    }
+
+    /**
      * Copy a quad from source to destination while applying the specified crop and move.
      */
     default void assembleQuad(BakedQuad src, List<BakedQuad> dest, AABB crop, Vec3 move) {
         dest.add(BakedQuadHelper.cloneWithCustomGeometry(src,
                 BakedModelHelper.cropAndMove(src.getVertices(), src.getSprite(), crop, move)));
+    }
+
+    /**
+     * Copy a quad from source to destination while applying the specified transforms.
+     */
+    default void assembleQuad(BakedQuad src, List<BakedQuad> dest, AABB crop, Vec3 move, QuadTransform... transforms) {
+        int[] vertices = BakedModelHelper.cropAndMove(src.getVertices(), src.getSprite(), crop, move);
+        for (QuadTransform transform : transforms) {
+            vertices = transform.transformVertices(vertices, src.getSprite());
+        }
+        dest.add(BakedQuadHelper.cloneWithCustomGeometry(src, vertices));
     }
 
     default CopycatRenderContext context(List<BakedQuad> src, List<BakedQuad> dest) {
@@ -74,16 +124,133 @@ public interface ISimpleCopycatModel {
         return new MutableCullFace(mask);
     }
 
-    default MutableVec3 vec3(float x, float y, float z) {
+    default MutableVec3 vec3(double x, double y, double z) {
         return new MutableVec3(x, y, z);
     }
 
-    default MutableAABB aabb(float sizeX, float sizeY, float sizeZ) {
+    default MutableVec3 pivot(double x, double y, double z) {
+        return new MutableVec3(x, y, z);
+    }
+
+    default MutableAABB aabb(double sizeX, double sizeY, double sizeZ) {
         return new MutableAABB(sizeX, sizeY, sizeZ);
+    }
+
+    default MutableRotation rot(MutableVec3 pivot, MutableVec3 rot) {
+        return new MutableRotation(pivot, rot);
     }
 
     record CopycatRenderContext(List<BakedQuad> src, List<BakedQuad> dest) {
 
+    }
+
+    interface QuadTransform {
+        int[] transformVertices(int[] vertexData, TextureAtlasSprite sprite);
+
+        QuadTransform rotate(int angle);
+
+        QuadTransform flipX(boolean flip);
+
+        QuadTransform flipY(boolean flip);
+
+        QuadTransform flipZ(boolean flip);
+    }
+
+    enum MutationType {
+        ROTATE,
+        MIRROR
+    }
+
+    record Mutation(MutationType type, int value) {
+        public MutableVec3 mutate(MutableVec3 vec3) {
+            return switch (type) {
+                case ROTATE -> vec3.rotate(value);
+                case MIRROR -> {
+                    if (value == 0) yield vec3.flipX(true);
+                    else if (value == 1) yield vec3.flipY(true);
+                    else if (value == 2) yield vec3.flipZ(true);
+                    else yield vec3;
+                }
+            };
+        }
+
+        public MutableVec3 undoMutate(MutableVec3 vec3) {
+            return switch (type) {
+                case ROTATE -> vec3.rotate(-value);
+                case MIRROR -> {
+                    if (value == 0) yield vec3.flipX(true);
+                    else if (value == 1) yield vec3.flipY(true);
+                    else if (value == 2) yield vec3.flipZ(true);
+                    else yield vec3;
+                }
+            };
+        }
+    }
+
+    class MutableRotation implements QuadTransform {
+        private final Vec3 pivot;
+        private final Vec3 rotation;
+        List<Mutation> mutations = new ArrayList<>(2);
+
+        public MutableRotation(MutableVec3 pivot, MutableVec3 rotation) {
+            this.pivot = pivot.toVec3Unscaled();
+            this.rotation = rotation.toVec3Unscaled();
+        }
+
+        @Override
+        public int[] transformVertices(int[] vertexData, TextureAtlasSprite sprite) {
+            vertexData = Arrays.copyOf(vertexData, vertexData.length);
+            MutableVec3 mutableVertex = new MutableVec3(0, 0, 0);
+            for (int i = 0; i < 4; i++) {
+                Vec3 vertex = BakedQuadHelper.getXYZ(vertexData, i);
+                undoMutate(mutableVertex.set(vertex.x * 16, vertex.y * 16, vertex.z * 16));
+                Vec3 rotated = VecHelper.rotate(mutableVertex.toVec3Unscaled().subtract(pivot), rotation).add(pivot);
+                BakedQuadHelper.setXYZ(vertexData, i, mutate(mutableVertex.set(rotated.x, rotated.y, rotated.z)).toVec3());
+            }
+            return vertexData;
+        }
+
+        private MutableVec3 mutate(MutableVec3 vec3) {
+            for (Mutation mutation : mutations) {
+                mutation.mutate(vec3);
+            }
+            return vec3;
+        }
+
+        private MutableVec3 undoMutate(MutableVec3 vec3) {
+            for (int i = mutations.size() - 1; i >= 0; i--) {
+                Mutation mutation = mutations.get(i);
+                mutation.undoMutate(vec3);
+            }
+            return vec3;
+        }
+
+        @Override
+        public QuadTransform rotate(int angle) {
+            mutations.add(new Mutation(MutationType.ROTATE, angle));
+            return this;
+        }
+
+        @Override
+        public QuadTransform flipX(boolean flip) {
+            if (!flip) return this;
+            mutations.add(new Mutation(MutationType.MIRROR, 0));
+            return this;
+        }
+
+        @Override
+        public QuadTransform flipY(boolean flip) {
+            if (!flip) return this;
+            mutations.add(new Mutation(MutationType.MIRROR, 1));
+            return this;
+        }
+
+        @Override
+        public QuadTransform flipZ(boolean flip) {
+            if (!flip) return this;
+            mutations.add(new Mutation(MutationType.MIRROR, 2));
+            return this;
+        }
     }
 
     class MutableCullFace {
@@ -155,11 +322,11 @@ public interface ISimpleCopycatModel {
     }
 
     class MutableVec3 {
-        public float x;
-        public float y;
-        public float z;
+        public double x;
+        public double y;
+        public double z;
 
-        private MutableVec3(float x, float y, float z) {
+        private MutableVec3(double x, double y, double z) {
             set(x, y, z);
         }
 
@@ -193,7 +360,11 @@ public interface ISimpleCopycatModel {
             return new Vec3(x / 16f, y / 16f, z / 16f);
         }
 
-        public MutableVec3 set(float x, float y, float z) {
+        public Vec3 toVec3Unscaled() {
+            return new Vec3(x, y, z);
+        }
+
+        public MutableVec3 set(double x, double y, double z) {
             this.x = x;
             this.y = y;
             this.z = z;
@@ -202,18 +373,18 @@ public interface ISimpleCopycatModel {
     }
 
     class MutableAABB {
-        public float minX;
-        public float minY;
-        public float minZ;
-        public float maxX;
-        public float maxY;
-        public float maxZ;
+        public double minX;
+        public double minY;
+        public double minZ;
+        public double maxX;
+        public double maxY;
+        public double maxZ;
 
-        private MutableAABB(float sizeX, float sizeY, float sizeZ) {
+        private MutableAABB(double sizeX, double sizeY, double sizeZ) {
             set(0, 0, 0, sizeX, sizeY, sizeZ);
         }
 
-        public MutableAABB move(float dX, float dY, float dZ) {
+        public MutableAABB move(double dX, double dY, double dZ) {
             minX += dX;
             maxX += dX;
             minY += dY;
@@ -253,7 +424,7 @@ public interface ISimpleCopycatModel {
             return new AABB(minX / 16f, minY / 16f, minZ / 16f, maxX / 16f, maxY / 16f, maxZ / 16f);
         }
 
-        public MutableAABB set(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+        public MutableAABB set(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
             this.minX = minX;
             this.minY = minY;
             this.minZ = minZ;
