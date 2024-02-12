@@ -256,9 +256,9 @@ tasks.publishMods.dependsOn(tasks.assemble)
 tasks.publishMods.mustRunAfter(tasks.build)
 
 publishMods {
-    changelog = "Check out the detailed changelog at https://github.com/copycats-plus/copycats/blob/main/CHANGELOG.md"
+    changelog = "Check out the detailed changelog at https://github.com/copycats-plus/copycats/blob/fabric/CHANGELOG.md"
     type = STABLE
-    file = tasks.jar.archiveFile
+    file = tasks.remapJar.archiveFile
     modLoaders.add("fabric")
 
     github {
