@@ -104,7 +104,10 @@ public class CopycatBeamBlock extends CTWaterloggedCopycatBlock {
     @SuppressWarnings("deprecation")
     @Override
     public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
-        return false;
+        return switch (pType) {
+            case LAND -> pState.getValue(AXIS).isHorizontal();
+            default -> false;
+        };
     }
 
     @Override

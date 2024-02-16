@@ -156,7 +156,10 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
     @SuppressWarnings("deprecation")
     @Override
     public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
-        return false;
+        return switch (pType) {
+            case LAND -> pState.getValue(LAYERS) < 5 && pState.getValue(FACING).equals(UP);
+            default -> false;
+        };
     }
 
     @Override

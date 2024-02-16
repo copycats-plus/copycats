@@ -28,9 +28,9 @@ import static net.minecraft.world.level.block.StairBlock.HALF;
 import static net.minecraft.world.level.block.StairBlock.SHAPE;
 
 @SuppressWarnings("deprecation")
-public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implements ICustomCTBlocking {
+public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedStairsBlock> implements ICustomCTBlocking {
 
-    public static StairBlock stairs;
+    public static WrappedStairsBlock stairs;
 
     public CopycatStairsBlock(Properties properties) {
         super(properties);
@@ -42,7 +42,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock implement
     }
 
     @Override
-    public Block getWrappedBlock() {
+    public WrappedStairsBlock getWrappedBlock() {
         return stairs;
     }
 

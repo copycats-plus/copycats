@@ -109,7 +109,10 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
 
     @Override
     public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
-        return false;
+        return switch (pType) {
+            case LAND -> pState.getValue(LAYERS) < 5;
+            default -> false;
+        };
     }
 
     @Override

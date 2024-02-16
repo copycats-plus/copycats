@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -89,6 +90,14 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
     @Override
     public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
         return !canFaceBeOccluded(state, face);
+    }
+
+    @Override
+    public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
+        return switch (pType) {
+            case LAND -> (!pState.getValue(UP) && pState.getValue(DOWN) || pState.getValue(UP));
+            default -> false;
+        };
     }
 
     private static VoxelShape calculateMultifaceShape(BlockState pState) {
