@@ -68,6 +68,11 @@ public class CopycatStoneButtonBlock extends CopycatBlock implements ICopycatWit
     }
 
     @Override
+    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
+        return true;
+    }
+
+    @Override
     public boolean isSignalSource(@NotNull BlockState pState) {
         return button.isSignalSource(pState);
     }

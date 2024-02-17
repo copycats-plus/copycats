@@ -46,6 +46,11 @@ public class CopycatWoodenPressurePlate extends CopycatBlock implements ICopycat
     }
 
     @Override
+    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
+        return true;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder.add(POWERED));
     }

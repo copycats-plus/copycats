@@ -1,22 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.button;
 
-import com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel;
 import com.copycatsplus.copycats.content.copycat.SimpleCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.ModelData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.copycatsplus.copycats.content.copycat.ISimpleCopycatModel.MutableCullFace.*;
 
@@ -57,22 +45,22 @@ public class CopycatButtonModel extends SimpleCopycatModel {
                     assemblePiece(context, rot, false,
                             vec3(5, 6, 0),
                             aabb(3, 2, 1),
-                            cull(SOUTH | NORTH | UP | EAST)
+                            cull(SOUTH | UP | EAST)
                     );
                     assemblePiece(context, rot, false,
                             vec3(5, 8, 0),
                             aabb(3, 2, 1).move(0, 14, 0),
-                            cull(SOUTH | NORTH | DOWN | EAST)
+                            cull(SOUTH | DOWN | EAST)
                     );
                     assemblePiece(context, rot, false,
                             vec3(8, 8, 0),
                             aabb(3, 2, 1).move(13, 14, 0),
-                            cull(SOUTH | NORTH | DOWN | WEST)
+                            cull(SOUTH | DOWN | WEST)
                     );
                     assemblePiece(context, rot, false,
                             vec3(8, 6, 0),
                             aabb(3, 2, 1).move(13, 0, 0),
-                            cull(SOUTH | NORTH | UP | WEST)
+                            cull(SOUTH | UP | WEST)
                     );
                 }
             }
@@ -101,22 +89,22 @@ public class CopycatButtonModel extends SimpleCopycatModel {
                     assemblePiece(context, rot, (face != AttachFace.FLOOR),
                             vec3(5, 0, 6),
                             aabb(3, 1, 2).move(0, 0, 0),
-                            cull(UP | DOWN | SOUTH | EAST)
+                            cull(UP | SOUTH | EAST)
                     );
                     assemblePiece(context, rot, (face != AttachFace.FLOOR),
                             vec3(5, 0, 8),
                             aabb(3, 1, 2).move(0, 0, 14),
-                            cull(UP | DOWN | NORTH | EAST)
+                            cull(UP | NORTH | EAST)
                     );
                     assemblePiece(context, rot, (face != AttachFace.FLOOR),
                             vec3(8, 0, 6),
                             aabb(3, 1, 2).move(13, 0, 0),
-                            cull(UP | DOWN | SOUTH | WEST)
+                            cull(UP | SOUTH | WEST)
                     );
                     assemblePiece(context, rot, (face != AttachFace.FLOOR),
                             vec3(8, 0, 8),
                             aabb(3, 1, 2).move(13, 0, 14),
-                            cull(UP | DOWN | NORTH | WEST)
+                            cull(UP | NORTH | WEST)
                     );
                 }
             }

@@ -308,6 +308,14 @@ public class CopycatHalfLayerBlock extends CTWaterloggedCopycatBlock implements 
     }
 
     @Override
+    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
+        if (face.getAxis().isVertical() && (state.getValue(HALF) == Half.TOP) == (face == Direction.DOWN)) {
+            return state.getValue(POSITIVE_LAYERS) < 8 || state.getValue(NEGATIVE_LAYERS) < 8;
+        }
+        return super.shouldFaceAlwaysRender(state, face);
+    }
+
+    @Override
     public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir) {
         return false;
     }
