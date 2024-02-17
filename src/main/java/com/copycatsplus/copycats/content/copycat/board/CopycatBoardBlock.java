@@ -79,7 +79,8 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
 
     @Override
     public Optional<Boolean> blockCTTowards(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos ctPos, BlockPos connectingPos, Direction face) {
-        return Optional.of(!reader.getBlockState(ctPos).is(this));
+        if (!reader.getBlockState(ctPos).is(this)) return Optional.empty();
+        return Optional.of(false);
     }
 
     @Override
