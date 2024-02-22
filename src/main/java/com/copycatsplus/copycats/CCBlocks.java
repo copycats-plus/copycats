@@ -279,7 +279,8 @@ public class CCBlocks {
     public static final BlockEntry<CopycatWoodenButtonBlock> COPYCAT_WOODEN_BUTTON =
             REGISTRATE.block("copycat_wooden_button", CopycatWoodenButtonBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
+                            .noCollission())
                     .tag(BlockTags.BUTTONS)
                     .tag(BlockTags.WOODEN_BUTTONS)
                     .transform(FeatureToggle.register())
@@ -291,7 +292,8 @@ public class CCBlocks {
     public static final BlockEntry<CopycatStoneButtonBlock> COPYCAT_STONE_BUTTON =
             REGISTRATE.block("copycat_stone_button", CopycatStoneButtonBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
+                            .noCollission())
                     .tag(BlockTags.BUTTONS)
                     .tag(BlockTags.STONE_BUTTONS)
                     .transform(FeatureToggle.register())
@@ -330,7 +332,8 @@ public class CCBlocks {
     public static final BlockEntry<CopycatWoodenPressurePlate> COPYCAT_WOODEN_PRESSURE_PLATE =
             REGISTRATE.block("copycat_wooden_pressure_plate", CopycatWoodenPressurePlate::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
+                            .noCollission())
                     .tag(BlockTags.PRESSURE_PLATES)
                     .tag(BlockTags.WOODEN_PRESSURE_PLATES)
                     .transform(FeatureToggle.register())
@@ -351,7 +354,8 @@ public class CCBlocks {
     public static final BlockEntry<CopycatStonePressurePlate> COPYCAT_STONE_PRESSURE_PLATE =
             REGISTRATE.block("copycat_stone_pressure_plate", CopycatStonePressurePlate::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
+                            .noCollission())
                     .tag(BlockTags.PRESSURE_PLATES)
                     .tag(BlockTags.STONE_PRESSURE_PLATES)
                     .transform(FeatureToggle.register())
@@ -371,7 +375,8 @@ public class CCBlocks {
     public static final BlockEntry<CopycatHeavyWeightedPressurePlate> COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE =
             REGISTRATE.block("copycat_heavy_weighted_pressure_plate", CopycatHeavyWeightedPressurePlate::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
+                            .noCollission())
                     .tag(BlockTags.PRESSURE_PLATES)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatPressurePlateModel::new))
@@ -390,7 +395,8 @@ public class CCBlocks {
     public static final BlockEntry<CopycatLightWeightedPressurePlate> COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE =
             REGISTRATE.block("copycat_light_weighted_pressure_plate", CopycatLightWeightedPressurePlate::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
+                            .noCollission())
                     .tag(BlockTags.PRESSURE_PLATES)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> CopycatPressurePlateModel::new))
