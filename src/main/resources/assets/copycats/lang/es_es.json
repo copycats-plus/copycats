@@ -1,1 +1,22 @@
-{}
+{
+  "block.copycats.copycat_beam": "Viga Imitadora",
+  "block.copycats.copycat_beam.tooltip.behaviour1": "Aplica el objeto _sostenido_ como _material_ si es posible. _Haz clic de nuevo_ para cambiar la _orientación_ o _el estado de _alimentación_. Usa una _llave inglesa_ para _restablecer_ el material.",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "Alterna las _texturas conectadas_ en su _material_.",
+  "block.copycats.copycat_beam.tooltip.condition1": "Cuando se hace click con el botón derecho",
+  "block.copycats.copycat_beam.tooltip.condition2": "Cuando se hace click derecho agachado con la mano vacía",
+  "block.copycats.copycat_beam.tooltip.summary": "_Convierte_ cualquier _bloque completo_ en una viga decorativa.",
+  "block.copycats.copycat_block": "Bloque Imitador",
+  "block.copycats.copycat_block.tooltip.behaviour1": "Aplica el objeto _sostenido_ como _material_ si es posible. _Haz clic de nuevo_ para cambiar la _orientación_ o _el estado de _alimentación_. Usa una _llave inglesa_ para _restablecer_ el material.",
+  "block.copycats.copycat_block.tooltip.behaviour2": "Alterna las _texturas conectadas_ en su _material_.",
+  "block.copycats.copycat_block.tooltip.condition1": "Cuando se hace click con el botón derecho",
+  "block.copycats.copycat_block.tooltip.condition2": "Cuando se hace click derecho agachado con la mano vacía",
+  "block.copycats.copycat_block.tooltip.summary": "_Convierte_ cualquier _bloque completo_ en clon decorativo.",
+  "block.copycats.copycat_board": "Tabla Imitadora",
+  "block.copycats.copycat_board.tooltip.behaviour1": "Aplica el objeto _sostenido_ como _material_ si es posible. _Haz clic de nuevo_ para cambiar la _orientación_ o _el estado de _alimentación_. Usa una _llave inglesa_ para _restablecer_ el material.",
+  "block.copycats.copycat_board.tooltip.behaviour2": "Alterna las _texturas conectadas_ en su _material_.",
+  "block.copycats.copycat_board.tooltip.behaviour3": "_Desmonta_ partes del imitador _individualmente_.",
+  "block.copycats.copycat_board.tooltip.condition1": "Cuando se hace click con el botón derecho",
+  "block.copycats.copycat_board.tooltip.condition2": "Cuando se hace click derecho agachado con la mano vacía",
+  "block.copycats.copycat_board.tooltip.condition3": "Cuando se hace click con la llave inglesa mientras agachado",
+  "block.copycats.copycat_board.tooltip.summary": "_Convierte_ cualquier _bloque completo_ en un tablero decorativo. Múltiples tableros pueden ser colocados en el mismo espacio de bloque."
+}
