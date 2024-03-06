@@ -48,6 +48,12 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }
 
+sourceSets {
+    main {
+        resources.srcDir 'src/generated/resources'
+    }
+}
+
 processResources {
     inputs.property "version", project.version
 

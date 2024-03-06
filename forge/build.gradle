@@ -75,7 +75,7 @@ remapJar {
 
 sourceSets {
     main {
-        resources.srcDir generatedResources
+        resources.srcDir 'src/generated/resources'
     }
 }
 
