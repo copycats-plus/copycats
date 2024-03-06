@@ -1,8 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
-var commonVar = project(":common")
-def generatedResources = commonVar.file("src/generated/resources")
 loom {
     forge {
         mixinConfig "copycats-common.mixins.json"
@@ -12,9 +10,11 @@ loom {
     runs {
         data {
             data()
+            name "Data Generation"
             programArgs "--all", "--mod", "copycats"
-            programArgs "--output", generatedResources.absolutePath
-            programArgs "--existing", commonVar.file("src/main/resources").absolutePath
+            programArgs "--output", file("src/generated/resources").absolutePath
+            programArgs "--existing", project(":common").file("src/main/resources").absolutePath
+            programArgs "--existing-mod", "create"
         }
     }
 
