@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "copycats",
+  "version": "${version}",
+
+  "name": "Copycats",
+  "description": "",
+  "authors": [],
+  "contact": {},
+
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.copycatsplus.copycats.fabric.CopycatsImpl"
+    ],
+    "client": ["com.copycatsplus.copycats.fabric.CopycatsClientImpl"
+    ],
+    "fabric-datagen": ["com.copycatsplus.copycats.datagen.fabric.CCDatagenImpl"],
+    "jei_mod_plugin": [
+      "com.copycatsplus.copycats.compat.CopycatsJEI"
+      ]
+  },
+  "mixins": [
+    "copycats-fabric.mixins.json",
+    "copycats-common.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.7",
+    "minecraft": ">=1.20.1"
+  }
+}

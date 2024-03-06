@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.copycatsplus.copycats.forge.mixin",
+  "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "copycat.base.CopycatModelMixin",
+    "network.ServerGamePacketListenerImplMixin"
+  ],
+  "client": [
+    "copycat.base.CopycatModelAccessor",
+    "featuretoggle.SubMenuConfigScreenMixin",
+    "network.ClientPacketListenerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

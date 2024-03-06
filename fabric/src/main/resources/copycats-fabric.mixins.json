@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.copycatsplus.copycats.fabric.mixin",
+  "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "featuretoggle.SubMenuConfigScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "copycats:copycat_block",
+    "copycats:copycat_beam",
+    "copycats:copycat_board",
+    "copycats:copycat_wooden_button",
+    "copycats:copycat_stone_button",
+    "copycats:copycat_byte",
+    "copycats:copycat_fence",
+    "copycats:copycat_fence_gate",
+    "copycats:copycat_half_layer",
+    "copycats:copycat_half_panel",
+    "copycats:copycat_layer",
+    "copycats:copycat_wooden_pressure_plate",
+    "copycats:copycat_stone_pressure_plate",
+    "copycats:copycat_heavy_weighted_pressure_plate",
+    "copycats:copycat_light_weighted_pressure_plate",
+    "copycats:copycat_slab",
+    "copycats:copycat_slice",
+    "copycats:copycat_stairs",
+    "copycats:copycat_trapdoor",
+    "copycats:copycat_vertical_slice",
+    "copycats:copycat_vertical_step",
+    "copycats:copycat_wall"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.copycatsplus.copycats.mixin",
+  "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "compat.additionalplacements.ConfigCommonMixin",
+    "compat.additionalplacements.PlacementBlockMixin",
+    "compat.diagonalfences.FenceBlockMixin",
+    "compat.radium.PathNodeDefaultsMixin",
+    "copycat.TrackPlacementMixin",
+    "copycat.base.ConnectedTextureBehaviourMixin",
+    "copycat.base.CopycatBlockEntityMixin",
+    "copycat.base.FilteredBlockAndTintGetterAccessor",
+    "copycat.button.ButtonBlockMixin",
+    "copycat.button.ContraptionMixin",
+    "copycat.fence.FenceBlockMixin",
+    "copycat.fence.ValueBoxRendererMixin",
+    "copycat.fence_gate.BlockCanSurviveMixin",
+    "copycat.fence_gate.WalkNodeEvaluatorMixin",
+    "copycat.panel.CopycatPanelBlockMixin",
+    "copycat.pressure_plate.BasePressurePlateBlockMixin",
+    "copycat.pressure_plate.BlockMovementChecksMixin",
+    "copycat.pressure_plate.ContraptionMixin",
+    "copycat.slab.SeatMovementBehaviourMixin",
+    "copycat.stairs.StairBlockMixin",
+    "copycat.stairs.StructureTransformMixin",
+    "copycat.step.CopycatStepBlockMixin",
+    "copycat.trapdoor.DismountHelperMixin",
+    "copycat.trapdoor.RedStoneWireBlockMixin",
+    "copycat.wall.TrackPaverMixin",
+    "copycat.wall.WallBlockMixin",
+    "feature_toggle.CreativeModeTabsAccessor"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
