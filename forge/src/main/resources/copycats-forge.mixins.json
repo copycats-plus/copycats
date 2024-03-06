@@ -5,6 +5,7 @@
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "compat.doubleslabs.DSConfigCommonMixin",
     "copycat.base.CopycatModelMixin",
     "network.ServerGamePacketListenerImplMixin"
   ],
