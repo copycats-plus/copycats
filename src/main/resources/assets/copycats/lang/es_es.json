@@ -74,5 +74,10 @@
   "block.copycats.copycat_slab.tooltip.behaviour2": "Alterna las _texturas conectadas_ en su _material_.",
   "block.copycats.copycat_slab.tooltip.condition1": "Cuando se hace click con el botón derecho",
   "block.copycats.copycat_slab.tooltip.condition2": "Cuando se hace click derecho agachado con la mano vacía",
-  "block.copycats.copycat_slab.tooltip.summary": "_Convierte_ cualquier _bloque completo_ en una losa decorativa. Se puede colocar _verticalmente_."
+  "block.copycats.copycat_slab.tooltip.summary": "_Convierte_ cualquier _bloque completo_ en una losa decorativa. Se puede colocar _verticalmente_.",
+  "block.copycats.copycat_stairs": "Losa Imitadora",
+  "block.copycats.copycat_stairs.tooltip.behaviour1": "Aplica el _objeto sostenido_ como _material_ si es posible. _Haz clic de nuevo_ para cambiar la _orientación_ o _el estado de _alimentación_. Usa una _llave inglesa_ para _restablecer_ el material.",
+  "block.copycats.copycat_stairs.tooltip.behaviour2": "Alterna las _texturas conectadas_ en su _material_.",
+  "block.copycats.copycat_stairs.tooltip.condition1": "Cuando se hace click con el botón derecho",
+  "block.copycats.copycat_stairs.tooltip.condition2": "Cuando se hace click derecho agachado con la mano vacía"
 }
