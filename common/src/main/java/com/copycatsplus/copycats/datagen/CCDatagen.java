@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.datagen;
 
+import com.copycatsplus.copycats.CopycatRegistrate;
 import com.copycatsplus.copycats.Copycats;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,7 +13,7 @@ import java.util.function.BiConsumer;
 
 public class CCDatagen {
 
-    private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
+    private static final CopycatRegistrate REGISTRATE = Copycats.getRegistrate();
 
     protected static void addExtraRegistrateData() {
         CCTagGen.addGenerators();

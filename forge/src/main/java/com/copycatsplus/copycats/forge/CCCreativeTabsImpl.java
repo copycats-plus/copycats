@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.forge;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCCreativeTabs;
+import com.copycatsplus.copycats.CopycatRegistrate;
 import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.AllCreativeModeTabs;
 import net.minecraft.core.registries.Registries;
@@ -27,7 +28,7 @@ public class CCCreativeTabsImpl extends CCCreativeTabs {
                     .build());
 
     public static void setCreativeTab() {
-        Copycats.getRegistrate().setCreativeTab(MAIN_TAB);
+        CopycatRegistrate.setTab(MAIN_TAB);
     }
 
     public static void register(IEventBus modEventBus) {

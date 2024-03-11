@@ -16,7 +16,7 @@ public class Copycats {
 	public static final String MODID = "copycats";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Copycats+");
 
-	private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
+	private static final CopycatRegistrate REGISTRATE = CopycatRegistrate.create(MODID);
 
 	static {
 		REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
@@ -38,7 +38,7 @@ public class Copycats {
 		finalizeRegistrate();
 	}
 
-	public static CreateRegistrate getRegistrate() {
+	public static CopycatRegistrate getRegistrate() {
 		return REGISTRATE;
 	}
 

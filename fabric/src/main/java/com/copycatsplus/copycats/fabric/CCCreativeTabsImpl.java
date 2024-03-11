@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.fabric;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCCreativeTabs;
+import com.copycatsplus.copycats.CopycatRegistrate;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.simibubi.create.AllCreativeModeTabs;
@@ -31,7 +32,7 @@ public class CCCreativeTabsImpl extends CCCreativeTabs {
             .build());
 
     public static void setCreativeTab() {
-        Copycats.getRegistrate().useCreativeTab(MAIN_TAB.key());
+        CopycatRegistrate.setTab(MAIN_TAB.key());
     }
 
     private static AllCreativeModeTabs.TabInfo register(String name, Supplier<CreativeModeTab> supplier) {

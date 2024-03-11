@@ -28,8 +28,9 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
+
     archivesBaseName = rootProject.archives_base_name
-    version = rootProject.mod_version
+    version = project.name + "." + minecraft_version + "-" + mod_version
     group = rootProject.maven_group
 
     repositories {
@@ -63,6 +64,7 @@ allprojects {
         maven {
             url = "https://mvn.devos.one/snapshots/"
         }
+        maven { url = "https://mvn.devos.one/releases/" }
         maven {
             url = "https://cursemaven.com"
         }
@@ -76,11 +78,39 @@ allprojects {
         maven { //Forge Config Api Port
             url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
         }
+        maven { // for Porting Lib: Mixin Extras, Fabric ASM
+            url = "https://jitpack.io/"
+            content { includeGroupAndSubgroups("com.github") }
+        }
     }
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
         options.release.set(17)
+    }
+
+    tasks.named('processResources', ProcessResources).configure {
+        duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+        // include packs
+        from(project(":common").file("src/main/resources")) {
+            include("resourcepacks/")
+        }
+
+        // set up properties for filling into metadata
+        var replaceProperties = [
+                version               : version,
+                minecraft_version     : minecraft_version,
+                fabric_api_version    : fabric_api_version,
+                fabric_loader_version : fabric_loader_version,
+                create_forge_range  : create_forge_range,
+                create_fabric_range : create_fabric_range
+        ]
+
+        inputs.properties replaceProperties
+
+        filesMatching(["fabric.mod.json", "META-INF/mods.toml"]) {
+            expand replaceProperties + [project: project]
+        }
     }
 
     java {

@@ -64,3 +64,9 @@ description='''
    versionRange="[1.20.1,1.21)"
    ordering="NONE"
    side="BOTH"
+[[dependencies.copycats]]
+modId="create"
+mandatory=true
+versionRange="${create_forge_range}"
+ordering="NONE"
+side="BOTH"

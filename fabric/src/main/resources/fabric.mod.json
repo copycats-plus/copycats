@@ -29,6 +29,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.15.7",
-    "minecraft": ">=1.20.1"
+    "minecraft": ">=1.20.1",
+    "create": "${create_fabric_range}"
   }
 }

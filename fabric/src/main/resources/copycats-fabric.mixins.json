@@ -5,6 +5,8 @@
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "compat.registrate.CreateRegistrateMixin",
+    "copycat.base.CopycatModelMixin"
   ],
   "client": [
     "featuretoggle.SubMenuConfigScreenMixin"

@@ -69,7 +69,7 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 //noinspection unchecked
 public class CCBlocks {
 
-    private static final CreateRegistrate REGISTRATE = Copycats.getRegistrate();
+    private static final CopycatRegistrate REGISTRATE = Copycats.getRegistrate();
 
     public static final BlockEntry<CopycatBlockBlock> COPYCAT_BLOCK =
             REGISTRATE.block("copycat_block", CopycatBlockBlock::new)

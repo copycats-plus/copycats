@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "compat.doubleslabs.DSConfigCommonMixin",
+    "compat.registrate.CreateRegistrateMixin",
     "copycat.base.CopycatModelMixin",
     "network.ServerGamePacketListenerImplMixin"
   ],
