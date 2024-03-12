@@ -21,6 +21,7 @@ public enum Mods {
     /**
      * For copycat fence compatibility (only prevents crash)
      */
+    ADDITIONAL_PLACEMENTS("additionalplacements"),
     DIAGONAL_FENCES("diagonalfences");
 
     public final String id;

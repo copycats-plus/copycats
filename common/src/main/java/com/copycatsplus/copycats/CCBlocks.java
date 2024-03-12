@@ -357,6 +357,7 @@ public class CCBlocks {
                     .transform(BuilderTransformers.copycat())
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
                     .tag(BlockTags.TRAPDOORS)
+                    .tag(BlockTags.WOODEN_TRAPDOORS)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatTrapdoorModel())))
                     .item()
@@ -368,6 +369,7 @@ public class CCBlocks {
                     .initialProperties(() -> Blocks.OAK_TRAPDOOR)
                     .onRegister(b -> CopycatTrapdoorBlock.trapdoor = b)
                     .tag(BlockTags.TRAPDOORS)
+                    .tag(BlockTags.WOODEN_TRAPDOORS)
                     .blockstate((c, p) -> getWrappedBlockState(c, p, "wrapped_copycat_trapdoor"))
                     .register();
 
