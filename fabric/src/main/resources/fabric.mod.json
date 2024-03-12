@@ -3,13 +3,13 @@
   "id": "copycats",
   "version": "${version}",
 
-  "name": "Copycats",
-  "description": "",
-  "authors": [],
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
   "contact": {},
 
-  "license": "All Rights Reserved",
-  "icon": "icon.png",
+  "license": "${mod_license}",
+  "icon": "copycats_icon.png",
 
   "environment": "*",
   "entrypoints": {
