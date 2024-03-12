@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_vertical_step",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:copycat_step"
+          }
+        ],
+        "result": {
+          "item": "copycats:copycat_vertical_step"
+        }
+      }
+    }
+  ]
+}

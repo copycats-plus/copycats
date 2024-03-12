@@ -1,26 +1,19 @@
 package com.copycatsplus.copycats.datagen.recipes.fabric;
 
-import com.copycatsplus.copycats.datagen.recipes.CCStandardRecipes;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
 
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class CCStandardRecipesImpl extends CCStandardRecipes {
-    protected CCStandardRecipesImpl(PackOutput output) {
-        super(output);
+public class CCStandardRecipesImpl {
+
+
+    public static GeneratedRecipeBuilder create(Supplier<ItemLike> result) {
+        return new GeneratedRecipeBuilderFabric("/", result);
     }
 
-    public static RecipeProvider create(PackOutput output) {
-        CCStandardRecipes recipes = new CCStandardRecipesImpl(output);
-        return new FabricRecipeProvider((FabricDataOutput) output) {
-            @Override
-            public void buildRecipes(Consumer<FinishedRecipe> writer) {
-                recipes.registerRecipes(writer);
-            }
-        };
+    public static GeneratedRecipeBuilder create(ResourceLocation result) {
+        return new GeneratedRecipeBuilderFabric("/", result);
     }
 }

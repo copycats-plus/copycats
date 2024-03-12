@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_block",
+          "invert": false
+        },
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_slab",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "s": {
+            "tag": "copycats:copycat_slab"
+          }
+        },
+        "pattern": [
+          "s",
+          "s"
+        ],
+        "result": {
+          "item": "copycats:copycat_block"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 4,
+  "ingredient": {
+    "tag": "c:ingots/zinc"
+  },
+  "result": "copycats:copycat_beam"
+}

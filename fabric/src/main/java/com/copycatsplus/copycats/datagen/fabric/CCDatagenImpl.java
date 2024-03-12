@@ -28,7 +28,6 @@ public class CCDatagenImpl extends CCDatagen implements DataGeneratorEntrypoint 
         );
         FabricDataGenerator.Pack pack = generator.createPack();
         Copycats.getRegistrate().setupDatagen(pack, helper);
-
-        /*pack.addProvider((FabricDataGenerator.Pack.Factory<RecipeProvider>) CCStandardRecipes::create);*/
+        Copycats.gatherData(pack);
     }
 }

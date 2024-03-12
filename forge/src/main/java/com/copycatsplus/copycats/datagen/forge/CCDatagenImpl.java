@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.datagen.forge;
 
+import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.CCDatagen;
 import com.copycatsplus.copycats.datagen.recipes.CCStandardRecipes;
 import net.minecraft.core.HolderLookup;
@@ -21,7 +22,7 @@ public class CCDatagenImpl extends CCDatagen {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         if (event.includeServer()) {
-            generator.addProvider(true, CCStandardRecipes.create(output));
+            Copycats.gatherData(generator.getVanillaPack(true));
         }
     }
 }

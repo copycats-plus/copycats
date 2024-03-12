@@ -75,7 +75,8 @@ allprojects {
             url = "https://maven.jamieswhiteshirt.com/libs-release"
             content { includeGroup("com.jamieswhiteshirt") }
         }
-        maven { //Forge Config Api Port
+        maven {
+            //Forge Config Api Port
             url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
         }
         maven { // for Porting Lib: Mixin Extras, Fabric ASM
@@ -98,7 +99,7 @@ allprojects {
 
         // set up properties for filling into metadata
         var replaceProperties = [
-                version               : version,
+                version               : version.replace("forge.", "").replace("fabric.", ""),
                 minecraft_version     : minecraft_version,
                 fabric_api_version    : fabric_api_version,
                 fabric_loader_version : fabric_loader_version,

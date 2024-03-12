@@ -5,6 +5,7 @@ import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.CCTags;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
+import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -22,9 +23,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
@@ -33,6 +34,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+
+import static com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder.*;
 
 public class CCStandardRecipes extends CopycatsRecipeProvider {
 
@@ -177,19 +180,21 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     protected static class Marker {
     }
 
-    GeneratedRecipeBuilder create(Supplier<ItemLike> result) {
-        return new GeneratedRecipeBuilder("/", result);
+    @ExpectPlatform
+    static GeneratedRecipeBuilder create(Supplier<ItemLike> result) {
+        throw new AssertionError();
     }
 
-    GeneratedRecipeBuilder create(ResourceLocation result) {
-        return new GeneratedRecipeBuilder("/", result);
+    @ExpectPlatform
+    static GeneratedRecipeBuilder create(ResourceLocation result) {
+        throw new AssertionError();
     }
 
-    GeneratedRecipeBuilder create(ItemProviderEntry<? extends ItemLike> result) {
+    static GeneratedRecipeBuilder create(ItemProviderEntry<? extends ItemLike> result) {
         return create(result::get);
     }
 
-    GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
+    GeneratedRecipeBuilder.GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
         if (result.get() instanceof CopycatBlock copycat) {
             copycatsWithRecipes.add(copycat);
         }
@@ -207,20 +212,20 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             ItemProviderEntry<? extends ItemLike> nextEntry = cycle.get((i + 1) % cycle.size());
             result = create(nextEntry).withSuffix("_from_conversion")
                     .unlockedBy(currentEntry::get)
-/*                    .requiresFeature(currentEntry.getId())
-                    .requiresFeature(nextEntry.getId())*/
+                    .requiresFeature(currentEntry.getId())
+                    .requiresFeature(nextEntry.getId())
                     .viaShapeless(b -> b.requires(currentEntry.get()));
         }
         return result;
     }
 
-    protected CCStandardRecipes(PackOutput output) {
+    public CCStandardRecipes(PackOutput output) {
         super(output);
 
         List<ResourceLocation> missingRecipes = new LinkedList<>();
         for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
-            if (entry.getKey().location().getNamespace().equals(Copycats.MODID) && entry.getValue() instanceof CopycatBlock) {
-                if (!copycatsWithRecipes.contains(entry.getValue()))
+            if (entry.getKey().location().getNamespace().equals(Copycats.MODID) && entry.getValue() instanceof CopycatBlock copycatBlock) {
+                if (!copycatsWithRecipes.contains(copycatBlock))
                     missingRecipes.add(entry.getKey().location());
             }
         }
@@ -228,252 +233,5 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             throw new AssertionError("The following copycats do not have a crafting recipe: \n" + missingRecipes.stream().map(ResourceLocation::toString).collect(Collectors.joining(", ")));
         }
     }
-
-    @ExpectPlatform
-    public static RecipeProvider create(PackOutput output) {
-        throw new AssertionError();
-    }
-
-    @Override
-    public String getName() {
-        return "Create: Copycats+ Standard Recipes";
-    }
-
-    public static class GeneratedRecipeBuilder {
-
-        private static String path = "";
-        private static String suffix;
-        private static Supplier<? extends ItemLike> result;
-        private static ResourceLocation compatDatagenOutput;
-
-        private Supplier<ItemPredicate> unlockedBy;
-        private int amount;
-        //Used by platforms;
-        public static GeneratedRecipeBuilder instance;
-
-        private GeneratedRecipeBuilder(String path) {
-            GeneratedRecipeBuilder.path = path;
-            suffix = "";
-            this.amount = 1;
-            instance = this;
-        }
-
-        public GeneratedRecipeBuilder(String path, Supplier<? extends ItemLike> result) {
-            this(path);
-            GeneratedRecipeBuilder.result = result;
-        }
-
-        public GeneratedRecipeBuilder(String path, ResourceLocation result) {
-            this(path);
-            compatDatagenOutput = result;
-        }
-
-        GeneratedRecipeBuilder returns(int amount) {
-            this.amount = amount;
-            return this;
-        }
-
-        GeneratedRecipeBuilder unlockedBy(Supplier<? extends ItemLike> item) {
-            this.unlockedBy = () -> ItemPredicate.Builder.item()
-                    .of(item.get())
-                    .build();
-            return this;
-        }
-
-        GeneratedRecipeBuilder unlockedByTag(Supplier<TagKey<Item>> tag) {
-            this.unlockedBy = () -> ItemPredicate.Builder.item()
-                    .of(tag.get())
-                    .build();
-            return this;
-        }
-
-        GeneratedRecipeBuilder withSuffix(String suffix) {
-            GeneratedRecipeBuilder.suffix = suffix;
-            return this;
-        }
-
-
-        GeneratedRecipe viaShaped(UnaryOperator<ShapedRecipeBuilder> builder) {
-            return handleConditions(consumer -> {
-                ShapedRecipeBuilder b = builder.apply(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result.get(), amount));
-                if (unlockedBy != null)
-                    b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
-                b.save(consumer, createLocation("crafting"));
-            });
-        }
-
-        GeneratedRecipe viaShapeless(UnaryOperator<ShapelessRecipeBuilder> builder) {
-            return handleConditions(consumer -> {
-                ShapelessRecipeBuilder b = builder.apply(ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result.get(), amount));
-                if (unlockedBy != null)
-                    b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
-                b.save(consumer, createLocation("crafting"));
-            });
-        }
-
-        private static ResourceLocation clean(ResourceLocation loc) {
-            String path = loc.getPath();
-            while (path.contains("//"))
-                path = path.replaceAll("//", "/");
-            return new ResourceLocation(loc.getNamespace(), path);
-        }
-
-        private ResourceLocation createSimpleLocation(String recipeType) {
-            ResourceLocation loc = clean(Copycats.asResource(recipeType + "/" + getRegistryName().getPath() + suffix));
-            return loc;
-        }
-
-        protected static ResourceLocation createLocation(String recipeType) {
-            ResourceLocation loc = clean(Copycats.asResource(recipeType + "/" + path + "/" + getRegistryName().getPath() + suffix));
-            return loc;
-        }
-
-        GeneratedRecipeBuilder requiresResultFeature() {
-            return requiresFeature(RegisteredObjects.getKeyOrThrow(result.get().asItem()));
-        }
-
-        GeneratedRecipeBuilder requiresFeature(ResourceLocation location) {
-            return requiresFeature(location, false);
-        }
-
-        GeneratedRecipeBuilder requiresFeature(BlockEntry<?> block) {
-            return requiresFeature(block, false);
-        }
-
-        GeneratedRecipeBuilder requiresFeature(BlockEntry<?> block, boolean invert) {
-            return requiresFeature(block.getId(), invert);
-        }
-
-        @ExpectPlatform
-        public static GeneratedRecipeBuilder requiresFeature(ResourceLocation location, boolean invert) {
-            throw new AssertionError();
-        }
-
-        @ExpectPlatform
-        public static GeneratedRecipe handleConditions(Consumer<Consumer<FinishedRecipe>> recipe) {
-            throw new AssertionError();
-        }
-
-        private static ResourceLocation getRegistryName() {
-            return compatDatagenOutput == null ? RegisteredObjects.getKeyOrThrow(result.get()
-                    .asItem()) : compatDatagenOutput;
-        }
-
-        GeneratedCookingRecipeBuilder viaCooking(Supplier<? extends ItemLike> item) {
-            return unlockedBy(item).viaCookingIngredient(() -> Ingredient.of(item.get()));
-        }
-
-        GeneratedCookingRecipeBuilder viaCookingTag(Supplier<TagKey<Item>> tag) {
-            return unlockedByTag(tag).viaCookingIngredient(() -> Ingredient.of(tag.get()));
-        }
-
-        GeneratedCookingRecipeBuilder viaCookingIngredient(Supplier<Ingredient> ingredient) {
-            return new GeneratedCookingRecipeBuilder(ingredient);
-        }
-
-        GeneratedStonecuttingRecipeBuilder viaStonecutting(Supplier<? extends ItemLike> item) {
-            return unlockedBy(item).viaStonecuttingIngredient(() -> Ingredient.of(item.get()));
-        }
-
-        GeneratedStonecuttingRecipeBuilder viaStonecuttingTag(Supplier<TagKey<Item>> tag) {
-            return unlockedByTag(tag).viaStonecuttingIngredient(() -> Ingredient.of(tag.get()));
-        }
-
-        GeneratedStonecuttingRecipeBuilder viaStonecuttingIngredient(Supplier<Ingredient> ingredient) {
-            return new GeneratedStonecuttingRecipeBuilder(ingredient);
-        }
-
-        class GeneratedStonecuttingRecipeBuilder {
-
-            private final Supplier<Ingredient> ingredient;
-
-            GeneratedStonecuttingRecipeBuilder(Supplier<Ingredient> ingredient) {
-                this.ingredient = ingredient;
-            }
-
-            private GeneratedRecipe create(UnaryOperator<SingleItemRecipeBuilder> builder) {
-                return handleConditions(consumer -> {
-                    SingleItemRecipeBuilder b = builder.apply(SingleItemRecipeBuilder.stonecutting(ingredient.get(), RecipeCategory.MISC, result.get(), amount));
-                    if (unlockedBy != null)
-                        b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
-                    b.save(consumer, createLocation("stonecutting"));
-                });
-            }
-
-            private GeneratedRecipe create() {
-                return create(b -> b);
-            }
-        }
-
-        class GeneratedCookingRecipeBuilder {
-
-            private final Supplier<Ingredient> ingredient;
-            private float exp;
-            private int cookingTime;
-
-            private final RecipeSerializer<? extends AbstractCookingRecipe> FURNACE = RecipeSerializer.SMELTING_RECIPE,
-                    SMOKER = RecipeSerializer.SMOKING_RECIPE, BLAST = RecipeSerializer.BLASTING_RECIPE,
-                    CAMPFIRE = RecipeSerializer.CAMPFIRE_COOKING_RECIPE;
-
-            GeneratedCookingRecipeBuilder(Supplier<Ingredient> ingredient) {
-                this.ingredient = ingredient;
-                cookingTime = 200;
-                exp = 0;
-            }
-
-            GeneratedCookingRecipeBuilder forDuration(int duration) {
-                cookingTime = duration;
-                return this;
-            }
-
-            GeneratedCookingRecipeBuilder rewardXP(float xp) {
-                exp = xp;
-                return this;
-            }
-
-            GeneratedRecipe inFurnace() {
-                return inFurnace(b -> b);
-            }
-
-            GeneratedRecipe inFurnace(UnaryOperator<SimpleCookingRecipeBuilder> builder) {
-                return create(FURNACE, builder, 1);
-            }
-
-            GeneratedRecipe inSmoker() {
-                return inSmoker(b -> b);
-            }
-
-            GeneratedRecipe inSmoker(UnaryOperator<SimpleCookingRecipeBuilder> builder) {
-                create(FURNACE, builder, 1);
-                create(CAMPFIRE, builder, 3);
-                return create(SMOKER, builder, .5f);
-            }
-
-            GeneratedRecipe inBlastFurnace() {
-                return inBlastFurnace(b -> b);
-            }
-
-            GeneratedRecipe inBlastFurnace(UnaryOperator<SimpleCookingRecipeBuilder> builder) {
-                create(FURNACE, builder, 1);
-                return create(BLAST, builder, .5f);
-            }
-
-            private GeneratedRecipe create(RecipeSerializer<? extends AbstractCookingRecipe> serializer,
-                                           UnaryOperator<SimpleCookingRecipeBuilder> builder, float cookingTimeModifier) {
-                return register(consumer -> {
-                    boolean isOtherMod = compatDatagenOutput != null;
-
-                    SimpleCookingRecipeBuilder b = builder.apply(
-                            SimpleCookingRecipeBuilder.generic(ingredient.get(), RecipeCategory.MISC, isOtherMod ? Items.DIRT : result.get(),
-                                    exp, (int) (cookingTime * cookingTimeModifier), serializer));
-                    if (unlockedBy != null)
-                        b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
-                    b.save(consumer::accept, createSimpleLocation(RegisteredObjects.getKeyOrThrow(serializer)
-                            .getPath()));
-                });
-            }
-        }
-    }
-
 
 }

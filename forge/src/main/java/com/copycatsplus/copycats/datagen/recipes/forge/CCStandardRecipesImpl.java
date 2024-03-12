@@ -1,24 +1,20 @@
 package com.copycatsplus.copycats.datagen.recipes.forge;
 
-import com.copycatsplus.copycats.datagen.recipes.CCStandardRecipes;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
 
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class CCStandardRecipesImpl extends CCStandardRecipes {
-    protected CCStandardRecipesImpl(PackOutput output) {
-        super(output);
+public class CCStandardRecipesImpl {
+
+
+    public static GeneratedRecipeBuilder create(Supplier<ItemLike> result) {
+        return new GeneratedRecipeBuilderForge("/", result);
     }
 
-    public static RecipeProvider create(PackOutput output) {
-        CCStandardRecipes recipes = new CCStandardRecipesImpl(output);
-        return new RecipeProvider(output) {
-            @Override
-            protected void buildRecipes(Consumer<FinishedRecipe> writer) {
-                recipes.registerRecipes(writer);
-            }
-        };
+    public static GeneratedRecipeBuilder create(ResourceLocation result) {
+        return new GeneratedRecipeBuilderForge("/", result);
     }
 }
+
