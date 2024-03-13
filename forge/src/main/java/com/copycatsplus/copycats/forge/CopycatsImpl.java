@@ -19,7 +19,6 @@ public class CopycatsImpl {
     static IEventBus bus;
     public CopycatsImpl() {
         bus = FMLJavaModLoadingContext.get().getModEventBus();
-        CCCreativeTabsImpl.register(CopycatsImpl.bus);
         Copycats.init();
 
         CCCraftingConditions.register();

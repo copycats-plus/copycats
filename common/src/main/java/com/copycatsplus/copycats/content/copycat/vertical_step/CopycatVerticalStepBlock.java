@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
 public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock {
@@ -94,7 +95,7 @@ public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

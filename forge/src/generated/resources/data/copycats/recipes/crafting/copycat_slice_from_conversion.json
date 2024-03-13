@@ -16,7 +16,6 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shapeless",
-        "category": "misc",
         "ingredients": [
           {
             "item": "copycats:copycat_vertical_slice"

@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
 import static net.minecraft.world.level.block.StairBlock.SHAPE;
@@ -194,7 +195,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction side = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction side = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         if (side != null) {
             FaceShape sideShape = getFaceShape(state, side);

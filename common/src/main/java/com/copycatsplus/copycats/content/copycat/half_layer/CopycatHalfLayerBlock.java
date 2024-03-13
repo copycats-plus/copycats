@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.core.Direction.AxisDirection;
 
@@ -212,7 +213,7 @@ public class CopycatHalfLayerBlock extends CTWaterloggedCopycatBlock implements 
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

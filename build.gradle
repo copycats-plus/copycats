@@ -83,6 +83,17 @@ allprojects {
             url = "https://jitpack.io/"
             content { includeGroupAndSubgroups("com.github") }
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
+        }
     }
 
     tasks.withType(JavaCompile) {

@@ -28,8 +28,8 @@
     "copycats-common.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.7",
-    "minecraft": ">=1.20.1",
+    "fabricloader": ">=0.14.24",
+    "minecraft": ">=1.19.2",
     "create": "${create_fabric_range}"
   }
 }

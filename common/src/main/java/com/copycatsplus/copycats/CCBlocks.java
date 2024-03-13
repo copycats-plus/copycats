@@ -59,7 +59,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
 import static com.simibubi.create.foundation.data.CreateRegistrate.blockModel;
@@ -121,7 +120,6 @@ public class CCBlocks {
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
                             .noCollission())
                     .tag(BlockTags.BUTTONS)
-                    .tag(BlockTags.STONE_BUTTONS)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatButtonModel())))
                     .item()
@@ -129,7 +127,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedButton.Wood> WRAPPED_COPYCAT_WOODEN_BUTTON =
-            REGISTRATE.block("wrapped_copycat_wooden_button", p -> new WrappedButton().wood(p, BlockSetType.OAK, 30, true))
+            REGISTRATE.block("wrapped_copycat_wooden_button", p -> new WrappedButton().wood(p))
                     .initialProperties(() -> Blocks.OAK_BUTTON)
                     .onRegister(b -> CopycatWoodenButtonBlock.button = b)
                     .tag(BlockTags.BUTTONS)
@@ -138,11 +136,10 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedButton.Stone> WRAPPED_COPYCAT_STONE_BUTTON =
-            REGISTRATE.block("wrapped_copycat_stone_button", p -> new WrappedButton().stone(p, BlockSetType.STONE, 20, false))
+            REGISTRATE.block("wrapped_copycat_stone_button", p -> new WrappedButton().stone(p))
                     .initialProperties(() -> Blocks.STONE_BUTTON)
                     .onRegister(b -> CopycatStoneButtonBlock.button = b)
                     .tag(BlockTags.BUTTONS)
-                    .tag(BlockTags.STONE_BUTTONS)
                     .blockstate((c, p) -> getWrappedBlockState(c, p, "wrapped_copycat_stone_button"))
                     .register();
 
@@ -178,7 +175,6 @@ public class CCBlocks {
     public static final BlockEntry<CopycatFenceGateBlock> COPYCAT_FENCE_GATE =
             REGISTRATE.block("copycat_fence_gate", CopycatFenceGateBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(BlockBehaviour.Properties::forceSolidOn)
                     .tag(BlockTags.FENCE_GATES, CCTags.commonBlockTag("fence_gates"), BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatFenceGateModel())))
@@ -188,7 +184,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedFenceGateBlock> WRAPPED_COPYCAT_FENCE_GATE =
-            REGISTRATE.block("wrapped_copycat_fence_gate", p -> new WrappedFenceGateBlock(p, WoodType.OAK))
+            REGISTRATE.block("wrapped_copycat_fence_gate", WrappedFenceGateBlock::new)
                     .initialProperties(() -> Blocks.OAK_FENCE_GATE)
                     .onRegister(b -> CopycatFenceGateBlock.fenceGate = b)
                     .tag(BlockTags.FENCE_GATES, CCTags.commonBlockTag("fence_gates"), BlockTags.UNSTABLE_BOTTOM_CENTER, AllTags.AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
@@ -228,7 +224,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.Wooden> WRAPPED_COPYCAT_WOODEN_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_wooden_pressure_plate", p -> new WrappedPressurePlate().wooden(PressurePlateBlock.Sensitivity.EVERYTHING, p, BlockSetType.OAK))
+            REGISTRATE.block("wrapped_copycat_wooden_pressure_plate", p -> new WrappedPressurePlate().wooden(PressurePlateBlock.Sensitivity.EVERYTHING, p))
                     .initialProperties(() -> Blocks.OAK_BUTTON)
                     .onRegister(b -> CopycatWoodenPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -250,7 +246,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.Stone> WRAPPED_COPYCAT_STONE_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_stone_pressure_plate", p -> new WrappedPressurePlate().stone(PressurePlateBlock.Sensitivity.MOBS, p, BlockSetType.STONE))
+            REGISTRATE.block("wrapped_copycat_stone_pressure_plate", p -> new WrappedPressurePlate().stone(PressurePlateBlock.Sensitivity.MOBS, p))
                     .initialProperties(() -> Blocks.STONE_BUTTON)
                     .onRegister(b -> CopycatStonePressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -272,7 +268,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.HeavyWeighted> WRAPPED_COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_heavy_weighted_pressure_plate", p -> new WrappedPressurePlate().heavyWeighted(150, p, BlockSetType.IRON))
+            REGISTRATE.block("wrapped_copycat_heavy_weighted_pressure_plate", p -> new WrappedPressurePlate().heavyWeighted(150, p))
                     .initialProperties(() -> Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
                     .onRegister(b -> CopycatHeavyWeightedPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -292,7 +288,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.LightWeighted> WRAPPED_COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE =
-            REGISTRATE.block("wrapped_copycat_light_weighted_pressure_plate", p -> new WrappedPressurePlate().lightWeighted(15, p, BlockSetType.GOLD))
+            REGISTRATE.block("wrapped_copycat_light_weighted_pressure_plate", p -> new WrappedPressurePlate().lightWeighted(15, p))
                     .initialProperties(() -> Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE)
                     .onRegister(b -> CopycatLightWeightedPressurePlate.pressurePlate = b)
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -365,7 +361,7 @@ public class CCBlocks {
                     .register();
 
     public static final BlockEntry<WrappedTrapdoorBlock> WRAPPED_COPYCAT_TRAPDOOR =
-            REGISTRATE.block("wrapped_copycat_trapdoor", p -> new WrappedTrapdoorBlock(p, BlockSetType.OAK))
+            REGISTRATE.block("wrapped_copycat_trapdoor", WrappedTrapdoorBlock::new)
                     .initialProperties(() -> Blocks.OAK_TRAPDOOR)
                     .onRegister(b -> CopycatTrapdoorBlock.trapdoor = b)
                     .tag(BlockTags.TRAPDOORS)
@@ -396,7 +392,6 @@ public class CCBlocks {
     public static final BlockEntry<CopycatWallBlock> COPYCAT_WALL =
             REGISTRATE.block("copycat_wall", CopycatWallBlock::new)
                     .transform(BuilderTransformers.copycat())
-                    .properties(BlockBehaviour.Properties::forceSolidOn)
                     .tag(BlockTags.WALLS)
                     .transform(FeatureToggle.register())
                     .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatWallModel())))

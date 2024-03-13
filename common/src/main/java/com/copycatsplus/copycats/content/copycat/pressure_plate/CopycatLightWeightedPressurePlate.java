@@ -56,8 +56,8 @@ public class CopycatLightWeightedPressurePlate extends CopycatBlock implements I
     }
 
     @Override
-    public boolean isPossibleToRespawnInThis(@NotNull BlockState pState) {
-        return pressurePlate.isPossibleToRespawnInThis(pState);
+    public boolean isPossibleToRespawnInThis() {
+        return pressurePlate.isPossibleToRespawnInThis();
     }
 
     @Override

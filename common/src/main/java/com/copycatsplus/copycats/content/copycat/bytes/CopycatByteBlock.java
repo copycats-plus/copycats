@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.content.copycat.MathHelper;
 import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
@@ -125,7 +126,7 @@ public class CopycatByteBlock extends CTWaterloggedCopycatBlock implements ISpec
         BlockState state = context.getLevel().getBlockState(blockPos);
         Vec3 bias = Vec3.atLowerCornerOf(context.getClickedFace().getNormal()).scale(1 / 16f);
         Vec3 biasedLocation = context.getClickLocation().add(bias);
-        if (!BlockPos.containing(biasedLocation).equals(context.getClickedPos())) {
+        if (!MathHelper.blockPosContaining(biasedLocation).equals(context.getClickedPos())) {
             biasedLocation = clampToBlockPos(biasedLocation, context.getClickedPos());
         }
         Byte bite = getByteFromVec(biasedLocation, context.getClickedPos());
@@ -153,7 +154,7 @@ public class CopycatByteBlock extends CTWaterloggedCopycatBlock implements ISpec
         if (!itemstack.is(this.asItem())) return false;
         Vec3 bias = Vec3.atLowerCornerOf(pUseContext.getClickedFace().getNormal()).scale(1 / 16f);
         Vec3 biasedLocation = pUseContext.getClickLocation().add(bias);
-        if (!BlockPos.containing(biasedLocation).equals(pUseContext.getClickedPos())) {
+        if (!MathHelper.blockPosContaining(biasedLocation).equals(pUseContext.getClickedPos())) {
             biasedLocation = clampToBlockPos(biasedLocation, pUseContext.getClickedPos());
         }
         Byte bite = getByteFromVec(biasedLocation, pUseContext.getClickedPos());

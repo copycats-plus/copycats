@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static com.simibubi.create.foundation.block.ProperWaterloggedBlock.WATERLOGGED;
 
 public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopycatWithWrappedBlock<Block> {
@@ -106,7 +107,7 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             boolean correctAxis = switch (axis) {
                 case X -> diff.getX() == 0;
@@ -319,7 +320,7 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
             List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
                     state.getValue(AXIS),
                     dir -> world.getBlockState(pos.relative(dir))
-                            .canBeReplaced());
+                            .getMaterial().isReplaceable());
 
             if (directions.isEmpty())
                 return PlacementOffset.fail();

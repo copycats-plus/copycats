@@ -47,7 +47,7 @@ public class QuadHelperImpl {
     }
 
     public static <Source extends MutableQuadView, Destination extends QuadEmitter> void assembleQuad(Source src, Destination dest) {
-        dest.copyFrom(src);
+        src.copyTo(dest);
         dest.emit();
     }
 
@@ -61,8 +61,8 @@ public class QuadHelperImpl {
 
 
     public static <Source extends MutableQuadView, Destination extends QuadEmitter> void assembleQuad(Source src, Destination dest, AABB crop, Vec3 move) {
-        dest.copyFrom(src);
-        BakedModelHelper.cropAndMove(dest, spriteFinder.find(src), crop, move);
+        src.copyTo(dest);
+        BakedModelHelper.cropAndMove(dest, spriteFinder.find(src, 0), crop, move);
         dest.emit();
     }
 

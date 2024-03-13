@@ -5,6 +5,7 @@ import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.copycatsplus.copycats.content.copycat.base.model.ToggleableCopycatModel;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -31,7 +32,7 @@ public class ToggleableCopycatModelImpl extends CopycatModel implements Toggleab
 
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
-        (CCConfigs.client().useEnhancedModels.get() ? enhanced : base).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+        ((FabricBakedModel) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).emitBlockQuads(blockView, state, pos, randomSupplier, context);
     }
 
     @Override

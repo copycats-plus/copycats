@@ -7,35 +7,32 @@ import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
-import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.*;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
+import net.minecraft.core.Registry;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import static com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder.*;
+import static com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder.GeneratedRecipe;
 
 public class CCStandardRecipes extends CopycatsRecipeProvider {
 
@@ -49,7 +46,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_PANEL::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('p', AllBlocks.COPYCAT_PANEL)
+                    .define('p', AllBlocks.COPYCAT_PANEL.get())
                     .pattern("p")
                     .pattern("p")
             );
@@ -58,7 +55,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('s', AllBlocks.COPYCAT_STEP)
+                    .define('s', AllBlocks.COPYCAT_STEP.get())
                     .pattern("ss")
             );
 
@@ -96,7 +93,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShapeless(b -> b
-                    .requires(AllBlocks.COPYCAT_STEP)
+                    .requires(AllBlocks.COPYCAT_STEP.get())
             );
 
     GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
@@ -107,7 +104,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(CCBlocks.COPYCAT_HALF_PANEL::get)
             .requiresFeature(CCBlocks.COPYCAT_HALF_PANEL)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_HALF_PANEL)
+                    .define('s', CCBlocks.COPYCAT_HALF_PANEL.get())
                     .pattern("ss")
             );
 
@@ -172,6 +169,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
 
     String currentFolder = "";
+
     Marker enterFolder(String folder) {
         currentFolder = folder;
         return new Marker();
@@ -192,6 +190,11 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     static GeneratedRecipeBuilder create(ItemProviderEntry<? extends ItemLike> result) {
         return create(result::get);
+    }
+
+    @ExpectPlatform
+    public static RecipeProvider create(DataGenerator generator) {
+        throw new AssertionError();
     }
 
     GeneratedRecipeBuilder.GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
@@ -219,11 +222,11 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return result;
     }
 
-    public CCStandardRecipes(PackOutput output) {
+    public CCStandardRecipes(DataGenerator output) {
         super(output);
 
         List<ResourceLocation> missingRecipes = new LinkedList<>();
-        for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
+        for (Map.Entry<ResourceKey<Block>, Block> entry : Registry.BLOCK.entrySet()) {
             if (entry.getKey().location().getNamespace().equals(Copycats.MODID) && entry.getValue() instanceof CopycatBlock copycatBlock) {
                 if (!copycatsWithRecipes.contains(copycatBlock))
                     missingRecipes.add(entry.getKey().location());

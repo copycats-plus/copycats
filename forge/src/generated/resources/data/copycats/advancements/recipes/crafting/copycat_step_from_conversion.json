@@ -31,8 +31,7 @@
           "recipes": [
             "copycats:crafting/copycat_step_from_conversion"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

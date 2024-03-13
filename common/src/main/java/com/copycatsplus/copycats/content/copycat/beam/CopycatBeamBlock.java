@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
 public class CopycatBeamBlock extends CTWaterloggedCopycatBlock {
@@ -89,7 +90,7 @@ public class CopycatBeamBlock extends CTWaterloggedCopycatBlock {
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

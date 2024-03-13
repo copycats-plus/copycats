@@ -31,7 +31,7 @@
     "copycat.trapdoor.RedStoneWireBlockMixin",
     "copycat.wall.TrackPaverMixin",
     "copycat.wall.WallBlockMixin",
-    "feature_toggle.CreativeModeTabsAccessor"
+    "minecraft.CreativeModTabMixin"
   ],
   "client": [],
   "injectors": {

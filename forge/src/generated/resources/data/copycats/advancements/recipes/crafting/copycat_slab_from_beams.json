@@ -31,8 +31,7 @@
           "recipes": [
             "copycats:crafting/copycat_slab_from_beams"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

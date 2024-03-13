@@ -1,31 +1,31 @@
 package com.copycatsplus.copycats.content.copycat.button;
 
-import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.StoneButtonBlock;
+import net.minecraft.world.level.block.WoodButtonBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 public class WrappedButton {
 
-    public Wood wood(BlockBehaviour.Properties properties, BlockSetType type, int ticksToStayPressed, boolean arrowsCanPress) {
-        return new Wood(properties, type, ticksToStayPressed, arrowsCanPress);
+    public Wood wood(BlockBehaviour.Properties properties) {
+        return new Wood(properties);
     }
 
-    public Stone stone(BlockBehaviour.Properties properties, BlockSetType type, int ticksToStayPressed, boolean arrowsCanPress) {
-        return new Stone(properties, type, ticksToStayPressed, arrowsCanPress);
+    public Stone stone(BlockBehaviour.Properties properties) {
+        return new Stone(properties);
     }
 
 
-    public static class Wood extends ButtonBlock {
+    public static class Wood extends WoodButtonBlock {
 
-        public Wood(Properties pProperties, BlockSetType pType, int pTicksToStayPressed, boolean pArrowsCanPress) {
-            super(pProperties, pType, pTicksToStayPressed, pArrowsCanPress);
+        public Wood(Properties pProperties) {
+            super(pProperties);
         }
     }
 
-    public static class Stone extends ButtonBlock {
+    public static class Stone extends StoneButtonBlock {
 
-        public Stone(Properties pProperties, BlockSetType pType, int pTicksToStayPressed, boolean pArrowsCanPress) {
-            super(pProperties, pType, pTicksToStayPressed, pArrowsCanPress);
+        public Stone(Properties pProperties) {
+            super(pProperties);
         }
     }
 }
