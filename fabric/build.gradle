@@ -39,7 +39,7 @@ dependencies {
 
     modImplementation("com.simibubi.create:create-fabric-${rootProject.minecraft_version}:${rootProject.create_fabric_version}")
     // because create fabric is a bit broken I think
-    modImplementation("net.minecraftforge:forgeconfigapiport-fabric:4.2.9")
+    modImplementation("net.minecraftforge:forgeconfigapiport-fabric:3.2.4")
 
     modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${rootProject.jei_fabric_version}")
 

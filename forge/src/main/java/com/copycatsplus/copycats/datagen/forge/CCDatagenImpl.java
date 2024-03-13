@@ -4,7 +4,7 @@ import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.CCDatagen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 public class CCDatagenImpl extends CCDatagen {
 

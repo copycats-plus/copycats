@@ -14,6 +14,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.FenceGateBlock.*;
 
@@ -108,9 +109,14 @@ public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock<Wrappe
         return true;
     }
 
-    @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return false;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getConnectiveMaterial(BlockAndTintGetter reader, BlockState otherState, Direction face, BlockPos fromPos, BlockPos toPos) {
+        return (canConnectTexturesToward(reader, fromPos, toPos, reader.getBlockState(fromPos)) ? getMaterial(reader, toPos) : null);
     }
 
     @Override

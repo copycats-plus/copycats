@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "copycats:copycat_wooden_button",
     "copycats:wrapped_copycat_wooden_button"

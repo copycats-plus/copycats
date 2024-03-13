@@ -23,12 +23,12 @@ public abstract class CopycatPanelBlockMixin extends WaterloggedCopycatBlock imp
         super(pProperties);
     }
 
-    @Override
+/*    @Override
     public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, BlockState queryState, BlockPos queryPos) {
         if (!allowCTAppearance(state, level, pos, side, queryState, queryPos))
             return state;
         return super.getAppearance(state, level, pos, side, queryState, queryPos);
-    }
+    }*/
 
     @Inject(
             at = @At("HEAD"),

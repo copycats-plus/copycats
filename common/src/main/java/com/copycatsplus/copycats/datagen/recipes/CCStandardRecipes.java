@@ -7,20 +7,13 @@ import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
-import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.core.Registry;
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +21,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 

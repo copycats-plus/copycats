@@ -11,11 +11,11 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Supplier;
 
 import static com.copycatsplus.copycats.content.copycat.base.model.fabric.QuadHelperImpl.assembleQuad;
@@ -30,7 +30,7 @@ public class SimpleCopycatModel extends CopycatModel {
     }
 
     @Override
-    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
+    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
 
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform

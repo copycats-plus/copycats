@@ -12,7 +12,6 @@
     "copycat.TrackPlacementMixin",
     "copycat.base.ConnectedTextureBehaviourMixin",
     "copycat.base.CopycatBlockEntityMixin",
-    "copycat.base.FilteredBlockAndTintGetterAccessor",
     "copycat.button.ButtonBlockMixin",
     "copycat.button.ContraptionMixin",
     "copycat.fence.FenceBlockMixin",

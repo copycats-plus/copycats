@@ -36,6 +36,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -97,7 +98,6 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         }
     }
 
-    @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
         Axis axis = state.getValue(AXIS);
@@ -124,6 +124,12 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         } else {
             return true;
         }
+    }
+
+    @Nullable
+    @Override
+    public BlockState getConnectiveMaterial(BlockAndTintGetter reader, BlockState otherState, Direction face, BlockPos fromPos, BlockPos toPos) {
+        return (canConnectTexturesToward(reader, fromPos, toPos, reader.getBlockState(fromPos)) ? getMaterial(reader, toPos) : null);
     }
 
     @Override

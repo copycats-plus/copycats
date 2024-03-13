@@ -9,10 +9,10 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Random;
 import java.util.function.Supplier;
 
 public class ToggleableCopycatModelImpl extends CopycatModel implements ToggleableCopycatModel {
@@ -31,12 +31,12 @@ public class ToggleableCopycatModelImpl extends CopycatModel implements Toggleab
     }
 
     @Override
-    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         ((FabricBakedModel) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).emitBlockQuads(blockView, state, pos, randomSupplier, context);
     }
 
     @Override
-    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
+    protected void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         throw new RuntimeException("emitBlockQuadsInner should not be reachable in ToggleableCopycatModel");
     }
 }

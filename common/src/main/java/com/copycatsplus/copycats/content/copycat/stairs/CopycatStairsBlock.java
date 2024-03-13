@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -20,8 +19,10 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.Random;
 
 import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.*;
@@ -72,7 +73,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
     }
 
     @Override
-    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         stairs.animateTick(pState, pLevel, pPos, pRandom);
     }
 
@@ -108,12 +109,12 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
     }
 
     @Override
-    public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         stairs.randomTick(pState, pLevel, pPos, pRandom);
     }
 
     @Override
-    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull Random pRandom) {
         stairs.tick(pState, pLevel, pPos, pRandom);
     }
 
@@ -188,7 +189,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
         }
     }
 
-    @Override
+
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         BlockState toState = reader.getBlockState(toPos);
         BlockPos diff = toPos.subtract(fromPos);
@@ -208,6 +209,12 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
         }
 
         return true;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getConnectiveMaterial(BlockAndTintGetter reader, BlockState otherState, Direction face, BlockPos fromPos, BlockPos toPos) {
+        return (canConnectTexturesToward(reader, fromPos, toPos, reader.getBlockState(fromPos)) ? getMaterial(reader, toPos) : null);
     }
 
     @Override

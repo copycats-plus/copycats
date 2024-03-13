@@ -16,12 +16,12 @@ public abstract class CTWaterloggedCopycatBlock extends WaterloggedCopycatBlock 
         super(pProperties);
     }
 
-    @Override
+/*    @Override
     public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, BlockState queryState, BlockPos queryPos) {
         if (!allowCTAppearance(state, level, pos, side, queryState, queryPos))
             return state;
         return super.getAppearance(state, level, pos, side, queryState, queryPos);
-    }
+    }*/
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
