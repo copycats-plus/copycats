@@ -1,0 +1,5 @@
+{
+  "block.copycats.copycat_beam.tooltip.behaviour1": "Se possível, aplica o _item segurado_ como seu _material_. _Clique novamente_ para alternar a _orientação_ ou _estado energizado_. Use uma _Chave Inglesa_ para _redefinir_ o material.",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "Altera _texturas conectadas_ no seu _material_.",
+  "block.copycats.copycat_beam.tooltip.condition1": "Quando clicado com o botão direito do rato"
+}
