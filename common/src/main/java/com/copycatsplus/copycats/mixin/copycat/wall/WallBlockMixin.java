@@ -16,7 +16,7 @@ public class WallBlockMixin {
 
     @Inject(
             at = @At("HEAD"),
-            method = "connectsTo(Lnet/minecraft/world/level/block/state/BlockState;ZLnet/minecraft/core/Direction;)Z",
+            method = "connectsTo",
             cancellable = true
     )
     private void connectsToCopycat(BlockState pState, boolean pSideSolid, Direction pDirection, CallbackInfoReturnable<Boolean> cir) {
@@ -26,7 +26,7 @@ public class WallBlockMixin {
 
     @Inject(
             at = @At("HEAD"),
-            method = "shouldRaisePost(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/phys/shapes/VoxelShape;)Z",
+            method = "shouldRaisePost",
             cancellable = true
     )
     private void raisePostForCopycat(BlockState pState, BlockState pNeighbour, VoxelShape pShape, CallbackInfoReturnable<Boolean> cir) {

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class BlockMovementChecksMixin {
     @WrapOperation(
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getBlock()Lnet/minecraft/world/level/block/Block;"),
-            method = "isBrittleFallback(Lnet/minecraft/world/level/block/state/BlockState;)Z"
+            method = "isBrittleFallback"
     )
     private static Block isPressurePlateBrittle(BlockState instance, Operation<Block> original) {
         return ICopycatWithWrappedBlock.unwrap(original.call(instance));
@@ -21,7 +21,7 @@ public class BlockMovementChecksMixin {
 
     @WrapOperation(
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getBlock()Lnet/minecraft/world/level/block/Block;"),
-            method = "isBlockAttachedTowardsFallback(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;)Z"
+            method = "isBlockAttachedTowardsFallback"
     )
     private static Block isPressurePlateAttachedTowards(BlockState instance, Operation<Block> original) {
         return ICopycatWithWrappedBlock.unwrap(original.call(instance));

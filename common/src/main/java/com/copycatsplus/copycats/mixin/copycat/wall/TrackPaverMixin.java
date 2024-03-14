@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class TrackPaverMixin {
     @Inject(
             at = @At("HEAD"),
-            method = "isWallLike(Lnet/minecraft/world/level/block/state/BlockState;)Z",
+            method = "isWallLike",
             cancellable = true
     )
     private static void copycatIsWallLike(BlockState defaultBlockState, CallbackInfoReturnable<Boolean> cir) {

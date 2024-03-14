@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class FenceBlockMixin {
     @Inject(
             at = @At("HEAD"),
-            method = "isSameFence(Lnet/minecraft/world/level/block/state/BlockState;)Z",
+            method = "isSameFence",
             cancellable = true
     )
     private void connectToCopycatFence(BlockState pState, CallbackInfoReturnable<Boolean> cir) {
@@ -32,7 +32,7 @@ public class FenceBlockMixin {
 
     @Inject(
             at = @At("HEAD"),
-            method = "connectsTo(Lnet/minecraft/world/level/block/state/BlockState;ZLnet/minecraft/core/Direction;)Z",
+            method = "connectsTo",
             cancellable = true
     )
     private void connectsToCopycat(BlockState pState, boolean pIsSideSolid, Direction pDirection, CallbackInfoReturnable<Boolean> cir) {

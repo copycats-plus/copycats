@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TrackPlacement.class)
 public class TrackPlacementMixin {
     @WrapOperation(
-            method = "paveTracks(Lnet/minecraft/world/level/Level;Lcom/simibubi/create/content/trains/track/TrackPlacement$PlacementInfo;Lnet/minecraft/world/item/BlockItem;Z)V",
+            method = "paveTracks",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/BlockItem;getBlock()Lnet/minecraft/world/level/block/Block;")
     )
     private static Block getInnerBlock(BlockItem instance, Operation<Block> original) {
@@ -26,7 +26,7 @@ public class TrackPlacementMixin {
 
     @Inject(
             at = @At(value = "NEW", target = "()Ljava/util/HashSet;"),
-            method = "paveTracks(Lnet/minecraft/world/level/Level;Lcom/simibubi/create/content/trains/track/TrackPlacement$PlacementInfo;Lnet/minecraft/world/item/BlockItem;Z)V"
+            method = "paveTracks"
     )
     private static void revertBlock(Level level,
                                     TrackPlacement.PlacementInfo info,
