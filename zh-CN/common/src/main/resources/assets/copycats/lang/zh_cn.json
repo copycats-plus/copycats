@@ -1,0 +1,5 @@
+{
+  "block.copycats.copycat_beam.tooltip.behaviour1": "如果可能，将根据_手持物品_改变_材质_。_再次点击_以循环切换_方向_或_充能_状态。使用_扳手_重置材质。",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "切换_材质_的_连接贴图_。",
+  "block.copycats.copycat_beam.tooltip.condition1": "右击时"
+}
