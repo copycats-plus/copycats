@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class ValueBoxRendererMixin {
     @WrapOperation(
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/BlockItem;getBlock()Lnet/minecraft/world/level/block/Block;"),
-            method = "customZOffset(Lnet/minecraft/world/item/Item;)F"
+            method = "customZOffset"
     )
     private static Block getWrappedBlock(BlockItem instance, Operation<Block> original) {
         return ICopycatWithWrappedBlock.unwrap(original.call(instance));
