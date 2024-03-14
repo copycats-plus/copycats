@@ -1,0 +1,5 @@
+{
+  "block.copycats.copycat_beam.tooltip.behaviour1": "如果可以，將根據_手持物品_改片_材質_。_再次點擊_以循環切換_方向_或_充能_狀態。使用_扳手_重置材質。",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "切換此_材料_上的_連接材質_。",
+  "block.copycats.copycat_beam.tooltip.condition1": "當右鍵時"
+}
