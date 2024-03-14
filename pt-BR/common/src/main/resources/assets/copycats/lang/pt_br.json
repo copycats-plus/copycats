@@ -1,0 +1,8 @@
+{
+  "block.copycats.copycat_beam": "Viga Central Imitadora",
+  "block.copycats.copycat_beam.tooltip.behaviour1": "Aplica o _item segurado_ como seu _material_, se possível. _Clique novamente_ para alternar a _orientação_ ou entre o estado _ligado/desligado_. Use uma _Chave-Inglesa_ para _retirar_ o material.",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "Altera _texturas conectadas_ no seu _material_.",
+  "block.copycats.copycat_beam.tooltip.condition1": "Quando Clique-Direito",
+  "block.copycats.copycat_beam.tooltip.condition2": "Quando usado o Shift + Clique Direito com a Mão Vazia",
+  "block.copycats.copycat_beam.tooltip.summary": "_Converte_ qualquer bloco _inteiro_ em uma viga decorativa."
+}
