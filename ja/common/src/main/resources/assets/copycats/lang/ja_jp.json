@@ -1,0 +1,5 @@
+{
+  "block.copycats.copycat_beam.tooltip.behaviour1": "_持っているアイテム_が_素材_に使えるなら適用する。再びクリックで_方向_や_信号_状態_を切り替えられる。レンチを使うと素材をリセットできる。",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "_接続されたテクスチャ_の_素材_を切り替える。_接続されたテクスチャ_の_素材_を切り替える。",
+  "block.copycats.copycat_beam.tooltip.condition1": "右クリックしたとき"
+}
