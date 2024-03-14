@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.2.0 - 2024-03-13
 
 ### Added
+- Fixed crash issues on fabric caused by mixins
+
+
+## 1.2.0 - 2024-03-13
+
+### Added
 - Compatibility for Create 0.5.1-f (Fabric)
 
 ### Changed
