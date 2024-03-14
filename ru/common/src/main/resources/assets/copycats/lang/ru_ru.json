@@ -1,0 +1,5 @@
+{
+  "block.copycats.copycat_beam.tooltip.behaviour1": "Применяет _предмет в руке_ как его _материал_, если это возможно. _Кликните снова_, чтобы изменить _ориентацию_ или _состояние_. Используйте _ключ_, чтобы сбросить материал.",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "Переключает _соединение текстур_ _материала_.",
+  "block.copycats.copycat_beam.tooltip.condition1": "ПКМ с блоком в руке"
+}
