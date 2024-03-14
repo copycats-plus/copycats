@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class SeatMovementBehaviourMixin {
     @WrapOperation(
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getBlock()Lnet/minecraft/world/level/block/Block;"),
-            method = "visitNewPosition(Lcom/simibubi/create/content/contraptions/behaviour/MovementContext;Lnet/minecraft/core/BlockPos;)V"
+            method = "visitNewPosition"
     )
     private Block getWrappedBlock(BlockState instance, Operation<Block> original) {
         return ICopycatWithWrappedBlock.unwrap(original.call(instance));

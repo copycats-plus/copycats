@@ -16,11 +16,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = Contraption.class, remap = false)
+@Mixin(value = Contraption.class)
 public class ContraptionMixin {
     @Inject(
-            at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/contraptions/Contraption;getBlockEntityNBT(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/nbt/CompoundTag;"),
-            method = "capture(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Lorg/apache/commons/lang3/tuple/Pair;"
+            method = "capture",
+            at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/contraptions/Contraption;getBlockEntityNBT(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/nbt/CompoundTag;")
     )
     private void capturePressurePlate(Level world,
                                       BlockPos pos,

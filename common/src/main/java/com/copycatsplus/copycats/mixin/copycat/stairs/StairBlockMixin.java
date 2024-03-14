@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class StairBlockMixin {
     @Inject(
             at = @At("HEAD"),
-            method = "isStairs(Lnet/minecraft/world/level/block/state/BlockState;)Z",
+            method = "isStairs",
             cancellable = true
     )
     private static void copycatStairs(BlockState pState, CallbackInfoReturnable<Boolean> cir) {

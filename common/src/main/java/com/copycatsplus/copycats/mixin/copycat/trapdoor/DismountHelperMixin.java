@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class DismountHelperMixin {
     @WrapOperation(
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/BlockGetter;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"),
-            method = "nonClimbableShape(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/phys/shapes/VoxelShape;"
+            method = "nonClimbableShape"
     )
     private static BlockState getWrappedBlock(BlockGetter instance, BlockPos pos, Operation<BlockState> original) {
         BlockState state = original.call(instance, pos);
