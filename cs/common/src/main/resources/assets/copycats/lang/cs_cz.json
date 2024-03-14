@@ -1,0 +1,5 @@
+{
+  "block.copycats.copycat_beam.tooltip.behaviour1": "Pokud je to možné, použije _držený předmět_ jako svůj _materiál_. Dalším kliknutím_ se změní _orientace_ nebo stav _napájení_. Pro _resetování_ materiálu použijte _montážní klíč_.",
+  "block.copycats.copycat_beam.tooltip.behaviour2": "Přepíná _propojené textury_ na svém _materiálu_.",
+  "block.copycats.copycat_beam.tooltip.condition1": "Při pravém kliknutí"
+}
