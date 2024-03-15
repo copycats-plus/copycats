@@ -125,7 +125,11 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
         }
 
         if (toState.is(this)) {
-            return toState.getValue(FACING) == facing && toState.getValue(OFFSET) == offset && face.getAxis() == getOffsetAxis(facing, offset);
+            try {
+                return toState.getValue(FACING) == facing && toState.getValue(OFFSET) == offset && face.getAxis() == getOffsetAxis(facing, offset);
+            } catch (IllegalStateException ignored) {
+                return false;
+            }
         } else {
             return false;
         }
