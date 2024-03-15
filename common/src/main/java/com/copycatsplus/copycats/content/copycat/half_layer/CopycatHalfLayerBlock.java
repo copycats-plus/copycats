@@ -225,11 +225,15 @@ public class CopycatHalfLayerBlock extends CTWaterloggedCopycatBlock implements 
         BlockState toState = reader.getBlockState(toPos);
 
         if (toState.is(this)) {
-            return toState.getValue(AXIS) == axis &&
-                    toState.getValue(HALF) == half &&
-                    toState.getValue(POSITIVE_LAYERS) == positiveLayers &&
-                    toState.getValue(NEGATIVE_LAYERS) == negativeLayers &&
-                    face.getClockWise().getAxis() == axis;
+            try {
+                return toState.getValue(AXIS) == axis &&
+                        toState.getValue(HALF) == half &&
+                        toState.getValue(POSITIVE_LAYERS) == positiveLayers &&
+                        toState.getValue(NEGATIVE_LAYERS) == negativeLayers &&
+                        face.getClockWise().getAxis() == axis;
+            } catch (IllegalStateException ignored) {
+                return false;
+            }
         } else {
             return false;
         }

@@ -101,7 +101,11 @@ public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock {
         }
 
         if (toState.is(this)) {
-            return toState.getValue(FACING) == facing && face.getAxis() == Axis.Y;
+            try {
+                return toState.getValue(FACING) == facing && face.getAxis() == Axis.Y;
+            } catch (IllegalStateException ignored) {
+                return false;
+            }
         } else {
             return false;
         }
