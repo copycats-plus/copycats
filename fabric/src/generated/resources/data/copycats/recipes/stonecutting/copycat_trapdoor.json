@@ -1,7 +1,7 @@
 {
   "type": "minecraft:stonecutting",
   "ingredient": {
-    "tag": "c:ingots/zinc"
+    "tag": "c:zinc_ingots"
   },
   "result": "copycats:copycat_trapdoor",
   "count": 4

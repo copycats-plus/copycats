@@ -6,6 +6,7 @@ import com.copycatsplus.copycats.CCTags;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
+import com.copycatsplus.copycats.multiloader.Platform;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -196,7 +197,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(result)
                 .unlockedBy(AllItems.ZINC_INGOT::get)
                 .returns(resultCount)
-                .viaStonecuttingTag(() -> CCTags.commonItemTag("ingots/zinc"))
+                .viaStonecuttingTag(TaggedIngredients.ZINC::getTag)
                 .create();
     }
 
@@ -229,4 +230,20 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         }
     }
 
+    public enum TaggedIngredients {
+        ZINC(CCTags.commonItemTag("ingots/zinc"), CCTags.commonItemTag("zinc_ingots"));
+
+
+        private final TagKey<Item> forge;
+        private final TagKey<Item> fabric;
+
+        TaggedIngredients(TagKey<Item> forge, TagKey<Item> fabric) {
+            this.forge = forge;
+            this.fabric = fabric;
+        }
+
+        public TagKey<Item> getTag() {
+            return Platform.getCurrent().equals(Platform.FORGE) ? this.forge : this.fabric;
+        }
+    }
 }
