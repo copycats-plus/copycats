@@ -90,7 +90,11 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
         BlockState toState = reader.getBlockState(toPos);
 
         if (toState.is(this)) {
-            return toState.getValue(FACING) == facing && toState.getValue(LAYERS) == layers && face.getAxis() == Axis.Y;
+            try {
+                return toState.getValue(FACING) == facing && toState.getValue(LAYERS) == layers && face.getAxis() == Axis.Y;
+            } catch (IllegalStateException ignored) {
+                return false;
+            }
         } else {
             return false;
         }

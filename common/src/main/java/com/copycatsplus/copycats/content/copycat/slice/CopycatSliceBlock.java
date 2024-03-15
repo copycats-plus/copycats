@@ -88,10 +88,14 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
         BlockState toState = reader.getBlockState(toPos);
 
         if (toState.is(this)) {
-            return toState.getValue(FACING) == facing &&
-                    toState.getValue(HALF) == half &&
-                    toState.getValue(LAYERS) == layers &&
-                    face.getAxis() == facing.getClockWise().getAxis();
+            try {
+                return toState.getValue(FACING) == facing &&
+                        toState.getValue(HALF) == half &&
+                        toState.getValue(LAYERS) == layers &&
+                        face.getAxis() == facing.getClockWise().getAxis();
+            } catch (IllegalStateException ignored) {
+                return false;
+            }
         } else {
             return false;
         }

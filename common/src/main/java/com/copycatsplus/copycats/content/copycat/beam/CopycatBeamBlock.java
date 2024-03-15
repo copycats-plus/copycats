@@ -96,7 +96,11 @@ public class CopycatBeamBlock extends CTWaterloggedCopycatBlock {
         }
 
         if (toState.is(this)) {
-            return toState.getValue(AXIS) == axis && face.getAxis() == axis;
+            try {
+                return toState.getValue(AXIS) == axis && face.getAxis() == axis;
+            } catch (IllegalStateException ignored) {
+                return false;
+            }
         } else {
             return false;
         }
