@@ -13,8 +13,7 @@ public class ButtonBlockMixin {
 
     @ModifyArg(
             method = "checkPressed",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;scheduleTick(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;I)V"),
-            index = 1
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;scheduleTick(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;I)V")
     )
     private Block copycats$checkPressed(Block original) {
         if (original instanceof WrappedButton.Wood) {
@@ -28,8 +27,7 @@ public class ButtonBlockMixin {
 
     @ModifyArg(
             method = "press",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;scheduleTick(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;I)V"),
-            index = 1
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;scheduleTick(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;I)V")
     )
     private Block copycats$press(Block original) {
         if (original instanceof WrappedButton.Wood) {
