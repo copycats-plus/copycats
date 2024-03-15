@@ -18,6 +18,8 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
@@ -231,7 +233,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     }
 
     public enum TaggedIngredients {
-        ZINC(CCTags.commonItemTag("ingots/zinc"), CCTags.commonItemTag("zinc_ingots"));
+        //This is
+        ZINC(CCTags.commonItemTag("ingots/zinc"), CCTags.commonItemTag("ingots/zinc"));
 
 
         private final TagKey<Item> forge;
