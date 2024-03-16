@@ -9,6 +9,7 @@
     "compat.additionalplacements.PlacementBlockMixin",
     "compat.diagonalfences.FenceBlockMixin",
     "compat.radium.PathNodeDefaultsMixin",
+    "compat.rubidium.BlockOcclusionCacheMixin",
     "copycat.TrackPlacementMixin",
     "copycat.base.ConnectedTextureBehaviourMixin",
     "copycat.base.CopycatBlockEntityMixin",

@@ -196,4 +196,18 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
         return false;
     }
 
+    @Override
+    public @NotNull VoxelShape getOcclusionShape(BlockState pState, BlockGetter level, BlockPos pos) {
+        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+    }
+
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getValue(LAYERS) == 8 ? 0.2f : 1.0f;
+    }
 }
