@@ -43,6 +43,8 @@ dependencies {
 
     modLocalRuntime("mezz.jei:jei-${minecraft_version}-forge:${jei_forge_version}")
 
+    modLocalRuntime("curse.maven:rubidium-574856:4952685")
+
     modCompileOnly("curse.maven:double-slabs-350179:3873442")
 
     compileOnly("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}")
