@@ -8,6 +8,7 @@
     "copycats:copycat_byte",
     "copycats:copycat_fence",
     "copycats:copycat_fence_gate",
+    "copycats:copycat_ghost_block",
     "copycats:copycat_half_layer",
     "copycats:copycat_half_panel",
     "copycats:copycat_layer",

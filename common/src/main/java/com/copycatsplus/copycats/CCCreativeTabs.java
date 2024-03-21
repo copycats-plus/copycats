@@ -20,6 +20,7 @@ public class CCCreativeTabs {
             CCItems.COPYCAT_CATWALK,
             CCBlocks.COPYCAT_FENCE,
             CCBlocks.COPYCAT_FENCE_GATE,
+            CCBlocks.COPYCAT_GHOST_BLOCK,
             CCBlocks.COPYCAT_HALF_LAYER,
             CCBlocks.COPYCAT_HALF_PANEL,
             CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
