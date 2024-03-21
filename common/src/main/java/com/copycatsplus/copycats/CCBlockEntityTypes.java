@@ -10,28 +10,30 @@ public class CCBlockEntityTypes {
     public static final BlockEntityEntry<CopycatBlockEntity> COPYCAT =
             REGISTRATE.blockEntity("copycat", CopycatBlockEntity::new)
                     .validBlocks(
-                            CCBlocks.COPYCAT_BLOCK,
-                            CCBlocks.COPYCAT_SLAB,
                             CCBlocks.COPYCAT_BEAM,
-                            CCBlocks.COPYCAT_VERTICAL_STEP,
-                            CCBlocks.COPYCAT_HALF_PANEL,
-                            CCBlocks.COPYCAT_STAIRS,
-                            CCBlocks.COPYCAT_FENCE,
-                            CCBlocks.COPYCAT_FENCE_GATE,
-                            CCBlocks.COPYCAT_TRAPDOOR,
-                            CCBlocks.COPYCAT_WALL,
+                            CCBlocks.COPYCAT_BLOCK,
                             CCBlocks.COPYCAT_BOARD,
                             CCBlocks.COPYCAT_BYTE,
-                            CCBlocks.COPYCAT_LAYER,
+                            CCBlocks.COPYCAT_FENCE,
+                            CCBlocks.COPYCAT_FENCE_GATE,
                             CCBlocks.COPYCAT_HALF_LAYER,
-                            CCBlocks.COPYCAT_SLICE,
-                            CCBlocks.COPYCAT_VERTICAL_SLICE,
-                            CCBlocks.COPYCAT_WOODEN_BUTTON,
-                            CCBlocks.COPYCAT_STONE_BUTTON,
-                            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
-                            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
+                            CCBlocks.COPYCAT_HALF_PANEL,
+                            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+                            CCBlocks.COPYCAT_LAYER,
                             CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
-                            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE
+                            CCBlocks.COPYCAT_PANE,
+                            CCBlocks.COPYCAT_HORIZONTAL_PANE,
+                            CCBlocks.COPYCAT_SLAB,
+                            CCBlocks.COPYCAT_SLICE,
+                            CCBlocks.COPYCAT_STAIRS,
+                            CCBlocks.COPYCAT_STONE_BUTTON,
+                            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
+                            CCBlocks.COPYCAT_TRAPDOOR,
+                            CCBlocks.COPYCAT_VERTICAL_SLICE,
+                            CCBlocks.COPYCAT_VERTICAL_STEP,
+                            CCBlocks.COPYCAT_WALL,
+                            CCBlocks.COPYCAT_WOODEN_BUTTON,
+                            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE
                     )
                     .register();
 

@@ -20,6 +20,7 @@
     "copycat.fence.ValueBoxRendererMixin",
     "copycat.fence_gate.BlockCanSurviveMixin",
     "copycat.fence_gate.WalkNodeEvaluatorMixin",
+    "copycat.pane.IronBarsMixin",
     "copycat.panel.CopycatPanelBlockMixin",
     "copycat.pressure_plate.BasePressurePlateBlockMixin",
     "copycat.pressure_plate.BlockMovementChecksMixin",

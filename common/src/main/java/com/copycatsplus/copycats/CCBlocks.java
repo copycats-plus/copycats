@@ -27,6 +27,7 @@ import com.copycatsplus.copycats.content.copycat.half_panel.CopycatHalfPanelBloc
 import com.copycatsplus.copycats.content.copycat.half_panel.CopycatHalfPanelModel;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
+import com.copycatsplus.copycats.content.copycat.pane.*;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.*;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabModel;
@@ -225,6 +226,35 @@ public class CCBlocks {
                     .loot(CCLootGen.build(CCLootGen.lootForLayers()))
                     .item()
                     .transform(customItemModel("copycat_base", "layer"))
+                    .register();
+
+    public static final BlockEntry<WrappedPaneBlock> WRAPPED_COPYCAT_PANE =
+            REGISTRATE.block("wrapped_copycat_pane", WrappedPaneBlock::new)
+                    .initialProperties(() -> Blocks.GLASS_PANE)
+                    .onRegister(b -> CopycatPaneBlock.pane = b)
+                    .blockstate((c, p) -> getWrappedBlockState(c, p, "wrapped_copycat_pane"))
+                    .register();
+
+    public static final BlockEntry<CopycatPaneBlock> COPYCAT_PANE =
+            REGISTRATE.block("copycat_pane", CopycatPaneBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .transform(FeatureToggle.register())
+                    .tag(CCTags.commonBlockTag("glass_panes"))
+                    .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatPaneModel())))
+                    .item()
+                    .transform(customItemModel("copycat_base", "pane"))
+                    .register();
+
+    public static final BlockEntry<CopycatHorizontalPaneBlock> COPYCAT_HORIZONTAL_PANE =
+            REGISTRATE.block("copycat_horizontal_pane", CopycatHorizontalPaneBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .transform(FeatureToggle.register())
+                    .tag(CCTags.commonBlockTag("glass_panes"))
+                    .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatHorizontalPaneModel())))
+                    .item()
+                    .transform(customItemModel("copycat_base", "horizontal_pane"))
                     .register();
 
     public static final BlockEntry<WrappedPressurePlate.Wooden> WRAPPED_COPYCAT_WOODEN_PRESSURE_PLATE =

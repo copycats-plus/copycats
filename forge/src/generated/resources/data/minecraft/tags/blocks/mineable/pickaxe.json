@@ -11,6 +11,8 @@
     "copycats:copycat_half_layer",
     "copycats:copycat_half_panel",
     "copycats:copycat_layer",
+    "copycats:copycat_pane",
+    "copycats:copycat_horizontal_pane",
     "copycats:copycat_wooden_pressure_plate",
     "copycats:copycat_stone_pressure_plate",
     "copycats:copycat_heavy_weighted_pressure_plate",
