@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.content.copycat.configurable_block.CopycatConfigurableBlockBlockEntity;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -35,6 +36,10 @@ public class CCBlockEntityTypes {
                     )
                     .register();
 
+    public static final BlockEntityEntry<CopycatConfigurableBlockBlockEntity> CONFIGURABLE_BLOCK_ENTITY =
+            REGISTRATE.blockEntity("configurable_copycat", CopycatConfigurableBlockBlockEntity::new)
+                    .validBlocks(CCBlocks.COPYCAT_CONFIGURABLE_BLOCK)
+                    .register();
 
     public static void register() {
     }

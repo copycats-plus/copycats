@@ -15,6 +15,8 @@ import com.copycatsplus.copycats.content.copycat.button.CopycatWoodenButtonBlock
 import com.copycatsplus.copycats.content.copycat.button.WrappedButton;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteModel;
+import com.copycatsplus.copycats.content.copycat.configurable_block.CopycatConfigurableBlock;
+import com.copycatsplus.copycats.content.copycat.configurable_block.CopycatConfigurableBlockModel;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceModel;
 import com.copycatsplus.copycats.content.copycat.fence.WrappedFenceBlock;
@@ -411,6 +413,16 @@ public class CCBlocks {
                     .onRegister(b -> CopycatWallBlock.wall = b)
                     .tag(BlockTags.WALLS)
                     .blockstate((c, p) -> getWrappedBlockState(c, p, "wrapped_copycat_wall"))
+                    .register();
+
+    public static final BlockEntry<CopycatConfigurableBlock> COPYCAT_CONFIGURABLE_BLOCK =
+            REGISTRATE.block("copycat_configurable_block", CopycatConfigurableBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatConfigurableBlockModel())))
+                    .item()
+                    .transform(customItemModel("copycat_base", "configurable_block"))
                     .register();
 
     @ExpectPlatform

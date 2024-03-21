@@ -27,6 +27,7 @@
   "block.copycats.copycat_byte.tooltip.condition2": "When Sneak-R-Clicked with Empty Hand",
   "block.copycats.copycat_byte.tooltip.condition3": "When Wrenched while Sneaking",
   "block.copycats.copycat_byte.tooltip.summary": "_Converts_ any _full block_ into a decorative mini-block. Note: no connected textures.",
+  "block.copycats.copycat_configurable_block": "Copycat Configurable Block",
   "block.copycats.copycat_fence": "Copycat Fence",
   "block.copycats.copycat_fence.tooltip.behaviour1": "Applies _held item_ as its _material_ if possible. _Click again_ to cycle _orientation_ or _powered_ state. Use a _Wrench_ to _reset_ the material.",
   "block.copycats.copycat_fence.tooltip.behaviour2": "Toggles _connected textures_ on its _material_.",

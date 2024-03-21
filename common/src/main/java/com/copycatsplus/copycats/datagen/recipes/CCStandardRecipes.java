@@ -171,6 +171,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE, 2);
 
+    GeneratedRecipe COPYCAT_CONFIGURABLE_BLOCK = copycat(CCBlocks.COPYCAT_CONFIGURABLE_BLOCK, 1);
 
     String currentFolder = "";
     Marker enterFolder(String folder) {
