@@ -23,6 +23,7 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_HALF_LAYER,
             CCBlocks.COPYCAT_HALF_PANEL,
             CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_LADDER,
             CCBlocks.COPYCAT_LAYER,
             CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
             CCBlocks.COPYCAT_SLAB,
