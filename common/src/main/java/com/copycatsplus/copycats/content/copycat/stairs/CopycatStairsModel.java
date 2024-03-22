@@ -23,7 +23,7 @@ public class CopycatStairsModel implements SimpleCopycatPart {
                 assemblePiece(context, facing, top,
                         vec3(0, 0, 0),
                         aabb(16, 4, 8),
-                        cull(UP | SOUTH)
+                        cull(UP | SOUTH )
                 );
                 assemblePiece(context, facing, top,
                         vec3(0, 4, 0),

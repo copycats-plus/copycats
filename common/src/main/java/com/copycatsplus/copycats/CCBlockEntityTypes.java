@@ -31,7 +31,8 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
                             CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
                             CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
-                            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE
+                            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+                            CCBlocks.COPYCAT_VERTICAL_STAIRS
                     )
                     .register();
 

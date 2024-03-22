@@ -41,6 +41,8 @@ import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.WrappedTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_slice.CopycatVerticalSliceBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_slice.CopycatVerticalSliceModel;
+import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
+import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairsModel;
 import com.copycatsplus.copycats.content.copycat.vertical_step.CopycatVerticalStepBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_step.CopycatVerticalStepModel;
 import com.copycatsplus.copycats.content.copycat.wall.CopycatWallBlock;
@@ -411,6 +413,17 @@ public class CCBlocks {
                     .onRegister(b -> CopycatWallBlock.wall = b)
                     .tag(BlockTags.WALLS)
                     .blockstate((c, p) -> getWrappedBlockState(c, p, "wrapped_copycat_wall"))
+                    .register();
+
+    public static final BlockEntry<CopycatVerticalStairBlock> COPYCAT_VERTICAL_STAIRS =
+            REGISTRATE.block("copycat_vertical_stairs", CopycatVerticalStairBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .tag(BlockTags.STAIRS)
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> model -> SimpleCopycatPart.create(model, new CopycatVerticalStairsModel())))
+                    .item()
+                    .tag(CCTags.Items.COPYCAT_STAIRS.tag)
+                    .transform(customItemModel("copycat_base", "vertical_stairs"))
                     .register();
 
     @ExpectPlatform

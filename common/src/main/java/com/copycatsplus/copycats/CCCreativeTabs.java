@@ -35,7 +35,8 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_VERTICAL_STEP,
             CCBlocks.COPYCAT_WALL,
             CCBlocks.COPYCAT_WOODEN_BUTTON,
-            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE
+            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_VERTICAL_STAIRS
     );
 
     @ExpectPlatform
