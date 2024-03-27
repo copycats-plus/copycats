@@ -82,8 +82,9 @@ public class CopycatBeamBlock extends CTWaterloggedCopycatBlock {
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
-        Axis axis = state.getValue(AXIS);
         BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
+        Axis axis = state.getValue(AXIS);
 
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {

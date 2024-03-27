@@ -208,6 +208,8 @@ public class CopycatHalfLayerBlock extends CTWaterloggedCopycatBlock implements 
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
+        BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {
             return true;
@@ -221,7 +223,6 @@ public class CopycatHalfLayerBlock extends CTWaterloggedCopycatBlock implements 
         Half half = state.getValue(HALF);
         int positiveLayers = state.getValue(POSITIVE_LAYERS);
         int negativeLayers = state.getValue(NEGATIVE_LAYERS);
-        BlockState toState = reader.getBlockState(toPos);
 
         if (toState.is(this)) {
             try {
