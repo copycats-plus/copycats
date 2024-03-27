@@ -122,7 +122,8 @@ public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock<WrappedWall
 
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
+                if (!toState.is(this)) return false;
+        if (!state.is(this)) return false;
 
         long sideCount = Arrays.stream(Iterate.horizontalDirections).filter(s -> state.getValue(byDirection(s)) != WallSide.NONE).count();
         if (sideCount > 2)

@@ -114,7 +114,8 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock {
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
         BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
+                if (!toState.is(this)) return false;
+        if (!state.is(this)) return false;
         Direction facing = state.getValue(FACING);
         Direction offset = state.getValue(OFFSET);
 

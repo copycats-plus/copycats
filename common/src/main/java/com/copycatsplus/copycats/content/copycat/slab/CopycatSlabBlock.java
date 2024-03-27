@@ -102,6 +102,7 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
                                             BlockState state) {
         BlockState toState = reader.getBlockState(toPos);
         if (!toState.is(this)) return false;
+        if (!state.is(this)) return false;
         Axis axis = state.getValue(AXIS);
 
         BlockPos diff = toPos.subtract(fromPos);

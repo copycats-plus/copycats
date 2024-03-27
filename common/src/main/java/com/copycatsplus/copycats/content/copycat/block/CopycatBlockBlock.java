@@ -29,7 +29,8 @@ public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWra
 
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
+                if (!toState.is(this)) return false;
+        if (!state.is(this)) return false;
         return true;
     }
 
