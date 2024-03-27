@@ -118,8 +118,9 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
 
 
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        Direction facing = state.getValue(FACING);
         BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
+        Direction facing = state.getValue(FACING);
 
         if (toPos.equals(fromPos.relative(facing))) return false;
 

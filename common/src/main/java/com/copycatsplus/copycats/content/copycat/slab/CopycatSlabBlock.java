@@ -100,8 +100,9 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
 
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
-        Axis axis = state.getValue(AXIS);
         BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
+        Axis axis = state.getValue(AXIS);
 
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {
@@ -331,8 +332,13 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
             if (directions.isEmpty())
                 return PlacementOffset.fail();
             else {
-                return PlacementOffset.success(pos.relative(directions.get(0)),
-                        s -> s.setValue(AXIS, state.getValue(AXIS)).setValue(SLAB_TYPE, state.getValue(SLAB_TYPE)));
+                if (state.getValue(SLAB_TYPE).equals(SlabType.DOUBLE)) {
+                    return PlacementOffset.success(pos.relative(directions.get(0)),
+                            s -> s.setValue(AXIS, state.getValue(AXIS)).setValue(SLAB_TYPE, SlabType.BOTTOM));
+                } else {
+                    return PlacementOffset.success(pos.relative(directions.get(0)),
+                            s -> s.setValue(AXIS, state.getValue(AXIS)).setValue(SLAB_TYPE, state.getValue(SLAB_TYPE)));
+                }
             }
         }
     }

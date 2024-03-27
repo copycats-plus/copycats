@@ -88,8 +88,9 @@ public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock {
 
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
-        Direction facing = state.getValue(FACING);
         BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
+        Direction facing = state.getValue(FACING);
 
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {
