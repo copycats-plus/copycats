@@ -76,6 +76,8 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
+        BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {
             return true;
@@ -87,7 +89,6 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
 
         Direction facing = state.getValue(FACING);
         int layers = state.getValue(LAYERS);
-        BlockState toState = reader.getBlockState(toPos);
 
         if (toState.is(this)) {
             try {

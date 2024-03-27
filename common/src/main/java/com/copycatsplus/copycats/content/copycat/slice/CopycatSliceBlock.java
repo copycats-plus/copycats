@@ -73,6 +73,8 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
+        BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {
             return true;
@@ -85,7 +87,6 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
         Direction facing = state.getValue(FACING);
         Half half = state.getValue(HALF);
         int layers = state.getValue(LAYERS);
-        BlockState toState = reader.getBlockState(toPos);
 
         if (toState.is(this)) {
             try {
