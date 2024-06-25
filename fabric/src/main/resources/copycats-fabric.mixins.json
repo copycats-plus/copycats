@@ -5,10 +5,12 @@
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "HolderReferenceInvoker",
     "compat.registrate.CreateRegistrateMixin",
-    "copycat.base.CopycatModelMixin"
+    "copycat.base.multistate.MultiStateCopycatBlockCombinerMixin"
   ],
   "client": [
+    "copycat.base.CopycatModelMixin",
     "featuretoggle.SubMenuConfigScreenMixin"
   ],
   "injectors": {

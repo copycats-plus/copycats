@@ -1,11 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.base.model.fabric;
 
-import com.copycatsplus.copycats.content.copycat.base.model.QuadHelper.CopycatRenderContext;
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
+import com.copycatsplus.copycats.content.copycat.base.model.assembly.fabric.AssemblerImpl.CopycatRenderContextFabric;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.resources.model.BakedModel;
@@ -17,11 +16,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.fabric.QuadHelperImpl.assembleQuad;
+import static com.copycatsplus.copycats.content.copycat.base.model.assembly.fabric.AssemblerImpl.assembleQuad;
 
 public class SimpleCopycatModel extends CopycatModel {
 
-    private SimpleCopycatPart part;
+    private final SimpleCopycatPart part;
 
     public SimpleCopycatModel(BakedModel originalModel, SimpleCopycatPart part) {
         super(originalModel);
@@ -37,7 +36,7 @@ public class SimpleCopycatModel extends CopycatModel {
         QuadEmitter emitter = meshBuilder.getEmitter();
 
         renderContext.pushTransform(quad -> {
-            CopycatRenderContext<MutableQuadView, QuadEmitter> context = new CopycatRenderContext<>(quad, emitter);
+            CopycatRenderContextFabric context = new CopycatRenderContextFabric(quad, emitter);
             if (cullFaceRemovalData.shouldRemove(quad.cullFace())) {
                 quad.cullFace(null);
             } else if (occlusionData.isOccluded(quad.cullFace())) {

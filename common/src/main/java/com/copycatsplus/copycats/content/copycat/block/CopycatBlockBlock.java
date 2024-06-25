@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.block;
 
 import com.copycatsplus.copycats.content.copycat.base.CTCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -15,7 +16,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWrappedBlock<Block> {
+public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWrappedBlock<Block>, IStateType {
 
     public CopycatBlockBlock(Properties properties) {
         super(properties);
@@ -28,6 +29,8 @@ public class CopycatBlockBlock extends CTCopycatBlock implements ICopycatWithWra
 
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+        BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
         return true;
     }
 

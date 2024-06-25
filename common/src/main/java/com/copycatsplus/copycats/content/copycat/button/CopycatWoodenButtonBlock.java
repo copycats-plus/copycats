@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.button;
 
 import com.copycatsplus.copycats.content.copycat.base.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
@@ -28,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import static net.minecraft.world.level.block.ButtonBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatWoodenButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Wood> {
+public class CopycatWoodenButtonBlock extends CopycatBlock implements ICopycatWithWrappedBlock<WrappedButton.Wood>, IStateType {
 
     public static WrappedButton.Wood button;
 

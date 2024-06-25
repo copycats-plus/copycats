@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.wall;
 
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.copycatsplus.copycats.content.copycat.base.WaterloggedCopycatWrappedBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -26,7 +27,7 @@ import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.world.level.block.WallBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock<WrappedWallBlock> {
+public class CopycatWallBlock extends WaterloggedCopycatWrappedBlock<WrappedWallBlock> implements IStateType {
 
     public static WrappedWallBlock wall;
 

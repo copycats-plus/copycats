@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.layer;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.VoxelShaper;
@@ -35,7 +36,7 @@ import java.util.List;
 
 import static net.minecraft.core.Direction.UP;
 
-public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
 
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -117,8 +118,9 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
 
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        Direction facing = state.getValue(FACING);
         BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
+        Direction facing = state.getValue(FACING);
 
         if (toPos.equals(fromPos.relative(facing))) return false;
 

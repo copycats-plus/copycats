@@ -8,8 +8,10 @@
     "copycats:copycat_byte",
     "copycats:copycat_fence",
     "copycats:copycat_fence_gate",
+    "copycats:copycat_ghost_block",
     "copycats:copycat_half_layer",
     "copycats:copycat_half_panel",
+    "copycats:copycat_ladder",
     "copycats:copycat_layer",
     "copycats:copycat_wooden_pressure_plate",
     "copycats:copycat_stone_pressure_plate",
@@ -18,10 +20,12 @@
     "copycats:copycat_slab",
     "copycats:copycat_slice",
     "copycats:copycat_stairs",
+    "copycats:copycat_vertical_stairs",
     "copycats:copycat_trapdoor",
     "copycats:copycat_vertical_slice",
     "copycats:copycat_vertical_step",
     "copycats:copycat_wall",
-    "copycats:copycat_configurable_block"
+    "copycats:copycat_configurable_block",
+    "copycats:copycat_slope"
   ]
 }

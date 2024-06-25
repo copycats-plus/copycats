@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.vertical_slice;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -40,7 +41,7 @@ import java.util.Map;
 
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement {
+public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
@@ -75,6 +76,8 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
+        BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {
             return true;
@@ -86,7 +89,6 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
 
         Direction facing = state.getValue(FACING);
         int layers = state.getValue(LAYERS);
-        BlockState toState = reader.getBlockState(toPos);
 
         if (toState.is(this)) {
             try {

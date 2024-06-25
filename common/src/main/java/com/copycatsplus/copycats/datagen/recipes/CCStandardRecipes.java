@@ -3,7 +3,7 @@ package com.copycatsplus.copycats.datagen.recipes;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.CCTags;
-import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.copycatsplus.copycats.multiloader.Platform;
@@ -11,36 +11,28 @@ import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
-import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import static com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder.*;
+import static com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder.GeneratedRecipe;
 
 public class CCStandardRecipes extends CopycatsRecipeProvider {
 
-    private final Set<CopycatBlock> copycatsWithRecipes = new HashSet<>();
+    private final Set<Block> copycatsWithRecipes = new HashSet<>();
 
     private final Marker PALETTES = enterFolder("palettes");
 
@@ -171,9 +163,18 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE = copycat(CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE, 2);
 
+    GeneratedRecipe COPYCAT_VERTICAL_STAIRS = copycat(CCBlocks.COPYCAT_VERTICAL_STAIRS, 1);
+
+    GeneratedRecipe COPYCAT_GHOST_BLOCK = copycat(CCBlocks.COPYCAT_GHOST_BLOCK, 1);
+
+    GeneratedRecipe COPYCAT_LADDER = copycat(CCBlocks.COPYCAT_LADDER, 6);
+
+    GeneratedRecipe COPYCAT_SLOPE = copycat(CCBlocks.COPYCAT_SLOPE, 2);
+
     GeneratedRecipe COPYCAT_CONFIGURABLE_BLOCK = copycat(CCBlocks.COPYCAT_CONFIGURABLE_BLOCK, 1);
 
     String currentFolder = "";
+
     Marker enterFolder(String folder) {
         currentFolder = folder;
         return new Marker();
@@ -200,6 +201,11 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         if (result.get() instanceof CopycatBlock copycat) {
             copycatsWithRecipes.add(copycat);
         }
+
+        if (result.get() instanceof MultiStateCopycatBlock copycat) {
+            copycatsWithRecipes.add(copycat);
+        }
+
         return create(result)
                 .unlockedBy(AllItems.ZINC_INGOT::get)
                 .returns(resultCount)
@@ -225,10 +231,10 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         super(output);
 
         List<ResourceLocation> missingRecipes = new LinkedList<>();
-        for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
-            if (entry.getKey().location().getNamespace().equals(Copycats.MODID) && entry.getValue() instanceof CopycatBlock copycatBlock) {
-                if (!copycatsWithRecipes.contains(copycatBlock))
-                    missingRecipes.add(entry.getKey().location());
+        for (RegistryEntry<Block> entry : CCBlocks.getAllRegisteredBlocksWithoutWrapped()) {
+            if (!entry.equals(CCBlocks.COPYCAT_TEST_BLOCK)) {
+                if (!copycatsWithRecipes.contains(entry.get()))
+                    missingRecipes.add(entry.getId());
             }
         }
         if (!missingRecipes.isEmpty()) {

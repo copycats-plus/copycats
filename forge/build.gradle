@@ -1,6 +1,15 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'me.modmuss50.mod-publish-plugin' version "0.5.1"
 }
+
+def secrets = new Properties()
+if (file("./../secrets.properties").exists()) {
+    file("./../secrets.properties").withInputStream {
+        stream -> secrets.load(stream)
+    }
+}
+
 loom {
     forge {
         mixinConfig "copycats-common.mixins.json"
@@ -8,6 +17,12 @@ loom {
     }
 
     runs {
+        client {
+            vmArg "-XX:+AllowEnhancedClassRedefinition"
+        }
+        server {
+            vmArg "-XX:+AllowEnhancedClassRedefinition"
+        }
         data {
             data()
             name "Data Generation"
@@ -34,21 +49,23 @@ configurations {
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+    forge "net.minecraftforge:forge:${forge_version}"
 
     // Create and its dependencies
-    modImplementation("com.simibubi.create:create-${rootProject.minecraft_version}:${rootProject.create_forge_version}:slim") { transitive = false }
-    modImplementation("com.tterrag.registrate:Registrate:${rootProject.registrate_forge_version}")
-    modImplementation("com.jozufozu.flywheel:flywheel-forge-${rootProject.minecraft_version}:${rootProject.flywheel_forge_version}")
+    modImplementation("com.simibubi.create:create-${minecraft_version}:${create_forge_version}:slim") { transitive = false }
+    modImplementation("com.tterrag.registrate:Registrate:${registrate_forge_version}")
+    modImplementation("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_forge_version}")
 
+    modLocalRuntime "curse.maven:jade-324717:${jade_forge_curse_id}"
     modLocalRuntime("mezz.jei:jei-${minecraft_version}-forge:${jei_forge_version}")
 
-    modLocalRuntime("curse.maven:rubidium-574856:4952685")
+    modLocalRuntime("curse.maven:rubidium-574856:${rubidium_forge_curse_id}")
+    modImplementation("curse.maven:additional-placements-674852:${additionalplacements_forge_curse_id}")
 
-    modCompileOnly("curse.maven:double-slabs-350179:3873442")
+    modCompileOnly("curse.maven:double-slabs-350179:${double_slabs_curse_id}")
 
-    compileOnly("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}")
-    annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-forge:${rootProject.mixin_extras_version}")))
+    compileOnly("io.github.llamalad7:mixinextras-common:${mixin_extras_version}")
+    annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")))
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
@@ -100,7 +117,7 @@ components.java {
 publishing {
     publications {
         mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
+            artifactId = archives_base_name + "-" + project.name
             from components.java
         }
     }
@@ -109,4 +126,36 @@ publishing {
     repositories {
         // Add repositories to publish to here.
     }
+}
+
+tasks.publishMods.dependsOn(tasks.assemble)
+tasks.publishMods.mustRunAfter(tasks.build)
+
+publishMods {
+    changelog = "Check out the detailed changelog at https://github.com/copycats-plus/copycats/blob/multiloader/CHANGELOG.md"
+    type = STABLE
+    file = tasks.remapJar.archiveFile
+    displayName = file.map { it.asFile.name.substring(0, it.asFile.name.lastIndexOf('.')) }
+    modLoaders.add("forge")
+
+    modrinth {
+        accessToken = secrets.MODRINTH_TOKEN
+        projectId = "UT2M39wf"
+        minecraftVersions.add(minecraft_version)
+
+        requires {
+            id = "LNytGWDc"
+        }
+        optional {
+            id = "u6dRKJwZ"
+        }
+    }
+
+    curseforge {
+        accessToken = secrets.CURSEFORGE_TOKEN
+        projectId = "968398"
+        minecraftVersions.add(minecraft_version)
+    }
+
+    dryRun = Boolean.parseBoolean(doDryRun)
 }

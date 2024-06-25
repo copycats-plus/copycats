@@ -8,6 +8,7 @@
     "compat.doubleslabs.DSConfigCommonMixin",
     "compat.registrate.CreateRegistrateMixin",
     "copycat.base.CopycatModelMixin",
+    "copycat.base.multistate.MultiStateCopycatBlockCombinerMixin",
     "network.ServerGamePacketListenerImplMixin"
   ],
   "client": [

@@ -1,7 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.stairs;
 
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.copycatsplus.copycats.content.copycat.base.WaterloggedCopycatWrappedBlock;
+import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,7 +31,7 @@ import static net.minecraft.world.level.block.StairBlock.HALF;
 import static net.minecraft.world.level.block.StairBlock.SHAPE;
 
 @SuppressWarnings("deprecation")
-public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedStairsBlock> implements ICustomCTBlocking {
+public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedStairsBlock> implements ICustomCTBlocking, IStateType {
 
     public static WrappedStairsBlock stairs;
 
@@ -152,7 +155,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
             return true;
         }
 
-        if (toState.is(this)) {
+        if (CopycatVerticalStairBlock.isStairs(toState)) {
             return false;
         } else {
             if (diff.getY() == 0) {
@@ -164,7 +167,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
                     FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.X, directionOf(diff.getX())));
                     if (faceShape.isFull())
                         fullCount++;
-                    else if (shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) {
+                    else if ((shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) && diff.getZ() != 0) {
                         if (diff.getX() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getX() < 0 && faceShape.topPositive && faceShape.bottomPositive)
                             fullCount++;
                     }
@@ -173,7 +176,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
                     FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.Z, directionOf(diff.getZ())));
                     if (faceShape.isFull())
                         fullCount++;
-                    else if (shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) {
+                    else if ((shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) && diff.getX() != 0) {
                         if (diff.getZ() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getZ() < 0 && faceShape.topPositive && faceShape.bottomPositive)
                             fullCount++;
                     }
@@ -199,7 +202,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
         if (side != null) {
             FaceShape sideShape = getFaceShape(state, side);
             if (!sideShape.canConnect()) return false;
-            if (toState.is(this)) {
+            if (CopycatVerticalStairBlock.isStairs(toState)) {
                 if (!sideShape.equals(getFaceShape(toState, side.getOpposite()))) return false;
             } else {
                 if (!sideShape.isFull()) return false;
@@ -211,25 +214,12 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
 
     @Override
     public Optional<Boolean> isCTBlocked(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos connectingPos, BlockPos blockingPos, Direction face) {
-        if (!getFaceShape(state, face).canConnect())
-            return Optional.of(false);
-        return Optional.empty();
+        return CCBlocks.COPYCAT_VERTICAL_STAIRS.get().isCTBlocked(reader, state, pos, connectingPos, blockingPos, face);
     }
 
     @Override
     public Optional<Boolean> blockCTTowards(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos ctPos, BlockPos connectingPos, Direction face) {
-        FaceShape sideShape = getFaceShape(state, face);
-        if (!sideShape.canConnect()) return Optional.of(false);
-        BlockState connectingState = reader.getBlockState(connectingPos);
-        if (connectingState.is(this)) {
-            if (sideShape.equals(getFaceShape(connectingState, face.getOpposite())))
-                return Optional.of(true);
-        } else if (sideShape.isFull()) {
-            BlockState ctState = reader.getBlockState(ctPos);
-            if (ctPos.getY() == pos.getY() || !ctState.is(this) || ctState.getValue(HALF) != state.getValue(HALF))
-                return Optional.of(true);
-        }
-        return Optional.empty();
+        return CCBlocks.COPYCAT_VERTICAL_STAIRS.get().blockCTTowards(reader, state, pos, ctPos, connectingPos, face);
     }
 
     @Override
@@ -251,7 +241,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
 
     public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
                                      Direction dir) {
-        if (neighborState.getBlock() instanceof StairBlock || neighborState.getBlock() instanceof CopycatStairsBlock) {
+        if (CopycatVerticalStairBlock.isStairs(neighborState)) {
             if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite()))
                 return getFaceShape(state, dir).equals(getFaceShape(neighborState, dir.getOpposite()));
         }
@@ -274,6 +264,9 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
      * Return the area of the face that is at the edge of the block.
      */
     public static FaceShape getFaceShape(BlockState state, Direction face) {
+        if (state.getBlock() instanceof CopycatVerticalStairBlock) {
+            return CopycatVerticalStairBlock.getFaceShape(state, face);
+        }
         boolean top = state.getValue(StairBlock.HALF) == Half.TOP;
         Direction facing = state.getValue(StairBlock.FACING);
         StairsShape shape = state.getValue(StairBlock.SHAPE);
@@ -339,7 +332,7 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
         return faceShape;
     }
 
-    private static class FaceShape {
+    public static class FaceShape {
         public boolean topNegative;
         public boolean topPositive;
         public boolean bottomNegative;
@@ -348,6 +341,32 @@ public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedSt
         public FaceShape fillTop() {
             topNegative = topPositive = true;
             return this;
+        }
+
+        public FaceShape fillColumn(AxisDirection direction) {
+            switch (direction) {
+                case POSITIVE -> topPositive = bottomPositive = true;
+                case NEGATIVE -> topNegative = bottomNegative = true;
+            }
+            return this;
+        }
+
+        public FaceShape fillNegative() {
+            topNegative = bottomNegative = true;
+            return this;
+        }
+
+        public FaceShape fillPositive() {
+            topPositive = bottomPositive = true;
+            return this;
+        }
+
+        public FaceShape fillLeft(Direction relativeTo) {
+            return fillColumn(relativeTo.getClockWise().getAxisDirection());
+        }
+
+        public FaceShape fillRight(Direction relativeTo) {
+            return fillColumn(relativeTo.getCounterClockWise().getAxisDirection());
         }
 
         public FaceShape fillTop(AxisDirection direction) {

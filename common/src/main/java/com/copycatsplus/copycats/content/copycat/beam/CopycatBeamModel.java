@@ -3,20 +3,23 @@ package com.copycatsplus.copycats.content.copycat.beam;
 
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.QuadHelper.*;
+import static com.copycatsplus.copycats.content.copycat.base.model.assembly.Assembler.*;
 import static com.copycatsplus.copycats.content.copycat.base.model.PlatformModelUtils.*;
 import static net.minecraft.core.Direction.*;
 
 public class CopycatBeamModel implements SimpleCopycatPart {
 
+    static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
+
     @Override
-    public void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
+    public void emitCopycatQuads(BlockState state, CopycatRenderContext<?, ?> context, BlockState material) {
         Axis axis = state.getOptionalValue(CopycatBeamBlock.AXIS).orElse(Axis.Y);
 
         Vec3 normal = Vec3.atLowerCornerOf(Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE).getNormal());

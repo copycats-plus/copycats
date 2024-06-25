@@ -1,11 +1,12 @@
 package com.copycatsplus.copycats.content.copycat.board;
 
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.content.copycat.base.multistate.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
-import com.simibubi.create.content.schematics.requirement.ItemRequirement;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,12 +26,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -38,8 +40,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, ICustomCTBlocking {
+public class CopycatBoardBlock extends WaterloggedMultiStateCopycatBlock implements ICustomCTBlocking {
     public static BooleanProperty UP = BlockStateProperties.UP;
     public static BooleanProperty DOWN = BlockStateProperties.DOWN;
     public static BooleanProperty NORTH = BlockStateProperties.NORTH;
@@ -63,17 +66,60 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
     }
 
     @Override
+    public int maxMaterials() {
+        return 6;
+    }
+
+    @Override
+    public Vec3i vectorScale(BlockState state) {
+        return new Vec3i(1, 1, 1);
+    }
+
+    @Override
+    public Set<String> storageProperties() {
+        return Set.of(UP, DOWN, NORTH, EAST, SOUTH, WEST).stream().map(BooleanProperty::getName).collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean partExists(BlockState state, String property) {
+        if (property.equals(UP.getName())) return state.getValue(UP);
+        if (property.equals(DOWN.getName())) return state.getValue(DOWN);
+        if (property.equals(NORTH.getName())) return state.getValue(NORTH);
+        if (property.equals(SOUTH.getName())) return state.getValue(SOUTH);
+        if (property.equals(EAST.getName())) return state.getValue(EAST);
+        if (property.equals(WEST.getName())) return state.getValue(WEST);
+        return false;
+    }
+
+    @Override
+    public String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit) {
+        facing = Direction.fromAxisAndDirection(facing.getAxis(), unscaledHit.get(facing.getAxis()) > 0.5 ? Direction.AxisDirection.POSITIVE : Direction.AxisDirection.NEGATIVE);
+        BooleanProperty face = byDirection(facing);
+        return face.getName();
+    }
+
+    @Override
+    public String getPropertyFromRender(String renderingProperty, BlockState state, ScaledBlockAndTintGetter level, Vec3i vector, BlockPos blockPos, Direction side, BlockState queryState, BlockPos queryPos) {
+        return renderingProperty;
+    }
+
+    @Override
+    public Vec3i getVectorFromProperty(BlockState state, String property) {
+        return Vec3i.ZERO;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder.add(UP, DOWN, NORTH, SOUTH, EAST, WEST));
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
+    public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
         return !reader.getBlockState(toPos).is(this);
     }
 
     @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+    public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return reader.getBlockState(toPos).is(this);
     }
 
@@ -114,6 +160,8 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
+        VoxelShape shapeOverride = multiPlatformGetShape(pState, pLevel, pPos, pContext);
+        if (shapeOverride != null) return shapeOverride;
         return Objects.requireNonNull(this.shapesCache.get(pState));
     }
 
@@ -189,10 +237,18 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
         BlockPos pos = context.getClickedPos();
         Player player = context.getPlayer();
         if (world instanceof ServerLevel) {
-            if (player != null && !player.isCreative()) {
+            if (player != null) {
                 List<ItemStack> drops = Block.getDrops(defaultBlockState().setValue(byDirection(options.get(0)), true), (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand());
-                for (ItemStack drop : drops) {
-                    player.getInventory().placeItemBackInInventory(drop);
+                withBlockEntityDo(world, pos, ufte -> {
+                    String property = byDirection(options.get(0)).getName();
+                    drops.add(ufte.getMaterialItemStorage().getMaterialItem(property).consumedItem());
+                    ufte.setMaterial(property, AllBlocks.COPYCAT_BASE.getDefaultState());
+                    ufte.setConsumedItem(property, ItemStack.EMPTY);
+                });
+                if (!player.isCreative()) {
+                    for (ItemStack drop : drops) {
+                        player.getInventory().placeItemBackInInventory(drop);
+                    }
                 }
             }
             BlockPos up = pos.relative(Direction.UP);
@@ -200,14 +256,6 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
             playRemoveSound(world, pos);
         }
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
-        return new ItemRequirement(
-                ItemRequirement.ItemUseType.CONSUME,
-                new ItemStack(asItem(), (int) Arrays.stream(Iterate.directions).filter(d -> state.getValue(byDirection(d))).count())
-        );
     }
 
     private static int getByAxis(Vec3i pos, Direction.Axis axis) {
@@ -231,23 +279,50 @@ public class CopycatBoardBlock extends CTWaterloggedCopycatBlock implements ISpe
                                      Direction dir) {
         if (state.is(this) && !state.getValue(byDirection(dir))) return false;
         if (neighborState.is(this) && !neighborState.getValue(byDirection(dir.getOpposite()))) return false;
+        String property = getProperty(state, level, pos, new BlockHitResult(Vec3.atCenterOf(pos), dir, pos, true), true);
         if (state.is(this) == neighborState.is(this)) {
-            return (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite()));
+            return (getMaterial(level, pos, property).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite()));
         }
 
-        return getMaterial(level, pos).skipRendering(neighborState, dir.getOpposite());
+        return getMaterial(level, pos, property).skipRendering(neighborState, dir.getOpposite());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public @NotNull BlockState rotate(@NotNull BlockState pState, Rotation pRotation) {
+        pState = super.rotate(pState, pRotation);
         return mapDirections(pState, pRotation::rotate);
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
+    public void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation) {
+        be.getMaterialItemStorage().remapStorage(key -> directionToProperty(rotation.rotate(propertyToDirection(key))));
+    }
+
+    private static Direction propertyToDirection(String property) {
+        return switch (property) {
+            case "up" -> Direction.UP;
+            case "down" -> Direction.DOWN;
+            case "north" -> Direction.NORTH;
+            case "south" -> Direction.SOUTH;
+            case "east" -> Direction.EAST;
+            case "west" -> Direction.WEST;
+            default -> throw new IllegalStateException("Unexpected value: " + property);
+        };
+    }
+
+    public static String directionToProperty(Direction direction) {
+        return direction.getName().toLowerCase();
+    }
+
     @Override
     public @NotNull BlockState mirror(@NotNull BlockState pState, Mirror pMirror) {
+        pState = super.mirror(pState, pMirror);
         return mapDirections(pState, pMirror::mirror);
+    }
+
+    @Override
+    public void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror) {
+        be.getMaterialItemStorage().remapStorage(key -> directionToProperty(mirror.mirror(propertyToDirection(key))));
     }
 
     private BlockState mapDirections(BlockState pState, Function<Direction, Direction> pDirectionalFunction) {

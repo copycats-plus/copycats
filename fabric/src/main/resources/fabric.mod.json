@@ -19,9 +19,7 @@
     "client": ["com.copycatsplus.copycats.fabric.CopycatsClientImpl"
     ],
     "fabric-datagen": ["com.copycatsplus.copycats.datagen.fabric.CCDatagenImpl"],
-    "jei_mod_plugin": [
-      "com.copycatsplus.copycats.compat.CopycatsJEI"
-      ]
+    "jei_mod_plugin": ["com.copycatsplus.copycats.compat.CopycatsJEI"]
   },
   "mixins": [
     "copycats-fabric.mixins.json",

@@ -1,6 +1,18 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "1.5.+" apply false
+    id 'org.ajoberstar.grgit' version '4.1.1'
+}
+
+boolean isTestBuild = rootProject.is_test_build.toBoolean()
+
+project.ext {
+    // Open the Git repository in the current directory.
+    git = org.ajoberstar.grgit.Grgit.open(dir: file('.'))
+    // Get commit id of HEAD.
+    gitRevision = git.head().id
+    // Get abbreviated commit Id of HEAD
+    gitAbbRevision = git.head().abbreviatedId
 }
 
 architectury {
@@ -30,7 +42,7 @@ allprojects {
 
 
     archivesBaseName = rootProject.archives_base_name
-    version = project.name + "." + minecraft_version + "-" + mod_version
+    version = project.name + "." + minecraft_version + "-" + mod_version + (isTestBuild ? "-TEST." + rootProject.gitAbbRevision : "")
     group = rootProject.maven_group
 
     repositories {
@@ -90,6 +102,10 @@ allprojects {
         options.release.set(17)
     }
 
+    jar {
+        processResources.exclude("assets/copycats/models/block/copycat_base/README.md")
+    }
+
     tasks.named('processResources', ProcessResources).configure {
         duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
         // include packs
@@ -99,16 +115,16 @@ allprojects {
 
         // set up properties for filling into metadata
         var replaceProperties = [
-                version               : version.replace("forge.", "").replace("fabric.", ""),
-                minecraft_version     : minecraft_version,
-                fabric_api_version    : fabric_api_version,
-                fabric_loader_version : fabric_loader_version,
-                create_forge_range    : create_forge_range,
-                create_fabric_range   : create_fabric_range,
-                mod_license           : mod_license,
-                mod_authors           : mod_authors,
-                mod_name              : mod_name,
-                mod_description       : mod_description
+                version              : version.replace("forge.", "").replace("fabric.", ""),
+                minecraft_version    : minecraft_version,
+                fabric_api_version   : fabric_api_version,
+                fabric_loader_version: fabric_loader_version,
+                create_forge_range   : create_forge_range,
+                create_fabric_range  : create_fabric_range,
+                mod_license          : mod_license,
+                mod_authors          : mod_authors,
+                mod_name             : mod_name,
+                mod_description      : mod_description
         ]
 
         inputs.properties replaceProperties

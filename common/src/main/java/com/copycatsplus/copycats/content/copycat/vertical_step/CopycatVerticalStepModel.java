@@ -2,19 +2,22 @@ package com.copycatsplus.copycats.content.copycat.vertical_step;
 
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.QuadHelper.*;
+import static com.copycatsplus.copycats.content.copycat.base.model.assembly.Assembler.*;
 import static com.copycatsplus.copycats.content.copycat.base.model.PlatformModelUtils.*;
 
 public class CopycatVerticalStepModel implements SimpleCopycatPart {
 
+    static final AABB CUBE_AABB = new AABB(BlockPos.ZERO);
+
     @Override
-    public void emitCopycatQuads(BlockState state, CopycatRenderContext context, BlockState material) {
+    public void emitCopycatQuads(BlockState state, CopycatRenderContext<?, ?> context, BlockState material) {
         Direction facing = state.getOptionalValue(CopycatVerticalStepBlock.FACING).orElse(Direction.NORTH);
         Direction perpendicular = facing.getCounterClockWise();
 
@@ -49,5 +52,4 @@ public class CopycatVerticalStepModel implements SimpleCopycatPart {
             }
         }
     }
-
 }

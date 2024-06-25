@@ -1,7 +1,5 @@
 package com.copycatsplus.copycats.config;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.config.ModConfig;
 
 public class CCommon extends SyncConfigBase {
@@ -17,6 +15,8 @@ public class CCommon extends SyncConfigBase {
         return "common";
     }
 
+    public final ConfigBool disableConversion = b(false, "disableConversion", Comments.multiStateConversion);
+
     public final CFeatures toggle = nested(0, CFeatures::new, Comments.toggle);
 
     public void register() {
@@ -24,5 +24,7 @@ public class CCommon extends SyncConfigBase {
 
     private static class Comments {
         static String toggle = "Enable/disable features. Values on server override clients";
+
+        static String multiStateConversion = "Enables/Disables the conversion of placed copycats from the single material to the multi material(where applicable) block entity. Set this to false to enable conversion! (only happens on world load, so if changed while ingame you will need to load the world again)";
     }
 }

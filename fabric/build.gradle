@@ -1,5 +1,13 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'me.modmuss50.mod-publish-plugin' version "0.5.1"
+}
+
+def secrets = new Properties()
+if (file("./../secrets.properties").exists()) {
+    file("./../secrets.properties").withInputStream {
+        stream -> secrets.load(stream)
+    }
 }
 
 architectury {
@@ -10,6 +18,12 @@ architectury {
 loom {
 
     runs {
+        client {
+            vmArg "-XX:+AllowEnhancedClassRedefinition"
+        }
+        server {
+            vmArg "-XX:+AllowEnhancedClassRedefinition"
+        }
         create("datagen") {
             client()
 
@@ -34,16 +48,19 @@ configurations {
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 
-    modImplementation("com.simibubi.create:create-fabric-${rootProject.minecraft_version}:${rootProject.create_fabric_version}")
+    modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_fabric_version}")
     // because create fabric is a bit broken I think
-    modImplementation("net.minecraftforge:forgeconfigapiport-fabric:4.2.9")
+    modImplementation("net.minecraftforge:forgeconfigapiport-fabric:${config_port_version}")
 
-    modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${rootProject.jei_fabric_version}")
+    modLocalRuntime "curse.maven:jade-324717:${jade_fabric_curse_id}"
+    modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_fabric_version}")
 
-    annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")))
+    modImplementation "curse.maven:continuity-531351:${continuity_curse_version}"
+
+    annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-fabric:${mixin_extras_version}")))
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
@@ -94,7 +111,7 @@ components.java {
 publishing {
     publications {
         mavenFabric(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
+            artifactId = archives_base_name + "-" + project.name
             from components.java
         }
     }
@@ -103,4 +120,36 @@ publishing {
     repositories {
         // Add repositories to publish to here.
     }
+}
+
+tasks.publishMods.dependsOn(tasks.assemble)
+tasks.publishMods.mustRunAfter(tasks.build)
+
+publishMods {
+    changelog = "Check out the detailed changelog at https://github.com/copycats-plus/copycats/blob/multiloader/CHANGELOG.md"
+    type = STABLE
+    file = tasks.remapJar.archiveFile
+    displayName = file.map { it.asFile.name.substring(0, it.asFile.name.lastIndexOf('.')) }
+    modLoaders.add("fabric")
+
+    modrinth {
+        accessToken = secrets.MODRINTH_TOKEN
+        projectId = "UT2M39wf"
+        minecraftVersions.add(minecraft_version)
+
+        requires {
+            id = "Xbc0uyRg"
+        }
+        optional {
+            id = "u6dRKJwZ"
+        }
+    }
+
+    curseforge {
+        accessToken = secrets.CURSEFORGE_TOKEN
+        projectId = "968398"
+        minecraftVersions.add(minecraft_version)
+    }
+
+    dryRun = Boolean.parseBoolean(doDryRun)
 }

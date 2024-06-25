@@ -2,8 +2,11 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.content.copycat.base.multistate.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -14,35 +17,37 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
-import static com.simibubi.create.foundation.block.ProperWaterloggedBlock.WATERLOGGED;
-
-public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopycatWithWrappedBlock<Block> {
+public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implements ICopycatWithWrappedBlock<Block> {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
     public static final EnumProperty<SlabType> SLAB_TYPE = BlockStateProperties.SLAB_TYPE;
@@ -54,6 +59,54 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         registerDefaultState(defaultBlockState()
                 .setValue(AXIS, Axis.Y)
                 .setValue(SLAB_TYPE, SlabType.BOTTOM));
+    }
+
+    @Override
+    public int maxMaterials() {
+        return 2;
+    }
+
+    @Override
+    public Vec3i vectorScale(BlockState state) {
+        return switch (state.getValue(AXIS)) {
+            case X -> new Vec3i(2, 1, 1);
+            case Y -> new Vec3i(1, 2, 1);
+            case Z -> new Vec3i(1, 1, 2);
+        };
+    }
+
+    @Override
+    public String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit) {
+        if (hitLocation.get(state.getValue(AXIS)) > 0) {
+            return SlabType.TOP.getSerializedName();
+        } else {
+            return SlabType.BOTTOM.getSerializedName();
+        }
+    }
+
+    @Override
+    public Vec3i getVectorFromProperty(BlockState state, String property) {
+        return switch (state.getValue(AXIS)) {
+            case X -> property.equals(SlabType.TOP.getSerializedName()) ? new Vec3i(1, 0, 0) : new Vec3i(0, 0, 0);
+            case Y -> property.equals(SlabType.TOP.getSerializedName()) ? new Vec3i(0, 1, 0) : new Vec3i(0, 0, 0);
+            case Z -> property.equals(SlabType.TOP.getSerializedName()) ? new Vec3i(0, 0, 1) : new Vec3i(0, 0, 0);
+        };
+    }
+
+    @Override
+    public boolean partExists(BlockState state, String property) {
+        SlabType slabType = state.getValue(SLAB_TYPE);
+        if (property.equals(SlabType.BOTTOM.getSerializedName())) {
+            return slabType == SlabType.DOUBLE || slabType == SlabType.BOTTOM;
+        } else if (property.equals(SlabType.TOP.getSerializedName())) {
+            return slabType == SlabType.DOUBLE || slabType == SlabType.TOP;
+        }
+        return false;
+    }
+
+    @Override
+    public Set<String> storageProperties() {
+        return Set.of(SlabType.BOTTOM.getSerializedName(), SlabType.TOP.getSerializedName());
     }
 
     @Override
@@ -79,50 +132,55 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        Axis axis = state.getValue(AXIS);
-        BlockState toState = reader.getBlockState(toPos);
+    public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+        if (state.getValue(SLAB_TYPE) != SlabType.DOUBLE) return super.onSneakWrenched(state, context);
 
-        if (toState.is(this)) {
-            // connecting to another copycat slab
-            if (toState.getValue(AXIS) != axis) return true;
-            return getFaceShape(state, face) != getFaceShape(toState, face);
-        } else {
-            // do not connect slab sides
-            if (face.getAxis() != axis) return true;
-            // connecting to another block
-            return getFaceShape(state, face) != FaceShape.FULL;
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Player player = context.getPlayer();
+        String property = getProperty(state, context.getLevel(), context.getClickedPos(), context.getClickLocation(), context.getClickedFace(), true);
+        if (!partExists(state, property)) return InteractionResult.FAIL;
+        if (world instanceof ServerLevel) {
+            if (player != null) {
+                List<ItemStack> drops = Block.getDrops(defaultBlockState().setValue(SLAB_TYPE, property.equals(SlabType.BOTTOM.getSerializedName()) ? SlabType.BOTTOM : SlabType.TOP), (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand());
+                withBlockEntityDo(world, pos, ufte -> {
+                    drops.add(ufte.getMaterialItemStorage().getMaterialItem(property).consumedItem());
+                    ufte.setMaterial(property, AllBlocks.COPYCAT_BASE.getDefaultState());
+                    ufte.setConsumedItem(property, ItemStack.EMPTY);
+                });
+                if (!player.isCreative()) {
+                    for (ItemStack drop : drops) {
+                        player.getInventory().placeItemBackInInventory(drop);
+                    }
+                }
+            }
+            BlockPos up = pos.relative(Direction.UP);
+            world.setBlockAndUpdate(pos, state.setValue(SLAB_TYPE, property.equals(SlabType.BOTTOM.getSerializedName()) ? SlabType.TOP : SlabType.BOTTOM).updateShape(Direction.UP, world.getBlockState(up), world, pos, up));
+            playRemoveSound(world, pos);
         }
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                            BlockState state) {
-        Axis axis = state.getValue(AXIS);
+    public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
         BlockState toState = reader.getBlockState(toPos);
-
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
+        if (reader instanceof ScaledBlockAndTintGetter scaledReader) {
+            BlockPos fromTruePos = scaledReader.getTruePos(fromPos);
+            BlockPos toTruePos = scaledReader.getTruePos(toPos);
+            return fromTruePos.equals(toTruePos);
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
-        if (face == null) {
-            boolean correctAxis = switch (axis) {
-                case X -> diff.getX() == 0;
-                case Y -> diff.getY() == 0;
-                case Z -> diff.getZ() == 0;
-            };
-            return correctAxis && diff.distManhattan(Vec3i.ZERO) <= 2;
-        }
+        return !toState.is(this);
+    }
 
-        if (face.getAxis() == axis) return false;
-
-        if (toState.is(this)) {
-            return FaceShape.canConnect(getFaceShape(state, face), getFaceShape(toState, face.getOpposite()));
-        } else {
-            return true;
+    @Override
+    public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+        BlockState toState = reader.getBlockState(toPos);
+        if (reader instanceof ScaledBlockAndTintGetter scaledReader) {
+            BlockPos fromTruePos = scaledReader.getTruePos(fromPos);
+            BlockPos toTruePos = scaledReader.getTruePos(toPos);
+            return !fromTruePos.equals(toTruePos) && toState.is(this);
         }
+        return toState.is(this);
     }
 
     @Override
@@ -195,6 +253,8 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
+        VoxelShape shapeOverride = multiPlatformGetShape(pState, pLevel, pPos, pContext);
+        if (shapeOverride != null) return shapeOverride;
         SlabType type = pState.getValue(SLAB_TYPE);
         Axis axis = pState.getValue(AXIS);
         if (type == SlabType.DOUBLE) {
@@ -229,16 +289,36 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
         return state;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
+        state = super.rotate(state, rot);
         return setApparentDirection(state, rot.rotate(getApparentDirection(state)));
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull BlockState mirror(BlockState state, Mirror mirrorIn) {
+    public void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation) {
+        Axis axis = state.getValue(AXIS);
+        if (axis == Axis.Y) return;
+        if (rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
+                rotation == Rotation.CLOCKWISE_180 ||
+                rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {
+            be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
+        }
+    }
+
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirrorIn) {
+        state = super.mirror(state, mirrorIn);
         return state.rotate(mirrorIn.getRotation(getApparentDirection(state)));
+    }
+
+    @Override
+    public void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror) {
+        Axis axis = state.getValue(AXIS);
+        if (axis == Axis.Y) return;
+        if (mirror == Mirror.FRONT_BACK && axis == Axis.Z || mirror == Mirror.LEFT_RIGHT && axis == Axis.X) {
+            be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
+        }
     }
 
     /**
@@ -324,8 +404,13 @@ public class CopycatSlabBlock extends CTWaterloggedCopycatBlock implements ICopy
             if (directions.isEmpty())
                 return PlacementOffset.fail();
             else {
-                return PlacementOffset.success(pos.relative(directions.get(0)),
-                        s -> s.setValue(AXIS, state.getValue(AXIS)).setValue(SLAB_TYPE, state.getValue(SLAB_TYPE)));
+                if (state.getValue(SLAB_TYPE).equals(SlabType.DOUBLE)) {
+                    return PlacementOffset.success(pos.relative(directions.get(0)),
+                            s -> s.setValue(AXIS, state.getValue(AXIS)).setValue(SLAB_TYPE, SlabType.BOTTOM));
+                } else {
+                    return PlacementOffset.success(pos.relative(directions.get(0)),
+                            s -> s.setValue(AXIS, state.getValue(AXIS)).setValue(SLAB_TYPE, state.getValue(SLAB_TYPE)));
+                }
             }
         }
     }

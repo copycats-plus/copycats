@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.fence_gate;
 
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.copycatsplus.copycats.content.copycat.base.WaterloggedCopycatWrappedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.FenceGateBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock<WrappedFenceGateBlock> {
+public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock<WrappedFenceGateBlock> implements IStateType {
 
     public static WrappedFenceGateBlock fenceGate;
 
@@ -110,6 +111,8 @@ public class CopycatFenceGateBlock extends WaterloggedCopycatWrappedBlock<Wrappe
 
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+                BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
         return false;
     }
 

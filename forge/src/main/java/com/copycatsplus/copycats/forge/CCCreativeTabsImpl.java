@@ -5,6 +5,7 @@ import com.copycatsplus.copycats.CCCreativeTabs;
 import com.copycatsplus.copycats.CopycatRegistrate;
 import com.copycatsplus.copycats.Copycats;
 import com.simibubi.create.AllCreativeModeTabs;
+import com.simibubi.create.Create;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -22,7 +23,7 @@ public class CCCreativeTabsImpl extends CCCreativeTabs {
     public static final RegistryObject<CreativeModeTab> MAIN_TAB = TAB_REGISTER.register("main",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.copycats.main"))
-                    .withTabsBefore(AllCreativeModeTabs.PALETTES_CREATIVE_TAB.getKey())
+                    .withTabsBefore(Create.asResource("palettes"))
                     .icon(CCBlocks.COPYCAT_SLAB::asStack)
                     .displayItems(new DisplayItemsGenerator(ITEMS))
                     .build());

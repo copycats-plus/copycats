@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.fence;
 
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.copycatsplus.copycats.content.copycat.base.WaterloggedCopycatWrappedBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minecraft.world.level.block.CrossCollisionBlock.*;
 
 @SuppressWarnings("deprecation")
-public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock<WrappedFenceBlock> {
+public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock<WrappedFenceBlock> implements IStateType {
 
     public static WrappedFenceBlock fence;
 
@@ -114,8 +115,9 @@ public class CopycatFenceBlock extends WaterloggedCopycatWrappedBlock<WrappedFen
 
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+        BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
         if (toPos.getX() == fromPos.getX() && toPos.getZ() == fromPos.getZ()) {
-            BlockState toState = reader.getBlockState(toPos);
             if (toState.is(this)) {
                 return isPole(state) && isPole(toState);
             }

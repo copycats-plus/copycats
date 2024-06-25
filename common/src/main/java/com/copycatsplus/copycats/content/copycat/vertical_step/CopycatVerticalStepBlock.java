@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.vertical_step;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
@@ -40,7 +41,7 @@ import java.util.function.Predicate;
 
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock {
+public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock implements IStateType {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -87,8 +88,9 @@ public class CopycatVerticalStepBlock extends CTWaterloggedCopycatBlock {
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
                                             BlockState state) {
-        Direction facing = state.getValue(FACING);
         BlockState toState = reader.getBlockState(toPos);
+        if (!toState.is(this)) return false;
+        Direction facing = state.getValue(FACING);
 
         BlockPos diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO)) {
