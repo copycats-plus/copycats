@@ -15,7 +15,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface IFunctionalCopycatBlockEntity extends CTCopycatBlockEntity, ISpecialBlockEntityItemRequirement, ITransformableBlockEntity, IPartialSafeNBT {
-    CopycatBlockEntity getCopycatBlockEntity();
+    default CopycatBlockEntity getCopycatBlockEntity() {
+        return this instanceof CopycatBlockEntity be ? be : null;
+    }
 
     default Level getLevel() {
         return getCopycatBlockEntity().getLevel();

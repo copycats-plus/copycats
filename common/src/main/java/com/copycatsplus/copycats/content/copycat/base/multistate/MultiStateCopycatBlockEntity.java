@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.base.multistate;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.CCConfigs;
 import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlockEntity;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
@@ -48,6 +49,14 @@ public abstract class MultiStateCopycatBlockEntity extends SmartBlockEntity impl
     @Override
     public CopycatBlockEntity getCopycatBlockEntity() {
         return null;
+    }
+
+    @Override
+    public BlockState getMaterial() {
+        return materialItemStorage.getAllMaterials().stream()
+                .filter(x -> !x.is(AllBlocks.COPYCAT_BASE.get()))
+                .findFirst()
+                .orElse(AllBlocks.COPYCAT_BASE.getDefaultState());
     }
 
     @Override
