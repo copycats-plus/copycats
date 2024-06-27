@@ -29,9 +29,7 @@ public class ToggleableCopycatModelImpl extends CopycatModel implements Toggleab
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, Random rand, BlockState material, IModelData wrappedData) {
-        return ((CopycatModelAccessor) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).callGetCroppedQuads(state, side, rand, material, wrappedData);
-    public List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material, ModelData wrappedData, RenderType renderType) {
-        return ((CopycatModel) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).getCroppedQuads(state, side, rand, material, wrappedData, renderType);
+    public List<BakedQuad> getCroppedQuads(BlockState state, Direction side, Random rand, BlockState material, IModelData wrappedData) {
+        return ((CopycatModel) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).getCroppedQuads(state, side, rand, material, wrappedData);
     }
 }

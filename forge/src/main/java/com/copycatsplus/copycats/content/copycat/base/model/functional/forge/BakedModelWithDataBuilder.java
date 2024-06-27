@@ -10,11 +10,14 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
+
+import java.util.Random;
 
 public final class BakedModelWithDataBuilder implements Bufferable {
     private final BakedModel model;
@@ -22,7 +25,9 @@ public final class BakedModelWithDataBuilder implements Bufferable {
     private BlockState referenceState = Blocks.AIR.defaultBlockState();
     private PoseStack poseStack = new PoseStack();
     private BlockPos renderPos = BlockPos.ZERO;
-    private ModelData data = ModelUtil.VIRTUAL_DATA;
+    public static final ModelProperty<Boolean> VIRTUAL_PROPERTY = new ModelProperty<>();
+    public static final IModelData VIRTUAL_DATA = new ModelDataMap.Builder().withInitial(VIRTUAL_PROPERTY, true).build();
+    private IModelData data = VIRTUAL_DATA;
 
     public BakedModelWithDataBuilder(BakedModel model) {
         this.model = model;
@@ -48,14 +53,14 @@ public final class BakedModelWithDataBuilder implements Bufferable {
         return this;
     }
 
-    public BakedModelWithDataBuilder withData(ModelData data) {
+    public BakedModelWithDataBuilder withData(IModelData data) {
         this.data = data;
         return this;
     }
 
     @Override
-    public void bufferInto(VertexConsumer consumer, ModelBlockRenderer blockRenderer, RandomSource random) {
-        blockRenderer.tesselateBlock(renderWorld, model, referenceState, renderPos, poseStack, consumer, false, random, 42, OverlayTexture.NO_OVERLAY, data, null);
+    public void bufferInto(VertexConsumer consumer, ModelBlockRenderer blockRenderer, Random random) {
+        blockRenderer.tesselateBlock(renderWorld, model, referenceState, renderPos, poseStack, consumer, false, random, 42, OverlayTexture.NO_OVERLAY);
     }
 
     public BlockModel toModel(String name) {

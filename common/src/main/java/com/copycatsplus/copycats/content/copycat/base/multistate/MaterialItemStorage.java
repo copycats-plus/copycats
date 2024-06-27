@@ -131,8 +131,6 @@ public class MaterialItemStorage {
         }
 
         public static MaterialItem deserialize(CompoundTag tag) {
-            return new MaterialItem(NbtUtils.readBlockState(tag.getCompound("material")),
-                    ItemStack.of(tag.getCompound("consumedItem")));
             return new MaterialItem(
                     NbtUtils.readBlockState(tag.getCompound("material")),
                     ItemStack.of(tag.getCompound("consumedItem")),
