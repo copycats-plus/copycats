@@ -36,6 +36,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
+
 public class CopycatShaftBlock extends ShaftBlock implements IFunctionalCopycatBlock, ICustomCTBlocking {
 
     public static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
@@ -122,7 +124,7 @@ public class CopycatShaftBlock extends ShaftBlock implements IFunctionalCopycatB
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         Vec3i diff = toPos.subtract(fromPos);
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) return false;
         return face.getAxis() == state.getValue(AXIS);
     }

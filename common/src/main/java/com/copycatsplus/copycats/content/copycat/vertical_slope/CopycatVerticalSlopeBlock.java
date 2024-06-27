@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
 public class CopycatVerticalSlopeBlock extends CTWaterloggedCopycatBlock implements IStateType, ICustomCTBlocking {
@@ -82,7 +83,7 @@ public class CopycatVerticalSlopeBlock extends CTWaterloggedCopycatBlock impleme
         if (diff.equals(Vec3i.ZERO)) {
             return false;
         }
-        Direction connectFace = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction connectFace = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (connectFace == null) {
             return false;
         }
@@ -111,7 +112,7 @@ public class CopycatVerticalSlopeBlock extends CTWaterloggedCopycatBlock impleme
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return true;
         }

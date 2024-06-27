@@ -259,7 +259,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
         }
         return pState
                 .setValue(FACING, newFacing)
-                .setValue(OFFSET, Objects.requireNonNull(Direction.fromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ())));
+                .setValue(OFFSET, Objects.requireNonNull(DirectionFromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ())));
     }
 
     @SuppressWarnings("deprecation")

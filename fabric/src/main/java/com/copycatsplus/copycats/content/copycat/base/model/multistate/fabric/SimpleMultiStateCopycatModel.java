@@ -28,7 +28,7 @@ public class SimpleMultiStateCopycatModel extends MultiStateCopycatModel {
     }
 
     @Override
-    protected void emitBlockQuadsInner(String key, BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CopycatModel.CullFaceRemovalData cullFaceRemovalData, CopycatModel.OcclusionData occlusionData) {
+    protected void emitBlockQuadsInner(String key, BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
 
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform

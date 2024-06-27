@@ -2,7 +2,6 @@ package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.MathHelper;
-import com.copycatsplus.copycats.content.copycat.base.multistate.CTWaterloggedMultiStateCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;

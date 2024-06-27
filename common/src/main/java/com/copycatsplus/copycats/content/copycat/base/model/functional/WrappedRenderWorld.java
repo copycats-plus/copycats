@@ -6,8 +6,8 @@ import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.DataLayer;
-import net.minecraft.world.level.chunk.LightChunk;
 import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.lighting.LayerLightEventListener;
 import net.minecraft.world.level.lighting.LevelLightEngine;
@@ -38,9 +37,8 @@ public class WrappedRenderWorld implements VirtualEmptyBlockGetter {
         this.material = be.getMaterial();
         lightEngine = new LevelLightEngine(new LightChunkGetter() {
             @Override
-            @Nullable
-            public LightChunk getChunkForLighting(int p_63023_, int p_63024_) {
-                return null;
+            public BlockGetter getChunkForLighting(int p_63023_, int p_63024_) {
+                return WrappedRenderWorld.this;
             }
 
             @Override
@@ -67,6 +65,12 @@ public class WrappedRenderWorld implements VirtualEmptyBlockGetter {
         return new LayerLightEventListener() {
             @Override
             public void checkBlock(@NotNull BlockPos pos) {
+
+            }
+
+            @Override
+            public void onBlockEmissionIncrease(BlockPos pos, int emissionLevel) {
+
             }
 
             @Override
@@ -75,8 +79,8 @@ public class WrappedRenderWorld implements VirtualEmptyBlockGetter {
             }
 
             @Override
-            public int runLightUpdates() {
-                return 0;
+            public int runUpdates(int pos, boolean isQueueEmpty, boolean updateBlockLight) {
+                return pos;
             }
 
             @Override
@@ -84,11 +88,8 @@ public class WrappedRenderWorld implements VirtualEmptyBlockGetter {
             }
 
             @Override
-            public void setLightEnabled(@NotNull ChunkPos pos, boolean lightEnabled) {
-            }
+            public void enableLightSources(ChunkPos chunkPos, boolean isQueueEmpty) {
 
-            @Override
-            public void propagateLightSources(@NotNull ChunkPos pos) {
             }
 
             @Override
@@ -159,7 +160,7 @@ public class WrappedRenderWorld implements VirtualEmptyBlockGetter {
 
     @Override
     public int getBlockTint(@NotNull BlockPos pos, @NotNull ColorResolver resolver) {
-        Biome plainsBiome = Minecraft.getInstance().getConnection().registryAccess().registryOrThrow(Registries.BIOME).getOrThrow(Biomes.PLAINS);
+        Biome plainsBiome = Minecraft.getInstance().getConnection().registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getOrThrow(Biomes.PLAINS);
         return resolver.getColor(plainsBiome, pos.getX(), pos.getZ());
     }
 }
