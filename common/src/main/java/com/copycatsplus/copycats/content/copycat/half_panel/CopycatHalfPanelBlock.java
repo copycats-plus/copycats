@@ -232,7 +232,34 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull BlockState rotate(@NotNull BlockState pState, Rotation pRot) {
-        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
+        Direction facing = pState.getValue(FACING);
+        Direction offset = pState.getValue(OFFSET);
+        Vec3i offsetNormal = getOffsetFacing(facing, offset).getNormal();
+        switch (pRot) {
+            case CLOCKWISE_90:
+                offsetNormal = new Vec3i(-offsetNormal.getZ(), offsetNormal.getY(), offsetNormal.getX());
+                break;
+            case CLOCKWISE_180:
+                offsetNormal = new Vec3i(-offsetNormal.getX(), offsetNormal.getY(), -offsetNormal.getZ());
+                break;
+            case COUNTERCLOCKWISE_90:
+                offsetNormal = new Vec3i(offsetNormal.getZ(), offsetNormal.getY(), -offsetNormal.getX());
+                break;
+            default:
+                break;
+        }
+        Direction newFacing = pRot.rotate(facing);
+        Vec3i facingNormal = newFacing.getNormal();
+        if (offsetNormal.getY() != 0) {
+            if (offsetNormal.getX() == 0 && facingNormal.getX() != 0) {
+                offsetNormal = new Vec3i(offsetNormal.getY(), offsetNormal.getX(), offsetNormal.getZ());
+            } else {
+                offsetNormal = new Vec3i(offsetNormal.getX(), offsetNormal.getZ(), offsetNormal.getY());
+            }
+        }
+        return pState
+                .setValue(FACING, newFacing)
+                .setValue(OFFSET, Objects.requireNonNull(Direction.fromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ())));
     }
 
     @SuppressWarnings("deprecation")

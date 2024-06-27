@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MaterialItemStorage {
@@ -62,6 +63,12 @@ public class MaterialItemStorage {
         return !storage.get(property).material().is(AllBlocks.COPYCAT_BASE.get());
     }
 
+    public void remapStorage(Function<String, String> keyMapper) {
+        Map<String, MaterialItem> newStorage = new HashMap<>();
+        storage.forEach((key, materialItem) -> newStorage.put(keyMapper.apply(key), materialItem));
+        storage = newStorage;
+    }
+
     public CompoundTag serialize() {
         CompoundTag root = new CompoundTag();
         storage.forEach((key, materialItem) -> root.put(key, materialItem.serialize()));
@@ -78,10 +85,12 @@ public class MaterialItemStorage {
         AtomicBoolean anyUpdated = new AtomicBoolean(false);
         tag.getAllKeys().forEach(key -> {
             MaterialItem newVersion = MaterialItem.deserialize(tag.getCompound(key));
-            if (newVersion.material() != storage.put(key, newVersion).material() && !anyUpdated.get()) {
+            MaterialItem oldVersion = storage.put(key, newVersion);
+            if (oldVersion != null &&
+                    (newVersion.material() != oldVersion.material() || newVersion.enableCT() != oldVersion.enableCT()) &&
+                    !anyUpdated.get()) {
                 anyUpdated.set(true);
             }
-            ;
         });
         return anyUpdated.get();
     }
@@ -92,20 +101,23 @@ public class MaterialItemStorage {
 
         private BlockState material;
         private ItemStack consumedItem;
+        private boolean enableCT;
 
         public MaterialItem(BlockState material, ItemStack consumedItem) {
-            this.material = material;
-            this.consumedItem = consumedItem;
+            this(material, consumedItem, true);
         }
 
-        public void setConsumedItem(ItemStack stack) {
-            consumedItem = ItemUtils.copyStackWithSize(stack, 1);
+        public MaterialItem(BlockState material, ItemStack consumedItem, boolean enableCT) {
+            this.material = material;
+            this.consumedItem = consumedItem;
+            this.enableCT = enableCT;
         }
 
         public CompoundTag serialize() {
             CompoundTag root = new CompoundTag();
             root.put("material", NbtUtils.writeBlockState(material));
             root.put("consumedItem", NBTUtils.serializeStack(consumedItem));
+            root.putBoolean("enableCT", enableCT);
             return root;
         }
 
@@ -115,12 +127,16 @@ public class MaterialItemStorage {
             ItemStack stackEmpty = consumedItem.copy();
             stackEmpty.setTag(null);
             root.put("consumedItem", NBTUtils.serializeStack(stackEmpty));
+            root.putBoolean("enableCT", enableCT);
             return root;
         }
 
         public static MaterialItem deserialize(CompoundTag tag) {
-            return new MaterialItem(NbtUtils.readBlockState(tag.getCompound("material")),
-                    ItemStack.of(tag.getCompound("consumedItem")));
+            return new MaterialItem(
+                    NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("material")),
+                    ItemStack.of(tag.getCompound("consumedItem")),
+                    !tag.contains("enableCT") || tag.getBoolean("enableCT")
+            );
         }
 
         public BlockState material() {
@@ -131,8 +147,20 @@ public class MaterialItemStorage {
             return consumedItem;
         }
 
+        public boolean enableCT() {
+            return enableCT;
+        }
+
         public void setMaterial(BlockState material) {
             this.material = material;
+        }
+
+        public void setConsumedItem(ItemStack stack) {
+            consumedItem = ItemUtils.copyStackWithSize(stack, 1);
+        }
+
+        public void setEnableCT(boolean enableCT) {
+            this.enableCT = enableCT;
         }
     }
 

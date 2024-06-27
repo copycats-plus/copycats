@@ -3,8 +3,10 @@ package com.copycatsplus.copycats.datagen.recipes;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.CCTags;
-import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.content.copycat.base.ICopycatWithWrappedBlock;
+import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlock;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.copycatsplus.copycats.multiloader.Platform;
@@ -17,6 +19,7 @@ import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.data.PackOutput;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.core.Registry;
@@ -32,8 +35,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -178,6 +183,14 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_LADDER = copycat(CCBlocks.COPYCAT_LADDER, 6);
 
+    GeneratedRecipe COPYCAT_SLOPE = copycat(CCBlocks.COPYCAT_SLOPE, 2);
+
+    GeneratedRecipe COPYCAT_VERTICAL_SLOPE = copycat(CCBlocks.COPYCAT_VERTICAL_SLOPE, 2);
+
+    GeneratedRecipe COPYCAT_SLOPE_LAYER = copycat(CCBlocks.COPYCAT_SLOPE_LAYER, 8);
+
+    GeneratedRecipe COPYCAT_SHAFT = copycat(CCBlocks.COPYCAT_SHAFT, 4);
+
 
     String currentFolder = "";
 
@@ -211,6 +224,10 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     GeneratedRecipeBuilder.GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
         if (result.get() instanceof CopycatBlock copycat) {
             copycatsWithRecipes.add(copycat);
+        }
+
+        if (result.get() instanceof IFunctionalCopycatBlock) {
+            copycatsWithRecipes.add((Block) result.get());
         }
 
         if (result.get() instanceof MultiStateCopycatBlock copycat) {

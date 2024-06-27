@@ -5,9 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.3.5 - 2024-06-27
+
+### Fixed
+
+- Fixed overflow issue with explosions on forge
+
+### Added
+
+- Added Vertical Slopes (better hitbox to come)
+- Added Slope Layers (better hitbox to come)
+- Added Copycat Shaft
+
 ## 1.3.4 - 2024-06-19
 
-## Fixed
+### Fixed
 
 - Multistate copycats having much lower friction than normal
 

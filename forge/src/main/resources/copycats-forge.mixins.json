@@ -7,11 +7,12 @@
   "mixins": [
     "compat.doubleslabs.DSConfigCommonMixin",
     "copycat.base.CopycatModelMixin",
+    "compat.registrate.CreateRegistrateMixin",
+    "copycat.base.functional.FunctionalCopycatBlockMixin",
     "copycat.base.multistate.MultiStateCopycatBlockCombinerMixin",
     "network.ServerGamePacketListenerImplMixin"
   ],
   "client": [
-    "copycat.base.CopycatModelAccessor",
     "featuretoggle.SubMenuConfigScreenMixin",
     "network.ClientPacketListenerMixin"
   ],

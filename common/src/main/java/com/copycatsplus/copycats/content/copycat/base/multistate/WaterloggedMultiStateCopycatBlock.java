@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class WaterloggedMultiStateCopycatBlock extends MultiStateCopycatBlock implements ProperWaterloggedBlock {
     public WaterloggedMultiStateCopycatBlock(Properties properties) {
@@ -32,8 +33,13 @@ public abstract class WaterloggedMultiStateCopycatBlock extends MultiStateCopyca
     }
 
     @Override
-    public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState,
-                                  LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
+    public @NotNull BlockState updateShape(@NotNull BlockState pState,
+                                           @NotNull Direction pDirection,
+                                           @NotNull BlockState pNeighborState,
+                                           @NotNull LevelAccessor pLevel,
+                                           @NotNull BlockPos pCurrentPos,
+                                           @NotNull BlockPos pNeighborPos) {
+        super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
         updateWater(pLevel, pState, pCurrentPos);
         return pState;
     }

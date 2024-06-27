@@ -3,6 +3,8 @@ package com.copycatsplus.copycats.content.copycat.bytes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.MathHelper;
 import com.copycatsplus.copycats.content.copycat.base.multistate.CTWaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.AllBlocks;
@@ -37,7 +39,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CopycatByteBlock extends CTWaterloggedMultiStateCopycatBlock {
+public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     public static BooleanProperty TOP_NE = BooleanProperty.create("top_northeast");
     public static BooleanProperty TOP_NW = BooleanProperty.create("top_northwest");
     public static BooleanProperty TOP_SE = BooleanProperty.create("top_southeast");
@@ -253,25 +255,26 @@ public class CopycatByteBlock extends CTWaterloggedMultiStateCopycatBlock {
         return InteractionResult.SUCCESS;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
-        if (pRotation == Rotation.CLOCKWISE_90) {
-            return mapBytes(pState, bite -> bite(!bite.z, bite.y, bite.x));
-        } else if (pRotation == Rotation.CLOCKWISE_180) {
-            return mapBytes(pState, bite -> bite(!bite.x, bite.y, !bite.z));
-        } else if (pRotation == Rotation.COUNTERCLOCKWISE_90) {
-            return mapBytes(pState, bite -> bite(bite.z, bite.y, !bite.x));
-        }
-        return pState;
+        pState = super.rotate(pState, pRotation);
+        return mapBytes(pState, bite -> bite.rotate(pRotation));
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
+    public void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation) {
+        be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).rotate(rotation)).getName());
+    }
+
     @Override
     public @NotNull BlockState mirror(@NotNull BlockState pState, Mirror pMirror) {
-        boolean invertX = pMirror.rotation() == OctahedralGroup.INVERT_X;
-        boolean invertZ = pMirror.rotation() == OctahedralGroup.INVERT_Z;
-        return mapBytes(pState, bite -> bite(invertX != bite.x, bite.y, invertZ != bite.z));
+        pState = super.mirror(pState, pMirror);
+        return mapBytes(pState, bite -> bite.mirror(pMirror));
+    }
+
+    @Override
+    public void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror) {
+        be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).mirror(mirror)).getName());
     }
 
     public static Vec3 clampToBlockPos(Vec3 vec, BlockPos pos) {
@@ -370,6 +373,24 @@ public class CopycatByteBlock extends CTWaterloggedMultiStateCopycatBlock {
 
         public Byte relative(Direction direction) {
             return set(direction.getAxis(), !get(direction.getAxis()));
+        }
+
+        public Byte rotate(Rotation rotation) {
+            if (rotation == Rotation.CLOCKWISE_90) {
+                return new Byte(!this.z, this.y, this.x);
+            } else if (rotation == Rotation.CLOCKWISE_180) {
+                return new Byte(!this.x, this.y, !this.z);
+            } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
+                return new Byte(this.z, this.y, !this.x);
+            } else {
+                return this;
+            }
+        }
+
+        public Byte mirror(Mirror mirror) {
+            boolean invertX = mirror.rotation() == OctahedralGroup.INVERT_X;
+            boolean invertZ = mirror.rotation() == OctahedralGroup.INVERT_Z;
+            return new Byte(invertX != this.x, this.y, invertZ != this.z);
         }
 
         @Override

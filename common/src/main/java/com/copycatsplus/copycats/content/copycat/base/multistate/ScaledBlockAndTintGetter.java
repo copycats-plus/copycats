@@ -17,18 +17,24 @@ import java.util.function.Predicate;
 
 public class ScaledBlockAndTintGetter implements BlockAndTintGetter {
 
+    protected final String renderingProperty;
     protected final BlockAndTintGetter wrapped;
     protected final BlockPos origin;
     protected final Vec3i originInner;
     protected final Vec3i scale;
     protected final Predicate<BlockPos> filter;
 
-    public ScaledBlockAndTintGetter(BlockAndTintGetter wrapped, BlockPos origin, Vec3i originInner, Vec3i scale, Predicate<BlockPos> filter) {
+    public ScaledBlockAndTintGetter(String renderingProperty, BlockAndTintGetter wrapped, BlockPos origin, Vec3i originInner, Vec3i scale, Predicate<BlockPos> filter) {
+        this.renderingProperty = renderingProperty;
         this.wrapped = wrapped;
         this.origin = origin;
         this.originInner = originInner;
         this.scale = scale;
         this.filter = filter;
+    }
+
+    public String getRenderingProperty() {
+        return renderingProperty;
     }
 
     public BlockAndTintGetter getWrapped() {

@@ -3,7 +3,6 @@ package com.copycatsplus.copycats.content.copycat.base.model.fabric;
 import com.copycatsplus.copycats.config.CCConfigs;
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.copycatsplus.copycats.content.copycat.base.model.ToggleableCopycatModel;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;

@@ -1,12 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.base.model.multistate.fabric;
 
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.Assembler;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.fabric.AssemblerImpl;
 import com.copycatsplus.copycats.content.copycat.base.model.assembly.fabric.AssemblerImpl.CopycatRenderContextFabric;
+import com.copycatsplus.copycats.content.copycat.base.model.fabric.CopycatModel;
 import com.copycatsplus.copycats.content.copycat.base.model.multistate.SimpleMultiStateCopycatPart;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
@@ -30,7 +28,7 @@ public class SimpleMultiStateCopycatModel extends MultiStateCopycatModel {
     }
 
     @Override
-    protected void emitBlockQuadsInner(String key, BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData) {
+    protected void emitBlockQuadsInner(String key, BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext renderContext, BlockState material, CopycatModel.CullFaceRemovalData cullFaceRemovalData, CopycatModel.OcclusionData occlusionData) {
         BakedModel model = getModelOf(material);
 
         // Use a mesh to defer quad emission since quads cannot be emitted inside a transform
@@ -55,17 +53,4 @@ public class SimpleMultiStateCopycatModel extends MultiStateCopycatModel {
 
         renderContext.meshConsumer().accept(meshBuilder.build());
     }
-
-
-
-/*    @Override
-    protected List<BakedQuad> getCroppedQuads(String key, BlockState state, Direction side, RandomSource rand, BlockState material, ModelData wrappedData, RenderType renderType) {
-        List<BakedQuad> quads = new ArrayList<>();
-        List<BakedQuad> templateQuads = getModelOf(material).getQuads(material, side, rand, wrappedData, renderType);
-        QuadHelper.CopycatRenderContext<List<BakedQuad>, List<BakedQuad>> context = new QuadHelper.CopycatRenderContext<>(templateQuads, quads);
-
-        part.emitCopycatQuads(key, state, context, material);
-
-        return quads;
-    }*/
 }

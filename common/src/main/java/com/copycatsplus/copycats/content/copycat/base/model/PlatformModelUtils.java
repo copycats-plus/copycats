@@ -1,8 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.base.model;
 
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.Assembler;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -10,11 +8,6 @@ import net.minecraft.world.phys.Vec3;
 import static com.copycatsplus.copycats.content.copycat.base.model.assembly.Assembler.CopycatRenderContext;
 
 public class PlatformModelUtils {
-
-    @ExpectPlatform
-    public static <Source, Destination> void cullFacing(Direction facing, Assembler.CopycatRenderContext<Source, Destination> context, boolean front, boolean topSlab, boolean isDouble, AABB bb, Vec3 normalScaledN8) {
-
-    }
 
     @ExpectPlatform
     public static <Source, Destination> void quadShift(CopycatRenderContext<Source, Destination> context, Vec3i rowShiftNormal, Vec3i columnShiftNormal, AABB bb1, Vec3 offset) {

@@ -15,26 +15,6 @@ import static com.copycatsplus.copycats.content.copycat.base.model.assembly.forg
 public class PlatformModelUtilsImpl {
 
 
-    //Used in Slabs
-    public static <Source extends List<BakedQuad>, Destination extends List<BakedQuad>> void cullFacing(Direction facing, CopycatRenderContext<Source, Destination> context, boolean front, boolean topSlab, boolean isDouble, AABB bb, Vec3 normalScaledN8) {
-        for (int i = 0; i < context.source().size(); i++) {
-            BakedQuad quad = context.source().get(i);
-            Direction direction = quad.getDirection();
-
-            if (front && direction == facing)
-                continue;
-            if (!front && direction == facing.getOpposite())
-                continue;
-            if (isDouble && topSlab && direction == facing)
-                continue;
-            if (isDouble && !topSlab && direction == facing.getOpposite())
-                continue;
-
-            assembleQuad(quad, context.destination(), bb, normalScaledN8);
-        }
-    }
-
-
     //Used in Beams
     public static <Source extends List<BakedQuad>, Destination extends List<BakedQuad>> void quadShift(CopycatRenderContext<Source, Destination> context, Vec3i rowShiftNormal, Vec3i columnShiftNormal, AABB bb1, Vec3 offset) {
         for (int i = 0; i < context.source().size(); i++) {

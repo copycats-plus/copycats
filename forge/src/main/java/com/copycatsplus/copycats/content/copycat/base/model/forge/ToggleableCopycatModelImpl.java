@@ -3,8 +3,6 @@ package com.copycatsplus.copycats.content.copycat.base.model.forge;
 import com.copycatsplus.copycats.config.CCConfigs;
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.copycatsplus.copycats.content.copycat.base.model.ToggleableCopycatModel;
-import com.copycatsplus.copycats.forge.mixin.copycat.base.CopycatModelAccessor;
-import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -33,7 +31,7 @@ public class ToggleableCopycatModelImpl extends CopycatModel implements Toggleab
     }
 
     @Override
-    protected List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material, ModelData wrappedData, RenderType renderType) {
-        return ((CopycatModelAccessor) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).callGetCroppedQuads(state, side, rand, material, wrappedData, renderType);
+    public List<BakedQuad> getCroppedQuads(BlockState state, Direction side, RandomSource rand, BlockState material, ModelData wrappedData, RenderType renderType) {
+        return ((CopycatModel) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).getCroppedQuads(state, side, rand, material, wrappedData, renderType);
     }
 }
