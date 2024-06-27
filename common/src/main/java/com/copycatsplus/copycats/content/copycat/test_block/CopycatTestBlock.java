@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.test_block;
 
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.multistate.ScaledBlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,10 +11,13 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -21,6 +25,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
+
+import static com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock.getApparentDirection;
+import static com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock.setApparentDirection;
 
 public class CopycatTestBlock extends MultiStateCopycatBlock {
 
@@ -161,5 +168,37 @@ public class CopycatTestBlock extends MultiStateCopycatBlock {
             return !fromTruePos.equals(toTruePos) && toState.is(this);
         }
         return toState.is(this);
+    }
+
+    @Override
+    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
+        state = super.rotate(state, rot);
+        return setApparentDirection(state, rot.rotate(getApparentDirection(state)));
+    }
+
+    @Override
+    public void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation) {
+        Direction.Axis axis = state.getValue(AXIS);
+        if (axis == Direction.Axis.Y) return;
+        if (rotation == Rotation.CLOCKWISE_90 && axis == Direction.Axis.X ||
+                rotation == Rotation.CLOCKWISE_180 ||
+                rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Direction.Axis.Z) {
+            be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
+        }
+    }
+
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirrorIn) {
+        state = super.mirror(state, mirrorIn);
+        return state.rotate(mirrorIn.getRotation(getApparentDirection(state)));
+    }
+
+    @Override
+    public void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror) {
+        Direction.Axis axis = state.getValue(AXIS);
+        if (axis == Direction.Axis.Y) return;
+        if (mirror == Mirror.FRONT_BACK && axis == Direction.Axis.Z || mirror == Mirror.LEFT_RIGHT && axis == Direction.Axis.X) {
+            be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
+        }
     }
 }

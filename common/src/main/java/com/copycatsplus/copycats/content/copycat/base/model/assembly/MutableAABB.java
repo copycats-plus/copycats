@@ -14,7 +14,26 @@ public class MutableAABB implements GlobalTransform.Transformable<MutableAABB> {
         set(0, 0, 0, sizeX, sizeY, sizeZ);
     }
 
+    /**
+     * Move the entire AABB by the given amount in VOXEL SPACE
+     */
     public MutableAABB move(double dX, double dY, double dZ) {
+        dX /= 16;
+        dY /= 16;
+        dZ /= 16;
+        minX += dX;
+        maxX += dX;
+        minY += dY;
+        maxY += dY;
+        minZ += dZ;
+        maxZ += dZ;
+        return this;
+    }
+
+    /**
+     * Move the entire AABB by the given amount in BLOCK SPACE
+     */
+    public MutableAABB shift(double dX, double dY, double dZ) {
         minX += dX;
         maxX += dX;
         minY += dY;
@@ -29,9 +48,9 @@ public class MutableAABB implements GlobalTransform.Transformable<MutableAABB> {
         angle = angle % 360;
         if (angle < 0) angle += 360;
         return switch (angle) {
-            case 90 -> set(16 - minZ, minY, minX, 16 - maxZ, maxY, maxX);
-            case 180 -> set(16 - minX, minY, 16 - minZ, 16 - maxX, maxY, 16 - maxZ);
-            case 270 -> set(minZ, minY, 16 - minX, maxZ, maxY, 16 - maxX);
+            case 90 -> set(1 - minZ, minY, minX, 1 - maxZ, maxY, maxX);
+            case 180 -> set(1 - minX, minY, 1 - minZ, 1 - maxX, maxY, 1 - maxZ);
+            case 270 -> set(minZ, minY, 1 - minX, maxZ, maxY, 1 - maxX);
             default -> this;
         };
     }
@@ -41,9 +60,9 @@ public class MutableAABB implements GlobalTransform.Transformable<MutableAABB> {
         angle = angle % 360;
         if (angle < 0) angle += 360;
         return switch (angle) {
-            case 90 -> set(minX, minZ, 16 - minY, maxX, maxZ, 16 - maxY);
-            case 180 -> set(minX, 16 - minY, 16 - minZ, maxX, 16 - maxY, 16 - maxZ);
-            case 270 -> set(minX, 16 - minZ, minY, maxX, 16 - maxZ, maxY);
+            case 90 -> set(minX, minZ, 1 - minY, maxX, maxZ, 1 - maxY);
+            case 180 -> set(minX, 1 - minY, 1 - minZ, maxX, 1 - maxY, 1 - maxZ);
+            case 270 -> set(minX, 1 - minZ, minY, maxX, 1 - maxZ, maxY);
             default -> this;
         };
     }
@@ -53,30 +72,30 @@ public class MutableAABB implements GlobalTransform.Transformable<MutableAABB> {
         angle = angle % 360;
         if (angle < 0) angle += 360;
         return switch (angle) {
-            case 90 -> set(minY, 16 - minX, minZ, maxY, 16 - maxX, maxZ);
-            case 180 -> set(16 - minX, 16 - minY, minZ, 16 - maxX, 16 - maxY, maxZ);
-            case 270 -> set(16 - minY, minX, minZ, 16 - maxY, maxX, maxZ);
+            case 90 -> set(minY, 1 - minX, minZ, maxY, 1 - maxX, maxZ);
+            case 180 -> set(1 - minX, 1 - minY, minZ, 1 - maxX, 1 - maxY, maxZ);
+            case 270 -> set(1 - minY, minX, minZ, 1 - maxY, maxX, maxZ);
             default -> this;
         };
     }
 
     public MutableAABB flipX(boolean flip) {
         if (!flip) return this;
-        return set(16 - minX, minY, minZ, 16 - maxX, maxY, maxZ);
+        return set(1 - minX, minY, minZ, 1 - maxX, maxY, maxZ);
     }
 
     public MutableAABB flipY(boolean flip) {
         if (!flip) return this;
-        return set(minX, 16 - minY, minZ, maxX, 16 - maxY, maxZ);
+        return set(minX, 1 - minY, minZ, maxX, 1 - maxY, maxZ);
     }
 
     public MutableAABB flipZ(boolean flip) {
         if (!flip) return this;
-        return set(minX, minY, 16 - minZ, maxX, maxY, 16 - maxZ);
+        return set(minX, minY, 1 - minZ, maxX, maxY, 1 - maxZ);
     }
 
     public AABB toAABB() {
-        return new AABB(minX / 16f, minY / 16f, minZ / 16f, maxX / 16f, maxY / 16f, maxZ / 16f);
+        return new AABB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     public MutableAABB set(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {

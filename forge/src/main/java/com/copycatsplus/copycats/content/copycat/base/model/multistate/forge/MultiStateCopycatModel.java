@@ -1,6 +1,8 @@
 package com.copycatsplus.copycats.content.copycat.base.model.multistate.forge;
 
+import com.copycatsplus.copycats.content.copycat.base.model.forge.CopycatModel.OcclusionData;
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateTextureAtlasSprite;
 import com.simibubi.create.foundation.model.BakedModelWrapperWithData;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -15,6 +17,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -44,6 +47,7 @@ public abstract class MultiStateCopycatModel extends BakedModelWrapperWithData {
             return;
 
         builder.withInitial(MATERIALS_PROPERTY, material);
+        builder.with(MATERIALS_PROPERTY, new HashMap<>(material));
 
         if (!(state.getBlock() instanceof MultiStateCopycatBlock copycatBlock))
             return;
@@ -58,9 +62,14 @@ public abstract class MultiStateCopycatModel extends BakedModelWrapperWithData {
 
         Map<String, IModelData> wrappedDataMap = material.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, s -> {
             Vec3i inner = copycatBlock.getVectorFromProperty(state, s.getKey());
-            ScaledBlockAndTintGetterForge scaledWorld = new ScaledBlockAndTintGetterForge(world, pos, inner, copycatBlock.vectorScale(state), p -> true);
-            ScaledBlockAndTintGetterForge filteredWorld = new ScaledBlockAndTintGetterForge(world, pos, inner, copycatBlock.vectorScale(state),
-                    targetPos -> copycatBlock.canConnectTexturesToward(s.getKey(), scaledWorld, pos, targetPos, state));
+            ScaledBlockAndTintGetterForge scaledWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, copycatBlock.vectorScale(state), p -> true);
+            ScaledBlockAndTintGetterForge filteredWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, copycatBlock.vectorScale(state),
+                    targetPos -> {
+                        BlockEntity be = world.getBlockEntity(pos);
+                        if (be instanceof MultiStateCopycatBlockEntity mscbe)
+                            if (!mscbe.getMaterialItemStorage().getMaterialItem(s.getKey()).enableCT()) return false;
+                        return copycatBlock.canConnectTexturesToward(s.getKey(), scaledWorld, pos, targetPos, state);
+                    });
             return getModelOf(s.getValue()).getModelData(
                     filteredWorld,
                     pos, s.getValue(), EmptyModelData.INSTANCE);
@@ -180,23 +189,5 @@ public abstract class MultiStateCopycatModel extends BakedModelWrapperWithData {
         return Minecraft.getInstance()
                 .getBlockRenderer()
                 .getBlockModel(state);
-    }
-
-
-    //Copied from com.simibubi.create.content.decoration.copycat.CopycatModel.OcclusionData as it was private
-    private static class OcclusionData {
-        private final boolean[] occluded;
-
-        public OcclusionData() {
-            occluded = new boolean[6];
-        }
-
-        public void occlude(Direction face) {
-            occluded[face.get3DDataValue()] = true;
-        }
-
-        public boolean isOccluded(Direction face) {
-            return face == null ? false : occluded[face.get3DDataValue()];
-        }
     }
 }

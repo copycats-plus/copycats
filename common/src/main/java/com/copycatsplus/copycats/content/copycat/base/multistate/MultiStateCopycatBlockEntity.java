@@ -2,6 +2,8 @@ package com.copycatsplus.copycats.content.copycat.base.multistate;
 
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.CCConfigs;
+import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlockEntity;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
@@ -18,6 +20,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class MultiStateCopycatBlockEntity extends SmartBlockEntity implements
-        ISpecialBlockEntityItemRequirement, ITransformableBlockEntity, IPartialSafeNBT {
+        IFunctionalCopycatBlockEntity, ISpecialBlockEntityItemRequirement, ITransformableBlockEntity, IPartialSafeNBT {
 
     private final MaterialItemStorage materialItemStorage;
 
@@ -39,6 +44,36 @@ public abstract class MultiStateCopycatBlockEntity extends SmartBlockEntity impl
         } else {
             materialItemStorage = MaterialItemStorage.create(1, Set.of("block"));
         }
+    }
+
+    @Override
+    public CopycatBlockEntity getCopycatBlockEntity() {
+        return null;
+    }
+
+    @Override
+    public BlockState getMaterial() {
+        return materialItemStorage.getAllMaterials().stream()
+                .filter(x -> !x.is(AllBlocks.COPYCAT_BASE.get()))
+                .findFirst()
+                .orElse(AllBlocks.COPYCAT_BASE.getDefaultState());
+    }
+
+    @Override
+    public void setLevel(@NotNull Level level) {
+        super.setLevel(level);
+    }
+
+    public void updateTransform() {
+        BlockStateTransform transform = getBlockState().getValue(MultiStateCopycatBlock.TRANSFORM);
+        if (transform != BlockStateTransform.ABCD) {
+            MultiStateCopycatBlock block = (MultiStateCopycatBlock) getBlockState().getBlock();
+            transform.undoTransform(
+                    r -> block.rotate(getBlockState(), this, r),
+                    m -> block.mirror(getBlockState(), this, m)
+            );
+        }
+        getLevel().setBlock(getBlockPos(), getBlockState().setValue(MultiStateCopycatBlock.TRANSFORM, BlockStateTransform.ABCD), 2 | 4 | 16 | 32);
     }
 
     public boolean cycleMaterial(String property) {
@@ -101,10 +136,14 @@ public abstract class MultiStateCopycatBlockEntity extends SmartBlockEntity impl
     public void setConsumedItem(String property, ItemStack itemStack) {
         getMaterialItemStorage().getMaterialItem(property).setConsumedItem(itemStack);
         setChanged();
-
     }
 
-    private void redraw() {
+    public void setEnableCT(String property, boolean value) {
+        getMaterialItemStorage().getMaterialItem(property).setEnableCT(value);
+        notifyUpdate();
+    }
+
+    public void redraw() {
         if (!isVirtual())
             requestModelUpdate();
         if (hasLevel()) {
@@ -146,14 +185,14 @@ public abstract class MultiStateCopycatBlockEntity extends SmartBlockEntity impl
     }
 
     @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
+    public void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
 
         tag.put("material_data", materialItemStorage.serialize());
     }
 
     @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
+    public void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         if (getBlockState().getBlock() instanceof MultiStateCopycatBlock mscb) {
             boolean anyUpdated = materialItemStorage.deserialize(tag.getCompound("material_data"));

@@ -2,8 +2,9 @@ package com.copycatsplus.copycats.content.copycat.half_layer;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
-import com.copycatsplus.copycats.content.copycat.base.multistate.CTWaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.multistate.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.utility.VoxelShaper;
@@ -41,11 +42,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 import static net.minecraft.core.Direction.AxisDirection;
 
-public class CopycatHalfLayerBlock extends CTWaterloggedMultiStateCopycatBlock {
+public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
 
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
@@ -253,9 +253,9 @@ public class CopycatHalfLayerBlock extends CTWaterloggedMultiStateCopycatBlock {
         return toState.is(this);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
+        state = super.rotate(state, rot);
         Function<Axis, Axis> swap = axis -> axis == Axis.Z ? Axis.X : Axis.Z;
         return switch (rot) {
             case NONE -> state;
@@ -286,9 +286,27 @@ public class CopycatHalfLayerBlock extends CTWaterloggedMultiStateCopycatBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull BlockState mirror(BlockState state, Mirror mirrorIn) {
+    public void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation) {
+        Axis axis = state.getValue(AXIS);
+        if (rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
+                rotation == Rotation.CLOCKWISE_180 ||
+                rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {
+            be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
+        }
+    }
+
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirrorIn) {
+        state = super.mirror(state, mirrorIn);
         return state.rotate(mirrorIn.getRotation(Direction.get(AxisDirection.POSITIVE, state.getValue(AXIS))));
+    }
+
+    @Override
+    public void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror) {
+        Axis axis = state.getValue(AXIS);
+        if (mirror == Mirror.FRONT_BACK && axis == Axis.Z || mirror == Mirror.LEFT_RIGHT && axis == Axis.X) {
+            be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -332,6 +350,14 @@ public class CopycatHalfLayerBlock extends CTWaterloggedMultiStateCopycatBlock {
     public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
         if (face.getAxis().isVertical() && (state.getValue(HALF) == Half.TOP) == (face == Direction.DOWN)) {
             return state.getValue(POSITIVE_LAYERS) < 8 || state.getValue(NEGATIVE_LAYERS) < 8;
+        }
+        if (face.getAxis() == state.getValue(AXIS)) {
+            int negativeLayers = state.getValue(NEGATIVE_LAYERS);
+            int positiveLayers = state.getValue(POSITIVE_LAYERS);
+            if (face.getAxisDirection() == AxisDirection.NEGATIVE && negativeLayers < positiveLayers)
+                return true;
+            if (face.getAxisDirection() == AxisDirection.POSITIVE && positiveLayers < negativeLayers)
+                return true;
         }
         return super.shouldFaceAlwaysRender(state, face);
     }

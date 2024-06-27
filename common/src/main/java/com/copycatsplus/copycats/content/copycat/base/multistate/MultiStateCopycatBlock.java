@@ -1,11 +1,15 @@
 package com.copycatsplus.copycats.content.copycat.base.multistate;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
+import com.copycatsplus.copycats.CCBlockStateProperties;
+import com.copycatsplus.copycats.content.copycat.base.CTCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.copycatsplus.copycats.content.copycat.base.StateType;
+import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
+import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -21,6 +25,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -37,13 +42,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.TickPriority;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -55,10 +63,20 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minecraft.core.Direction.Axis;
 
-public abstract class MultiStateCopycatBlock extends Block implements IBE<MultiStateCopycatBlockEntity>, IWrenchable, ISpecialBlockItemRequirement, IStateType {
+public abstract class MultiStateCopycatBlock extends Block implements IFunctionalCopycatBlock, IBE<MultiStateCopycatBlockEntity>, IWrenchable, ISpecialBlockItemRequirement, IStateType {
+
+    public static final EnumProperty<BlockStateTransform> TRANSFORM = CCBlockStateProperties.TRANSFORM;
 
     public MultiStateCopycatBlock(Properties properties) {
         super(properties);
+        registerDefaultState(defaultBlockState()
+                .setValue(TRANSFORM, BlockStateTransform.ABCD)
+        );
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder.add(TRANSFORM));
     }
 
     public abstract int maxMaterials();
@@ -73,6 +91,10 @@ public abstract class MultiStateCopycatBlock extends Block implements IBE<MultiS
     public abstract boolean partExists(BlockState state, String property);
 
     public abstract String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit);
+
+    public String getPropertyFromRender(String renderingProperty, BlockState state, ScaledBlockAndTintGetter level, Vec3i vector, BlockPos blockPos, Direction side, BlockState queryState, BlockPos queryPos) {
+        return getPropertyFromInteraction(state, level, vector, blockPos, side, Vec3.atCenterOf(vector));
+    }
 
     public abstract Vec3i getVectorFromProperty(BlockState state, String property);
 
@@ -110,8 +132,7 @@ public abstract class MultiStateCopycatBlock extends Block implements IBE<MultiS
 
     @Override
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
-        onWrenched(state, context);
-        return IWrenchable.super.onSneakWrenched(state, context);
+        return IFunctionalCopycatBlock.super.onSneakWrenched(state, context);
     }
 
     @Override
@@ -135,8 +156,17 @@ public abstract class MultiStateCopycatBlock extends Block implements IBE<MultiS
         });
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+        if (player.isShiftKeyDown() && player.getItemInHand(hand).equals(ItemStack.EMPTY)) {
+            String property = getProperty(state, level, pos, hit, true);
+            MultiStateCopycatBlockEntity be = getBlockEntity(level, pos);
+            be.setEnableCT(property, !be.getMaterialItemStorage().getMaterialItem(property).enableCT());
+            be.redraw();
+            return InteractionResult.SUCCESS;
+        }
+
         if (player == null || !player.mayBuild() && !player.isSpectator())
             return InteractionResult.PASS;
 
@@ -220,7 +250,7 @@ public abstract class MultiStateCopycatBlock extends Block implements IBE<MultiS
             return null;
 
         Block block = bi.getBlock();
-        if (block instanceof MultiStateCopycatBlock || block instanceof CopycatBlock)
+        if (block instanceof IFunctionalCopycatBlock || block instanceof CopycatBlock)
             return null;
 
         BlockState appliedState = block.defaultBlockState();
@@ -302,6 +332,34 @@ public abstract class MultiStateCopycatBlock extends Block implements IBE<MultiS
     @Override
     public StateType stateType() {
         return StateType.MULTI;
+    }
+
+    @ExpectPlatform
+    public static BlockState multiPlatformGetAppearance(MultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
+                                                        BlockState queryState, BlockPos queryPos) {
+        throw new AssertionError("This should never appear");
+    }
+
+    @Environment(EnvType.CLIENT)
+    public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
+                                    BlockState queryState, BlockPos queryPos) {
+
+        return multiPlatformGetAppearance(this, state, level, pos, side, queryState, queryPos);
+    }
+
+    public boolean allowCTAppearance(MultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, Direction side,
+                                     BlockState queryState, BlockPos queryPos) {
+        String property;
+        if (level instanceof ScaledBlockAndTintGetter scaledLevel) {
+            BlockPos truePos = scaledLevel.getTruePos(queryPos);
+            Vec3i inner = scaledLevel.getInner(queryPos);
+            property = block.getPropertyFromRender(scaledLevel.getRenderingProperty(), state, scaledLevel, inner, truePos, side, queryState, queryPos);
+        } else {
+            property = block.storageProperties().stream().findFirst().get();
+        }
+        MultiStateCopycatBlockEntity be = getBlockEntity(level, queryPos);
+        if (be == null) return true;
+        return be.getMaterialItemStorage().getMaterialItem(property) == null || be.getMaterialItemStorage().getMaterialItem(property).enableCT();
     }
 
     public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face,
@@ -432,6 +490,47 @@ public abstract class MultiStateCopycatBlock extends Block implements IBE<MultiS
         // intentionally left empty so intellij doesn't complain about unreachable paths
         return null;
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState, LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
+        level.scheduleTick(pos, this, 0, TickPriority.EXTREMELY_HIGH);
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+        withBlockEntityDo(level, pos, MultiStateCopycatBlockEntity::updateTransform);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rotation) {
+        return switch (rotation) {
+            case CLOCKWISE_180 ->
+                    super.rotate(state, rotation).setValue(TRANSFORM, state.getValue(TRANSFORM).getClockwise().getClockwise());
+            case COUNTERCLOCKWISE_90 ->
+                    super.rotate(state, rotation).setValue(TRANSFORM, state.getValue(TRANSFORM).getCounterClockwise());
+            case CLOCKWISE_90 ->
+                    super.rotate(state, rotation).setValue(TRANSFORM, state.getValue(TRANSFORM).getClockwise());
+            default -> super.rotate(state, rotation);
+        };
+    }
+
+    public abstract void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation);
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirror) {
+        return switch (mirror) {
+            case FRONT_BACK -> super.mirror(state, mirror).setValue(TRANSFORM, state.getValue(TRANSFORM).flipZ());
+            case LEFT_RIGHT -> super.mirror(state, mirror).setValue(TRANSFORM, state.getValue(TRANSFORM).flipX());
+            default -> super.mirror(state, mirror);
+        };
+    }
+
+    public abstract void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror);
 
     @Environment(EnvType.CLIENT)
     public static BlockColor wrappedColor() {

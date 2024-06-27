@@ -15,19 +15,18 @@ public class CCommon extends SyncConfigBase {
         return "common";
     }
 
-    public final ConfigBool disableDataFixers = b(false, "disableDataFixers", Comments.dataFixers);
-
     public final ConfigBool disableConversion = b(false, "disableConversion", Comments.multiStateConversion);
 
     public final CFeatures toggle = nested(0, CFeatures::new, Comments.toggle);
+
+    public final CFeatureCategories categories = nested(0, CFeatureCategories::new, Comments.categories);
 
     public void register() {
     }
 
     private static class Comments {
         static String toggle = "Enable/disable features. Values on server override clients";
-
-        static String dataFixers = "Enables/Disables the data fixers. (Currently none available)";
+        static String categories = "Enable/disable categories of features. Disabling a category hides all related features. Values on server override clients";
 
         static String multiStateConversion = "Enables/Disables the conversion of placed copycats from the single material to the multi material(where applicable) block entity. Set this to false to enable conversion! (only happens on world load, so if changed while ingame you will need to load the world again)";
     }

@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.forge;
 
+import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.simibubi.create.foundation.data.TagGen;
@@ -37,5 +38,20 @@ public class CCBuilderTransformersImpl {
                 .addLayer(() -> RenderType::cutoutMipped)
                 .addLayer(() -> RenderType::translucent)
                 .color(() -> MultiStateCopycatBlock::wrappedColor);
+    }
+
+    public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> functionalCopycat() {
+        return b -> b.initialProperties(SharedProperties::softMetal)
+                .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
+                        .getExistingFile(p.mcLoc("air"))))
+                .initialProperties(SharedProperties::softMetal)
+                .properties(p -> p.noOcclusion()
+                        .color(MaterialColor.NONE))
+                .addLayer(() -> RenderType::solid)
+                .addLayer(() -> RenderType::cutout)
+                .addLayer(() -> RenderType::cutoutMipped)
+                .addLayer(() -> RenderType::translucent)
+                .color(() -> IFunctionalCopycatBlock::wrappedColor)
+                .transform(TagGen.axeOrPickaxe());
     }
 }

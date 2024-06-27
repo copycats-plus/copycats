@@ -4,6 +4,8 @@ import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopyc
 import com.copycatsplus.copycats.content.copycat.base.multistate.forge.MultiStateCopycatBlockEntityForge;
 import com.copycatsplus.copycats.content.copycat.ladder.CopycatLadderMultiStateBlockEntity;
 import com.copycatsplus.copycats.content.copycat.ladder.forge.CopycatLadderMultiStateBlockEntityForge;
+import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;
+import com.copycatsplus.copycats.content.copycat.shaft.forge.CopycatShaftBlockEntityForge;
 import com.tterrag.registrate.builders.BlockEntityBuilder;
 
 public class CCBlockEntityTypesImpl {
@@ -15,5 +17,10 @@ public class CCBlockEntityTypesImpl {
 
     public static BlockEntityBuilder.BlockEntityFactory<? extends CopycatLadderMultiStateBlockEntity> getPlatformMultiStateLadder() {
         return CopycatLadderMultiStateBlockEntityForge::new;
+    }
+
+
+    public static BlockEntityBuilder.BlockEntityFactory<? extends CopycatShaftBlockEntity> getPlatformShaft() {
+        return CopycatShaftBlockEntityForge::new;
     }
 }

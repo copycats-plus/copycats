@@ -6,12 +6,12 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "compat.doubleslabs.DSConfigCommonMixin",
+    "copycat.base.functional.FunctionalCopycatBlockMixin",
     "copycat.base.multistate.MultiStateCopycatBlockCombinerMixin",
     "copycat.base.ConnectedTextureBehaviourMixin",
     "network.ServerGamePacketListenerImplMixin"
   ],
   "client": [
-    "copycat.base.CopycatModelAccessor",
     "featuretoggle.SubMenuConfigScreenMixin",
     "network.ClientPacketListenerMixin"
   ],

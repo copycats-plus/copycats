@@ -8,10 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -38,7 +35,9 @@ public abstract class MultiStateCopycatBlockCombinerMixin extends Block implemen
 
     @Override
     public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity) {
-        return getMaterial(level, pos).getSoundType();
+        // There really is no easy way to know which part of the block is being interacted with
+        // So returning sounds of the copycat base should be less confusing
+        return state.getSoundType();
     }
 
     @Override
@@ -72,7 +71,7 @@ public abstract class MultiStateCopycatBlockCombinerMixin extends Block implemen
     @Override
     public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion) {
         if (state.getBlock() instanceof MultiStateCopycatBlock mscb) {
-            AtomicReference<Float> explosionResistance = new AtomicReference<>(state.getBlock().getExplosionResistance(state, level, pos, explosion));
+            AtomicReference<Float> explosionResistance = new AtomicReference<>(state.getBlock().getExplosionResistance());
             mscb.withBlockEntityDo(level, pos, mscbe -> {
                 mscbe.getMaterialItemStorage().getAllMaterials().forEach(bs -> {
                     explosionResistance.accumulateAndGet(bs.getBlock().getExplosionResistance(), Math::max);
@@ -86,10 +85,11 @@ public abstract class MultiStateCopycatBlockCombinerMixin extends Block implemen
     @Override
     public boolean addLandingEffects(BlockState state1, ServerLevel level, BlockPos pos, BlockState state2, LivingEntity entity, int numberOfParticles) {
         if (state1.getBlock() instanceof MultiStateCopycatBlock mscb) {
-            String property = mscb.getProperty(state1, level, pos, new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, true), true);
+            BlockHitResult hitResult = level.clip(new ClipContext(entity.position(), entity.position().add(0, -2, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, entity));
+            String property = mscb.getProperty(state1, level, pos, hitResult, true);
             AtomicReference<BlockState> mat = new AtomicReference<>(AllBlocks.COPYCAT_BASE.getDefaultState());
             mscb.withBlockEntityDo(level, pos, mscbe -> mat.set(mscbe.getMaterialItemStorage().getMaterialItem(property).material()));
-            return mat.get().getBlock().addLandingEffects(state1, level, pos, state2, entity, numberOfParticles);
+            return mat.get().addLandingEffects(level, pos, mat.get(), entity, numberOfParticles);
         }
         return false;
     }
@@ -97,10 +97,11 @@ public abstract class MultiStateCopycatBlockCombinerMixin extends Block implemen
     @Override
     public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (state.getBlock() instanceof MultiStateCopycatBlock mscb) {
-            String property = mscb.getProperty(state, level, pos, new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, true), true);
+            BlockHitResult hitResult = level.clip(new ClipContext(entity.position(), entity.position().add(0, -2, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, entity));
+            String property = mscb.getProperty(state, level, pos, hitResult, true);
             AtomicReference<BlockState> mat = new AtomicReference<>(AllBlocks.COPYCAT_BASE.getDefaultState());
             mscb.withBlockEntityDo(level, pos, mscbe -> mat.set(mscbe.getMaterialItemStorage().getMaterialItem(property).material()));
-            return mat.get().getBlock().addRunningEffects(state, level, pos, entity);
+            return mat.get().addRunningEffects(level, pos, entity);
         }
         return false;
     }
@@ -118,7 +119,8 @@ public abstract class MultiStateCopycatBlockCombinerMixin extends Block implemen
     @Override
     public void fallOn(@NotNull Level pLevel, @NotNull BlockState state, @NotNull BlockPos pPos, @NotNull Entity pEntity, float p_152430_) {
         if (state.getBlock() instanceof MultiStateCopycatBlock mscb) {
-            String property = mscb.getProperty(state, pLevel, pPos, new BlockHitResult(Vec3.atCenterOf(pPos), Direction.UP, pPos, true), true);
+            BlockHitResult hitResult = pLevel.clip(new ClipContext(pEntity.position(), pEntity.position().add(0, -2, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, pEntity));
+            String property = mscb.getProperty(state, pLevel, pPos, hitResult, true);
             AtomicReference<BlockState> material = new AtomicReference<>(AllBlocks.COPYCAT_BASE.getDefaultState());
             mscb.withBlockEntityDo(pLevel, pPos, mscbe -> material.set(mscbe.getMaterialItemStorage().getMaterialItem(property).material()));
             material.get().getBlock().fallOn(pLevel, material.get(), pPos, pEntity, p_152430_);

@@ -13,24 +13,6 @@ import static com.copycatsplus.copycats.content.copycat.base.model.assembly.Asse
 public class PlatformModelUtilsImpl {
 
 
-    //Used in Slabs
-    public static <Source extends MutableQuadView, Destination extends QuadEmitter> void cullFacing(Direction facing, CopycatRenderContext<Source, Destination> context, boolean front, boolean topSlab, boolean isDouble, AABB bb, Vec3 normalScaledN8) {
-
-        Direction direction = context.source().lightFace();
-
-        if (front && direction == facing)
-            return;
-        if (!front && direction == facing.getOpposite())
-            return;
-        if (isDouble && topSlab && direction == facing)
-            return;
-        if (isDouble && !topSlab && direction == facing.getOpposite())
-            return;
-
-        assembleQuad(context, bb, normalScaledN8);
-    }
-
-
     //Used in Beams
     public static <Source extends MutableQuadView, Destination extends QuadEmitter> void quadShift(CopycatRenderContext<Source, Destination> context, Vec3i rowShiftNormal, Vec3i columnShiftNormal, AABB bb1, Vec3 offset) {
         Direction direction = context.source().lightFace();
