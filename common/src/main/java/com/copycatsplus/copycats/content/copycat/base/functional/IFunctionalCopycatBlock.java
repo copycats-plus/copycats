@@ -6,6 +6,8 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
@@ -252,10 +254,12 @@ public interface IFunctionalCopycatBlock extends IWrenchable {
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     static BlockColor wrappedColor() {
         return new WrappedBlockColor();
     }
 
+    @Environment(EnvType.CLIENT)
     static class WrappedBlockColor implements BlockColor {
 
         @Override
