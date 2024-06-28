@@ -1,13 +1,13 @@
 package com.copycatsplus.copycats.content.copycat.base.functional;
 
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.ShimCopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class WrappedCopycatBlock extends CopycatBlock {
+public class WrappedCopycatBlock extends ShimCopycatBlock {
 
     private final ThreadLocal<IFunctionalCopycatBlock> wrapped = new ThreadLocal<>();
 
