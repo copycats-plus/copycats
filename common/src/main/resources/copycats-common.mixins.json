@@ -17,9 +17,11 @@
     "copycat.base.CopycatBlockEntityAccessor",
     "copycat.base.CopycatBlockEntityMixin",
     "copycat.base.CopycatBlockMixin",
+    "copycat.base.functional.ConnectedTextureBehaviourMixin",
     "copycat.base.functional.CopycatBlockEntityMixin",
     "copycat.base.functional.CopycatBlockMixin",
     "copycat.base.functional.CreateClientMixin",
+    "copycat.base.functional.CTModelMixin",
     "copycat.base.multistate.AirCurrentMixin",
     "copycat.base.multistate.ConnectedTextureBehaviourMixin",
     "copycat.base.multistate.ContraptionMixin",
@@ -42,8 +44,8 @@
     "copycat.trapdoor.RedStoneWireBlockMixin",
     "copycat.wall.TrackPaverMixin",
     "copycat.wall.WallBlockMixin",
-    "minecraft.CreativeModTabMixin",
-    "entity.CatMixin"
+    "entity.CatMixin",
+    "minecraft.CreativeModTabMixin"
   ],
   "client": [
     "copycat.base.multistate.ModelBlockRendererMixin",

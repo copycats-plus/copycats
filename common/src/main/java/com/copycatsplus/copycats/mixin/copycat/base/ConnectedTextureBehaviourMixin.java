@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.mixin.copycat.base;
 
+import com.copycatsplus.copycats.content.copycat.base.CTCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
 import com.copycatsplus.copycats.content.copycat.base.IShimCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.multistate.ScaledBlockAndTintGetter;
@@ -10,6 +11,7 @@ import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -51,6 +53,10 @@ public class ConnectedTextureBehaviourMixin {
     )
     private boolean bypassIfShim(CopycatBlock instance, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos, Operation<Boolean> original) {
         if (instance instanceof IShimCopycatBlock shim) {
+            BlockEntity be = reader.getBlockEntity(fromPos);
+            if (be instanceof CTCopycatBlockEntity ctbe) {
+                if (!ctbe.isCTEnabled()) return true;
+            }
             return !shim.canConnectTexturesToward(reader, fromPos, toPos, state);
         }
 

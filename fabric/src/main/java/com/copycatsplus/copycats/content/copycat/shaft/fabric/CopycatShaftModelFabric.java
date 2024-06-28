@@ -2,15 +2,16 @@ package com.copycatsplus.copycats.content.copycat.shaft.fabric;
 
 import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
-import io.github.fabricators_of_create.porting_lib.models.CustomParticleIconModel;
+import io.github.fabricators_of_create.porting_lib.model.CustomParticleIconModel;
+import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Random;
 import java.util.function.Supplier;
 
 public class CopycatShaftModelFabric extends BracketedKineticBlockModel implements CustomParticleIconModel {
@@ -37,11 +38,11 @@ public class CopycatShaftModelFabric extends BracketedKineticBlockModel implemen
     }
 
     @Override
-    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         if (!VirtualEmptyBlockGetter.is(blockView)) {
             super.emitBlockQuads(blockView, state, pos, randomSupplier, context);
         } else {
-            copycat.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+            ((ForwardingBakedModel) copycat).emitBlockQuads(blockView, state, pos, randomSupplier, context);
         }
     }
 }

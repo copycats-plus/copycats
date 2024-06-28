@@ -1,21 +1,26 @@
 {
   "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "copycats:stonecutting/copycat_shaft"
+    ]
+  },
   "criteria": {
     "has_item": {
+      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "c:zinc_ingots"
+            "tag": "c:ingots/zinc"
           }
         ]
-      },
-      "trigger": "minecraft:inventory_changed"
+      }
     },
     "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
       "conditions": {
         "recipe": "copycats:stonecutting/copycat_shaft"
-      },
-      "trigger": "minecraft:recipe_unlocked"
+      }
     }
   },
   "requirements": [
@@ -23,11 +28,5 @@
       "has_item",
       "has_the_recipe"
     ]
-  ],
-  "rewards": {
-    "recipes": [
-      "copycats:stonecutting/copycat_shaft"
-    ]
-  },
-  "sends_telemetry_event": false
+  ]
 }

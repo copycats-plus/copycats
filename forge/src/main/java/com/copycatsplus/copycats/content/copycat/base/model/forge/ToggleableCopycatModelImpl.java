@@ -9,6 +9,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraft.world.level.block.state.BlockState;
+
 import java.util.Random;
 
 import java.util.List;
@@ -30,6 +31,6 @@ public class ToggleableCopycatModelImpl extends CopycatModel implements Toggleab
 
     @Override
     public List<BakedQuad> getCroppedQuads(BlockState state, Direction side, Random rand, BlockState material, IModelData wrappedData) {
-        return ((CopycatModelAccessor) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).callGetCroppedQuads(state, side, rand, material, wrappedData);
+        return ((CopycatModel) (CCConfigs.client().useEnhancedModels.get() ? enhanced : base)).getCroppedQuads(state, side, rand, material, wrappedData);
     }
 }

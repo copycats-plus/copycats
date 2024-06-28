@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.utility;
 import com.copycatsplus.copycats.config.CCConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,6 @@ public class ChatUtils {
         if (CCConfigs.client().disableGraphicsWarnings.get()) return;
         if (messages.contains(id)) return;
         messages.add(id);
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Warning: " + message));
+        Minecraft.getInstance().player.sendMessage(new TextComponent("Warning: " + message), Minecraft.getInstance().player.getUUID());
     }
 }

@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "copycats:copycat_shaft"
+          "name": "minecraft:air"
         }
       ],
       "conditions": [
