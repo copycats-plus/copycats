@@ -28,6 +28,5 @@
     "recipes": [
       "copycats:stonecutting/copycat_slope_layer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -2,7 +2,8 @@ package com.copycatsplus.copycats.content.copycat.shaft.fabric;
 
 import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
-import io.github.fabricators_of_create.porting_lib.models.CustomParticleIconModel;
+import io.github.fabricators_of_create.porting_lib.model.CustomParticleIconModel;
+import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -41,7 +42,7 @@ public class CopycatShaftModelFabric extends BracketedKineticBlockModel implemen
         if (!VirtualEmptyBlockGetter.is(blockView)) {
             super.emitBlockQuads(blockView, state, pos, randomSupplier, context);
         } else {
-            copycat.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+            ((ForwardingBakedModel) copycat).emitBlockQuads(blockView, state, pos, randomSupplier, context);
         }
     }
 }

@@ -48,7 +48,7 @@ public class CCBuilderTransformersImpl {
                         .getExistingFile(p.mcLoc("air"))))
                 .initialProperties(SharedProperties::softMetal)
                 .properties(p -> p.noOcclusion()
-                        .mapColor(MapColor.NONE))
+                        .color(MaterialColor.NONE))
                 // fabric: only render base model on cutout. When rendering the wrapped model's material is copied.
                 .addLayer(() -> RenderType::cutout)
                 .color(() -> IFunctionalCopycatBlock::wrappedColor)
