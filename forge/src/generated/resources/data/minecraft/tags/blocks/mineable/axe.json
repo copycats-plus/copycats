@@ -1,5 +1,6 @@
 {
   "values": [
+    "copycats:wrapped_copycat",
     "copycats:copycat_block",
     "copycats:copycat_beam",
     "copycats:copycat_board",

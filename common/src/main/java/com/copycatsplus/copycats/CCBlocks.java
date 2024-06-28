@@ -2,6 +2,7 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
+import com.copycatsplus.copycats.content.copycat.base.functional.WrappedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.copycatsplus.copycats.content.copycat.base.model.ToggleableCopycatModel;
 import com.copycatsplus.copycats.content.copycat.base.model.multistate.SimpleMultiStateCopycatPart;
@@ -68,6 +69,7 @@ import com.copycatsplus.copycats.content.copycat.wall.CopycatWallBlock;
 import com.copycatsplus.copycats.content.copycat.wall.CopycatWallModel;
 import com.copycatsplus.copycats.content.copycat.wall.WrappedWallBlock;
 import com.copycatsplus.copycats.datagen.CCLootGen;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.foundation.data.*;
@@ -100,6 +102,11 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 public class CCBlocks {
 
     private static final CopycatRegistrate REGISTRATE = Copycats.getRegistrate();
+
+    public static final BlockEntry<WrappedCopycatBlock> WRAPPED_COPYCAT =
+            REGISTRATE.block("wrapped_copycat", WrappedCopycatBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .register();
 
     public static final BlockEntry<CopycatBlockBlock> COPYCAT_BLOCK =
             REGISTRATE.block("copycat_block", CopycatBlockBlock::new)

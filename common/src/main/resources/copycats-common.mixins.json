@@ -46,6 +46,7 @@
     "entity.CatMixin"
   ],
   "client": [
+    "copycat.base.functional.CTModelMixin",
     "copycat.base.multistate.ModelBlockRendererMixin",
     "minecraft.TextureAtlasSpriteMixin"
   ],
