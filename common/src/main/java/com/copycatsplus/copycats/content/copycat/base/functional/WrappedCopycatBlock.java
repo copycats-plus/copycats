@@ -35,6 +35,11 @@ public class WrappedCopycatBlock extends CopycatBlock {
     }
 
     @Override
+    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+        return wrapped.get().canConnectTexturesToward(reader, fromPos, toPos, state);
+    }
+
+    @Override
     public boolean canFaceBeOccluded(BlockState state, Direction face) {
         return wrapped.get().canFaceBeOccluded(state, face);
     }

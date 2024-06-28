@@ -2,6 +2,7 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
+import com.copycatsplus.copycats.content.copycat.base.functional.WrappedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.copycatsplus.copycats.content.copycat.base.model.ToggleableCopycatModel;
 import com.copycatsplus.copycats.content.copycat.base.model.multistate.SimpleMultiStateCopycatPart;
@@ -68,7 +69,6 @@ import com.copycatsplus.copycats.content.copycat.wall.CopycatWallBlock;
 import com.copycatsplus.copycats.content.copycat.wall.CopycatWallModel;
 import com.copycatsplus.copycats.content.copycat.wall.WrappedWallBlock;
 import com.copycatsplus.copycats.datagen.CCLootGen;
-import com.copycatsplus.copycats.content.copycat.base.functional.WrappedCopycatBlock;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
@@ -103,9 +103,7 @@ public class CCBlocks {
 
     public static final BlockEntry<WrappedCopycatBlock> WRAPPED_COPYCAT =
             REGISTRATE.block("wrapped_copycat", WrappedCopycatBlock::new)
-                    .initialProperties(AllBlocks.COPYCAT_BASE)
-                    .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
-                            .getExistingFile(p.mcLoc("air"))))
+                    .transform(BuilderTransformers.copycat())
                     .register();
 
     public static final BlockEntry<CopycatBlockBlock> COPYCAT_BLOCK =
@@ -517,13 +515,13 @@ public class CCBlocks {
 
     public static final BlockEntry<CopycatShaftBlock> COPYCAT_SHAFT =
             REGISTRATE.block("copycat_shaft", CopycatShaftBlock::new)
-                    .transform(CCBuilderTransformers.functionalCopycat())
-                    .transform(FeatureToggle.register())
-                    .transform(BlockStressDefaults.setNoImpact())
-                    .onRegister(CreateRegistrate.blockModel(() -> model -> getShaftModel(model, SimpleCopycatPart.create(model, new CopycatShaftModel()))))
-                    .item()
-                    .transform(customItemModel("copycat_base", "shaft"))
-                    .register();
+            .transform(CCBuilderTransformers.functionalCopycat())
+            .transform(FeatureToggle.register())
+            .transform(BlockStressDefaults.setNoImpact())
+            .onRegister(CreateRegistrate.blockModel(() -> model -> getShaftModel(model, SimpleCopycatPart.create(model, new CopycatShaftModel()))))
+            .item()
+            .transform(customItemModel("copycat_base", "shaft"))
+            .register();
 
     @ExpectPlatform
     public static BakedModel getShaftModel(BakedModel original, BakedModel copycat) {
@@ -550,7 +548,7 @@ public class CCBlocks {
     }
 
     public static Set<RegistryEntry<Block>> getAllRegisteredBlocks() {
-        return new HashSet<>(REGISTRATE.getAll(Registry.BLOCK.key()));
+       return new HashSet<>(REGISTRATE.getAll(Registry.BLOCK.key()));
     }
 
     public static Set<RegistryEntry<Block>> getAllRegisteredBlocksWithoutWrapped() {

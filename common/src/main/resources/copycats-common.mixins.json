@@ -48,6 +48,7 @@
     "minecraft.CreativeModTabMixin"
   ],
   "client": [
+    "copycat.base.functional.CTModelMixin",
     "copycat.base.multistate.ModelBlockRendererMixin",
     "minecraft.TextureAtlasSpriteMixin"
   ],
