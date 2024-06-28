@@ -21,33 +21,42 @@ public class CCCreativeTabs {
     public static final CreativeModeTab MAIN = new MainCreativeModeTab();
 
     public static final List<ItemProviderEntry<?>> ITEMS = List.of(
-            CCBlocks.COPYCAT_BEAM,
+            /* Vanilla blocks */
             CCBlocks.COPYCAT_BLOCK,
-            CCBlocks.COPYCAT_BOARD,
-            CCItems.COPYCAT_BOX,
-            CCBlocks.COPYCAT_BYTE,
-            CCItems.COPYCAT_CATWALK,
-            CCBlocks.COPYCAT_FENCE,
-            CCBlocks.COPYCAT_FENCE_GATE,
-            CCBlocks.COPYCAT_GHOST_BLOCK,
-            CCBlocks.COPYCAT_HALF_LAYER,
-            CCBlocks.COPYCAT_HALF_PANEL,
-            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
-            CCBlocks.COPYCAT_LADDER,
-            CCBlocks.COPYCAT_LAYER,
-            CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
             CCBlocks.COPYCAT_SLAB,
-            CCBlocks.COPYCAT_SLICE,
             CCBlocks.COPYCAT_STAIRS,
             CCBlocks.COPYCAT_VERTICAL_STAIRS,
-            CCBlocks.COPYCAT_STONE_BUTTON,
-            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
-            CCBlocks.COPYCAT_TRAPDOOR,
-            CCBlocks.COPYCAT_VERTICAL_SLICE,
-            CCBlocks.COPYCAT_VERTICAL_STEP,
+            CCBlocks.COPYCAT_FENCE,
+            CCBlocks.COPYCAT_FENCE_GATE,
             CCBlocks.COPYCAT_WALL,
+            CCBlocks.COPYCAT_TRAPDOOR,
+            CCBlocks.COPYCAT_LADDER,
             CCBlocks.COPYCAT_WOODEN_BUTTON,
-            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE
+            CCBlocks.COPYCAT_STONE_BUTTON,
+            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+            /* Simple copycats */
+            CCBlocks.COPYCAT_VERTICAL_STEP,
+            CCBlocks.COPYCAT_BEAM,
+            CCBlocks.COPYCAT_SLICE,
+            CCBlocks.COPYCAT_VERTICAL_SLICE,
+            CCBlocks.COPYCAT_GHOST_BLOCK,
+            CCBlocks.COPYCAT_LAYER,
+            CCBlocks.COPYCAT_HALF_PANEL,
+            /* Multistates */
+            CCBlocks.COPYCAT_BYTE,
+            CCBlocks.COPYCAT_BOARD,
+            CCItems.COPYCAT_CATWALK,
+            CCItems.COPYCAT_BOX,
+            CCBlocks.COPYCAT_HALF_LAYER,
+            /* Slopes */
+            CCBlocks.COPYCAT_SLOPE,
+            CCBlocks.COPYCAT_VERTICAL_SLOPE,
+            CCBlocks.COPYCAT_SLOPE_LAYER,
+            /*Misc*/
+            CCBlocks.COPYCAT_SHAFT
     );
 
     public static class MainCreativeModeTab extends CreativeModeTab {

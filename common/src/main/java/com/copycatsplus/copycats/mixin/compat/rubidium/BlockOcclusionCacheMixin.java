@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.mixin.compat.rubidium;
 
+import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +20,7 @@ public class BlockOcclusionCacheMixin {
     //FIXME: Needs to be done more specifically. Or preferably without stopping their culling on us full stop but right now nothing i've tried seems to be working that makes sense
     @Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
     private void copycats$stopCullingUs(BlockState selfState, BlockGetter view, BlockPos pos, Direction facing, CallbackInfoReturnable<Boolean> cir) {
-        if (selfState.getBlock() instanceof CopycatBlock cb) {
+        if (selfState.getBlock() instanceof CopycatBlock || selfState.getBlock() instanceof IFunctionalCopycatBlock) {
             cir.setReturnValue(true);
         }
     }

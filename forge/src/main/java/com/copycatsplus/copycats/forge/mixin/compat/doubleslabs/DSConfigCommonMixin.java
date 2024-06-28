@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.forge.mixin.compat.doubleslabs;
 
 import cjminecraft.doubleslabs.common.config.DSConfig;
+import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,14 +16,14 @@ public class DSConfigCommonMixin {
 
     @Inject(method = "isBlacklistedHorizontalSlab", at = @At("HEAD"), cancellable = true, remap = false)
     private void copycats$alwaysBlacklistHorizontal(Block block, CallbackInfoReturnable<Boolean> cir) {
-        if (block instanceof CopycatBlock) {
+        if (block instanceof CopycatBlock || block instanceof IFunctionalCopycatBlock) {
             cir.setReturnValue(false);
         }
     }
 
     @Inject(method = "isBlacklistedVerticalSlab", at = @At("HEAD"), cancellable = true, remap = false)
     private void copycats$alwaysBlacklistVertical(Block block, CallbackInfoReturnable<Boolean> cir) {
-        if (block instanceof CopycatBlock) {
+        if (block instanceof CopycatBlock || block instanceof IFunctionalCopycatBlock) {
             cir.setReturnValue(false);
         }
     }

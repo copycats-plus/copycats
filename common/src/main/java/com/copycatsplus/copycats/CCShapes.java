@@ -1,5 +1,7 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.utility.shape.NoneVoxelShape;
+import com.copycatsplus.copycats.utility.shape.VoxelUtils;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.core.Direction;
@@ -137,6 +139,70 @@ public class CCShapes {
             .add(0, 0, 8, 8, 8, 16)
             .add(8, 0, 8, 16, 16, 16)
             .forDirectional(Direction.NORTH);
+    private static final int SLOPE_SUBDIVISIONS = 16;
+    public static final VoxelShaper SLOPE_BOTTOM = shape(Shapes.empty()).build((voxelShape, direction) -> {
+        VoxelShape shape = Shapes.empty();
+        for (int i = 0; i < SLOPE_SUBDIVISIONS - 1; i++) {
+            shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 0, 0, 1, 1 - 1d / SLOPE_SUBDIVISIONS * (i + 1), 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
+        }
+        shape = shape.optimize();
+        return shape(shape).forDirectional(Direction.NORTH);
+    }, Direction.SOUTH);
+    public static final VoxelShaper SLOPE_TOP = shape(Shapes.empty()).build((voxelShape, direction) -> {
+        VoxelShape shape = Shapes.empty();
+        for (int i = 0; i < SLOPE_SUBDIVISIONS - 1; i++) {
+            shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 1d / SLOPE_SUBDIVISIONS * (i + 1), 0, 1, 1, 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
+        }
+        shape = shape.optimize();
+        return shape(shape).forDirectional(Direction.NORTH);
+    }, Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LEFT = shape(Shapes.empty()).build((voxelShape, direction) -> {
+        VoxelShape shape = Shapes.empty();
+        for (int i = 0; i < SLOPE_SUBDIVISIONS - 1; i++) {
+            shape = Shapes.joinUnoptimized(shape, Shapes.box(1 - 1d / SLOPE_SUBDIVISIONS * (i + 1), 0, 1d / SLOPE_SUBDIVISIONS * (i + 1), 1, 1, 1d / SLOPE_SUBDIVISIONS * (i + 2)), BooleanOp.OR);
+        }
+        shape = shape.optimize();
+        return shape(shape).forDirectional(Direction.SOUTH);
+    }, Direction.SOUTH);
+
+    private static BiFunction<VoxelShape, Direction, VoxelShaper> slopeLayerBottom(double minHeight, double maxHeight) {
+        return (voxelShape, direction) -> {
+            VoxelShape shape = Shapes.empty();
+            for (int i = 0; i < SLOPE_SUBDIVISIONS; i++) {
+                shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 0, 1d / SLOPE_SUBDIVISIONS * i, 1, minHeight + (maxHeight - minHeight) / SLOPE_SUBDIVISIONS * i, 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
+            }
+            shape = shape.optimize();
+            return shape(shape).forDirectional(Direction.SOUTH);
+        };
+    }
+
+    public static final VoxelShaper SLOPE_LAYER_BOTTOM_1 = shape(Shapes.empty()).build(slopeLayerBottom(0, 4 / 16d), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_BOTTOM_2 = shape(Shapes.empty()).build(slopeLayerBottom(0, 8 / 16d), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_BOTTOM_3 = shape(Shapes.empty()).build(slopeLayerBottom(0, 12 / 16d), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_BOTTOM_4 = shape(Shapes.empty()).build(slopeLayerBottom(0, 1), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_BOTTOM_5 = shape(Shapes.empty()).build(slopeLayerBottom(4 / 16d, 1), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_BOTTOM_6 = shape(Shapes.empty()).build(slopeLayerBottom(8 / 16d, 1), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_BOTTOM_7 = shape(Shapes.empty()).build(slopeLayerBottom(12 / 16d, 1), Direction.SOUTH);
+
+    private static BiFunction<VoxelShape, Direction, VoxelShaper> slopeLayerTop(double minHeight, double maxHeight) {
+        return (voxelShape, direction) -> {
+            VoxelShape shape = Shapes.empty();
+            for (int i = 0; i < SLOPE_SUBDIVISIONS; i++) {
+                shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 1d - minHeight - (maxHeight - minHeight) / SLOPE_SUBDIVISIONS * i, 1d / SLOPE_SUBDIVISIONS * i, 1, 1, 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
+            }
+            shape = shape.optimize();
+            return shape(shape).forDirectional(Direction.SOUTH);
+        };
+    }
+
+    public static final VoxelShaper SLOPE_LAYER_TOP_1 = shape(Shapes.empty()).build(slopeLayerTop(0, 4 / 16d), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_TOP_2 = shape(Shapes.empty()).build(slopeLayerTop(0, 8 / 16d), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_TOP_3 = shape(Shapes.empty()).build(slopeLayerTop(0, 12 / 16d), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_TOP_4 = shape(Shapes.empty()).build(slopeLayerTop(0, 1), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_TOP_5 = shape(Shapes.empty()).build(slopeLayerTop(4 / 16d, 1), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_TOP_6 = shape(Shapes.empty()).build(slopeLayerTop(8 / 16d, 1), Direction.SOUTH);
+    public static final VoxelShaper SLOPE_LAYER_TOP_7 = shape(Shapes.empty()).build(slopeLayerTop(12 / 16d, 1), Direction.SOUTH);
+
 
     private static Builder shape(VoxelShape shape) {
         return new Builder(shape);

@@ -1,18 +1,18 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.1.+" apply false
-    id 'org.ajoberstar.grgit' version '4.1.1'
+    id "dev.architectury.loom" version "1.5.+" apply false
 }
 
-boolean isTestBuild = false;
+boolean ci = System.getenv("CI") != null ? System.getenv("CI").toBoolean() : false
+boolean nightly = ci && (System.getenv("RELEASE") != null ? !System.getenv("RELEASE").toBoolean() : true)
 
-project.ext {
-    // Open the Git repository in the current directory.
-    git = org.ajoberstar.grgit.Grgit.open(dir: file('.'))
-    // Get commit id of HEAD.
-    gitRevision = git.head().id
-    // Get abbreviated commit Id of HEAD
-    gitAbbRevision = git.head().abbreviatedId
+def getGitTag = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine "git", "describe", "--tags", "--abbrev=0"
+        standardOutput = stdout
+    }
+    return stdout.toString().trim().takeBetween("v", "+")
 }
 
 architectury {
@@ -21,6 +21,7 @@ architectury {
 
 subprojects {
     apply plugin: "dev.architectury.loom"
+    apply plugin: "maven-publish"
 
     loom {
         silentMojangMappingsLicense()
@@ -33,6 +34,30 @@ subprojects {
             parchment("org.parchmentmc.data:parchment-${rootProject.minecraft_version}:${rootProject.parchment_version}@zip")
         }
     }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = rootProject.archives_base_name
+                from components.java
+            }
+        }
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = "https://maven.pkg.github.com/copycats-plus/copycats"
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
+            maven {
+                name = "realRobotixMaven"
+                url = "https://maven.realrobotix.me/copycats"
+                credentials(PasswordCredentials)
+            }
+        }
+    }
 }
 
 allprojects {
@@ -42,7 +67,8 @@ allprojects {
 
 
     archivesBaseName = rootProject.archives_base_name
-    version = project.name + "." + minecraft_version + "-" + mod_version + (isTestBuild ? "-TEST." + rootProject.gitAbbRevision : "")
+    String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+    version = "${getGitTag()}+mc.${minecraft_version}-${project.name}${nightly ? "-build.${buildNumber}" : ""}"
     group = rootProject.maven_group
 
     repositories {
@@ -108,9 +134,13 @@ allprojects {
         }
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
         options.release.set(17)
+    }
+
+    jar {
+        processResources.exclude("assets/copycats/models/block/copycat_base/README.md")
     }
 
     tasks.named('processResources', ProcessResources).configure {

@@ -1,6 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.base.model.multistate.fabric;
 
+import com.copycatsplus.copycats.content.copycat.base.model.fabric.CopycatModel.CullFaceRemovalData;
+import com.copycatsplus.copycats.content.copycat.base.model.fabric.CopycatModel.MaterialFixer;
+import com.copycatsplus.copycats.content.copycat.base.model.fabric.CopycatModel.OcclusionData;
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
+import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.multistate.ScaledBlockAndTintGetter;
 import com.jozufozu.flywheel.fabric.model.FabricModelUtil;
 import com.simibubi.create.AllBlocks;
@@ -15,8 +19,6 @@ import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -24,19 +26,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public abstract class MultiStateCopycatModel extends ForwardingBakedModel implements CustomParticleIconModel {
-
-    @NotNull Map<String, BlockState> materials = new HashMap<>();
 
     public MultiStateCopycatModel(BakedModel originalModel) {
         wrapped = originalModel;
@@ -68,11 +68,14 @@ public abstract class MultiStateCopycatModel extends ForwardingBakedModel implem
         }
     }
 
+    @SuppressWarnings({"deprecation", "unchecked"})
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         if (blockView instanceof RenderAttachedBlockView attachmentView
                 && attachmentView.getBlockEntityRenderAttachment(pos) instanceof Map<?, ?> mats) {
-            materials = (Map<String, BlockState>) mats;
+            synchronized (mats) {
+                materials = new HashMap<>((Map<? extends String, ? extends BlockState>) mats);
+            }
         } else {
             materials = new HashMap<>();
         }
@@ -108,9 +111,15 @@ public abstract class MultiStateCopycatModel extends ForwardingBakedModel implem
             BlockAndTintGetter innerBlockView = blockView;
             if (state.getBlock() instanceof MultiStateCopycatBlock copycatBlock) {
                 Vec3i inner = copycatBlock.getVectorFromProperty(state, entry.getKey());
-                ScaledBlockAndTintGetter scaledWorld = new ScaledBlockAndTintGetter(blockView, pos, inner, copycatBlock.vectorScale(state), p -> true);
-                innerBlockView = new ScaledBlockAndTintGetter(blockView, pos, inner, copycatBlock.vectorScale(state),
-                        targetPos -> copycatBlock.canConnectTexturesToward(entry.getKey(), scaledWorld, pos, targetPos, state));
+                ScaledBlockAndTintGetter scaledWorld = new ScaledBlockAndTintGetter(entry.getKey(), blockView, pos, inner, copycatBlock.vectorScale(state), p -> true);
+                innerBlockView = new ScaledBlockAndTintGetter(entry.getKey(), blockView, pos, inner, copycatBlock.vectorScale(state),
+                        targetPos -> {
+                            BlockEntity be = blockView.getBlockEntity(pos);
+                            if (be instanceof MultiStateCopycatBlockEntity mscbe)
+                                if (!mscbe.getMaterialItemStorage().getMaterialItem(entry.getKey()).enableCT())
+                                    return false;
+                            return copycatBlock.canConnectTexturesToward(entry.getKey(), scaledWorld, pos, targetPos, state);
+                        });
             }
             emitBlockQuadsInner(entry.getKey(), innerBlockView, state, pos, randomSupplier, context, entry.getValue(), cullFaceRemovalData, occlusionData);
 
@@ -124,7 +133,7 @@ public abstract class MultiStateCopycatModel extends ForwardingBakedModel implem
 
     @Override
     public @NotNull TextureAtlasSprite getParticleIcon(Object data) {
-        if (data instanceof Map<?,?> mats) {
+        if (data instanceof Map<?, ?> mats) {
             if (mats.isEmpty())
                 return super.getParticleIcon();
             Map.Entry<String, BlockState> key = (Map.Entry<String, BlockState>) mats.entrySet().stream().findFirst().get();

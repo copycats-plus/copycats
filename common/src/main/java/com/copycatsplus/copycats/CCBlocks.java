@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.copycatsplus.copycats.content.copycat.base.model.SimpleCopycatPart;
 import com.copycatsplus.copycats.content.copycat.base.model.ToggleableCopycatModel;
@@ -35,10 +36,16 @@ import com.copycatsplus.copycats.content.copycat.ladder.WrappedLadderBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerBlock;
 import com.copycatsplus.copycats.content.copycat.layer.CopycatLayerModel;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.*;
+import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlock;
+import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftModel;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatMultiSlabModel;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
 import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceBlock;
 import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceModel;
+import com.copycatsplus.copycats.content.copycat.slope.CopycatSlopeBlock;
+import com.copycatsplus.copycats.content.copycat.slope.CopycatSlopeModel;
+import com.copycatsplus.copycats.content.copycat.slope_layer.CopycatSlopeLayerBlock;
+import com.copycatsplus.copycats.content.copycat.slope_layer.CopycatSlopeLayerModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsEnhancedModel;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsModel;
@@ -50,6 +57,8 @@ import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorModel;
 import com.copycatsplus.copycats.content.copycat.trapdoor.WrappedTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_slice.CopycatVerticalSliceBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_slice.CopycatVerticalSliceModel;
+import com.copycatsplus.copycats.content.copycat.vertical_slope.CopycatVerticalSlopeBlock;
+import com.copycatsplus.copycats.content.copycat.vertical_slope.CopycatVerticalSlopeModel;
 import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairsEnhancedModel;
 import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairsModel;
@@ -60,13 +69,14 @@ import com.copycatsplus.copycats.content.copycat.wall.CopycatWallModel;
 import com.copycatsplus.copycats.content.copycat.wall.WrappedWallBlock;
 import com.copycatsplus.copycats.datagen.CCLootGen;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.foundation.data.BuilderTransformers;
-import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.content.kinetics.BlockStressDefaults;
+import com.simibubi.create.foundation.data.*;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
+import net.minecraft.client.resources.model.BakedModel;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.BlockTags;
@@ -78,6 +88,7 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -468,6 +479,49 @@ public class CCBlocks {
                     .tag(BlockTags.WALLS)
                     .blockstate((c, p) -> getWrappedBlockState(c, p, "wrapped_copycat_wall"))
                     .register();
+
+    public static final BlockEntry<CopycatSlopeBlock> COPYCAT_SLOPE =
+            REGISTRATE.block("copycat_slope", CopycatSlopeBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(CreateRegistrate.blockModel(() -> ToggleableCopycatModel.with(new CopycatSlopeModel(false), new CopycatSlopeModel(true))))
+                    .item()
+                    .transform(customItemModel("copycat_base", "slope"))
+                    .register();
+
+    public static final BlockEntry<CopycatVerticalSlopeBlock> COPYCAT_VERTICAL_SLOPE =
+            REGISTRATE.block("copycat_vertical_slope", CopycatVerticalSlopeBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register(FeatureCategory.SLOPES))
+                    .onRegister(CreateRegistrate.blockModel(() -> ToggleableCopycatModel.with(new CopycatVerticalSlopeModel(false), new CopycatVerticalSlopeModel(true))))
+                    .item()
+                    .transform(customItemModel("copycat_base", "vertical_slope"))
+                    .register();
+
+    public static final BlockEntry<CopycatSlopeLayerBlock> COPYCAT_SLOPE_LAYER =
+            REGISTRATE.block("copycat_slope_layer", CopycatSlopeLayerBlock::new)
+                    .transform(BuilderTransformers.copycat())
+                    .transform(FeatureToggle.register(FeatureCategory.SLOPES, FeatureCategory.STACKABLES))
+                    .onRegister(CreateRegistrate.blockModel(() -> ToggleableCopycatModel.with(new CopycatSlopeLayerModel(false), new CopycatSlopeLayerModel(true))))
+                    .loot(CCLootGen.build(CCLootGen.lootForLayers()))
+                    .item()
+                    .transform(customItemModel("copycat_base", "slope_layer"))
+                    .register();
+
+    public static final BlockEntry<CopycatShaftBlock> COPYCAT_SHAFT =
+            REGISTRATE.block("copycat_shaft", CopycatShaftBlock::new)
+            .transform(CCBuilderTransformers.functionalCopycat())
+            .transform(FeatureToggle.register())
+            .transform(BlockStressDefaults.setNoImpact())
+            .onRegister(CreateRegistrate.blockModel(() -> model -> getShaftModel(model, SimpleCopycatPart.create(model, new CopycatShaftModel()))))
+            .item()
+            .transform(customItemModel("copycat_base", "shaft"))
+            .register();
+
+    @ExpectPlatform
+    public static BakedModel getShaftModel(BakedModel original, BakedModel copycat) {
+        throw new AssertionError();
+    }
 
     public static @Nullable BlockEntry<CopycatTestBlock> COPYCAT_TEST_BLOCK;
 

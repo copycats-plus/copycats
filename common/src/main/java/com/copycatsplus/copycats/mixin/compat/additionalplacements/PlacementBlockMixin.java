@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.mixin.compat.additionalplacements;
 
+import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.WrappedPressurePlate;
 import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
@@ -36,7 +37,8 @@ public class PlacementBlockMixin {
                 block instanceof WrappedPressurePlate.LightWeighted ||
                 block instanceof WrappedPressurePlate.HeavyWeighted ||
                 block instanceof WrappedStairsBlock ||
-                block instanceof CopycatBlock)
+                block instanceof CopycatBlock ||
+                block instanceof IFunctionalCopycatBlock)
             cir.setReturnValue(false);
     }
 }

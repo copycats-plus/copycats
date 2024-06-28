@@ -2,10 +2,6 @@ architectury {
     common(enabled_platforms.split(","))
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/copycats.accesswidener")
-}
-
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
@@ -25,18 +21,4 @@ dependencies {
     modCompileOnly("curse.maven:rubidium-574856:${rubidium_curse_id}")
 
     annotationProcessor(implementation("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
-}
-
-publishing {
-    publications {
-        mavenCommon(MavenPublication) {
-            artifactId = archives_base_name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-    }
 }

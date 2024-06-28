@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.content.copycat.base.multistate.BlockStateTransform;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ public class CCBlockStateProperties {
 
     public static final EnumProperty<VerticalStairShape> VERTICAL_STAIR_SHAPE = EnumProperty.create("vertical_stair_shape", VerticalStairShape.class);
     public static final EnumProperty<Side> SIDE = EnumProperty.create("side", Side.class);
+    public static final EnumProperty<BlockStateTransform> TRANSFORM = EnumProperty.create("transform", BlockStateTransform.class);
 
     public enum Side implements StringRepresentable {
         LEFT,

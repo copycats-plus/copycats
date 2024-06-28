@@ -39,7 +39,7 @@ public abstract class CopycatBlockEntityMixin extends SmartBlockEntity implement
     @Override
     public void setCTEnabled(boolean value) {
         enableCT = value;
-        setChanged();
+        notifyUpdate();
     }
 
     @Inject(

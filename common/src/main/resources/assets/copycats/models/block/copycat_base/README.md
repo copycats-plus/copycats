@@ -14,3 +14,10 @@ considerations need to be made when you want your model to function as a copycat
     - Basically, this means that the element must appear to be cut from the same corner of a block on all faces, so you
       cannot have an element which appears to come from the top of a block on one side, and the bottom of a block on the
       opposite side.
+
+However, copycat models are also more capable than regular block models in some ways:
+
+- Rotations, translations, and scaling can be done in all three axis and are not limited to 90-degree increments.
+- Per-vertex translation and rotation can be used to create more complex shapes.
+
+For more info, see the documentation of the copycat assembly API: https://github.com/copycats-plus/copycats/blob/multiloader/common/src/main/java/com/copycatsplus/copycats/content/copycat/base/model/assembly/Assembler.java
