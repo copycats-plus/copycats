@@ -71,26 +71,6 @@ public class MultiStateCopycatBlockImpl {
         return null;
     }
 
-    public static BlockState multiPlatformGetAppearance(MultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
-                                                        BlockState queryState, BlockPos queryPos) {
-        String property;
-        BlockPos truePos = null;
-        if (level instanceof ScaledBlockAndTintGetter scaledLevel) {
-            truePos = scaledLevel.getTruePos(pos);
-            Vec3i inner = scaledLevel.getInner(pos);
-            property = block.getPropertyFromRender(scaledLevel.getRenderingProperty(), state, scaledLevel, inner, truePos, side, queryState, queryPos);
-        } else {
-            property = block.storageProperties().stream().findFirst().get();
-        }
-        if (!block.allowCTAppearance(block, state, level, side, queryState, queryPos))
-            return state;
-        if (block.isIgnoredConnectivitySide(property, level, state, side, pos, queryPos))
-            return state;
-
-
-        return MultiStateCopycatBlock.getMaterial(level, pos, property);
-    }
-
 /*    public ItemStack getPickedStack(BlockState state, BlockGetter level, BlockPos pos, @Nullable Player player, @Nullable HitResult result) {
         String property = result == null
                 ? null

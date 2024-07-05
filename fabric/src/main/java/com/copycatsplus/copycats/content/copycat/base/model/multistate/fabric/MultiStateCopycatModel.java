@@ -19,6 +19,8 @@ import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -32,9 +34,10 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public abstract class MultiStateCopycatModel extends ForwardingBakedModel implements CustomParticleIconModel {
@@ -72,6 +75,7 @@ public abstract class MultiStateCopycatModel extends ForwardingBakedModel implem
     @SuppressWarnings({"deprecation", "unchecked"})
     @Override
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
+        Map<String, BlockState> materials;
         if (blockView instanceof RenderAttachedBlockView attachmentView
                 && attachmentView.getBlockEntityRenderAttachment(pos) instanceof Map<?, ?> mats) {
             synchronized (mats) {

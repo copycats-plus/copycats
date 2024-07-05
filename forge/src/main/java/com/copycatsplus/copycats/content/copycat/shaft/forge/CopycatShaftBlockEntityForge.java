@@ -4,7 +4,7 @@ import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -14,7 +14,7 @@ public class CopycatShaftBlockEntityForge extends CopycatShaftBlockEntity {
     }
 
     @Override
-    public @NotNull ModelData getModelData() {
+    public @NotNull IModelData getModelData() {
         return getCopycatBlockEntity().getModelData();
     }
 }

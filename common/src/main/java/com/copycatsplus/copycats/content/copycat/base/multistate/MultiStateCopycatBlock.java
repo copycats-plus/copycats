@@ -2,12 +2,14 @@ package com.copycatsplus.copycats.content.copycat.base.multistate;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
 import com.copycatsplus.copycats.CCBlockStateProperties;
+import com.copycatsplus.copycats.content.copycat.base.CTCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.IStateType;
 import com.copycatsplus.copycats.content.copycat.base.StateType;
 import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
+import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -329,19 +331,6 @@ public abstract class MultiStateCopycatBlock extends Block implements IFunctiona
         return StateType.MULTI;
     }
 
-    @ExpectPlatform
-    public static BlockState multiPlatformGetAppearance(MultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
-                                                        BlockState queryState, BlockPos queryPos) {
-        throw new AssertionError("This should never appear");
-    }
-
-    @Environment(EnvType.CLIENT)
-    public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
-                                    BlockState queryState, BlockPos queryPos) {
-
-        return multiPlatformGetAppearance(this, state, level, pos, side, queryState, queryPos);
-    }
-
     public boolean allowCTAppearance(MultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, Direction side,
                                      BlockState queryState, BlockPos queryPos) {
         String property;
@@ -498,8 +487,6 @@ public abstract class MultiStateCopycatBlock extends Block implements IFunctiona
     public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull Random random) {
         withBlockEntityDo(level, pos, MultiStateCopycatBlockEntity::updateTransform);
     }
-
-
 
     @SuppressWarnings("deprecation")
     @Override

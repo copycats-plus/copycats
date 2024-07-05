@@ -46,8 +46,7 @@ public abstract class MultiStateCopycatModel extends BakedModelWrapperWithData {
         if (material.isEmpty())
             return;
 
-        builder.withInitial(MATERIALS_PROPERTY, material);
-        builder.with(MATERIALS_PROPERTY, new HashMap<>(material));
+        builder.withInitial(MATERIALS_PROPERTY, new HashMap<>(material));
 
         if (!(state.getBlock() instanceof MultiStateCopycatBlock copycatBlock))
             return;

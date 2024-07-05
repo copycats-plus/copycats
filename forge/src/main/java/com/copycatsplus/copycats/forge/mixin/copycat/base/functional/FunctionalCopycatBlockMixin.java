@@ -86,14 +86,6 @@ public abstract class FunctionalCopycatBlockMixin extends Block implements IFunc
     }
 
     @Override
-    public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
-        if (isIgnoredConnectivitySide(level, state, side, pos, queryPos))
-            return state;
-
-        return getMaterial(level, pos);
-    }
-
-    @Override
     public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacements.Type type,
                                 EntityType<?> entityType) {
         return false;

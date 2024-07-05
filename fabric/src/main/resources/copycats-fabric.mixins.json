@@ -5,10 +5,7 @@
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "HolderReferenceInvoker",
-    "compat.registrate.CreateRegistrateMixin",
     "copycat.base.functional.FunctionalCopycatBlockMixin",
-    "copycat.base.CopycatModelMixin",
     "copycat.base.multistate.MultiStateCopycatBlockCombinerMixin"
   ],
   "client": [

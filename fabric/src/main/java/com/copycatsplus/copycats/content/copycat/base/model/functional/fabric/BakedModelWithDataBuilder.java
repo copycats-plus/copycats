@@ -11,10 +11,11 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.Random;
 
 public final class BakedModelWithDataBuilder implements Bufferable {
     private final BakedModel model;
@@ -48,7 +49,7 @@ public final class BakedModelWithDataBuilder implements Bufferable {
     }
 
     @Override
-    public void bufferInto(VertexConsumer consumer, ModelBlockRenderer blockRenderer, RandomSource random) {
+    public void bufferInto(VertexConsumer consumer, ModelBlockRenderer blockRenderer, Random random) {
         BakedModel model = this.model; //DefaultLayerFilteringBakedModel.wrap(this.model); // not sure what the goal of this filter is, but it filtered out all copycat quads
         if (consumer instanceof ShadeSeparatingVertexConsumer shadeSeparatingWrapper) {
             model = shadeSeparatingWrapper.wrapModel(model);

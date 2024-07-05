@@ -71,7 +71,7 @@ public class AssemblerImpl {
         dest.emit();
     }
 
-    public static <Source extends MutableQuadView, Destination extends QuadEmitter> void assembleQuad(Source src, Destination dest, AABB crop, Vec3 move, QuadTransform... transforms) {
+    public static <Source extends MutableQuadView, Destination extends QuadEmitter> void assembleQuad(Source src, Destination dest, AABB crop, Vec3 move, GlobalTransform globalTransform, QuadTransform... transforms) {
         src.copyTo(dest);
         TextureAtlasSprite sprite = spriteFinder.find(src, 0);
         BakedModelHelper.cropAndMove(dest, sprite, crop, move);
@@ -84,7 +84,7 @@ public class AssemblerImpl {
         mutableQuad.mutate();
         for (int i = 0; i < 4; i++) {
             BakedQuadHelper.setXYZ(dest, i, mutableQuad.vertices.get(i).xyz.toVec3());
-            dest.uv(i, mutableQuad.vertices.get(i).uv.u, mutableQuad.vertices.get(i).uv.v);
+            dest.sprite(i, 0, mutableQuad.vertices.get(i).uv.u, mutableQuad.vertices.get(i).uv.v);
         }
         // todo: assign lightFace
         dest.emit();
@@ -95,7 +95,7 @@ public class AssemblerImpl {
         List<MutableVertex> vertices = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             MutableVec3 xyz = new MutableVec3(vertexData.x(i), vertexData.y(i), vertexData.z(i));
-            MutableUV uv = new MutableUV(vertexData.u(i), vertexData.v(i));
+            MutableUV uv = new MutableUV(vertexData.spriteU(i, 0), vertexData.spriteV(i, 0));
             vertices.add(new MutableVertex(xyz, uv));
         }
         return new MutableQuad(vertices, vertexData.lightFace());

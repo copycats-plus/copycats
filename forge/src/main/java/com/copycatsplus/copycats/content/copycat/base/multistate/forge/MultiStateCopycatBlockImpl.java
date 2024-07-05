@@ -22,30 +22,4 @@ public class MultiStateCopycatBlockImpl {
         }
         return null;
     }
-
-    @SuppressWarnings("UnstableApiUsage")
-    public static BlockState multiPlatformGetAppearance(MultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
-                                                        BlockState queryState, BlockPos queryPos) {
-        String property;
-        BlockPos truePos = null;
-        if (level instanceof ScaledBlockAndTintGetter scaledLevel) {
-            truePos = scaledLevel.getTruePos(pos);
-            Vec3i inner = scaledLevel.getInner(pos);
-            property = block.getPropertyFromRender(scaledLevel.getRenderingProperty(), state, scaledLevel, inner, truePos, side, queryState, queryPos);
-        } else {
-            property = block.storageProperties().stream().findFirst().get();
-        }
-        if (!block.allowCTAppearance(block, state, level, side, queryState, queryPos))
-            return state;
-        if (block.isIgnoredConnectivitySide(property, level, state, side, pos, queryPos))
-            return state;
-
-        ModelDataManager modelDataManager = level.getModelDataManager();
-        BlockState appearance = null;
-        if (modelDataManager != null)
-            appearance = MultiStateCopycatModel.getMaterials(modelDataManager.getAt(truePos == null ? pos : truePos)).get(property);
-        if (appearance == null)
-            appearance = MultiStateCopycatBlock.getMaterial(level, pos, property);
-        return appearance;
-    }
 }

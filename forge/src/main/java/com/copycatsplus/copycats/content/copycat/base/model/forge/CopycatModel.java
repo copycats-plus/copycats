@@ -4,6 +4,7 @@ package com.copycatsplus.copycats.content.copycat.base.model.forge;
 import com.copycatsplus.copycats.content.copycat.base.CTCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.model.BakedModelWrapperWithData;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.client.Minecraft;
@@ -24,8 +25,8 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,24 +43,24 @@ public abstract class CopycatModel extends BakedModelWrapperWithData {
     }
 
     @Override
-    protected void gatherModelData(ModelDataMap.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state, IModelData blockEntityData) {
+    protected void gatherModelData(ModelDataMap.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
+                                   IModelData blockEntityData) {
         BlockState material = getMaterial(blockEntityData);
 
         builder.withInitial(MATERIAL_PROPERTY, material);
 
-        if (!(state.getBlock() instanceof IFunctionalCopycatBlock copycatBlock))
-            return;
-
-        CopycatModel.OcclusionData occlusionData = new CopycatModel.OcclusionData();
-        gatherOcclusionData(world, pos, state, material, occlusionData, copycatBlock);
-        builder.withInitial(OCCLUSION_PROPERTY, occlusionData);
+        OcclusionData occlusionData = new OcclusionData();
+        if (state.getBlock() instanceof IFunctionalCopycatBlock copycatBlock) {
+            gatherOcclusionData(world, pos, state, material, occlusionData, copycatBlock);
+            builder.withInitial(OCCLUSION_PROPERTY, occlusionData);
+        }
 
         IModelData wrappedData = getModelOf(material).getModelData(world, pos, material, EmptyModelData.INSTANCE);
         builder.withInitial(WRAPPED_DATA_PROPERTY, wrappedData);
     }
 
     private void gatherOcclusionData(BlockAndTintGetter world, BlockPos pos, BlockState state, BlockState material,
-                                     CopycatModel.OcclusionData occlusionData, IFunctionalCopycatBlock copycatBlock) {
+                                     OcclusionData occlusionData, IFunctionalCopycatBlock copycatBlock) {
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         for (Direction face : Iterate.directions) {
 
@@ -80,25 +81,26 @@ public abstract class CopycatModel extends BakedModelWrapperWithData {
         }
     }
 
-    @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull Random rand, @NotNull IModelData data) {
-        RenderType renderType = MinecraftForgeClient.getRenderType();
+    public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull Random rand, @NotNull IModelData data) {
+
         // Rubidium: see below
         if (side != null && state.getBlock() instanceof IFunctionalCopycatBlock ccb && ccb.shouldFaceAlwaysRender(state, side))
             return Collections.emptyList();
 
         BlockState material = getMaterial(data);
 
-        CopycatModel.OcclusionData occlusionData = data.getData(OCCLUSION_PROPERTY);
+        OcclusionData occlusionData = data.getData(OCCLUSION_PROPERTY);
         if (occlusionData != null && occlusionData.isOccluded(side))
+            return super.getQuads(state, side, rand, data);
+
+        RenderType renderType = MinecraftForgeClient.getRenderType();
+        if (renderType != null && !ItemBlockRenderTypes.canRenderInLayer(material, renderType))
             return super.getQuads(state, side, rand, data);
 
         IModelData wrappedData = data.getData(WRAPPED_DATA_PROPERTY);
         if (wrappedData == null)
             wrappedData = EmptyModelData.INSTANCE;
-        if (renderType != null && !ItemBlockRenderTypes.canRenderInLayer(material, renderType))
-            return super.getQuads(state, side, rand, data);
 
         List<BakedQuad> croppedQuads = getCroppedQuads(state, side, rand, material, wrappedData);
 
@@ -122,8 +124,8 @@ public abstract class CopycatModel extends BakedModelWrapperWithData {
     /**
      * The returned list must not be mutated.
      */
-    public abstract List<BakedQuad> getCroppedQuads(BlockState state, Direction side, Random rand,
-                                                    BlockState material, IModelData wrappedData);
+    protected abstract List<BakedQuad> getCroppedQuads(BlockState state, Direction side, Random rand,
+                                                       BlockState material, IModelData wrappedData);
 
     @Override
     public @NotNull TextureAtlasSprite getParticleIcon(@NotNull IModelData data) {
@@ -137,7 +139,7 @@ public abstract class CopycatModel extends BakedModelWrapperWithData {
     }
 
     public static BlockState getMaterial(IModelData data) {
-        BlockState material = data == null ? null : data.getData(MATERIAL_PROPERTY);
+        BlockState material = data.getData(MATERIAL_PROPERTY);
         return material == null ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
     }
 

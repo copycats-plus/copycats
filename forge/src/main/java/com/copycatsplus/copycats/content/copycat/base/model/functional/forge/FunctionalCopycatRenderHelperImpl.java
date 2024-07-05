@@ -2,6 +2,8 @@ package com.copycatsplus.copycats.content.copycat.base.model.functional.forge;
 
 import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.model.functional.WrappedRenderWorld;
+import com.copycatsplus.copycats.forge.mixin.copycat.base.ModelDataMapAccessor;
+import com.jozufozu.flywheel.core.model.ModelUtil;
 import com.jozufozu.flywheel.core.model.ShadeSeparatedBufferedData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.resources.model.BakedModel;
@@ -9,7 +11,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.functional.forge.BakedModelWithDataBuilder.VIRTUAL_PROPERTY;
+import java.util.Set;
 
 public class FunctionalCopycatRenderHelperImpl {
 
@@ -18,7 +20,7 @@ public class FunctionalCopycatRenderHelperImpl {
         IModelData renderData = model.getModelData(renderWorld, be.getBlockPos(), be.getBlockState(), be.getCopycatBlockEntity().getModelData());
         ModelDataMap.Builder builder = new ModelDataMap.Builder();
         copyModelData(renderData, builder);
-        builder.withInitial(VIRTUAL_PROPERTY, true);
+        builder.withInitial(BakedModelWithDataBuilder.VIRTUAL_PROPERTY, true);
 
         return new BakedModelWithDataBuilder(model)
                 .withRenderWorld(renderWorld.setCTMode(false))
@@ -37,10 +39,16 @@ public class FunctionalCopycatRenderHelperImpl {
     }
 
     static void copyModelData(IModelData from, ModelDataMap.Builder to) {
-        //Todo: needs fixing
-/*        for (ModelProperty<?> property : from.getProperties()) {
+        for (ModelProperty<?> property : getProperties(from)) {
             copyModelProperty(to, from, property);
-        }*/
+        }
+    }
+
+    static Set<ModelProperty<?>> getProperties(IModelData data) {
+        if (data instanceof ModelDataMap map) {
+            return ((ModelDataMapAccessor) map).getBackingMap().keySet();
+        }
+        return Set.of();
     }
 
     static <T> void copyModelProperty(ModelDataMap.Builder to, IModelData from, ModelProperty<T> property) {

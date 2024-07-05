@@ -50,7 +50,7 @@ dependencies {
     modImplementation("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_forge_version}")
 
     modLocalRuntime "curse.maven:jade-324717:${jade_forge_curse_id}"
-    modLocalRuntime("mezz.jei:jei-${minecraft_version}-forge:${jei_forge_version}")
+//    modLocalRuntime("mezz.jei:jei-${minecraft_version}-forge:${jei_forge_version}")
 
     modLocalRuntime("curse.maven:rubidium-574856:${rubidium_forge_curse_id}")
     modImplementation("curse.maven:additional-placements-674852:${additionalplacements_forge_curse_id}")

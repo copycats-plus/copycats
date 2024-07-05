@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.MathHelper;
+import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;
@@ -40,7 +41,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
-
     public static BooleanProperty TOP_NE = BooleanProperty.create("top_northeast");
     public static BooleanProperty TOP_NW = BooleanProperty.create("top_northwest");
     public static BooleanProperty TOP_SE = BooleanProperty.create("top_southeast");
@@ -124,6 +124,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder.add(TOP_NE, TOP_NW, TOP_SE, TOP_SW, BOTTOM_NE, BOTTOM_NW, BOTTOM_SE, BOTTOM_SW));
     }
+
 
     @Override
     public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {

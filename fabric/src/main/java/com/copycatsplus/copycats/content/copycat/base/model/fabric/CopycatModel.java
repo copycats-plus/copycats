@@ -3,10 +3,10 @@ package com.copycatsplus.copycats.content.copycat.base.model.fabric;
 
 import com.copycatsplus.copycats.content.copycat.base.CTCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
+import com.jozufozu.flywheel.fabric.model.FabricModelUtil;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.decoration.copycat.FilteredBlockAndTintGetter;
 import com.simibubi.create.foundation.utility.Iterate;
-import io.github.fabricators_of_create.porting_lib.models.CustomParticleIconModel;
+import io.github.fabricators_of_create.porting_lib.model.CustomParticleIconModel;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,6 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Supplier;
 
 public abstract class CopycatModel extends ForwardingBakedModel implements CustomParticleIconModel {
@@ -57,7 +57,7 @@ public abstract class CopycatModel extends ForwardingBakedModel implements Custo
 
     @SuppressWarnings("deprecation")
     @Override
-    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         BlockState material;
         if (blockView instanceof RenderAttachedBlockView attachmentView
                 && attachmentView.getBlockEntityRenderAttachment(pos) instanceof BlockState material1) {
@@ -83,24 +83,13 @@ public abstract class CopycatModel extends ForwardingBakedModel implements Custo
         // fabric: need to change the default render material
         context.pushTransform(MaterialFixer.create(material));
 
-        if (state.getBlock() instanceof IFunctionalCopycatBlock copycatBlock) {
-            FilteredBlockAndTintGetter filteredBlockAndTintGetter = new FilteredBlockAndTintGetter(blockView, t -> {
-                BlockEntity be = blockView.getBlockEntity(pos);
-                if (be instanceof CTCopycatBlockEntity ctbe)
-                    if (!ctbe.isCTEnabled())
-                        return false;
-                return copycatBlock.canConnectTexturesToward(blockView, pos, t, state);
-            });
-            emitBlockQuadsInner(filteredBlockAndTintGetter, state, pos, randomSupplier, context, material, cullFaceRemovalData, occlusionData);
-        } else {
-            emitBlockQuadsInner(blockView, state, pos, randomSupplier, context, material, cullFaceRemovalData, occlusionData);
-        }
+        emitBlockQuadsInner(blockView, state, pos, randomSupplier, context, material, cullFaceRemovalData, occlusionData);
 
         // fabric: pop the material changer transform
         context.popTransform();
     }
 
-    protected abstract void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData);
+    protected abstract void emitBlockQuadsInner(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context, BlockState material, CullFaceRemovalData cullFaceRemovalData, OcclusionData occlusionData);
 
     @Override
     public TextureAtlasSprite getParticleIcon(Object data) {
@@ -165,7 +154,8 @@ public abstract class CopycatModel extends ForwardingBakedModel implements Custo
     public record MaterialFixer(RenderMaterial materialDefault) implements RenderContext.QuadTransform {
         @Override
         public boolean transform(MutableQuadView quad) {
-            if (quad.material().blendMode() == BlendMode.DEFAULT) {
+            BlendMode quadBlendMode = FabricModelUtil.getBlendMode(quad);
+            if (quadBlendMode == BlendMode.DEFAULT) {
                 // default needs to be changed from the Copycat's default (cutout) to the wrapped material's default.
                 quad.material(materialDefault);
             }

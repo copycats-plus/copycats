@@ -1,11 +1,14 @@
 package com.copycatsplus.copycats.content.copycat.base.functional;
 
 import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
+import com.copycatsplus.copycats.content.copycat.base.IShimCopycatBlock;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
@@ -34,7 +37,7 @@ import java.util.Optional;
 /**
  * Indicates that a block functions as a copycat but is not a subclass of {@link CopycatBlock}.
  */
-public interface IFunctionalCopycatBlock extends IWrenchable {
+public interface IFunctionalCopycatBlock extends IWrenchable, IShimCopycatBlock {
 
     @Nullable
     default IFunctionalCopycatBlockEntity getCopycatBlockEntity(BlockGetter worldIn, BlockPos pos) {
@@ -234,6 +237,24 @@ public interface IFunctionalCopycatBlock extends IWrenchable {
         return Blocks.AIR.defaultBlockState();
     }
 
+    @Nullable
+    default BlockState getConnectiveMaterial(BlockAndTintGetter reader, BlockState fromState, Direction face,
+                                             BlockPos fromPos, BlockPos toPos) {
+        BlockState toState = reader.getBlockState(toPos); // toPos is the position with copycat
+
+        if (fromState.getBlock() instanceof IShimCopycatBlock fromCopycat) {
+            if (!fromCopycat.canConnectTexturesToward(reader, fromPos, toPos, fromState))
+                return null;
+        }
+
+        if (toState.getBlock() instanceof IShimCopycatBlock toCopycat) {
+            if (toCopycat.isIgnoredConnectivitySide(reader, toState, face, toPos, fromPos))
+                return null;
+        }
+
+        return getMaterial(reader, toPos);
+    }
+
     default boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
                                               BlockPos fromPos, BlockPos toPos) {
         return false;
@@ -252,10 +273,12 @@ public interface IFunctionalCopycatBlock extends IWrenchable {
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     static BlockColor wrappedColor() {
         return new WrappedBlockColor();
     }
 
+    @Environment(EnvType.CLIENT)
     static class WrappedBlockColor implements BlockColor {
 
         @Override

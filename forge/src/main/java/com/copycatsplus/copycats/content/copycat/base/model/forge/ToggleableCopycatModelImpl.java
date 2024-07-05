@@ -7,11 +7,12 @@ import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
+import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.Random;
 
 import java.util.List;
-import java.util.Random;
 
 public class ToggleableCopycatModelImpl extends CopycatModel implements ToggleableCopycatModel {
 

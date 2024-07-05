@@ -1,0 +1,1 @@
+import com.copycatsplus.copycats.fabric.mixin_interfaces.HolderReferenceAccessor;

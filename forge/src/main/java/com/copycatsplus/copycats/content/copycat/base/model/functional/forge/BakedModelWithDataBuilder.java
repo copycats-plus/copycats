@@ -2,8 +2,8 @@ package com.copycatsplus.copycats.content.copycat.base.model.functional.forge;
 
 import com.jozufozu.flywheel.core.model.BlockModel;
 import com.jozufozu.flywheel.core.model.Bufferable;
-import com.jozufozu.flywheel.core.model.ModelUtil;
 import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
+import com.jozufozu.flywheel.core.virtual.VirtualEmptyModelData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
@@ -20,14 +20,14 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import java.util.Random;
 
 public final class BakedModelWithDataBuilder implements Bufferable {
+    public static final ModelProperty<Boolean> VIRTUAL_PROPERTY = new ModelProperty<>();
+
     private final BakedModel model;
     private BlockAndTintGetter renderWorld = VirtualEmptyBlockGetter.INSTANCE;
     private BlockState referenceState = Blocks.AIR.defaultBlockState();
     private PoseStack poseStack = new PoseStack();
     private BlockPos renderPos = BlockPos.ZERO;
-    public static final ModelProperty<Boolean> VIRTUAL_PROPERTY = new ModelProperty<>();
-    public static final IModelData VIRTUAL_DATA = new ModelDataMap.Builder().withInitial(VIRTUAL_PROPERTY, true).build();
-    private IModelData data = VIRTUAL_DATA;
+    private IModelData data = new ModelDataMap.Builder().withInitial(VIRTUAL_PROPERTY, true).build();
 
     public BakedModelWithDataBuilder(BakedModel model) {
         this.model = model;
@@ -60,7 +60,7 @@ public final class BakedModelWithDataBuilder implements Bufferable {
 
     @Override
     public void bufferInto(VertexConsumer consumer, ModelBlockRenderer blockRenderer, Random random) {
-        blockRenderer.tesselateBlock(renderWorld, model, referenceState, renderPos, poseStack, consumer, false, random, 42, OverlayTexture.NO_OVERLAY);
+        blockRenderer.tesselateBlock(renderWorld, model, referenceState, renderPos, poseStack, consumer, false, random, 42, OverlayTexture.NO_OVERLAY, data);
     }
 
     public BlockModel toModel(String name) {
@@ -69,5 +69,9 @@ public final class BakedModelWithDataBuilder implements Bufferable {
 
     public BlockModel toModel() {
         return toModel(referenceState.toString());
+    }
+
+    public static boolean isVirtual(IModelData data) {
+        return VirtualEmptyModelData.is(data) || data.hasProperty(VIRTUAL_PROPERTY) && Boolean.TRUE.equals(data.getData(VIRTUAL_PROPERTY));
     }
 }
