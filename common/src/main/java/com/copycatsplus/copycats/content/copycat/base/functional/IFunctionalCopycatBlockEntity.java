@@ -83,7 +83,7 @@ public interface IFunctionalCopycatBlockEntity extends CTCopycatBlockEntity, ISp
 
     @Override
     default boolean isCTEnabled() {
-        return ((CTCopycatBlockEntity) getCopycatBlockEntity()).isCTEnabled();
+        return getCopycatBlockEntity() != null && ((CTCopycatBlockEntity) getCopycatBlockEntity()).isCTEnabled();
     }
 
     @Override
