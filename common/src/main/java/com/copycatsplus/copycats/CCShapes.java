@@ -201,7 +201,6 @@ public class CCShapes {
     public static final VoxelShaper SLOPE_LAYER_TOP_6 = shape(Shapes.empty()).build(slopeLayerTop(8 / 16d, 1), Direction.SOUTH);
     public static final VoxelShaper SLOPE_LAYER_TOP_7 = shape(Shapes.empty()).build(slopeLayerTop(12 / 16d, 1), Direction.SOUTH);
 
-
     private static Builder shape(VoxelShape shape) {
         return new Builder(shape);
     }
