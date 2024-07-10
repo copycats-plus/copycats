@@ -190,6 +190,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_IRON_DOOR = copycatWithBaseItem(Items.IRON_DOOR, CCBlocks.COPYCAT_IRON_DOOR, 1);
 
+    GeneratedRecipe COPYCAT_COWCATCHER = copycat(CCBlocks.COPYCAT_COWCATCHER, 1);
+
     Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
             CCBlocks.COPYCAT_GLASS_FLUID_PIPE
     );

@@ -16,6 +16,8 @@ import com.copycatsplus.copycats.content.copycat.button.CopycatButtonModelCore;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatMultiByteModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlock;
+import com.copycatsplus.copycats.content.copycat.cowcatcher.CopycatCowCatcherModelCore;
+import com.copycatsplus.copycats.content.copycat.cowcatcher.CopycatCowcatcherBlock;
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorModelCore;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -75,15 +77,19 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
+import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -494,6 +500,14 @@ public class CCBlocks {
                     .transform(customItemModel("copycat_base", "door"))
                     .register();
 
+    public static final BlockEntry<CopycatCowcatcherBlock> COPYCAT_COWCATCHER =
+            REGISTRATE.block("copycat_cowcatcher", CopycatCowcatcherBlock::new)
+                    .transform(CCBuilderTransformers.copycat())
+                    .onRegister(createBlockModel(new CopycatCowCatcherModelCore()))
+                    .item()
+                    .transform(customItemModel("copycat_base", "cowcatcher"))
+                    .register();
+
     @ExpectPlatform
     public static BakedModel getFluidPipeModel(BakedModel original, CopycatModelCore copycat) {
         throw new AssertionError();
@@ -502,6 +516,15 @@ public class CCBlocks {
     @ExpectPlatform
     public static void getWrappedBlockState(DataGenContext<Block, ? extends Block> c, RegistrateBlockstateProvider p, String name) {
         throw new AssertionError();
+    }
+
+    private static @NotNull <Model extends CopycatModelCore> NonNullConsumer<? super Block> createBlockModel(Model model) {
+        return CreateRegistrate.blockModel(() -> original -> CopycatModelCore.createModel(original, model));
+    }
+
+    //Just in case we want/need it
+    private static @NotNull <Model extends CopycatModelCore> NonNullConsumer<? super BlockItem> createItemModel(Model model) {
+        return CreateRegistrate.itemModel(() -> original -> CopycatModelCore.createModel(original, model));
     }
 
     public static void register() {

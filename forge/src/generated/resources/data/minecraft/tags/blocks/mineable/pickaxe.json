@@ -36,6 +36,7 @@
     "copycats:copycat_fluid_pipe",
     "copycats:copycat_glass_fluid_pipe",
     "copycats:copycat_door",
-    "copycats:copycat_iron_door"
+    "copycats:copycat_iron_door",
+    "copycats:copycat_cowcatcher"
   ]
 }
