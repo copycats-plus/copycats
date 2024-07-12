@@ -190,13 +190,10 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_IRON_DOOR = copycatWithBaseItem(Items.IRON_DOOR, CCBlocks.COPYCAT_IRON_DOOR, 1);
 
-    GeneratedRecipe COPYCAT_COPYCAT = copycatFromCopycat(CCBlocks.COPYCAT_BLOCK, CCBlocks.COPYCAT_COPY_CAT, 1);
-
-    GeneratedRecipe COPYCAT_COPYCAT_UNCRAFT = copycatFromCopycat(CCBlocks.COPYCAT_COPY_CAT, CCBlocks.COPYCAT_BLOCK, 1);
-
     Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
             CCBlocks.COPYCAT_BASE,
-            CCBlocks.COPYCAT_GLASS_FLUID_PIPE
+            CCBlocks.COPYCAT_GLASS_FLUID_PIPE,
+            CCBlocks.COPYCAT_COPY_CAT
     );
 
     String currentFolder = "";
