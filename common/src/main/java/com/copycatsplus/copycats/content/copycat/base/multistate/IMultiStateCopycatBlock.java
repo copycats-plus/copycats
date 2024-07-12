@@ -80,12 +80,30 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         return copycatBE;
     }
 
+    /**
+     * When it is impossible to determine the specific part involved in an interaction, this property is used.
+     */
     String defaultProperty();
 
+    /**
+     * The axis-scale of a virtual render world such that each part of the copycat occupies a single block space.
+     */
     Vec3i vectorScale(BlockState state);
 
+    /**
+     * The string keys of all parts that can be stored in the copycat.
+     */
     Set<String> storageProperties();
 
+    /**
+     * Get the color index of a part based on its property. This is used to colorize the copycat such that each
+     * adjacent part has a different color for accessibility.
+     */
+    int getColorIndex(String property);
+
+    /**
+     * Whether the given part exists in the copycat based on the given state.
+     */
     boolean partExists(BlockState state, String property);
 
     Vec3i getVectorFromProperty(BlockState state, String property);

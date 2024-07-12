@@ -2,6 +2,7 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
+import com.copycatsplus.copycats.content.copycat.base.CopycatBaseBlock;
 import com.copycatsplus.copycats.content.copycat.base.WrappedCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
 import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlock;
@@ -72,15 +73,18 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.content.contraptions.behaviour.DoorMovingInteraction;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
+import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
@@ -90,6 +94,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -97,8 +102,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.simibubi.create.AllInteractionBehaviours.interactionBehaviour;
+import static com.simibubi.create.Create.REGISTRATE;
 import static com.simibubi.create.foundation.data.CreateRegistrate.blockModel;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
+import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 @SuppressWarnings("unused")
 //noinspection unchecked
@@ -109,6 +116,16 @@ public class CCBlocks {
     public static final BlockEntry<WrappedCopycatBlock> WRAPPED_COPYCAT =
             REGISTRATE.block("wrapped_copycat", WrappedCopycatBlock::new)
                     .transform(BuilderTransformers.copycat())
+                    .register();
+
+    public static final BlockEntry<CopycatBaseBlock> COPYCAT_BASE =
+            REGISTRATE.block("copycat_base", CopycatBaseBlock::new)
+                    .initialProperties(SharedProperties::softMetal)
+                    .properties(p -> p.mapColor(MapColor.GLOW_LICHEN).noOcclusion())
+                    .addLayer(() -> RenderType::cutoutMipped)
+                    .tag(AllTags.AllBlockTags.FAN_TRANSPARENT.tag)
+                    .transform(pickaxeOnly())
+                    .blockstate(CCBlockStateGen::base)
                     .register();
 
     public static final BlockEntry<CopycatBlockBlock> COPYCAT_BLOCK =

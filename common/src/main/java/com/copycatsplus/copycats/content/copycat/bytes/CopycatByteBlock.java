@@ -113,6 +113,12 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     }
 
     @Override
+    public int getColorIndex(String property) {
+        Byte bite = byteMap.get(property);
+        return bite.x ^ bite.y ^ bite.z ? 1 : 0;
+    }
+
+    @Override
     public String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit) {
         return byByte(hitLocation.getX() > 0, hitLocation.getY() > 0, hitLocation.getZ() > 0).getName();
     }

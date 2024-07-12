@@ -1,6 +1,7 @@
 {
   "values": [
     "copycats:wrapped_copycat",
+    "copycats:copycat_base",
     "copycats:copycat_block",
     "copycats:copycat_copy_cat",
     "copycats:copycat_beam",

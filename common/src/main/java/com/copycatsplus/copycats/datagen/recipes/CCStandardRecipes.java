@@ -195,6 +195,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     GeneratedRecipe COPYCAT_COPYCAT_UNCRAFT = copycatFromCopycat(CCBlocks.COPYCAT_COPY_CAT, CCBlocks.COPYCAT_BLOCK, 1);
 
     Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
+            CCBlocks.COPYCAT_BASE,
             CCBlocks.COPYCAT_GLASS_FLUID_PIPE
     );
 
@@ -223,7 +224,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     }
 
     static GeneratedRecipeBuilder create(ItemLike result) {
-        return create(()-> result);
+        return create(() -> result);
     }
 
     GeneratedRecipeBuilder.GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
@@ -267,7 +268,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         }
 
         return create(result)
-                .unlockedBy(()-> base)
+                .unlockedBy(() -> base)
                 .returns(resultCount)
                 .viaShapeless(b -> b.requires(base, resultCount).requires(AllItems.ZINC_INGOT));
     }

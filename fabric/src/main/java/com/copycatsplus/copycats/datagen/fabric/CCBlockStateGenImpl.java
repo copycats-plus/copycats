@@ -1,5 +1,7 @@
 package com.copycatsplus.copycats.datagen.fabric;
 
+import com.copycatsplus.copycats.CCBlockStateProperties;
+import com.copycatsplus.copycats.content.copycat.base.CopycatBaseBlock;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatGlassFluidPipeBlock;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
@@ -22,5 +24,15 @@ public class CCBlockStateGenImpl {
                             .rotationY(axis == Direction.Axis.X ? 90 : 0)
                             .build();
                 }, BlockStateProperties.WATERLOGGED);
+    }
+
+    public static void base(DataGenContext<Block, CopycatBaseBlock> c, RegistrateBlockstateProvider p) {
+        p.getVariantBuilder(c.getEntry())
+                .forAllStatesExcept(state -> {
+                    int baseType = state.getValue(CCBlockStateProperties.BASE_TYPE);
+                    return ConfiguredModel.builder()
+                            .modelFile(p.models().cubeAll(c.getName() + "_" + baseType, p.modLoc("block/copycat_base_" + baseType)))
+                            .build();
+                });
     }
 }

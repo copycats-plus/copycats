@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.base.model.forge;
 
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
 import com.copycatsplus.copycats.content.copycat.base.ICopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
@@ -34,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.copycatsplus.copycats.CCBlockStateProperties.BASE_TYPE;
+import static com.copycatsplus.copycats.content.copycat.base.CopycatBaseBlock.BASE_TYPE_COUNT;
 import static com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore.MATERIAL_KEY;
 import static com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore.getModelOf;
 
@@ -253,6 +256,9 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         if (entry.model() == null)
             return originalModel;
         else {
+            if (core.colorize && state.getBlock() instanceof IMultiStateCopycatBlock multiState && AllBlocks.COPYCAT_BASE.has(material)) {
+                material = CCBlocks.COPYCAT_BASE.getDefaultState().setValue(BASE_TYPE, multiState.getColorIndex(entry.key()) % BASE_TYPE_COUNT);
+            }
             return entry.model().getModel(state, material);
         }
     }

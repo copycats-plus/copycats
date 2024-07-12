@@ -88,6 +88,17 @@ public class CopycatBoardBlock extends WaterloggedMultiStateCopycatBlock impleme
     }
 
     @Override
+    public int getColorIndex(String property) {
+        if (property.equals(UP.getName())) return 0;
+        if (property.equals(DOWN.getName())) return 0;
+        if (property.equals(NORTH.getName())) return 1;
+        if (property.equals(SOUTH.getName())) return 1;
+        if (property.equals(EAST.getName())) return 2;
+        if (property.equals(WEST.getName())) return 2;
+        return 0;
+    }
+
+    @Override
     public boolean partExists(BlockState state, String property) {
         if (property.equals(UP.getName())) return state.getValue(UP);
         if (property.equals(DOWN.getName())) return state.getValue(DOWN);

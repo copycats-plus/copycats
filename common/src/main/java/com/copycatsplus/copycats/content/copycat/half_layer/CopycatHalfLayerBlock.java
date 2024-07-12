@@ -123,6 +123,11 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
     }
 
     @Override
+    public int getColorIndex(String property) {
+        return property.equals(POSITIVE_LAYERS.getName()) ? 1 : 0;
+    }
+
+    @Override
     public String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit) {
         if (hitLocation.get(state.getValue(AXIS)) > 0) {
             return POSITIVE_LAYERS.getName();

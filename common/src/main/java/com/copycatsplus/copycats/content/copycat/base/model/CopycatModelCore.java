@@ -44,7 +44,12 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     /**
      * Whether this model core should render enhanced models.
      */
-    protected boolean enhanced = true;
+    public boolean enhanced = true;
+
+    /**
+     * Whether to colorize copycat base models.
+     */
+    public boolean colorize = false;
 
     /**
      * Register all models required to render this copycat.
@@ -94,6 +99,7 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      */
     public void prepareForRender() {
         enhanced = CCConfigs.client().useEnhancedModels.get();
+        colorize = CCConfigs.client().colorizeMultiStates.get();
     }
 
     /**

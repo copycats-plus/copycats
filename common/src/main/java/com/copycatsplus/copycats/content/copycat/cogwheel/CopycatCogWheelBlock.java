@@ -68,6 +68,11 @@ public class CopycatCogWheelBlock extends CogWheelBlock implements IMultiStateCo
     }
 
     @Override
+    public int getColorIndex(String property) {
+        return property.equals(Part.COGWHEEL.getSerializedName()) ? 1 : 0;
+    }
+
+    @Override
     public boolean partExists(BlockState state, String property) {
         return true;
     }
