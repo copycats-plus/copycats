@@ -2,6 +2,7 @@
   "values": [
     "copycats:wrapped_copycat",
     "copycats:copycat_block",
+    "copycats:copycat_copy_cat",
     "copycats:copycat_beam",
     "copycats:copycat_board",
     "copycats:copycat_wooden_button",

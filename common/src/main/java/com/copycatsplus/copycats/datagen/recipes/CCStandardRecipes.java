@@ -190,6 +190,10 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_IRON_DOOR = copycatWithBaseItem(Items.IRON_DOOR, CCBlocks.COPYCAT_IRON_DOOR, 1);
 
+    GeneratedRecipe COPYCAT_COPYCAT = copycatFromCopycat(CCBlocks.COPYCAT_BLOCK, CCBlocks.COPYCAT_COPY_CAT, 1);
+
+    GeneratedRecipe COPYCAT_COPYCAT_UNCRAFT = copycatFromCopycat(CCBlocks.COPYCAT_COPY_CAT, CCBlocks.COPYCAT_BLOCK, 1);
+
     Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
             CCBlocks.COPYCAT_GLASS_FLUID_PIPE
     );
@@ -231,6 +235,18 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
                 .unlockedBy(AllItems.ZINC_INGOT::get)
                 .returns(resultCount)
                 .viaStonecuttingTag(TaggedIngredients.ZINC::getTag)
+                .create();
+    }
+
+    GeneratedRecipeBuilder.GeneratedRecipe copycatFromCopycat(ItemProviderEntry<? extends ItemLike> input, ItemProviderEntry<? extends ItemLike> result, int resultCount) {
+        if (result.get() instanceof ICopycatBlock) {
+            copycatsWithRecipes.add((Block) result.get());
+        }
+
+        return create(result)
+                .unlockedBy(input)
+                .returns(resultCount)
+                .viaStonecutting(input)
                 .create();
     }
 

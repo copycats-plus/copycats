@@ -16,6 +16,8 @@ import com.copycatsplus.copycats.content.copycat.button.CopycatButtonModelCore;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatMultiByteModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlock;
+import com.copycatsplus.copycats.content.copycat.copy_cat.CopycatCopyCatBlock;
+import com.copycatsplus.copycats.content.copycat.copy_cat.CopycatCopyCatModelCore;
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorModelCore;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -122,6 +124,18 @@ public class CCBlocks {
                     ))
                     .tag(CCTags.Items.COPYCAT_BLOCK.tag)
                     .transform(customItemModel("copycat_base", "block"))
+                    .register();
+
+    public static final BlockEntry<CopycatCopyCatBlock> COPYCAT_COPY_CAT =
+            REGISTRATE.block("copycat_copy_cat", CopycatCopyCatBlock::new)
+                    .transform(CCBuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(createBlockModel(new CopycatCopyCatModelCore()))
+                    .item()
+                    .onRegister(CopycatDescription.register(
+                            CopycatCharacteristics.COPYCAT
+                    ))
+                    .transform(customItemModel("copycat_base", "copy_cat"))
                     .register();
 
     public static final BlockEntry<CopycatBeamBlock> COPYCAT_BEAM =
