@@ -2,10 +2,10 @@ package com.copycatsplus.copycats.content.copycat.slope;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.CCWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.copycatsplus.copycats.utility.shape.NoneVoxelShape;
 import com.copycatsplus.copycats.utility.shape.VoxelUtils;

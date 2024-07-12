@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats;
 
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelInstance;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelRenderer;

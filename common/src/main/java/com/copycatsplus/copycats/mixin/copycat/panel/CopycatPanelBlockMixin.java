@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.mixin.copycat.panel;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.decoration.copycat.CopycatPanelBlock;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;

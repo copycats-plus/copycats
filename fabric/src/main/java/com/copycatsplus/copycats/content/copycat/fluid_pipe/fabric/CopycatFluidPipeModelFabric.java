@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.fluid_pipe.fabric;
 
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
-import com.copycatsplus.copycats.content.copycat.base.model.fabric.CopycatModelFabric;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.fabric.CopycatModelFabric;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeModelCore;
 import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehaviour;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;

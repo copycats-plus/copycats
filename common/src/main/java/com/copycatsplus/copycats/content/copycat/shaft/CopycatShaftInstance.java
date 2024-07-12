@@ -1,9 +1,9 @@
 package com.copycatsplus.copycats.content.copycat.shaft;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.IKineticCopycatBlockInstance;
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.KineticCopycatRenderData;
-import com.copycatsplus.copycats.content.copycat.partial.CopycatPartialModel;
+import com.copycatsplus.copycats.CCCopycatPartialModels;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.IKineticCopycatBlockInstance;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.KineticCopycatRenderData;
 import com.jozufozu.flywheel.api.Instancer;
 import com.jozufozu.flywheel.api.Material;
 import com.jozufozu.flywheel.api.MaterialManager;
@@ -45,7 +45,7 @@ public class CopycatShaftInstance extends BracketedKineticBlockEntityInstance im
 
     @Override
     public Instancer<RotatingData> getModel() {
-        return IKineticCopycatBlockInstance.super.getModel(CopycatPartialModel.SHAFT);
+        return IKineticCopycatBlockInstance.super.getModel(CCCopycatPartialModels.SHAFT);
     }
 
     @Override

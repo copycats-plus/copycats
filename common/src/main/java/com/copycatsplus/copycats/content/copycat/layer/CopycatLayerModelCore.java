@@ -1,13 +1,13 @@
 package com.copycatsplus.copycats.content.copycat.layer;
 
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext.*;
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.MutableCullFace.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 
 public class CopycatLayerModelCore extends CopycatModelCore {
 

@@ -1,9 +1,9 @@
 package com.copycatsplus.copycats.forge.mixin.copycat.base;
 
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.model.forge.CopycatModelForge;
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.forge.KineticCopycatRendererImpl;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.model.forge.CopycatModelForge;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.forge.KineticCopycatRendererImpl;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeBlockEntity;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatStraightPipeBlockEntity;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;

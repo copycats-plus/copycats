@@ -1,17 +1,17 @@
 package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.CCBlocks;
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.MutableCullFace.*;
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 import static com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock.*;
 
 public class CopycatMultiByteModelCore extends CopycatModelCore {

@@ -1,14 +1,8 @@
 package com.copycatsplus.copycats.mixin.copycat.base;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.simibubi.create.AllBlocks;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

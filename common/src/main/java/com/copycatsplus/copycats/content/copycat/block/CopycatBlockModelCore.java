@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.block;
 
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class CopycatBlockModelCore extends CopycatModelCore {

@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.jetbrains.annotations.NotNull;
 
-import static com.copycatsplus.copycats.content.copycat.base.CopycatBaseBlock.BASE_TYPE_COUNT;
+import static com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock.BASE_TYPE_COUNT;
 
 public class CCBlockStateProperties {
 

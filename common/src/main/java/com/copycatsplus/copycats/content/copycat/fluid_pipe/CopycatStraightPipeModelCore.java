@@ -1,14 +1,14 @@
 package com.copycatsplus.copycats.content.copycat.fluid_pipe;
 
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext.*;
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.MutableCullFace.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 
 public class CopycatStraightPipeModelCore extends CopycatFluidPipeModelCore {
 

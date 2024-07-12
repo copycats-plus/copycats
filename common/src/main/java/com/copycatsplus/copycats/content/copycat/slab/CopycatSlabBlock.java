@@ -2,11 +2,11 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.model.ScaledBlockAndTintGetter;
-import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;

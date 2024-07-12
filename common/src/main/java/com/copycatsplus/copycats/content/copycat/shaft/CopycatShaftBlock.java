@@ -2,8 +2,8 @@ package com.copycatsplus.copycats.content.copycat.shaft;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
 import com.copycatsplus.copycats.CCBlocks;
-import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.google.common.base.Predicates;
 import com.simibubi.create.AllBlocks;
@@ -30,7 +30,6 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

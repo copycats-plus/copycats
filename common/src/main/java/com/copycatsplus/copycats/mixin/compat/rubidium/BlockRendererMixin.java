@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.mixin.compat.rubidium;
 
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateRenderManager;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateTextureAtlasSprite;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateRenderManager;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateTextureAtlasSprite;
 import me.jellysquid.mods.sodium.client.model.color.ColorProvider;
 import me.jellysquid.mods.sodium.client.model.quad.BakedQuadView;
 import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderContext;

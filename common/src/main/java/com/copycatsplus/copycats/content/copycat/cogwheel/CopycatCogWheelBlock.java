@@ -1,15 +1,11 @@
 package com.copycatsplus.copycats.content.copycat.cogwheel;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.model.ScaledBlockAndTintGetter;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.bracket.BracketBlock;
-import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

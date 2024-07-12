@@ -1,9 +1,9 @@
 package com.copycatsplus.copycats.content.copycat.cogwheel;
 
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.IMultiStateKineticCopycatBlockInstance;
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.KineticCopycatRenderData;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.partial.CopycatPartialModel;
+import com.copycatsplus.copycats.CCCopycatPartialModels;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.IMultiStateKineticCopycatBlockInstance;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.KineticCopycatRenderData;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.jozufozu.flywheel.api.Material;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.core.materials.FlatLit;
@@ -77,11 +77,11 @@ public class CopycatCogWheelInstance extends KineticBlockEntityInstance<Brackete
     public void init() {
         super.init();
         if (ICogWheel.isLargeCog(blockEntity.getBlockState())) {
-            initModel(CopycatPartialModel.SHAFT, SHAFT_KEY);
-            initModel(CopycatPartialModel.LARGE_COGWHEEL, COGWHEEL_KEY);
+            initModel(CCCopycatPartialModels.SHAFT, SHAFT_KEY);
+            initModel(CCCopycatPartialModels.LARGE_COGWHEEL, COGWHEEL_KEY);
         } else {
-            initModel(CopycatPartialModel.SHAFT, SHAFT_KEY);
-            initModel(CopycatPartialModel.COGWHEEL, COGWHEEL_KEY);
+            initModel(CCCopycatPartialModels.SHAFT, SHAFT_KEY);
+            initModel(CCCopycatPartialModels.COGWHEEL, COGWHEEL_KEY);
         }
         rotatingData.get(SHAFT_KEY).setRotationOffset(BracketedKineticBlockEntityRenderer.getShaftAngleOffset(axis, pos));
     }

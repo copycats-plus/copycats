@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.mixin.copycat.base.multistate;
 
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateRenderManager;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateTextureAtlasSprite;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateRenderManager;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateTextureAtlasSprite;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;

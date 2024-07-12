@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.mixin.compat.additionalplacements;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import net.minecraft.world.level.block.*;
 import org.spongepowered.asm.mixin.Mixin;

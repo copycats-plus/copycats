@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.content.copycat.block;
 
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

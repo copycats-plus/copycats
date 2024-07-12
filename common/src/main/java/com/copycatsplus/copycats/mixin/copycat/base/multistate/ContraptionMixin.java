@@ -1,15 +1,13 @@
 package com.copycatsplus.copycats.mixin.copycat.base.multistate;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;

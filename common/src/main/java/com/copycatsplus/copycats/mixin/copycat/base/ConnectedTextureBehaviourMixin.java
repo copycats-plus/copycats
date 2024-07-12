@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.mixin.copycat.base;
 
-import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
-import com.copycatsplus.copycats.content.copycat.base.model.FilteredBlockAndTintGetter;
-import com.copycatsplus.copycats.content.copycat.base.model.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
+import com.copycatsplus.copycats.foundation.copycat.model.FilteredBlockAndTintGetter;
+import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

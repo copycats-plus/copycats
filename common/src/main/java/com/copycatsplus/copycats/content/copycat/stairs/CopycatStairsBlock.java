@@ -2,8 +2,11 @@ package com.copycatsplus.copycats.content.copycat.stairs;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
 import com.copycatsplus.copycats.CCBlocks;
-import com.copycatsplus.copycats.content.copycat.base.*;
 import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -25,7 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

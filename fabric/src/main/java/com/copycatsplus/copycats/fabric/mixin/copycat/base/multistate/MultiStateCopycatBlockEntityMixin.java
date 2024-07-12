@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.fabric.mixin.copycat.base.multistate;
 
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;

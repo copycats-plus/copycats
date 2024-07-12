@@ -1,15 +1,15 @@
 package com.copycatsplus.copycats.content.copycat.half_layer;
 
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext.*;
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.MutableCullFace.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 import static com.copycatsplus.copycats.content.copycat.half_layer.CopycatHalfLayerBlock.*;
 
 public class CopycatHalfLayerModelCore extends CopycatModelCore {

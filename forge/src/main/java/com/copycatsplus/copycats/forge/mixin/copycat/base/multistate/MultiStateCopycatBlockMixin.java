@@ -1,9 +1,9 @@
 package com.copycatsplus.copycats.forge.mixin.copycat.base.multistate;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlock;
 import com.simibubi.create.AllBlocks;
 import net.minecraft.core.BlockPos;

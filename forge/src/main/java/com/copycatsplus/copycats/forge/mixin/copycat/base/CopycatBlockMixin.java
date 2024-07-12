@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.forge.mixin.copycat.base;
 
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.content.copycat.button.CopycatButtonBlock;
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
-import static com.copycatsplus.copycats.content.copycat.base.ICopycatBlock.getMaterial;
+import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMaterial;
 
 /**
  * Implement platform-specific methods for copycat blocks.

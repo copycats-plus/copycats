@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.content.copycat.shaft;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.IKineticCopycatBlockRenderer;
-import com.copycatsplus.copycats.content.copycat.partial.CopycatPartialModel;
+import com.copycatsplus.copycats.CCCopycatPartialModels;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.IKineticCopycatBlockRenderer;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityRenderer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
@@ -16,6 +16,6 @@ public class CopycatShaftRenderer extends BracketedKineticBlockEntityRenderer im
 
     @Override
     protected SuperByteBuffer getRotatedModel(BracketedKineticBlockEntity be, BlockState state) {
-        return IKineticCopycatBlockRenderer.super.getRotatedModel(CopycatPartialModel.SHAFT, (ICopycatBlockEntity) be);
+        return IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.SHAFT, (ICopycatBlockEntity) be);
     }
 }

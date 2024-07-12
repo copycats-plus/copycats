@@ -1,9 +1,9 @@
 package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.Copycats;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.AllBlocks;

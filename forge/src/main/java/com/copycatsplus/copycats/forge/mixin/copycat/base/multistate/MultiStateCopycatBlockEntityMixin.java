@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.forge.mixin.copycat.base.multistate;
 
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.forge.KineticCopycatRendererImpl;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.forge.KineticCopycatRendererImpl;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.Collections;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.forge.CopycatModelForge.MATERIALS_PROPERTY;
+import static com.copycatsplus.copycats.foundation.copycat.model.forge.CopycatModelForge.MATERIALS_PROPERTY;
 
 /**
  * Implement platform-specific methods for multi-state copycat block entities.

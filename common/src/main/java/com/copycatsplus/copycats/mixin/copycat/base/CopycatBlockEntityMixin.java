@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.mixin.copycat.base;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.minecraft.core.BlockPos;

@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.cogwheel;
 
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MaterialItemStorage;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MaterialItemStorage;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.fabric;
 
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.fabric.CopycatFluidPipeModelFabric;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;

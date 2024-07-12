@@ -1,8 +1,9 @@
 package com.copycatsplus.copycats.content.copycat.ladder;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
-import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.*;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.content.kinetics.simpleRelays.AbstractSimpleShaftBlock;
 import com.simibubi.create.foundation.block.IBE;

@@ -3,7 +3,7 @@ package com.copycatsplus.copycats.datagen.recipes;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.CCTags;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.copycatsplus.copycats.utility.Platform;
@@ -20,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.HashSet;
 import java.util.LinkedList;

@@ -2,9 +2,9 @@ package com.copycatsplus.copycats.content.copycat.slice;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
-import com.copycatsplus.copycats.content.copycat.base.CCWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.VoxelShaper;

@@ -1,9 +1,9 @@
 package com.copycatsplus.copycats.content.copycat.cogwheel;
 
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.IKineticCopycatBlockRenderer;
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.KineticCopycatRenderer;
-import com.copycatsplus.copycats.content.copycat.base.multistate.IMultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.partial.CopycatPartialModel;
+import com.copycatsplus.copycats.CCCopycatPartialModels;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.IKineticCopycatBlockRenderer;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.KineticCopycatRenderer;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
@@ -23,7 +23,7 @@ public class CopycatCogWheelRenderer extends BracketedKineticBlockEntityRenderer
 
     @Override
     protected SuperByteBuffer getRotatedModel(BracketedKineticBlockEntity be, BlockState state) {
-        return IKineticCopycatBlockRenderer.super.getRotatedModel(CopycatPartialModel.SHAFT, (IMultiStateCopycatBlockEntity) be, "shaft");
+        return IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.SHAFT, (IMultiStateCopycatBlockEntity) be, "shaft");
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CopycatCogWheelRenderer extends BracketedKineticBlockEntityRenderer
         if (!ICogWheel.isLargeCog(be.getBlockState())) {
             super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
             if (type != null)
-                renderRotatingBuffer(be, KineticCopycatRenderer.getBuffer(CopycatPartialModel.COGWHEEL, (IMultiStateCopycatBlockEntity) be, "cogwheel"), ms, buffer.getBuffer(type), light);
+                renderRotatingBuffer(be, KineticCopycatRenderer.getBuffer(CCCopycatPartialModels.COGWHEEL, (IMultiStateCopycatBlockEntity) be, "cogwheel"), ms, buffer.getBuffer(type), light);
             return;
         }
 
@@ -47,12 +47,12 @@ public class CopycatCogWheelRenderer extends BracketedKineticBlockEntityRenderer
 
         Direction.Axis axis = getRotationAxisOf(be);
         renderRotatingBuffer(be,
-                KineticCopycatRenderer.getBuffer(CopycatPartialModel.LARGE_COGWHEEL, (IMultiStateCopycatBlockEntity) be, "cogwheel"),
+                KineticCopycatRenderer.getBuffer(CCCopycatPartialModels.LARGE_COGWHEEL, (IMultiStateCopycatBlockEntity) be, "cogwheel"),
                 ms, buffer.getBuffer(type), light);
 
         float angle = getAngleForLargeCogShaft(be, axis);
         SuperByteBuffer shaft =
-                KineticCopycatRenderer.getBuffer(CopycatPartialModel.SHAFT, (IMultiStateCopycatBlockEntity) be, "shaft");
+                KineticCopycatRenderer.getBuffer(CCCopycatPartialModels.SHAFT, (IMultiStateCopycatBlockEntity) be, "shaft");
         kineticRotationTransform(shaft, be, axis, angle, light);
         shaft.renderInto(ms, buffer.getBuffer(shaftType));
     }

@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.mixin.compat.diagonalfences;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import org.spongepowered.asm.mixin.Mixin;

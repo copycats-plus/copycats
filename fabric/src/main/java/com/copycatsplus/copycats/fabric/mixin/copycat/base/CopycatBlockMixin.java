@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.fabric.mixin.copycat.base;
 
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.content.copycat.button.CopycatButtonBlock;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fence_gate.CopycatFenceGateBlock;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static com.copycatsplus.copycats.content.copycat.base.ICopycatBlock.getMaterial;
+import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMaterial;
 
 /**
  * Implement platform-specific methods for copycat blocks.

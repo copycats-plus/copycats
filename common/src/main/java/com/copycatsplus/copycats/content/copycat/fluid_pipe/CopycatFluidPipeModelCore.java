@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.content.copycat.fluid_pipe;
 
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.client.Minecraft;
@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext.*;
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.MutableCullFace.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 
 public class CopycatFluidPipeModelCore extends CopycatModelCore.WithData<CopycatFluidPipeModelCore.PipeModelData> {
 

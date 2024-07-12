@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.datagen.fabric;
 
 import com.copycatsplus.copycats.CCBlockStateProperties;
-import com.copycatsplus.copycats.content.copycat.base.CopycatBaseBlock;
+import com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatGlassFluidPipeBlock;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;

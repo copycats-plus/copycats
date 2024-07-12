@@ -1,8 +1,8 @@
 package com.copycatsplus.copycats.content.copycat.wall;
 
-import com.copycatsplus.copycats.content.copycat.base.model.CopycatModelCore;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext;
-import com.copycatsplus.copycats.content.copycat.base.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.WallBlock;
@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.state.properties.WallSide;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.CopycatRenderContext.*;
-import static com.copycatsplus.copycats.content.copycat.base.model.assembly.MutableCullFace.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 
 public class CopycatWallModelCore extends CopycatModelCore {
 

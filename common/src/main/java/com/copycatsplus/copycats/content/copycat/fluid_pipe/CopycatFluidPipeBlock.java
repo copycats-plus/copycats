@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.content.copycat.fluid_pipe;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.content.decoration.bracket.BracketBlock;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
@@ -17,12 +17,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

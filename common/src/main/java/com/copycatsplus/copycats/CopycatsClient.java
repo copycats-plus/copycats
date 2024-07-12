@@ -1,16 +1,10 @@
 package com.copycatsplus.copycats;
 
-import com.copycatsplus.copycats.content.copycat.base.model.kinetic.KineticCopycatRenderer;
+import com.copycatsplus.copycats.foundation.copycat.model.kinetic.KineticCopycatRenderer;
 import com.copycatsplus.copycats.utility.LogicalSidedProvider;
 import com.copycatsplus.copycats.network.CCPackets;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.jozufozu.flywheel.core.model.BlockModel;
 import com.simibubi.create.foundation.render.SuperByteBufferCache;
 import net.minecraft.client.Minecraft;
-
-import java.util.Map;
-import java.util.WeakHashMap;
 
 public class CopycatsClient {
 

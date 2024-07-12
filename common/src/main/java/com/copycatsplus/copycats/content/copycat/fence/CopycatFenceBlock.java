@@ -1,7 +1,9 @@
 package com.copycatsplus.copycats.content.copycat.fence;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
-import com.copycatsplus.copycats.content.copycat.base.*;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -24,12 +26,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static net.minecraft.world.level.block.CrossCollisionBlock.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
