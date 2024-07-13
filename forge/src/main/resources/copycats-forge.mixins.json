@@ -5,6 +5,7 @@
   "plugin": "com.copycatsplus.copycats.mixin.MixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "compat.create.GhostBlockRendererMixin",
     "compat.doubleslabs.DSConfigCommonMixin",
     "copycat.base.CopycatBlockEntityMixin",
     "copycat.base.CopycatBlockMixin",

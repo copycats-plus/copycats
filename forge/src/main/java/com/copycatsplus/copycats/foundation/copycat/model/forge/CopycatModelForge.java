@@ -216,7 +216,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                 if (wrappedData == null)
                     wrappedData = ModelData.EMPTY;
             }
-            if (renderType != null && !ModelUtil.isVirtual(data)) { // Don't check for render type in virtual render because placement helpers always render in translucent
+            if (renderType != null) {
                 if (!model.getRenderTypes(wrappedState, rand, wrappedData).contains(renderType))
                     continue;
             }
