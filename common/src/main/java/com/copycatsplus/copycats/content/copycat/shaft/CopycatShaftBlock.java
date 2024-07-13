@@ -2,8 +2,9 @@ package com.copycatsplus.copycats.content.copycat.shaft;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
 import com.copycatsplus.copycats.CCBlocks;
-import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
-import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.google.common.base.Predicates;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.decoration.bracket.BracketBlock;
@@ -11,7 +12,6 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.AbstractSimpleShaftBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import com.simibubi.create.content.kinetics.steamEngine.PoweredShaftBlock;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
 import com.simibubi.create.foundation.placement.PoleHelper;
@@ -33,12 +33,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
-
-public class CopycatShaftBlock extends ShaftBlock implements IFunctionalCopycatBlock, ICustomCTBlocking {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatShaftBlock extends ShaftBlock implements ICopycatBlock, ICustomCTBlocking {
 
     public static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
 
@@ -47,40 +48,33 @@ public class CopycatShaftBlock extends ShaftBlock implements IFunctionalCopycatB
     }
 
     @Override
+    public boolean canToggleCT(BlockState state, BlockAndTintGetter level, BlockPos pos) {
+        return false;
+    }
+
+    @Override
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
-        InteractionResult result = IFunctionalCopycatBlock.super.onSneakWrenched(state, context);
-        if (result.consumesAction()) {
-            return result;
-        }
-        return super.onSneakWrenched(state, context);
+        return InteractionUtils.sequential(
+                () -> ICopycatBlock.super.onSneakWrenched(state, context),
+                () -> super.onSneakWrenched(state, context)
+        );
     }
 
     @Override
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-        InteractionResult result = IFunctionalCopycatBlock.super.onWrenched(state, context);
-        if (result.consumesAction()) {
-            return result;
-        }
-        return super.onWrenched(state, context);
+        return InteractionUtils.sequential(
+                () -> ICopycatBlock.super.onWrenched(state, context),
+                () -> super.onWrenched(state, context)
+        );
     }
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
-        InteractionResult result = IFunctionalCopycatBlock.super.use(state, world, pos, player, hand, ray);
-        if (result.consumesAction()) {
-            return result;
-        }
-        if (!player.isShiftKeyDown() && player.mayBuild()) {
-            ItemStack heldItem = player.getItemInHand(hand);
-            IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
-            if (placementHelper.matchesItem(heldItem)) {
-                placementHelper.getOffset(player, world, state, pos, ray)
-                        .placeInWorld(world, (BlockItem) heldItem.getItem(), player, hand, ray);
-                return InteractionResult.SUCCESS;
-            }
-        }
-
-        return super.use(state, world, pos, player, hand, ray);
+        return InteractionUtils.sequential(
+                () -> ICopycatBlock.super.use(state, world, pos, player, hand, ray),
+                () -> InteractionUtils.usePlacementHelper(placementHelperId, state, world, pos, player, hand, ray),
+                () -> super.use(state, world, pos, player, hand, ray)
+        );
     }
 
     @Nullable
@@ -90,25 +84,25 @@ public class CopycatShaftBlock extends ShaftBlock implements IFunctionalCopycatB
             if (bi.getBlock() instanceof BracketBlock) return null;
         }
 
-        return IFunctionalCopycatBlock.super.getAcceptedBlockState(pLevel, pPos, item, face);
+        return ICopycatBlock.super.getAcceptedBlockState(pLevel, pPos, item, face);
     }
 
     @Override
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
-        IFunctionalCopycatBlock.super.setPlacedBy(worldIn, pos, state, placer, stack);
+        ICopycatBlock.super.setPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @Override
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         super.onRemove(state, world, pos, newState, isMoving);
-        IFunctionalCopycatBlock.super.onRemove(state, world, pos, newState, isMoving);
+        ICopycatBlock.super.onRemove(state, world, pos, newState, isMoving);
     }
 
     @Override
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         super.playerWillDestroy(level, pos, state, player);
-        IFunctionalCopycatBlock.super.playerWillDestroy(level, pos, state, player);
+        ICopycatBlock.super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -124,7 +118,7 @@ public class CopycatShaftBlock extends ShaftBlock implements IFunctionalCopycatB
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         Vec3i diff = toPos.subtract(fromPos);
-        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) return false;
         return face.getAxis() == state.getValue(AXIS);
     }

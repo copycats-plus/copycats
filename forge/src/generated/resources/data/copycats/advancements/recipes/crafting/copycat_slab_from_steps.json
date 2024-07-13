@@ -33,7 +33,8 @@
           "recipes": [
             "copycats:crafting/copycat_slab_from_steps"
           ]
-        }
+        },
+        "sends_telemetry_event": false
       },
       "conditions": [
         {

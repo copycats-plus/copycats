@@ -31,7 +31,8 @@
           "recipes": [
             "copycats:crafting/copycat_catwalk"
           ]
-        }
+        },
+        "sends_telemetry_event": false
       },
       "conditions": [
         {

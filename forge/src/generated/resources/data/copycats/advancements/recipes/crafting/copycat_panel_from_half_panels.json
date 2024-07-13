@@ -33,7 +33,8 @@
           "recipes": [
             "copycats:crafting/copycat_panel_from_half_panels"
           ]
-        }
+        },
+        "sends_telemetry_event": false
       },
       "conditions": [
         {

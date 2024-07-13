@@ -11,6 +11,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "s": {
             "item": "create:copycat_step"
@@ -21,7 +22,8 @@
         ],
         "result": {
           "item": "copycats:copycat_slab"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

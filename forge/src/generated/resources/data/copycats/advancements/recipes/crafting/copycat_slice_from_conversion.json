@@ -33,7 +33,8 @@
           "recipes": [
             "copycats:crafting/copycat_slice_from_conversion"
           ]
-        }
+        },
+        "sends_telemetry_event": false
       },
       "conditions": [
         {

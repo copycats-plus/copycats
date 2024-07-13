@@ -2,9 +2,9 @@ package com.copycatsplus.copycats.datagen;
 
 import com.copycatsplus.copycats.CopycatRegistrate;
 import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.foundation.tooltip.CopycatCharacteristics;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
 
@@ -23,6 +23,7 @@ public class CCDatagen {
 
             provideDefaultLang("interface", langConsumer);
             provideDefaultLang("tooltips", langConsumer);
+            provideCharacteristicsLang(langConsumer);
         });
     }
 
@@ -37,6 +38,13 @@ public class CCDatagen {
             String key = entry.getKey();
             String value = entry.getValue().getAsString();
             consumer.accept(key, value);
+        }
+    }
+
+    private static void provideCharacteristicsLang(BiConsumer<String, String> consumer) {
+        for (CopycatCharacteristics characteristic : CopycatCharacteristics.all()) {
+            consumer.accept(characteristic.getTitleKey(), characteristic.getTitle());
+            consumer.accept(characteristic.getDescriptionKey(), characteristic.getDescription());
         }
     }
 }

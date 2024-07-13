@@ -4,15 +4,15 @@ import com.copycatsplus.copycats.CCBlockStateProperties;
 import com.copycatsplus.copycats.CCBlockStateProperties.Side;
 import com.copycatsplus.copycats.CCBlockStateProperties.VerticalStairShape;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock.FaceShape;
-import com.copycatsplus.copycats.content.copycat.stairs.WrappedStairsBlock;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -30,14 +30,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
-import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
 
 @SuppressWarnings("deprecation")
-public class CopycatVerticalStairBlock extends CTWaterloggedCopycatBlock implements ICustomCTBlocking, IStateType {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock implements ICustomCTBlocking, IStateType {
 
     // Facing refers to the direction of the base of the stairs
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -185,7 +187,7 @@ public class CopycatVerticalStairBlock extends CTWaterloggedCopycatBlock impleme
     }
 
     public static boolean isStairs(BlockState state) {
-        return state.getBlock() instanceof StairBlock || state.getBlock() instanceof CopycatVerticalStairBlock || state.getBlock() instanceof WrappedStairsBlock || state.getBlock() instanceof CopycatStairsBlock;
+        return state.getBlock() instanceof StairBlock || state.getBlock() instanceof CopycatVerticalStairBlock;
     }
 
     @Override
@@ -272,7 +274,7 @@ public class CopycatVerticalStairBlock extends CTWaterloggedCopycatBlock impleme
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction side = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction side = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         if (side != null) {
             FaceShape sideShape = getFaceShape(state, side);
@@ -318,32 +320,18 @@ public class CopycatVerticalStairBlock extends CTWaterloggedCopycatBlock impleme
         return value >= 0 ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE;
     }
 
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        int count = getFaceShape(state, face).countBlocks();
-        return count == 4 || count == 3 && state.getValue(SHAPE) == VerticalStairShape.STRAIGHT;
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !canFaceBeOccluded(state, face);
-    }
-
 
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
     }
 
 
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (neighborState.getBlock() instanceof CopycatVerticalStairBlock) {
-            if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite()))
-                return getFaceShape(state, dir).equals(getFaceShape(neighborState, dir.getOpposite()));
-        }
-
-        return getFaceShape(state, dir).isFull()
-                && getMaterial(level, pos).skipRendering(neighborState, dir.getOpposite());
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     /**

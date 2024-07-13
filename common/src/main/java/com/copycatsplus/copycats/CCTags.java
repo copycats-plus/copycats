@@ -1,7 +1,8 @@
 package com.copycatsplus.copycats;
 
-import com.copycatsplus.copycats.multiloader.Platform;
+import com.copycatsplus.copycats.utility.Platform;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -21,15 +22,15 @@ public class CCTags {
     }
 
     public static TagKey<Block> commonBlockTag(String path) {
-        return commonTag(Registry.BLOCK, path);
+        return commonTag(BuiltInRegistries.BLOCK, path);
     }
 
     public static TagKey<Item> commonItemTag(String path) {
-        return commonTag(Registry.ITEM, path);
+        return commonTag(BuiltInRegistries.ITEM, path);
     }
 
     public static TagKey<Fluid> commonFluidTag(String path) {
-        return commonTag(Registry.FLUID, path);
+        return commonTag(BuiltInRegistries.FLUID, path);
     }
 
     public enum NameSpace {
@@ -86,11 +87,11 @@ public class CCTags {
         }
 
         Items(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
-            ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+            ResourceLocation id = new ResourceLocation(namespace.id, path == null ? CCLang.asId(name()) : path);
             if (optional) {
-                tag = optionalTag(Registry.ITEM, id);
+                tag = optionalTag(BuiltInRegistries.ITEM, id);
             } else {
-                tag = TagKey.create(Registry.ITEM.key(), id);
+                tag = TagKey.create(BuiltInRegistries.ITEM.key(), id);
             }
             this.alwaysDatagen = alwaysDatagen;
         }

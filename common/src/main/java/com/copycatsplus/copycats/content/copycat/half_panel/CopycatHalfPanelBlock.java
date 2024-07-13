@@ -2,8 +2,10 @@ package com.copycatsplus.copycats.content.copycat.half_panel;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItem;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -40,15 +42,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
-
-public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements IStateType {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatHalfPanelBlock extends CCWaterloggedCopycatBlock implements IStateType {
 
     /**
      * The direction where the base of the half panel is facing.
@@ -79,20 +82,12 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult ray) {
-
-        if (!player.isShiftKeyDown() && player.mayBuild()) {
-            ItemStack heldItem = player.getItemInHand(hand);
-            IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
-            if (placementHelper.matchesItem(heldItem)) {
-                placementHelper.getOffset(player, world, state, pos, ray)
-                        .placeInWorld(world, (BlockItem) heldItem.getItem(), player, hand, ray);
-                return InteractionResult.SUCCESS;
-            }
-        }
-
-        return super.use(state, world, pos, player, hand, ray);
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand,
+                                          @NotNull BlockHitResult ray) {
+        return InteractionUtils.sequential(
+                () -> InteractionUtils.usePlacementHelper(placementHelperId, state, world, pos, player, hand, ray),
+                () -> super.use(state, world, pos, player, hand, ray)
+        );
     }
 
     @Override
@@ -123,7 +118,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }
@@ -143,18 +138,6 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
     @Override
     public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
         return false;
-    }
-
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        Direction facing = state.getValue(FACING);
-        Direction offset = state.getValue(OFFSET);
-        return face == facing || face == getOffsetFacing(facing, offset) || face.getAxis() == getOffsetAxis(facing, offset);
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !canFaceBeOccluded(state, face);
     }
 
     @Override
@@ -216,17 +199,12 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
     }
 
 
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (state.is(this) == neighborState.is(this)) {
-            if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite())) {
-                return neighborState.getValue(FACING) == state.getValue(FACING) &&
-                        neighborState.getValue(OFFSET) == state.getValue(OFFSET) &&
-                        getOffsetAxis(state.getValue(FACING), state.getValue(OFFSET)) == dir.getAxis();
-            }
-        }
-
-        return false;
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @SuppressWarnings("deprecation")
@@ -259,7 +237,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
         }
         return pState
                 .setValue(FACING, newFacing)
-                .setValue(OFFSET, Objects.requireNonNull(DirectionFromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ())));
+                .setValue(OFFSET, Objects.requireNonNull(Direction.fromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ())));
     }
 
     @SuppressWarnings("deprecation")
@@ -300,7 +278,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
         if (facingNormal.getZ() != 0 && offsetNormal.getZ() != 0) {
             offsetNormal = new Vec3i(offsetNormal.getX(), offsetNormal.getZ(), offsetNormal.getY());
         }
-        return Objects.requireNonNull(DirectionFromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ()));
+        return Objects.requireNonNull(Direction.fromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ()));
     }
 
     /**
@@ -344,7 +322,7 @@ public class CopycatHalfPanelBlock extends CTWaterloggedCopycatBlock implements 
                 BlockPos newPos = pos.relative(dir, poles + 1);
                 BlockState newState = world.getBlockState(newPos);
 
-                if (newState.getMaterial().isReplaceable())
+                if (newState.canBeReplaced())
                     return PlacementOffset.success(newPos, bState -> bState.setValue(property, state.getValue(property)).setValue(OFFSET, state.getValue(OFFSET)));
 
             }

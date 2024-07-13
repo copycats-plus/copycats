@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Handle custom server-to-client packets using our network utils.
+ */
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
     @Shadow

@@ -2,13 +2,15 @@ package com.copycatsplus.copycats.content.copycat.vertical_slice;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
-import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -35,14 +37,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.copycatsplus.copycats.content.copycat.MathHelper.DirectionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
-public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatVerticalSliceBlock extends CCWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
@@ -83,7 +87,7 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = DirectionFromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }
@@ -106,17 +110,6 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
     @Override
     public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
         return false;
-    }
-
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        Direction facing = state.getValue(FACING);
-        return face.getAxis() == Axis.Y || face == facing || face == facing.getCounterClockWise();
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !canFaceBeOccluded(state, face);
     }
 
     private static final Map<Pair<Integer, Integer>, Direction> VERTICAL_POSITION_MAP = new HashMap<>();
@@ -224,21 +217,12 @@ public class CopycatVerticalSliceBlock extends CTWaterloggedCopycatBlock impleme
         return true;
     }
 
-
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (state.is(this) == neighborState.is(this)) {
-            if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite())) {
-                int layers = state.getValue(LAYERS);
-                int neighborLayers = neighborState.getValue(LAYERS);
-                if (layers == 8 && neighborLayers == 8) return true;
-                return dir.getAxis().isVertical() &&
-                        neighborState.getValue(FACING) == state.getValue(FACING) &&
-                        layers == neighborLayers;
-            }
-        }
-
-        return false;
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @SuppressWarnings("deprecation")

@@ -1,10 +1,6 @@
 package com.copycatsplus.copycats.utility.shape;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.stream.Stream;
 
 /*
 * Methods needed/wanted copied from https://github.com/Fuzss/diagonalblocks

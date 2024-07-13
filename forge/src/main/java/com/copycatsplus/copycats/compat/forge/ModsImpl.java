@@ -1,6 +1,5 @@
 package com.copycatsplus.copycats.compat.forge;
 
-import com.copycatsplus.copycats.compat.Mods;
 import net.minecraftforge.fml.ModList;
 
 public class ModsImpl {

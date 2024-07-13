@@ -2,9 +2,6 @@ package com.copycatsplus.copycats;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.world.item.CreativeModeTab;
-
-import java.util.function.Supplier;
 
 public class CopycatRegistrate extends CreateRegistrate {
 
@@ -16,6 +13,11 @@ public class CopycatRegistrate extends CreateRegistrate {
 
     public static CopycatRegistrate create(String modid) {
         return new CopycatRegistrate(modid);
+    }
+
+    @ExpectPlatform
+    public static <Tab> CreateRegistrate setTab(Tab tab) {
+        throw new AssertionError();
     }
 
     public static CopycatRegistrate getInstance() {

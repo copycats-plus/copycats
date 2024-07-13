@@ -9,8 +9,10 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-/*
- * Copied from https://github.com/Fuzss/diagonalblocks
+/**
+ * Access protected fields for diagonal hitboxes.
+ * <p>
+ * Copied from <a href="https://github.com/Fuzss/diagonalblocks">Fuzss/diagonalblocks</a>
  */
 @Mixin(VoxelShape.class)
 public interface VoxelShapeAccessor {

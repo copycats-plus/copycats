@@ -31,7 +31,8 @@
           "recipes": [
             "copycats:crafting/copycat_block_from_slabs"
           ]
-        }
+        },
+        "sends_telemetry_event": false
       },
       "conditions": [
         {

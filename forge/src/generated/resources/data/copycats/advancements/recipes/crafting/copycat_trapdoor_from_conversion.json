@@ -33,7 +33,8 @@
           "recipes": [
             "copycats:crafting/copycat_trapdoor_from_conversion"
           ]
-        }
+        },
+        "sends_telemetry_event": false
       },
       "conditions": [
         {

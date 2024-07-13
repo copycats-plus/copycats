@@ -4,8 +4,8 @@ import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.CopycatsClient;
 import com.copycatsplus.copycats.datagen.forge.CCDatagenImpl;
 import com.copycatsplus.copycats.datagen.recipes.forge.CCCraftingConditions;
-import com.copycatsplus.copycats.multiloader.LogicalSidedProvider;
-import com.copycatsplus.copycats.multiloader.Platform;
+import com.copycatsplus.copycats.utility.LogicalSidedProvider;
+import com.copycatsplus.copycats.utility.Platform;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -19,6 +19,7 @@ public class CopycatsImpl {
     static IEventBus bus;
     public CopycatsImpl() {
         bus = FMLJavaModLoadingContext.get().getModEventBus();
+        CCCreativeTabsImpl.register(CopycatsImpl.bus);
         Copycats.init();
 
         CCCraftingConditions.register();

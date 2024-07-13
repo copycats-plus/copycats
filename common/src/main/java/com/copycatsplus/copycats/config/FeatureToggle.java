@@ -2,8 +2,9 @@ package com.copycatsplus.copycats.config;
 
 import com.copycatsplus.copycats.compat.CopycatsJEI;
 import com.copycatsplus.copycats.compat.Mods;
-import com.copycatsplus.copycats.multiloader.LogicalSidedProvider;
-import com.copycatsplus.copycats.multiloader.Platform;
+import com.copycatsplus.copycats.mixin.feature_toggle.CreativeModeTabsAccessor;
+import com.copycatsplus.copycats.utility.LogicalSidedProvider;
+import com.copycatsplus.copycats.utility.Platform;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
@@ -139,6 +140,10 @@ public class FeatureToggle {
     static void refreshItemVisibility() {
         Platform.Environment.CLIENT.runIfCurrent(() -> () ->
                 LogicalSidedProvider.WORKQUEUE.get(Platform.Environment.CLIENT).submit(() -> {
+                    CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();
+                    if (cachedParameters != null) {
+                        CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);
+                    }
                     Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
                 })
         );

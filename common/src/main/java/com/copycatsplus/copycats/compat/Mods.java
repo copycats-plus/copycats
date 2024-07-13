@@ -1,14 +1,14 @@
 package com.copycatsplus.copycats.compat;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.copycatsplus.copycats.Lang.asId;
+import static com.copycatsplus.copycats.CCLang.asId;
 
 /**
  * For compatibility with and without another mod present, we have to define load conditions of the specific code
@@ -50,11 +50,11 @@ public enum Mods {
     }
 
     public Item getItem(String id) {
-        return Registry.ITEM.get(rl(id));
+        return BuiltInRegistries.ITEM.get(rl(id));
     }
 
     public Item getItem(ResourceLocation id) {
-        return Registry.ITEM.get(id);
+        return BuiltInRegistries.ITEM.get(id);
     }
 
     public boolean getLoaded() {

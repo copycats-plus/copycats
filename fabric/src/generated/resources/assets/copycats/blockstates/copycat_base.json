@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "base_type=0": {
+      "model": "copycats:block/copycat_base_0"
+    },
+    "base_type=1": {
+      "model": "copycats:block/copycat_base_1"
+    },
+    "base_type=2": {
+      "model": "copycats:block/copycat_base_2"
+    }
+  }
+}

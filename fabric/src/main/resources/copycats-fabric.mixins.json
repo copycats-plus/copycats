@@ -6,8 +6,13 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "HolderReferenceMixin",
-    "copycat.base.functional.FunctionalCopycatBlockMixin",
-    "copycat.base.multistate.MultiStateCopycatBlockCombinerMixin"
+    "compat.registrate.CreateRegistrateMixin",
+    "copycat.base.CopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
+    "copycat.base.CopycatBlockEntityMixin$FluidPipeData",
+    "copycat.base.CopycatBlockEntityMixin$StraightPipeData",
+    "copycat.base.CopycatBlockMixin",
+    "copycat.base.multistate.MultiStateCopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
+    "copycat.base.multistate.MultiStateCopycatBlockMixin"
   ],
   "client": [
     "featuretoggle.SubMenuConfigScreenMixin"

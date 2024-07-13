@@ -3,7 +3,8 @@ package com.copycatsplus.copycats;
 import com.simibubi.create.foundation.utility.Pair;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -18,8 +19,8 @@ public class CCCatVariants {
 
     private static Holder.Reference<CatVariant> register(String key, ResourceLocation texture) {
         Pair<Holder.Reference<CatVariant>, ResourceLocation> pair = Pair.of(Holder.Reference.createStandAlone(
-                Registry.CAT_VARIANT,
-                ResourceKey.create(Registry.CAT_VARIANT.key(), Copycats.asResource(key))
+                BuiltInRegistries.CAT_VARIANT.holderOwner(),
+                ResourceKey.create(Registries.CAT_VARIANT, Copycats.asResource(key))
         ), texture);
         ENTRIES.add(pair);
         return pair.getFirst();

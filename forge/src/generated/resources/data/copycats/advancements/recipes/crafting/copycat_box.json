@@ -31,7 +31,8 @@
           "recipes": [
             "copycats:crafting/copycat_box"
           ]
-        }
+        },
+        "sends_telemetry_event": false
       },
       "conditions": [
         {

@@ -2,7 +2,7 @@ package com.copycatsplus.copycats.network;
 
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.CCConfigs;
-import com.copycatsplus.copycats.multiloader.Platform;
+import com.copycatsplus.copycats.utility.Platform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

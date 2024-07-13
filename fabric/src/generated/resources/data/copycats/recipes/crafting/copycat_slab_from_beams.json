@@ -1,5 +1,5 @@
 {
-  "type": "forge:conditional",
+  "type": "porting_lib:conditional",
   "recipes": [
     {
       "fabric:load_conditions": [
@@ -16,6 +16,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "s": {
             "tag": "copycats:copycat_beam"
@@ -26,7 +27,8 @@
         ],
         "result": {
           "item": "copycats:copycat_slab"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

@@ -16,6 +16,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "s": {
             "tag": "copycats:copycat_slab"
@@ -27,7 +28,8 @@
         ],
         "result": {
           "item": "copycats:copycat_block"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

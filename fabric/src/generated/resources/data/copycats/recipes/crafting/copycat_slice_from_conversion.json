@@ -1,5 +1,5 @@
 {
-  "type": "forge:conditional",
+  "type": "porting_lib:conditional",
   "recipes": [
     {
       "fabric:load_conditions": [
@@ -16,6 +16,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shapeless",
+        "category": "misc",
         "ingredients": [
           {
             "item": "copycats:copycat_vertical_slice"
