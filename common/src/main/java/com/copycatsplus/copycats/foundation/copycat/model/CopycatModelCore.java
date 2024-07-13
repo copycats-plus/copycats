@@ -6,6 +6,7 @@ import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRender
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -215,9 +216,13 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * @param model A getter that returns a {@link BakedModel} to be rendered for this entry, invoked for each render. Set to null to render the original model as specified by the copycat's block state file.
      * @param part  A {@link CopycatModelPart} to assemble the model quads with. Set to null if the model should be rendered without modifications.
      * @param type  The type of the model entry, which determines how the model is rendered.
+     * @param renderType 1.18 only: The render type to use for models that are not associated with a block state.
      */
     public record ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part,
-                             EntryType type) {
+                             EntryType type, @Nullable RenderType renderType) {
+        public ModelEntry(String key, ModelGetter model, CopycatModelPart part, EntryType type) {
+            this(key, model, part, type, null);
+        }
     }
 
     public enum EntryType {

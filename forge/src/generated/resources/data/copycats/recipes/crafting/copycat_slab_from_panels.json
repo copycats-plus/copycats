@@ -4,22 +4,22 @@
     {
       "conditions": [
         {
-          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_slab",
-          "invert": false
+          "invert": false,
+          "type": "copycats:feature_enabled"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "p",
+          "p"
+        ],
         "key": {
           "p": {
             "item": "create:copycat_panel"
           }
         },
-        "pattern": [
-          "p",
-          "p"
-        ],
         "result": {
           "item": "copycats:copycat_slab"
         }

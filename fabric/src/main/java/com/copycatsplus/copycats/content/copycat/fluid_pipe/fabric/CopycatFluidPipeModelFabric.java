@@ -10,10 +10,10 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Random;
 import java.util.function.Supplier;
 
 public class CopycatFluidPipeModelFabric extends CopycatModelFabric {
@@ -23,7 +23,7 @@ public class CopycatFluidPipeModelFabric extends CopycatModelFabric {
     }
 
     @Override
-    protected void prepareModelCore(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, BlockState material, Object renderAttachmentData) {
+    protected void prepareModelCore(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, BlockState material, Object renderAttachmentData) {
         super.prepareModelCore(blockView, state, pos, randomSupplier, material, renderAttachmentData);
         CopycatFluidPipeModelCore.PipeModelData data = new CopycatFluidPipeModelCore.PipeModelData();
         BracketedBlockEntityBehaviour bracket = BlockEntityBehaviour.get(blockView, pos, BracketedBlockEntityBehaviour.TYPE);

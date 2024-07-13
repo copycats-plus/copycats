@@ -1,8 +1,11 @@
 package com.copycatsplus.copycats.mixin.copycat.base;
 
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
 import com.copycatsplus.copycats.foundation.copycat.model.FilteredBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,6 +20,8 @@ import java.util.Optional;
 
 /**
  * Implementation for {@link ICustomCTBlocking}.
+ * <p>
+ * 1.18.2: Redirect calls to getConnectiveMaterial to getAppearance
  */
 @Mixin(value = ConnectedTextureBehaviour.class)
 public class ConnectedTextureBehaviourMixin {
@@ -45,6 +50,26 @@ public class ConnectedTextureBehaviourMixin {
         if (blockingState.getBlock() instanceof ICustomCTBlocking customBlocker) {
             Optional<Boolean> blocking = customBlocker.blockCTTowards(reader, blockingState, blockingPos, pos, otherPos, face.getOpposite());
             blocking.ifPresent(cir::setReturnValue);
+        }
+    }
+
+    @Inject(
+            method = "getCTBlockState",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void getAppearance(BlockAndTintGetter reader, BlockState reference, Direction face, BlockPos fromPos, BlockPos toPos, CallbackInfoReturnable<BlockState> cir) {
+        BlockState blockState = reader.getBlockState(toPos);
+
+        if (blockState.getBlock() instanceof IMultiStateCopycatBlock ufb) {
+            BlockState connectiveMaterial = IMultiStateCopycatBlock.getAppearance(ufb, blockState, reader, toPos, face, reference, fromPos);
+            cir.setReturnValue(connectiveMaterial == null ? blockState : connectiveMaterial);
+            return;
+        }
+
+        if (blockState.getBlock() instanceof ICopycatBlock ufb) {
+            BlockState connectiveMaterial = ICopycatBlock.getAppearance(ufb, blockState, reader, toPos, face, reference, fromPos);
+            cir.setReturnValue(connectiveMaterial == null ? blockState : connectiveMaterial);
         }
     }
 }

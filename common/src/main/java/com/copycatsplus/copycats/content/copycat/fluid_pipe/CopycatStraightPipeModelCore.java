@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.fluid_pipe;
 
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -15,7 +16,7 @@ public class CopycatStraightPipeModelCore extends CopycatFluidPipeModelCore {
     @Override
     public void registerModels(List<ModelEntry> entries) {
         super.registerModels(entries);
-        entries.add(SUPER);
+        entries.add(new ModelEntry("super", null, null, EntryType.STATIC, RenderType.cutoutMipped()));
     }
 
     @Override

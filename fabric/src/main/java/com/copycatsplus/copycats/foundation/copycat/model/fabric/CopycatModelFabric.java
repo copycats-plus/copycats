@@ -32,7 +32,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -84,7 +83,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
 
     @SuppressWarnings("deprecation")
     @Override
-    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+    public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         Map<String, BlockState> materials;
         Map<String, Object> remainingDataMap;
         if (blockView instanceof RenderAttachedBlockView attachmentView) {
@@ -231,7 +230,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
         }
     }
 
-    protected void prepareModelCore(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, BlockState material, Object renderAttachmentData) {
+    protected void prepareModelCore(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, BlockState material, Object renderAttachmentData) {
         core.prepareForRender();
     }
 

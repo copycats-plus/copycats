@@ -5,20 +5,20 @@
       "x": 90,
       "y": 90
     },
-    "alt=false,axis=y": {
-      "model": "copycats:block/fluid_pipe/window"
-    },
-    "alt=false,axis=z": {
-      "model": "copycats:block/fluid_pipe/window",
-      "x": 90
-    },
     "alt=true,axis=x": {
       "model": "copycats:block/fluid_pipe/window",
       "x": 90,
       "y": 90
     },
+    "alt=false,axis=y": {
+      "model": "copycats:block/fluid_pipe/window"
+    },
     "alt=true,axis=y": {
       "model": "copycats:block/fluid_pipe/window"
+    },
+    "alt=false,axis=z": {
+      "model": "copycats:block/fluid_pipe/window",
+      "x": 90
     },
     "alt=true,axis=z": {
       "model": "copycats:block/fluid_pipe/window",

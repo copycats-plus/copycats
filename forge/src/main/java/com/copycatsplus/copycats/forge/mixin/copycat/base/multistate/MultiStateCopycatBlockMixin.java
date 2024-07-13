@@ -195,9 +195,4 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IForg
         }
         return pState.getDestroyProgress(pPlayer, pLevel, pPos);
     }
-
-    @Override
-    public BlockState getAppearance(BlockState state, BlockAndTintGetter renderView, BlockPos pos, Direction side, @org.jetbrains.annotations.Nullable BlockState sourceState, @org.jetbrains.annotations.Nullable BlockPos sourcePos) {
-        return IMultiStateCopycatBlock.getAppearance(this, state, renderView, pos, side, sourceState, sourcePos);
-    }
 }

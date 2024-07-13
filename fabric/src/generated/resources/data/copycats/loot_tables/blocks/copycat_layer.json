@@ -2,236 +2,236 @@
   "type": "minecraft:block",
   "pools": [
     {
+      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1.0,
+              "add": false
+            }
+          ],
+          "name": "copycats:copycat_layer"
+        }
+      ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "1"
           }
         }
-      ],
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 1.0,
-              "function": "minecraft:set_count"
+              "function": "minecraft:set_count",
+              "count": 2.0,
+              "add": false
             }
           ],
           "name": "copycats:copycat_layer"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "2"
           }
         }
-      ],
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 2.0,
-              "function": "minecraft:set_count"
+              "function": "minecraft:set_count",
+              "count": 3.0,
+              "add": false
             }
           ],
           "name": "copycats:copycat_layer"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "3"
           }
         }
-      ],
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 3.0,
-              "function": "minecraft:set_count"
+              "function": "minecraft:set_count",
+              "count": 4.0,
+              "add": false
             }
           ],
           "name": "copycats:copycat_layer"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "4"
           }
         }
-      ],
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 4.0,
-              "function": "minecraft:set_count"
+              "function": "minecraft:set_count",
+              "count": 5.0,
+              "add": false
             }
           ],
           "name": "copycats:copycat_layer"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "5"
           }
         }
-      ],
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 5.0,
-              "function": "minecraft:set_count"
+              "function": "minecraft:set_count",
+              "count": 6.0,
+              "add": false
             }
           ],
           "name": "copycats:copycat_layer"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "6"
           }
         }
-      ],
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 6.0,
-              "function": "minecraft:set_count"
+              "function": "minecraft:set_count",
+              "count": 7.0,
+              "add": false
             }
           ],
           "name": "copycats:copycat_layer"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "7"
           }
         }
-      ],
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": 7.0,
-              "function": "minecraft:set_count"
+              "function": "minecraft:set_count",
+              "count": 8.0,
+              "add": false
             }
           ],
           "name": "copycats:copycat_layer"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         },
         {
-          "block": "copycats:copycat_layer",
           "condition": "minecraft:block_state_property",
+          "block": "copycats:copycat_layer",
           "properties": {
             "layers": "8"
           }
         }
-      ],
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": 8.0,
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "copycats:copycat_layer"
-        }
-      ],
-      "rolls": 1.0
+      ]
     }
   ]
 }

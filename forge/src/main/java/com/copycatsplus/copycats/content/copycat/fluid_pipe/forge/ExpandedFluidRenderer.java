@@ -14,9 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
 
 import java.util.function.Function;
 
@@ -33,16 +32,15 @@ public class ExpandedFluidRenderer {
     public static void renderFluidStream(FluidStack fluidStack, Direction direction, float radius, float progress, float centerOffset,
                                          boolean inbound, VertexConsumer builder, PoseStack ms, int light) {
         Fluid fluid = fluidStack.getFluid();
-        IClientFluidTypeExtensions clientFluid = IClientFluidTypeExtensions.of(fluid);
-        FluidType fluidAttributes = fluid.getFluidType();
+        FluidAttributes fluidAttributes = fluid.getAttributes();
         Function<ResourceLocation, TextureAtlasSprite> spriteAtlas = Minecraft.getInstance()
                 .getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
-        TextureAtlasSprite flowTexture = spriteAtlas.apply(clientFluid.getFlowingTexture(fluidStack));
-        TextureAtlasSprite stillTexture = spriteAtlas.apply(clientFluid.getStillTexture(fluidStack));
+        TextureAtlasSprite flowTexture = spriteAtlas.apply(fluidAttributes.getFlowingTexture(fluidStack));
+        TextureAtlasSprite stillTexture = spriteAtlas.apply(fluidAttributes.getStillTexture(fluidStack));
 
-        int color = clientFluid.getTintColor(fluidStack);
+        int color = fluidAttributes.getColor(fluidStack);
         int blockLightIn = (light >> 4) & 0xF;
-        int luminosity = Math.max(blockLightIn, fluidAttributes.getLightLevel(fluidStack));
+        int luminosity = Math.max(blockLightIn, fluidAttributes.getLuminosity(fluidStack));
         light = (light & 0xF00000) | luminosity << 4;
 
         if (inbound)

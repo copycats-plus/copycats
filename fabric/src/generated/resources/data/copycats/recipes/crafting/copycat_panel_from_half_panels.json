@@ -11,14 +11,14 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "ss"
+        ],
         "key": {
           "s": {
             "item": "copycats:copycat_half_panel"
           }
         },
-        "pattern": [
-          "ss"
-        ],
         "result": {
           "item": "create:copycat_panel"
         }

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Always blacklist copycat blocks from being considered by Double Slabs.
  */
-@Mixin(DSConfig.Common.class)
+@Mixin(DSConfig.Server.class)
 @Pseudo
 public class DSConfigCommonMixin {
 

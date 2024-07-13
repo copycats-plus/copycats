@@ -2,19 +2,15 @@
   "type": "minecraft:block",
   "pools": [
     {
+      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
-              "block": "copycats:copycat_iron_door",
               "condition": "minecraft:block_state_property",
+              "block": "copycats:copycat_iron_door",
               "properties": {
                 "half": "lower"
               }
@@ -23,7 +19,11 @@
           "name": "copycats:copycat_iron_door"
         }
       ],
-      "rolls": 1.0
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ]
 }

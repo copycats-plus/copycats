@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -40,8 +41,21 @@ public final class WrappedCopycatBlock extends CopycatBlock {
         return wrapped.get().isIgnoredConnectivitySide(reader, state, face, fromPos, toPos);
     }
 
+    @Nullable
     @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        return wrapped.get().canConnectTexturesToward(reader, fromPos, toPos, state);
+    public BlockState getConnectiveMaterial(BlockAndTintGetter reader, BlockState fromState, Direction face, BlockPos fromPos, BlockPos toPos) {
+        BlockState toState = reader.getBlockState(toPos); // toPos is the position with copycat
+
+        if (fromState.getBlock() instanceof ICopycatBlock fromCopycat) {
+            if (!fromCopycat.canConnectTexturesToward(reader, fromPos, toPos, fromState))
+                return null;
+        }
+
+        if (toState.getBlock() instanceof ICopycatBlock toCopycat) {
+            if (toCopycat.isIgnoredConnectivitySide(reader, toState, face, toPos, fromPos))
+                return null;
+        }
+
+        return CopycatBlock.getMaterial(reader, toPos);
     }
 }

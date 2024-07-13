@@ -25,10 +25,6 @@ public abstract class CopycatFluidPipeRendererImpl extends SafeBlockEntityRender
     @SuppressWarnings("deprecation")
     public static void renderSafe(CopycatFluidPipeRenderer renderer, CopycatFluidPipeBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                                   int light, int overlay) {
-
-        if (ItemBlockRenderTypes.getRenderLayers(be.getMaterial()).contains(RenderType.solid()))
-            return;
-
         FluidTransportBehaviour pipe = be.getBehaviour(FluidTransportBehaviour.TYPE);
         if (pipe == null)
             return;

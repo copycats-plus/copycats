@@ -138,9 +138,4 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock {
     public float getDestroyProgress(@NotNull BlockState pState, @NotNull Player pPlayer, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos) {
         return getMaterial(pLevel, pPos).getDestroyProgress(pPlayer, pLevel, pPos);
     }
-
-    @Override
-    public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
-        return ICopycatBlock.getAppearance(this, state, level, pos, side, queryState, queryPos);
-    }
 }

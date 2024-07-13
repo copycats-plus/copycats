@@ -10,10 +10,12 @@ import com.copycatsplus.copycats.foundation.copycat.model.assembly.forge.Copycat
 import com.copycatsplus.copycats.foundation.copycat.model.kinetic.forge.KineticCopycatRendererImpl;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.utility.forge.ModelUtils;
 import com.jozufozu.flywheel.core.model.ModelUtil;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.model.BakedModelWrapperWithData;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,14 +23,14 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,9 +47,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
     public static final ModelProperty<BlockState> MATERIAL_PROPERTY = new ModelProperty<>();
     public static final ModelProperty<Map<String, BlockState>> MATERIALS_PROPERTY = new ModelProperty<>();
     private static final ModelProperty<Map<String, OcclusionData>> OCCLUSION_PROPERTY = new ModelProperty<>();
-    private static final ModelProperty<Map<String, ModelData>> WRAPPED_DATA_PROPERTY = new ModelProperty<>();
-
-    private static final ChunkRenderTypeSet allRenderTypes = ChunkRenderTypeSet.of(RenderType.solid(), RenderType.cutout(), RenderType.cutoutMipped(), RenderType.translucent());
+    private static final ModelProperty<Map<String, IModelData>> WRAPPED_DATA_PROPERTY = new ModelProperty<>();
 
     protected final CopycatModelCore core;
     private final boolean disableAO;
@@ -72,50 +72,28 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
     }
 
     @Override
-    public boolean useAmbientOcclusion(@NotNull BlockState state, @NotNull RenderType renderType) {
-        return !disableAO && super.useAmbientOcclusion(state, renderType);
-    }
-
-    @Override
-    public @NotNull ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
-        ChunkRenderTypeSet renderTypes = allRenderTypes;
-        Map<String, BlockState> materials = getMaterials(data);
-        prepareModelCore(state, rand, data);
-        for (CopycatModelCore.ModelEntry entry : entries) {
-            BlockState material = materials.get(entry.key());
-            if (material == null && entry.type().useCopycatLogic())
-                continue;
-            BakedModel model = getModelForEntry(entry, state, material);
-            if (model == null)
-                continue;
-            renderTypes = ChunkRenderTypeSet.union(renderTypes, model.getRenderTypes(state, rand, data));
-        }
-        return renderTypes;
-    }
-
-    @Override
-    public ModelData.Builder gatherModelData(ModelData.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
-                                             ModelData blockEntityData) {
+    public void gatherModelData(ModelDataMap.Builder builder, BlockAndTintGetter world,
+                                BlockPos pos, BlockState state, IModelData blockEntityData) {
         if (!(originalModel instanceof BakedModelWrapperWithData)) {
             KineticCopycatRendererImpl.copyModelData(originalModel.getModelData(world, pos, state, blockEntityData), builder);
         }
 
         Map<String, BlockState> materials = getMaterials(blockEntityData);
         if (materials.isEmpty()) {
-            BlockState material = blockEntityData.get(MATERIAL_PROPERTY);
+            BlockState material = blockEntityData.getData(MATERIAL_PROPERTY);
             if (material != null)
                 materials = Map.of(MATERIAL_KEY, material);
         }
         if (materials.isEmpty())
-            return builder;
+            return;
 
-        builder.with(MATERIALS_PROPERTY, new HashMap<>(materials));
+        builder.withInitial(MATERIALS_PROPERTY, new HashMap<>(materials));
 
         if (!(state.getBlock() instanceof ICopycatBlock copycatBlock))
-            return builder;
+            return;
 
         if (copycatBlock instanceof IMultiStateCopycatBlock multiStateBlock) {
-            Map<String, ModelData> wrappedDataMap = new HashMap<>();
+            Map<String, IModelData> wrappedDataMap = new HashMap<>();
             Map<String, OcclusionData> occlusionMap = new HashMap<>();
             for (Map.Entry<String, BlockState> s : materials.entrySet()) {
                 Vec3i inner = multiStateBlock.getVectorFromProperty(state, s.getKey());
@@ -123,7 +101,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                 ScaledBlockAndTintGetter scaledWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, multiStateBlock.vectorScale(state), p -> true);
 
                 OcclusionData occlusionData = new OcclusionData();
-                if (!ModelUtil.isVirtual(blockEntityData))
+                if (!ModelUtils.isVirtual(blockEntityData))
                     gatherOcclusionData(scaledWorld, pos, state, s.getValue(), occlusionData, copycatBlock);
                 occlusionMap.put(s.getKey(), occlusionData);
 
@@ -134,21 +112,21 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                         });
                 wrappedDataMap.put(s.getKey(), getModelOf(s.getValue()).getModelData(
                         filteredWorld,
-                        pos, s.getValue(), ModelData.EMPTY));
+                        pos, s.getValue(), EmptyModelData.INSTANCE));
             }
-            return builder.with(OCCLUSION_PROPERTY, occlusionMap).with(WRAPPED_DATA_PROPERTY, wrappedDataMap);
+            builder.withInitial(OCCLUSION_PROPERTY, occlusionMap).withInitial(WRAPPED_DATA_PROPERTY, wrappedDataMap);
         } else {
             BlockState material = materials.get(MATERIAL_KEY);
-            if (material == null) return builder;
+            if (material == null) return;
 
             OcclusionData occlusionData = new OcclusionData();
-            if (!ModelUtil.isVirtual(blockEntityData))
+            if (!ModelUtils.isVirtual(blockEntityData))
                 gatherOcclusionData(world, pos, state, material, occlusionData, copycatBlock);
             Map<String, OcclusionData> occlusionMap = Map.of(
                     MATERIAL_KEY,
                     occlusionData
             );
-            builder.with(OCCLUSION_PROPERTY, occlusionMap);
+            builder.withInitial(OCCLUSION_PROPERTY, occlusionMap);
 
             FilteredBlockAndTintGetter filteredWorld = new FilteredBlockAndTintGetterForge(world,
                     targetPos -> {
@@ -157,13 +135,13 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                             if (!copycatBE.isCTEnabled()) return false;
                         return copycatBlock.canConnectTexturesToward(world, pos, targetPos, state);
                     });
-            Map<String, ModelData> wrappedDataMap = Map.of(
+            Map<String, IModelData> wrappedDataMap = Map.of(
                     MATERIAL_KEY,
                     getModelOf(material).getModelData(
                             filteredWorld,
-                            pos, material, ModelData.EMPTY)
+                            pos, material, EmptyModelData.INSTANCE)
             );
-            return builder.with(WRAPPED_DATA_PROPERTY, wrappedDataMap);
+            builder.withInitial(WRAPPED_DATA_PROPERTY, wrappedDataMap);
         }
     }
 
@@ -186,21 +164,21 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         }
     }
 
-    protected @NotNull List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull RandomSource rand, @NotNull ModelData data, RenderType renderType) {
+    protected @NotNull List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data) {
 
         prepareModelCore(state, rand, data);
 
         List<CopycatRenderContextForge.CullingBakedQuad> allQuads = new ArrayList<>();
         Map<String, BlockState> materials = getMaterials(data);
         Map<String, OcclusionData> occlusionDataMap = getOcclusion(data);
-        Map<String, ModelData> wrappedDataMap = getWrappedData(data);
+        Map<String, IModelData> wrappedDataMap = getWrappedData(data);
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
 
-            if (entry.type().onlyWhenVirtual() && !ModelUtil.isVirtual(data))
+            if (entry.type().onlyWhenVirtual() && !ModelUtils.isVirtual(data))
                 continue;
             if (entry.type().useCopycatLogic() && material == null) {
-                if (materials.isEmpty() && ModelUtil.isVirtual(data)) {
+                if (materials.isEmpty() && ModelUtils.isVirtual(data)) {
                     material = AllBlocks.COPYCAT_BASE.getDefaultState();
                 } else continue;
             }
@@ -209,26 +187,29 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
             if (model == null) continue;
 
             BlockState wrappedState = state;
-            ModelData wrappedData = data;
+            IModelData wrappedData = data;
             if (entry.type().useCopycatLogic()) {
                 wrappedState = material;
                 wrappedData = wrappedDataMap.get(entry.key());
                 if (wrappedData == null)
-                    wrappedData = ModelData.EMPTY;
+                    wrappedData = EmptyModelData.INSTANCE;
             }
+            RenderType renderType = MinecraftForgeClient.getRenderType();
             if (renderType != null) {
-                if (!model.getRenderTypes(wrappedState, rand, wrappedData).contains(renderType))
+                if (entry.renderType() != null && renderType != entry.renderType())
+                    continue;
+                if (!ItemBlockRenderTypes.canRenderInLayer(wrappedState, renderType))
                     continue;
             }
 
             List<CopycatRenderContextForge.CullingBakedQuad> quads = new ArrayList<>();
             for (Direction side : Iterate.directions) {
-                List<BakedQuad> templateQuads = model.getQuads(wrappedState, side, rand, wrappedData, renderType);
+                List<BakedQuad> templateQuads = model.getQuads(wrappedState, side, rand, wrappedData);
                 for (BakedQuad templateQuad : templateQuads) {
                     quads.add(new CopycatRenderContextForge.CullingBakedQuad(templateQuad, side));
                 }
             }
-            List<BakedQuad> templateQuads = model.getQuads(wrappedState, null, rand, wrappedData, renderType);
+            List<BakedQuad> templateQuads = model.getQuads(wrappedState, null, rand, wrappedData);
             for (BakedQuad templateQuad : templateQuads) {
                 quads.add(new CopycatRenderContextForge.CullingBakedQuad(templateQuad, null));
             }
@@ -248,8 +229,8 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
     }
 
     @Override
-    public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull RandomSource rand, @NotNull ModelData data, RenderType renderType) {
-        List<CopycatRenderContextForge.CullingBakedQuad> templateQuads = renderSession.get().getQuads(state, rand, data, renderType);
+    public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull Random rand, @NotNull IModelData data) {
+        List<CopycatRenderContextForge.CullingBakedQuad> templateQuads = renderSession.get().getQuads(state, rand, data);
         List<BakedQuad> quads = new ArrayList<>();
         for (CopycatRenderContextForge.CullingBakedQuad quad : templateQuads) {
             if (side != quad.cullFace)
@@ -279,12 +260,12 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         }
     }
 
-    protected void prepareModelCore(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
+    protected void prepareModelCore(@NotNull BlockState state, @NotNull Random rand, @NotNull IModelData data) {
         core.prepareForRender();
     }
 
     @Override
-    public @NotNull TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+    public @NotNull TextureAtlasSprite getParticleIcon(@NotNull IModelData data) {
         @NotNull Map<String, BlockState> material = getMaterials(data);
 
         if (material.isEmpty())
@@ -295,23 +276,23 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         return getModelOf(key.getValue()).getParticleIcon(getWrappedData(data).get(key.getKey()));
     }
 
-    public static @NotNull BlockState getMaterial(ModelData data) {
-        BlockState material = data == null ? null : data.get(MATERIAL_PROPERTY);
+    public static @NotNull BlockState getMaterial(IModelData data) {
+        BlockState material = data == null ? null : data.getData(MATERIAL_PROPERTY);
         return material == null ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
     }
 
-    public static @NotNull Map<String, BlockState> getMaterials(ModelData data) {
-        Map<String, BlockState> materials = data == null ? null : data.get(MATERIALS_PROPERTY);
+    public static @NotNull Map<String, BlockState> getMaterials(IModelData data) {
+        Map<String, BlockState> materials = data == null ? null : data.getData(MATERIALS_PROPERTY);
         return materials == null ? Map.of() : materials;
     }
 
-    public static @NotNull Map<String, OcclusionData> getOcclusion(ModelData data) {
-        Map<String, OcclusionData> occlusions = data == null ? null : data.get(OCCLUSION_PROPERTY);
+    public static @NotNull Map<String, OcclusionData> getOcclusion(IModelData data) {
+        Map<String, OcclusionData> occlusions = data == null ? null : data.getData(OCCLUSION_PROPERTY);
         return occlusions == null ? Map.of() : occlusions;
     }
 
-    public static @NotNull Map<String, ModelData> getWrappedData(ModelData data) {
-        Map<String, ModelData> wrappedData = data == null ? null : data.get(WRAPPED_DATA_PROPERTY);
+    public static @NotNull Map<String, IModelData> getWrappedData(IModelData data) {
+        Map<String, IModelData> wrappedData = data == null ? null : data.getData(WRAPPED_DATA_PROPERTY);
         return wrappedData == null ? Map.of() : wrappedData;
     }
 
@@ -333,15 +314,14 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
 
     @FunctionalInterface
     public interface Renderer {
-        List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull RandomSource rand, @NotNull ModelData data, RenderType renderType);
+        List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data);
     }
 
     public static class RenderSession implements Renderer {
         private final Renderer renderer;
         private BlockState state = null;
-        private RandomSource rand = null;
-        private ModelData data = null;
-        private RenderType renderType = null;
+        private Random rand = null;
+        private IModelData data = null;
         private List<CopycatRenderContextForge.CullingBakedQuad> result = null;
 
         public RenderSession(Renderer renderer) {
@@ -349,15 +329,14 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         }
 
         @Override
-        public List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull RandomSource rand, @NotNull ModelData data, RenderType renderType) {
-            if (Objects.equals(this.state, state) && this.rand == rand && this.data == data && this.renderType == renderType && this.result != null) {
+        public List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data) {
+            if (Objects.equals(this.state, state) && this.rand == rand && this.data == data && this.result != null) {
                 return result;
             }
             this.state = state;
             this.rand = rand;
             this.data = data;
-            this.renderType = renderType;
-            this.result = renderer.getQuads(state, rand, data, renderType);
+            this.result = renderer.getQuads(state, rand, data);
             return result;
         }
     }

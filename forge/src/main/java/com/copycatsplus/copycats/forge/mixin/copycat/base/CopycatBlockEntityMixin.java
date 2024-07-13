@@ -12,7 +12,8 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -41,11 +42,11 @@ public abstract class CopycatBlockEntityMixin extends SmartBlockEntity implement
     }
 
     @Override
-    public @NotNull ModelData getModelData() {
+    public @NotNull IModelData getModelData() {
         return KineticCopycatRendererImpl.mergeData(
                 super.getModelData(),
-                ModelData.builder()
-                        .with(CopycatModelForge.MATERIAL_PROPERTY, getMaterial())
+                new ModelDataMap.Builder()
+                        .withInitial(CopycatModelForge.MATERIAL_PROPERTY, getMaterial())
                         .build()
         ).build();
     }

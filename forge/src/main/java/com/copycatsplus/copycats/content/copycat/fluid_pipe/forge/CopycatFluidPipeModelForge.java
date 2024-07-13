@@ -11,12 +11,14 @@ import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 public class CopycatFluidPipeModelForge extends CopycatModelForge {
 
@@ -27,8 +29,8 @@ public class CopycatFluidPipeModelForge extends CopycatModelForge {
     }
 
     @Override
-    public ModelData.Builder gatherModelData(ModelData.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
-                                             ModelData blockEntityData) {
+    public void gatherModelData(ModelDataMap.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
+                                IModelData blockEntityData) {
         super.gatherModelData(builder, world, pos, state, blockEntityData);
         CopycatFluidPipeModelCore.PipeModelData data = new CopycatFluidPipeModelCore.PipeModelData();
         FluidTransportBehaviour transport = BlockEntityBehaviour.get(world, pos, FluidTransportBehaviour.TYPE);
@@ -41,16 +43,16 @@ public class CopycatFluidPipeModelForge extends CopycatModelForge {
             data.putBracket(bracket.getBracket());
 
         data.setEncased(FluidPipeBlock.shouldDrawCasing(world, pos, state));
-        return builder.with(PIPE_PROPERTY, data);
+        builder.withInitial(PIPE_PROPERTY, data);
     }
 
     @Override
-    protected void prepareModelCore(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
+    protected void prepareModelCore(@NotNull BlockState state, @NotNull Random rand, @NotNull IModelData data) {
         super.prepareModelCore(state, rand, data);
         if (core instanceof CopycatModelCore.WithData<?>) {
             @SuppressWarnings("unchecked")
             CopycatModelCore.WithData<CopycatFluidPipeModelCore.PipeModelData> dataCore = (CopycatModelCore.WithData<CopycatFluidPipeModelCore.PipeModelData>) core;
-            CopycatFluidPipeModelCore.PipeModelData pipeData = data.get(PIPE_PROPERTY);
+            CopycatFluidPipeModelCore.PipeModelData pipeData = data.getData(PIPE_PROPERTY);
             if (pipeData == null)
                 pipeData = new CopycatFluidPipeModelCore.PipeModelData();
             dataCore.setData(pipeData);

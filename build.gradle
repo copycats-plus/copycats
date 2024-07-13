@@ -12,7 +12,11 @@ def getGitTag = { ->
         commandLine "git", "describe", "--tags", "--abbrev=0"
         standardOutput = stdout
     }
-    return stdout.toString().trim().takeBetween("v", "+")
+    def str = stdout.toString().trim().takeBetween("v", "+")
+    if (str == "") {
+        return "0.0.0"
+    }
+    return str
 }
 
 architectury {

@@ -37,7 +37,6 @@ public class Copycats {
 
         CCBlocks.register();
         CCBlockEntityTypes.register();
-        CCCatVariants.register();
         CCItems.register();
 
         CCConfigs.register();
@@ -48,7 +47,7 @@ public class Copycats {
     }
 
     public static void gatherData(DataGenerator gen) {
-        gen.addProvider(true, CCStandardRecipes.create(gen));
+        gen.addProvider(CCStandardRecipes.create(gen));
     }
 
     public static CopycatRegistrate getRegistrate() {
