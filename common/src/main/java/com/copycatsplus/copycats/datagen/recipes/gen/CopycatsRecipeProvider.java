@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.datagen.recipes.gen;
 
 import com.copycatsplus.copycats.Copycats;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public abstract class CopycatsRecipeProvider extends RecipeProvider {
 
     protected static final List<GeneratedRecipe> all = new ArrayList<>();
 
-    public CopycatsRecipeProvider(PackOutput output) {
+    public CopycatsRecipeProvider(DataGenerator output) {
         super(output);
     }
 
@@ -29,10 +29,4 @@ public abstract class CopycatsRecipeProvider extends RecipeProvider {
         all.add(recipe);
         return recipe;
     }
-
-    @Override
-    public void buildRecipes(Consumer<FinishedRecipe> writer) {
-        all.forEach(recipe -> recipe.register(writer));
-    }
-
 }

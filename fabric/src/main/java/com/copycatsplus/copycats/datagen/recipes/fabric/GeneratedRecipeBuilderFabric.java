@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class GeneratedRecipeBuilderFabric implements GeneratedRecipeBuilder {
     @Override
     public GeneratedRecipe viaShaped(UnaryOperator<ShapedRecipeBuilder> builder) {
         return handleConditions(consumer -> {
-            ShapedRecipeBuilder b = builder.apply(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result.get(), amount));
+            ShapedRecipeBuilder b = builder.apply(ShapedRecipeBuilder.shaped(result.get(), amount));
             if (unlockedBy != null)
                 b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
             b.save(consumer, createLocation("crafting"));
@@ -94,7 +95,7 @@ public class GeneratedRecipeBuilderFabric implements GeneratedRecipeBuilder {
     @Override
     public GeneratedRecipe viaShapeless(UnaryOperator<ShapelessRecipeBuilder> builder) {
         return handleConditions(consumer -> {
-            ShapelessRecipeBuilder b = builder.apply(ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result.get(), amount));
+            ShapelessRecipeBuilder b = builder.apply(ShapelessRecipeBuilder.shapeless(result.get(), amount));
             if (unlockedBy != null)
                 b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
             b.save(consumer, createLocation("crafting"));
@@ -201,7 +202,7 @@ public class GeneratedRecipeBuilderFabric implements GeneratedRecipeBuilder {
         private float exp;
         private int cookingTime;
 
-        private final RecipeSerializer<? extends AbstractCookingRecipe> FURNACE = RecipeSerializer.SMELTING_RECIPE,
+        private final SimpleCookingSerializer<? extends AbstractCookingRecipe> FURNACE = RecipeSerializer.SMELTING_RECIPE,
                 SMOKER = RecipeSerializer.SMOKING_RECIPE, BLAST = RecipeSerializer.BLASTING_RECIPE,
                 CAMPFIRE = RecipeSerializer.CAMPFIRE_COOKING_RECIPE;
 
@@ -256,13 +257,13 @@ public class GeneratedRecipeBuilderFabric implements GeneratedRecipeBuilder {
             return create(BLAST, builder, .5f);
         }
 
-        private GeneratedRecipe create(RecipeSerializer<? extends AbstractCookingRecipe> serializer,
+        private GeneratedRecipe create(SimpleCookingSerializer<? extends AbstractCookingRecipe> serializer,
                                        UnaryOperator<SimpleCookingRecipeBuilder> builder, float cookingTimeModifier) {
             return CopycatsRecipeProvider.register(consumer -> {
                 boolean isOtherMod = compatDatagenOutput != null;
 
                 SimpleCookingRecipeBuilder b = builder.apply(
-                        SimpleCookingRecipeBuilder.generic(ingredient.get(), RecipeCategory.MISC, isOtherMod ? Items.DIRT : result.get(),
+                        SimpleCookingRecipeBuilder.cooking(ingredient.get(), isOtherMod ? Items.DIRT : result.get(),
                                 exp, (int) (cookingTime * cookingTimeModifier), serializer));
                 if (unlockedBy != null)
                     b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
@@ -287,7 +288,7 @@ public class GeneratedRecipeBuilderFabric implements GeneratedRecipeBuilder {
 
         private GeneratedRecipe create(UnaryOperator<SingleItemRecipeBuilder> builder) {
             return handleConditions(consumer -> {
-                SingleItemRecipeBuilder b = builder.apply(SingleItemRecipeBuilder.stonecutting(ingredient.get(), RecipeCategory.MISC, result.get(), amount));
+                SingleItemRecipeBuilder b = builder.apply(SingleItemRecipeBuilder.stonecutting(ingredient.get(), result.get(), amount));
                 if (unlockedBy != null)
                     b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
                 b.save(consumer, createLocation("stonecutting"));

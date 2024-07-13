@@ -10,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 public class CopycatsImpl implements ModInitializer {
     @Override
     public void onInitialize() {
-        CCCreativeTabsImpl.register();
         Copycats.init();
 
         CCCraftingConditions.register();

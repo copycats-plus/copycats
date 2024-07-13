@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.foundation.tooltip;
 
+import com.mojang.bridge.game.Language;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.simibubi.create.foundation.utility.Components;
@@ -42,7 +43,7 @@ public class CopycatDescription {
     }
 
     protected final Item item;
-    private static String cachedLanguage = null;
+    private static Language cachedLanguage = null;
     private static Map<CopycatCharacteristics, Pair<List<Component>, List<Component>>> descriptions;
     @Nullable
     private List<Component> shortDescription = null;
@@ -103,7 +104,7 @@ public class CopycatDescription {
     }
 
     private static boolean checkLocale() {
-        String currentLanguage = Minecraft.getInstance()
+        Language currentLanguage = Minecraft.getInstance()
                 .getLanguageManager()
                 .getSelected();
         if (!currentLanguage.equals(cachedLanguage)) {

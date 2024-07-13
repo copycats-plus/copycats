@@ -35,7 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CopycatFenceGateBlock extends FenceGateBlock implements ICopycatBlock, IBE<CCCopycatBlockEntity>, IStateType {
 
     public CopycatFenceGateBlock(Properties properties) {
-        super(properties, WoodType.OAK);
+        super(properties);
     }
 
     public boolean collisionExtendsVertically(BlockState state, BlockGetter level, BlockPos pos, Entity collidingEntity) {

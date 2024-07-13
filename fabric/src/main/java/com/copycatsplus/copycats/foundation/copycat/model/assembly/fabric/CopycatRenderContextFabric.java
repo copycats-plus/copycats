@@ -68,7 +68,7 @@ public class CopycatRenderContextFabric extends CopycatRenderContext.Base<List<M
     }
 
     private static void assembleQuad(MutableQuadView src, QuadEmitter dest) {
-        dest.copyFrom(src);
+        src.copyTo(dest);
         dest.emit();
     }
 
@@ -87,8 +87,8 @@ public class CopycatRenderContextFabric extends CopycatRenderContext.Base<List<M
     }
 
     private static void assembleQuad(MutableQuadView src, QuadEmitter dest, AABB crop, Vec3 move, AssemblyTransform assemblyTransform, QuadTransform... transforms) {
-        dest.copyFrom(src);
-        TextureAtlasSprite sprite = spriteFinder.find(src);
+        src.copyTo(dest);
+        TextureAtlasSprite sprite = spriteFinder.find(src, 0);
         BakedModelHelper.cropAndMove(dest, sprite, crop, move);
         MutableQuad mutableQuad = getMutableQuad(dest);
         assemblyTransform.apply(mutableQuad);
@@ -101,7 +101,7 @@ public class CopycatRenderContextFabric extends CopycatRenderContext.Base<List<M
         mutableQuad.mutate();
         for (int i = 0; i < 4; i++) {
             BakedQuadHelper.setXYZ(dest, i, mutableQuad.vertices.get(i).xyz.toVec3());
-            dest.uv(i, mutableQuad.vertices.get(i).uv.u, mutableQuad.vertices.get(i).uv.v);
+            dest.sprite(i, 0, mutableQuad.vertices.get(i).uv.u, mutableQuad.vertices.get(i).uv.v);
         }
         dest.cullFace(mutableQuad.cullFace);
         dest.emit();
@@ -111,7 +111,7 @@ public class CopycatRenderContextFabric extends CopycatRenderContext.Base<List<M
         List<MutableVertex> vertices = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             MutableVec3 xyz = new MutableVec3(vertexData.x(i), vertexData.y(i), vertexData.z(i));
-            MutableUV uv = new MutableUV(vertexData.u(i), vertexData.v(i));
+            MutableUV uv = new MutableUV(vertexData.spriteU(i, 0), vertexData.spriteV(i, 0));
             vertices.add(new MutableVertex(xyz, uv));
         }
         return new MutableQuad(vertices, vertexData.lightFace());

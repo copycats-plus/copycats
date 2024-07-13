@@ -37,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
@@ -83,7 +85,7 @@ public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpe
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return false;
         }

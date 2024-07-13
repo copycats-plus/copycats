@@ -2,7 +2,6 @@ package com.copycatsplus.copycats.foundation.copycat.multistate;
 
 import com.copycatsplus.copycats.utility.ItemUtils;
 import com.simibubi.create.AllBlocks;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.ItemStack;
@@ -160,7 +159,7 @@ public class MaterialItemStorage {
 
         public static MaterialItem deserialize(CompoundTag tag) {
             return new MaterialItem(
-                    NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("material")),
+                    NbtUtils.readBlockState(tag.getCompound("material")),
                     ItemStack.of(tag.getCompound("consumedItem")),
                     !tag.contains("enableCT") || tag.getBoolean("enableCT")
             );

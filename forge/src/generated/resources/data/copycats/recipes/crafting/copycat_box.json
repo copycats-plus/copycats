@@ -11,7 +11,6 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "category": "misc",
         "key": {
           "s": {
             "tag": "copycats:copycat_board"
@@ -24,8 +23,7 @@
         ],
         "result": {
           "item": "copycats:copycat_box"
-        },
-        "show_notification": true
+        }
       }
     }
   ]

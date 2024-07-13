@@ -1,18 +1,6 @@
 {
   "advancements": [
     {
-      "fabric:load_conditions": [
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_vertical_slice",
-          "invert": false
-        },
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_slice",
-          "invert": false
-        }
-      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
         "criteria": {
@@ -45,9 +33,20 @@
           "recipes": [
             "copycats:crafting/copycat_slice_from_conversion"
           ]
+        }
+      },
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_vertical_slice",
+          "invert": false
         },
-        "sends_telemetry_event": false
-      }
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_slice",
+          "invert": false
+        }
+      ]
     }
   ]
 }

@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
 import static net.minecraft.core.Direction.Axis;
 
 @SuppressWarnings("deprecation")
@@ -127,7 +128,7 @@ public class CopycatWallBlock extends WallBlock implements ICopycatBlock, IBE<CC
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             if (diff.distManhattan(Vec3i.ZERO) > 2) return false;
             if (diff.getY() == 0) return false;

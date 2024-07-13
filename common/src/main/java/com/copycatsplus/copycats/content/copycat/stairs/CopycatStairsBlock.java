@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
 import static net.minecraft.core.Direction.*;
 
 @ParametersAreNonnullByDefault
@@ -143,7 +144,7 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction side = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction side = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         if (side != null) {
             FaceShape sideShape = getFaceShape(state, side);

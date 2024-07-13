@@ -13,7 +13,8 @@ import com.simibubi.create.AllItems;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -42,7 +43,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_PANEL::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('p', AllBlocks.COPYCAT_PANEL)
+                    .define('p', AllBlocks.COPYCAT_PANEL.get())
                     .pattern("p")
                     .pattern("p")
             );
@@ -51,7 +52,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShaped(b -> b
-                    .define('s', AllBlocks.COPYCAT_STEP)
+                    .define('s', AllBlocks.COPYCAT_STEP.get())
                     .pattern("ss")
             );
 
@@ -89,7 +90,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(AllBlocks.COPYCAT_STEP::get)
             .requiresResultFeature()
             .viaShapeless(b -> b
-                    .requires(AllBlocks.COPYCAT_STEP)
+                    .requires(AllBlocks.COPYCAT_STEP.get())
             );
 
     GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
@@ -100,7 +101,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(CCBlocks.COPYCAT_HALF_PANEL::get)
             .requiresFeature(CCBlocks.COPYCAT_HALF_PANEL)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_HALF_PANEL)
+                    .define('s', CCBlocks.COPYCAT_HALF_PANEL.get())
                     .pattern("ss")
             );
 
@@ -222,6 +223,11 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(() -> result);
     }
 
+    @ExpectPlatform
+    public static RecipeProvider create(DataGenerator generator) {
+        throw new AssertionError();
+    }
+
     GeneratedRecipeBuilder.GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
         if (result.get() instanceof ICopycatBlock) {
             copycatsWithRecipes.add((Block) result.get());
@@ -242,7 +248,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(result)
                 .unlockedBy(base)
                 .returns(resultCount)
-                .viaShapeless(b -> b.requires(base, resultCount).requires(AllItems.ZINC_INGOT));
+                .viaShapeless(b -> b.requires(base.get(), resultCount).requires(AllItems.ZINC_INGOT.get()));
     }
 
     GeneratedRecipeBuilder.GeneratedRecipe copycatWithBaseItem(ItemLike base, ItemProviderEntry<? extends ItemLike> result, int resultCount) {
@@ -253,7 +259,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(result)
                 .unlockedBy(() -> base)
                 .returns(resultCount)
-                .viaShapeless(b -> b.requires(base, resultCount).requires(AllItems.ZINC_INGOT));
+                .viaShapeless(b -> b.requires(base, resultCount).requires(AllItems.ZINC_INGOT.get()));
     }
 
     GeneratedRecipe conversionCycle(List<ItemProviderEntry<? extends ItemLike>> cycle) {
@@ -270,7 +276,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return result;
     }
 
-    public CCStandardRecipes(PackOutput output) {
+    public CCStandardRecipes(DataGenerator output) {
         super(output);
 
         List<ResourceLocation> missingRecipes = new LinkedList<>();

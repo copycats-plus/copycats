@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
@@ -31,8 +30,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class CopycatWeightedPressurePlate extends WeightedPressurePlateBlock implements ICopycatBlock, IBE<CCCopycatBlockEntity>, IStateType {
 
-    public CopycatWeightedPressurePlate(int maxWeight, Properties pProperties, BlockSetType type) {
-        super(maxWeight, pProperties, type);
+    public CopycatWeightedPressurePlate(int maxWeight, Properties pProperties) {
+        super(maxWeight, pProperties);
     }
 
     @Nullable

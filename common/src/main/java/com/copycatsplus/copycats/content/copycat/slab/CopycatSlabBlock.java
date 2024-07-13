@@ -369,7 +369,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
             List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
                     state.getValue(AXIS),
                     dir -> world.getBlockState(pos.relative(dir))
-                            .canBeReplaced());
+                            .getMaterial().isReplaceable());
 
             if (directions.isEmpty())
                 return PlacementOffset.fail();

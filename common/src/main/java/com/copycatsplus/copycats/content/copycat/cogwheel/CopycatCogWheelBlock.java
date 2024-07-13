@@ -33,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatCogWheelBlock extends CogWheelBlock implements IMultiStateCopycatBlock {
@@ -159,7 +161,7 @@ public class CopycatCogWheelBlock extends CogWheelBlock implements IMultiStateCo
         if (property.equals(Part.COGWHEEL.getSerializedName()))
             return false;
         Vec3i diff = toPos.subtract(fromPos);
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) return false;
         return face.getAxis() == state.getValue(AXIS);
     }

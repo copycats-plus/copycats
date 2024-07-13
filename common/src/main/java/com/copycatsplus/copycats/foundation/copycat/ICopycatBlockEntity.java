@@ -13,7 +13,6 @@ import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.ItemStack;
@@ -52,8 +51,6 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
     BlockPos getBlockPos();
 
     BlockState getBlockState();
-
-    HolderGetter<Block> blockHolderGetter();
 
     void setBlockState(BlockState blockState);
 
@@ -179,7 +176,7 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
             return;
         }
 
-        self.setMaterialInternal(NbtUtils.readBlockState(self.blockHolderGetter(), tag.getCompound("Material")));
+        self.setMaterialInternal(NbtUtils.readBlockState(tag.getCompound("Material")));
 
         // Validate Material
         if (self.getMaterial() != null && !clientPacket) {

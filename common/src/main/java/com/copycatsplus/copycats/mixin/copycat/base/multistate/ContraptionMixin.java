@@ -10,9 +10,7 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.HashMapPalette;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -41,16 +39,16 @@ public class ContraptionMixin {
             at = @At("RETURN"),
             cancellable = true
     )
-    private static void legacyReadStructureBlockInfo(CompoundTag blockListEntry, HolderGetter<Block> holderGetter, CallbackInfoReturnable<StructureTemplate.StructureBlockInfo> cir) {
+    private static void legacyReadStructureBlockInfo(CompoundTag blockListEntry, CallbackInfoReturnable<StructureTemplate.StructureBlockInfo> cir) {
         copycats$migrateStructureBlockInfo(cir);
     }
 
     @Unique
     private static void copycats$migrateStructureBlockInfo(CallbackInfoReturnable<StructureTemplate.StructureBlockInfo> cir) {
-        BlockState state = cir.getReturnValue().state();
-        CompoundTag nbt = cir.getReturnValue().nbt();
+        BlockState state = cir.getReturnValue().state;
+        CompoundTag nbt = cir.getReturnValue().nbt;
         if (state.getBlock() instanceof MultiStateCopycatBlock && nbt != null && nbt.contains("Material")) {
-            BlockPos pos = cir.getReturnValue().pos();
+            BlockPos pos = cir.getReturnValue().pos;
             CopycatBlockEntity be = AllBlockEntityTypes.COPYCAT.create(pos, state);
             be.load(nbt);
             MultiStateCopycatBlockEntity multiBe = CCBlockEntityTypes.MULTI_STATE_COPYCAT.create(pos, state);
@@ -61,7 +59,7 @@ public class ContraptionMixin {
                 nbt != null &&
                 nbt.contains("id") &&
                 nbt.getString("id").equals(AllBlockEntityTypes.COPYCAT.getId().toString())) {
-            BlockPos pos = cir.getReturnValue().pos();
+            BlockPos pos = cir.getReturnValue().pos;
             CCCopycatBlockEntity be = CCBlockEntityTypes.COPYCAT.create(pos, state);
             be.load(nbt);
             nbt = be.saveWithId();

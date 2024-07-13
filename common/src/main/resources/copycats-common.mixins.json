@@ -30,12 +30,13 @@
     "copycat.slab.WalkNodeEvaluatorMixin",
     "copycat.step.CopycatStepBlockMixin",
     "entity.CatMixin",
-    "feature_toggle.CreativeModeTabsAccessor"
+    "minecraft.CreativeModeTabMixin"
   ],
   "client": [
     "copycat.base.CTModelMixin",
     "copycat.base.LiquidBlockRendererMixin",
-    "copycat.base.multistate.ModelBlockRendererMixin"
+    "copycat.base.multistate.ModelBlockRendererMixin",
+    "minecraft.TextureAtlasSpriteMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -41,6 +41,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.blockPosContaining;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
@@ -185,7 +187,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
         BlockState state = context.getLevel().getBlockState(blockPos);
         Vec3 bias = Vec3.atLowerCornerOf(context.getClickedFace().getNormal()).scale(1 / 16f);
         Vec3 biasedLocation = context.getClickLocation().add(bias);
-        if (!BlockPos.containing(biasedLocation).equals(context.getClickedPos())) {
+        if (!blockPosContaining(biasedLocation).equals(context.getClickedPos())) {
             biasedLocation = clampToBlockPos(biasedLocation, context.getClickedPos());
         }
         Byte bite = getByteFromVec(biasedLocation, context.getClickedPos());
@@ -213,7 +215,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
         if (!itemstack.is(this.asItem())) return false;
         Vec3 bias = Vec3.atLowerCornerOf(pUseContext.getClickedFace().getNormal()).scale(1 / 16f);
         Vec3 biasedLocation = pUseContext.getClickLocation().add(bias);
-        if (!BlockPos.containing(biasedLocation).equals(pUseContext.getClickedPos())) {
+        if (!blockPosContaining(biasedLocation).equals(pUseContext.getClickedPos())) {
             biasedLocation = clampToBlockPos(biasedLocation, pUseContext.getClickedPos());
         }
         Byte bite = getByteFromVec(biasedLocation, pUseContext.getClickedPos());

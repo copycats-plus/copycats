@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
 
@@ -274,7 +275,7 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction side = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction side = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         if (side != null) {
             FaceShape sideShape = getFaceShape(state, side);

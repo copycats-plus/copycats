@@ -8,7 +8,7 @@ import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.MaterialColor;
 
 public class CCBuilderTransformersImpl {
 
@@ -18,7 +18,7 @@ public class CCBuilderTransformersImpl {
                         .getExistingFile(p.mcLoc("air"))))
                 .initialProperties(SharedProperties::softMetal)
                 .properties(p -> p.noOcclusion()
-                        .mapColor(MapColor.NONE))
+                        .color(MaterialColor.NONE))
                 // fabric: only render base model on cutout. When rendering the wrapped model's material is copied.
                 .addLayer(() -> RenderType::cutout)
                 .color(() -> ICopycatBlock::wrappedColor)
@@ -31,7 +31,7 @@ public class CCBuilderTransformersImpl {
                         .getExistingFile(p.mcLoc("air"))))
                 .initialProperties(SharedProperties::softMetal)
                 .properties(p -> p.noOcclusion()
-                        .mapColor(MapColor.NONE).lightLevel(state -> state.getLightEmission()))
+                        .color(MaterialColor.NONE).lightLevel(state -> state.getLightEmission()))
                 .addLayer(() -> RenderType::solid)
                 .addLayer(() -> RenderType::cutout)
                 .addLayer(() -> RenderType::cutoutMipped)

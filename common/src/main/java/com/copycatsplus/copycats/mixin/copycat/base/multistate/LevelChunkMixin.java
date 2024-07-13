@@ -9,7 +9,7 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -76,7 +76,7 @@ public abstract class LevelChunkMixin {
 
     @Unique
     private boolean isCopycatAndNeedingConversion(BlockState state, BlockEntity blockEntity) {
-        ResourceLocation id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType());
+        ResourceLocation id = Registry.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType());
         ResourceKey<Block> resourceKey = state.getBlock().builtInRegistryHolder().key();
         if (id.toString().equalsIgnoreCase("create:copycat")) {
             if (resourceKey.location().getNamespace().equalsIgnoreCase(Copycats.MODID)) {

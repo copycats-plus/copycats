@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.compat;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
@@ -50,11 +50,11 @@ public enum Mods {
     }
 
     public Item getItem(String id) {
-        return BuiltInRegistries.ITEM.get(rl(id));
+        return Registry.ITEM.get(rl(id));
     }
 
     public Item getItem(ResourceLocation id) {
-        return BuiltInRegistries.ITEM.get(id);
+        return Registry.ITEM.get(id);
     }
 
     public boolean getLoaded() {

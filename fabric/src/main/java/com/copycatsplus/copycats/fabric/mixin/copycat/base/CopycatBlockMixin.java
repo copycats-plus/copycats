@@ -2,7 +2,7 @@ package com.copycatsplus.copycats.fabric.mixin.copycat.base;
 
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.button.CopycatButtonBlock;
+import com.copycatsplus.copycats.content.copycat.button.CopycatWoodButtonBlock;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fence_gate.CopycatFenceGateBlock;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeBlock;
@@ -50,7 +50,7 @@ import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMate
  */
 @Mixin({
         CCCopycatBlock.class,
-        CopycatButtonBlock.class,
+        CopycatWoodButtonBlock.class,
         CopycatFenceBlock.class,
         CopycatFenceGateBlock.class,
         CopycatLadderBlock.class,

@@ -33,7 +33,7 @@ public class Copycats {
 
     public static void init() {
 
-        CCCreativeTabs.setCreativeTab();
+        REGISTRATE.creativeModeTab(() -> CCCreativeTabs.BASE);
 
         CCBlocks.register();
         CCBlockEntityTypes.register();
@@ -47,8 +47,8 @@ public class Copycats {
         finalizeRegistrate();
     }
 
-    public static void gatherData(DataGenerator.PackGenerator gen) {
-        gen.addProvider(CCStandardRecipes::new);
+    public static void gatherData(DataGenerator gen) {
+        gen.addProvider(true, CCStandardRecipes.create(gen));
     }
 
     public static CopycatRegistrate getRegistrate() {

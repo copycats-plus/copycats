@@ -43,6 +43,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatSlopeBlock extends CCWaterloggedCopycatBlock implements IStateType, ICustomCTBlocking {
@@ -80,7 +82,7 @@ public class CopycatSlopeBlock extends CCWaterloggedCopycatBlock implements ISta
         if (diff.equals(Vec3i.ZERO)) {
             return false;
         }
-        Direction connectFace = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction connectFace = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (connectFace == null) {
             return false;
         }
@@ -104,7 +106,7 @@ public class CopycatSlopeBlock extends CCWaterloggedCopycatBlock implements ISta
         if (diff.equals(Vec3i.ZERO)) {
             return true;
         }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) {
             return true;
         }

@@ -9,10 +9,11 @@ import com.copycatsplus.copycats.foundation.copycat.model.assembly.fabric.Copyca
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
+import com.jozufozu.flywheel.fabric.model.FabricModelUtil;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Pair;
-import io.github.fabricators_of_create.porting_lib.models.CustomParticleIconModel;
+import io.github.fabricators_of_create.porting_lib.model.CustomParticleIconModel;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
@@ -172,23 +173,23 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
 
                 context.pushTransform(quad -> {
                     if (entry.part() == null) {
-                        emitter.copyFrom(quad);
+                        quad.copyTo(emitter);
                         emitter.emit();
                     } else {
                         MutableQuadView newQuad = new IntermediateMutableQuadView();
-                        newQuad.copyFrom(quad);
+                        quad.copyTo(newQuad);
                         quads.add(newQuad);
                     }
                     return false;
                 });
-                model.emitBlockQuads(renderWorld, material, pos, randomSupplier, context);
+                ((ForwardingBakedModel) model).emitBlockQuads(renderWorld, material, pos, randomSupplier, context);
                 context.popTransform();
 
                 CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);
                 entry.part().emitCopycatQuads(entry.key(), state, copycatContext, material);
 
                 context.pushTransform(quad -> !occlusionData.isOccluded(quad.cullFace()));
-                meshBuilder.build().outputTo(context.getEmitter());
+                context.meshConsumer().accept(meshBuilder.build());
                 context.popTransform();
 
                 // fabric: pop the material changer transform
@@ -199,7 +200,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 if (model == null) continue;
 
                 if (entry.part() == null) {
-                    model.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                    ((ForwardingBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
                     continue;
                 }
 
@@ -210,17 +211,17 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 List<MutableQuadView> quads = new ArrayList<>();
                 context.pushTransform(quad -> {
                     MutableQuadView newQuad = new IntermediateMutableQuadView();
-                    newQuad.copyFrom(quad);
+                    quad.copyTo(newQuad);
                     quads.add(newQuad);
                     return false;
                 });
-                model.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                ((ForwardingBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
                 context.popTransform();
 
                 CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);
                 entry.part().emitCopycatQuads(entry.key(), state, copycatContext, material);
 
-                meshBuilder.build().outputTo(context.getEmitter());
+                context.meshConsumer().accept(meshBuilder.build());
             }
         }
     }
@@ -289,7 +290,8 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
     public record MaterialFixer(RenderMaterial materialDefault) implements RenderContext.QuadTransform {
         @Override
         public boolean transform(MutableQuadView quad) {
-            if (quad.material().blendMode() == BlendMode.DEFAULT) {
+            BlendMode quadBlendMode = FabricModelUtil.getBlendMode(quad);
+            if (quadBlendMode == BlendMode.DEFAULT) {
                 // default needs to be changed from the Copycat's default (cutout) to the wrapped material's default.
                 quad.material(materialDefault);
             }
@@ -300,7 +302,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
             RenderType type = ItemBlockRenderTypes.getChunkRenderType(materialState);
             BlendMode blendMode = BlendMode.fromRenderLayer(type);
             MaterialFinder finder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).materialFinder();
-            RenderMaterial renderMaterial = finder.blendMode(blendMode).find();
+            RenderMaterial renderMaterial = finder.blendMode(0, blendMode).find();
             return new CopycatModelFabric.MaterialFixer(renderMaterial);
         }
     }

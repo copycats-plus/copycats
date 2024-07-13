@@ -37,6 +37,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatShaftBlock extends ShaftBlock implements ICopycatBlock, ICustomCTBlocking {
@@ -118,7 +120,7 @@ public class CopycatShaftBlock extends ShaftBlock implements ICopycatBlock, ICus
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         Vec3i diff = toPos.subtract(fromPos);
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (face == null) return false;
         return face.getAxis() == state.getValue(AXIS);
     }

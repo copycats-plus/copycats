@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.foundation.copycat.model.fabric;
 
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.impl.client.indigo.renderer.mesh.EncodingFormat;
 import net.fabricmc.fabric.impl.client.indigo.renderer.mesh.MutableQuadViewImpl;
 import org.apache.commons.lang3.NotImplementedException;
@@ -14,7 +15,7 @@ public class IntermediateMutableQuadView extends MutableQuadViewImpl {
     }
 
     @Override
-    public void emitDirectly() {
-        throw new NotImplementedException("IntermediateMutableQuadView.emitDirectly() is not implemented");
+    public QuadEmitter emit() {
+        throw new NotImplementedException("IntermediateMutableQuadView.emit() is not implemented");
     }
 }

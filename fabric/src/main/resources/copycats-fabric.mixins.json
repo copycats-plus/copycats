@@ -6,7 +6,6 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "HolderReferenceMixin",
-    "compat.registrate.CreateRegistrateMixin",
     "copycat.base.CopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
     "copycat.base.CopycatBlockEntityMixin$FluidPipeData",
     "copycat.base.CopycatBlockEntityMixin$StraightPipeData",
