@@ -1,14 +1,8 @@
 package com.copycatsplus.copycats.config;
 
 import com.simibubi.create.foundation.config.ConfigBase;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.config.ModConfig;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Base class for all configs that require custom synchronization from server to clients.

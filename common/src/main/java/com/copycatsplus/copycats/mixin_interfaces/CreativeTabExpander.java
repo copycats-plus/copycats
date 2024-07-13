@@ -4,3 +4,4 @@ public interface CreativeTabExpander {
 
     int copycats$expandTabCount();
 }
+

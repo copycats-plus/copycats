@@ -1,10 +1,6 @@
 package com.copycatsplus.copycats;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.world.item.CreativeModeTab;
-
-import java.util.function.Supplier;
 
 public class CopycatRegistrate extends CreateRegistrate {
 

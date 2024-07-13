@@ -1,6 +1,5 @@
 package com.copycatsplus.copycats.config;
 
-import com.simibubi.create.foundation.config.ConfigBase;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;

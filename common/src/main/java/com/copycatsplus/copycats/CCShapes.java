@@ -1,7 +1,5 @@
 package com.copycatsplus.copycats;
 
-import com.copycatsplus.copycats.utility.shape.NoneVoxelShape;
-import com.copycatsplus.copycats.utility.shape.VoxelUtils;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.core.Direction;

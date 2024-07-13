@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create:fluid_pipe"
+    },
+    {
+      "item": "create:fluid_pipe"
+    },
+    {
+      "item": "create:fluid_pipe"
+    },
+    {
+      "item": "create:fluid_pipe"
+    },
+    {
+      "item": "create:zinc_ingot"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "copycats:copycat_fluid_pipe"
+  }
+}

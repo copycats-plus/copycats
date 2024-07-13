@@ -1,33 +1,33 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[43,)"
 license="All Rights Reserved"
 issueTrackerURL="https://github.com/copycats-plus/copycats/issues"
 [[mods]]
-   modId="copycats"
-   version="${version}"
-   displayName="${mod_name}"
-   updateJSONURL="https://raw.githubusercontent.com/copycats-plus/copycats/main/update.json"
-   displayURL="https://github.com/copycats-plus/copycats"
-   logoFile="copycats_icon.png"
-   credits="The Create: Addon Hub Discord"
-   authors="${mod_authors}"
-   description='''${mod_description}'''
+modId="copycats"
+version="${version}"
+displayName="${mod_name}"
+updateJSONURL="https://raw.githubusercontent.com/copycats-plus/copycats/main/update.json"
+displayURL="https://github.com/copycats-plus/copycats"
+logoFile="copycats_icon.png"
+credits="The Create: Addon Hub Discord"
+authors="${mod_authors}"
+description='''${mod_description}'''
 
 [[dependencies.copycats]]
-   modId="forge"
-   mandatory=true
-   versionRange="[40,)"
-   ordering="NONE"
-   side="BOTH"
+modId="forge"
+mandatory=true
+versionRange="[43,)"
+ordering="NONE"
+side="BOTH"
 [[dependencies.copycats]]
-   modId="minecraft"
-   mandatory=true
-   versionRange="[1.18.2, 1.19)"
-   ordering="NONE"
-   side="BOTH"
+modId="minecraft"
+mandatory=true
+versionRange="[1.19.2, 1.20)"
+ordering="NONE"
+side="BOTH"
 [[dependencies.copycats]]
-   modId="create"
-   mandatory=true
-   versionRange="${create_forge_range}"
-   ordering="NONE"
-   side="BOTH"
+modId="create"
+mandatory=true
+versionRange="${create_forge_range}"
+ordering="NONE"
+side="BOTH"

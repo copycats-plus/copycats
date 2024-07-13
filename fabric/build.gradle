@@ -13,6 +13,7 @@ loom {
     runs {
         client {
             vmArg "-XX:+AllowEnhancedClassRedefinition"
+            programArgs "--username=Dev"
         }
         server {
             vmArg "-XX:+AllowEnhancedClassRedefinition"

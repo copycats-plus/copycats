@@ -3,15 +3,13 @@ package com.copycatsplus.copycats.datagen.recipes;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCItems;
 import com.copycatsplus.copycats.CCTags;
-import com.copycatsplus.copycats.content.copycat.base.functional.IFunctionalCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
-import com.copycatsplus.copycats.multiloader.Platform;
+import com.copycatsplus.copycats.utility.Platform;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
@@ -20,6 +18,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
@@ -114,6 +113,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_TRAPDOOR = copycat(CCBlocks.COPYCAT_TRAPDOOR, 4);
 
+    GeneratedRecipe COPYCAT_IRON_TRAPDOOR = copycat(CCBlocks.COPYCAT_IRON_TRAPDOOR, 2);
+
     GeneratedRecipe COPYCAT_TRAPDOOR_CYCLE =
             conversionCycle(ImmutableList.of(AllBlocks.COPYCAT_PANEL, CCBlocks.COPYCAT_TRAPDOOR));
 
@@ -179,6 +180,20 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_SHAFT = copycat(CCBlocks.COPYCAT_SHAFT, 4);
 
+    GeneratedRecipe COPYCAT_COGWHEEL = copycatWithBaseItem(AllBlocks.COGWHEEL, CCBlocks.COPYCAT_COGWHEEL, 4);
+
+    GeneratedRecipe COPYCAT_LARGE_COGWHEEL = copycatWithBaseItem(AllBlocks.LARGE_COGWHEEL, CCBlocks.COPYCAT_LARGE_COGWHEEL, 4);
+
+    GeneratedRecipe COPYCAT_FLUID_PIPE = copycatWithBaseItem(AllBlocks.FLUID_PIPE, CCBlocks.COPYCAT_FLUID_PIPE, 4);
+
+    GeneratedRecipe COPYCAT_DOOR = copycat(CCBlocks.COPYCAT_DOOR, 1);
+
+    GeneratedRecipe COPYCAT_IRON_DOOR = copycatWithBaseItem(Items.IRON_DOOR, CCBlocks.COPYCAT_IRON_DOOR, 1);
+
+    Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
+            CCBlocks.COPYCAT_BASE,
+            CCBlocks.COPYCAT_GLASS_FLUID_PIPE
+    );
 
     String currentFolder = "";
 
@@ -204,22 +219,18 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(result::get);
     }
 
+    static GeneratedRecipeBuilder create(ItemLike result) {
+        return create(() -> result);
+    }
+
     @ExpectPlatform
     public static RecipeProvider create(DataGenerator generator) {
         throw new AssertionError();
     }
 
     GeneratedRecipeBuilder.GeneratedRecipe copycat(ItemProviderEntry<? extends ItemLike> result, int resultCount) {
-        if (result.get() instanceof CopycatBlock copycat) {
-            copycatsWithRecipes.add(copycat);
-        }
-
-        if (result.get() instanceof IFunctionalCopycatBlock) {
+        if (result.get() instanceof ICopycatBlock) {
             copycatsWithRecipes.add((Block) result.get());
-        }
-
-        if (result.get() instanceof MultiStateCopycatBlock copycat) {
-            copycatsWithRecipes.add(copycat);
         }
 
         return create(result)
@@ -227,6 +238,28 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
                 .returns(resultCount)
                 .viaStonecuttingTag(TaggedIngredients.ZINC::getTag)
                 .create();
+    }
+
+    GeneratedRecipeBuilder.GeneratedRecipe copycatWithBaseItem(ItemProviderEntry<? extends ItemLike> base, ItemProviderEntry<? extends ItemLike> result, int resultCount) {
+        if (result.get() instanceof ICopycatBlock) {
+            copycatsWithRecipes.add((Block) result.get());
+        }
+
+        return create(result)
+                .unlockedBy(base)
+                .returns(resultCount)
+                .viaShapeless(b -> b.requires(base.get(), resultCount).requires(AllItems.ZINC_INGOT.get()));
+    }
+
+    GeneratedRecipeBuilder.GeneratedRecipe copycatWithBaseItem(ItemLike base, ItemProviderEntry<? extends ItemLike> result, int resultCount) {
+        if (result.get() instanceof ICopycatBlock) {
+            copycatsWithRecipes.add((Block) result.get());
+        }
+
+        return create(result)
+                .unlockedBy(() -> base)
+                .returns(resultCount)
+                .viaShapeless(b -> b.requires(base, resultCount).requires(AllItems.ZINC_INGOT.get()));
     }
 
     GeneratedRecipe conversionCycle(List<ItemProviderEntry<? extends ItemLike>> cycle) {
@@ -247,8 +280,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         super(output);
 
         List<ResourceLocation> missingRecipes = new LinkedList<>();
-        for (RegistryEntry<Block> entry : CCBlocks.getAllRegisteredBlocksWithoutWrapped()) {
-            if (!entry.equals(CCBlocks.COPYCAT_TEST_BLOCK)) {
+        for (RegistryEntry<? extends Block> entry : CCBlocks.getAllRegisteredBlocksWithoutWrapped()) {
+            if (!blocksWithoutRecipe.contains(entry)) {
                 if (!copycatsWithRecipes.contains(entry.get()))
                     missingRecipes.add(entry.getId());
             }
@@ -259,8 +292,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     }
 
     public enum TaggedIngredients {
-        //This is
-        ZINC(CCTags.commonItemTag("ingots/zinc"), CCTags.commonItemTag("ingots/zinc"));
+        ZINC(CCTags.commonItemTag("ingots/zinc"), CCTags.commonItemTag("zinc_ingots"));
 
 
         private final TagKey<Item> forge;

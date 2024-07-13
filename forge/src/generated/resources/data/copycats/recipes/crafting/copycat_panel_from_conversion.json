@@ -4,14 +4,14 @@
     {
       "conditions": [
         {
+          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_trapdoor",
-          "invert": false,
-          "type": "copycats:feature_enabled"
+          "invert": false
         },
         {
+          "type": "copycats:feature_enabled",
           "feature": "create:copycat_panel",
-          "invert": false,
-          "type": "copycats:feature_enabled"
+          "invert": false
         }
       ],
       "recipe": {

@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "copycats:wrapped_copycat_ladder",
     "copycats:copycat_ladder"
   ]
 }

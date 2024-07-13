@@ -7,7 +7,7 @@ import com.copycatsplus.copycats.config.CCommon;
 import com.copycatsplus.copycats.config.SyncConfigBase;
 import com.simibubi.create.foundation.config.ConfigBase;
 import net.minecraftforge.api.ModLoadingContext;
-import net.minecraftforge.api.fml.event.config.ModConfigEvent;
+import net.minecraftforge.api.fml.event.config.ModConfigEvents;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.Map;
@@ -15,21 +15,17 @@ import java.util.Map;
 public class CCConfigsImpl extends CCConfigs {
 
     public static void onLoad(ModConfig modConfig) {
-        if (modConfig.getModId().equalsIgnoreCase(Copycats.MODID)) {
-            for (ConfigBase config : CONFIGS.values())
-                if (config.specification == modConfig
-                        .getSpec())
-                    config.onLoad();
-        }
+        for (ConfigBase config : CONFIGS.values())
+            if (config.specification == modConfig
+                    .getSpec())
+                config.onLoad();
     }
 
     public static void onReload(ModConfig modConfig) {
-        if (modConfig.getModId().equalsIgnoreCase(Copycats.MODID)) {
-            for (ConfigBase config : CONFIGS.values())
-                if (config.specification == modConfig
-                        .getSpec())
-                    config.onReload();
-        }
+        for (ConfigBase config : CONFIGS.values())
+            if (config.specification == modConfig
+                    .getSpec())
+                config.onReload();
     }
 
     public static void register() {
@@ -39,7 +35,7 @@ public class CCConfigsImpl extends CCConfigs {
         for (Map.Entry<ModConfig.Type, SyncConfigBase> pair : CONFIGS.entrySet())
             ModLoadingContext.registerConfig(Copycats.MODID, pair.getKey(), pair.getValue().specification);
 
-        ModConfigEvent.LOADING.register(CCConfigsImpl::onLoad);
-        ModConfigEvent.RELOADING.register(CCConfigsImpl::onReload);
+        ModConfigEvents.loading(Copycats.MODID).register(CCConfigsImpl::onLoad);
+        ModConfigEvents.reloading(Copycats.MODID).register(CCConfigsImpl::onReload);
     }
 }

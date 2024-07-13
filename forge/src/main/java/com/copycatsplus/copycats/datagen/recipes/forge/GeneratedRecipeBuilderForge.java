@@ -6,7 +6,6 @@ import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.client.RecipeBookCategories;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;

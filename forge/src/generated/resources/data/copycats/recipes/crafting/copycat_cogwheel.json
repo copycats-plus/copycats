@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create:cogwheel"
+    },
+    {
+      "item": "create:cogwheel"
+    },
+    {
+      "item": "create:cogwheel"
+    },
+    {
+      "item": "create:cogwheel"
+    },
+    {
+      "item": "create:zinc_ingot"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "copycats:copycat_cogwheel"
+  }
+}

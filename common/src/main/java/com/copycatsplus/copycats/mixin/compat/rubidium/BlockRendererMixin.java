@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.mixin.compat.rubidium;
 
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateRenderManager;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateTextureAtlasSprite;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateRenderManager;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateTextureAtlasSprite;
 import me.jellysquid.mods.sodium.client.model.IndexBufferBuilder;
 import me.jellysquid.mods.sodium.client.model.light.data.QuadLightData;
 import me.jellysquid.mods.sodium.client.model.quad.blender.ColorSampler;

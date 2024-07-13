@@ -11,16 +11,16 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "ss ",
-          "s s",
-          " ss"
-        ],
         "key": {
           "s": {
             "tag": "copycats:copycat_board"
           }
         },
+        "pattern": [
+          "ss ",
+          "s s",
+          " ss"
+        ],
         "result": {
           "item": "copycats:copycat_box"
         }

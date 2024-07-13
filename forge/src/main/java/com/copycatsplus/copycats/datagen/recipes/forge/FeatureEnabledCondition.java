@@ -32,11 +32,6 @@ public class FeatureEnabledCondition implements ICondition {
         return FeatureToggle.isEnabled(feature) != invert;
     }
 
-    @Override
-    public boolean test() {
-        return FeatureToggle.isEnabled(feature) != invert;
-    }
-
     public static class Serializer implements IConditionSerializer<FeatureEnabledCondition> {
         public static final Serializer INSTANCE = new Serializer();
 

@@ -2,14 +2,8 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.copycatsplus.copycats.mixin_interfaces.CreativeTabExpander;
-import com.simibubi.create.AllCreativeModeTabs;
-import com.simibubi.create.infrastructure.item.CreateCreativeModeTab;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import io.github.fabricators_of_create.porting_lib.util.ItemGroupUtil;
-import net.fabricmc.fabric.impl.item.group.ItemGroupExtensions;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -18,25 +12,18 @@ import java.util.List;
 
 public class CCCreativeTabs {
 
-    public static final CreativeModeTab MAIN = new MainCreativeModeTab();
+    public static final CreativeModeTab BASE = new BaseCreativeModeTab();
+    public static final CreativeModeTab FUNCTION = new FunctionalCreativeModeTab();
 
-    public static final List<ItemProviderEntry<?>> ITEMS = List.of(
+    public static final List<ItemProviderEntry<?>> DECORATIVE = List.of(
             /* Vanilla blocks */
             CCBlocks.COPYCAT_BLOCK,
             CCBlocks.COPYCAT_SLAB,
             CCBlocks.COPYCAT_STAIRS,
             CCBlocks.COPYCAT_VERTICAL_STAIRS,
             CCBlocks.COPYCAT_FENCE,
-            CCBlocks.COPYCAT_FENCE_GATE,
             CCBlocks.COPYCAT_WALL,
-            CCBlocks.COPYCAT_TRAPDOOR,
-            CCBlocks.COPYCAT_LADDER,
-            CCBlocks.COPYCAT_WOODEN_BUTTON,
-            CCBlocks.COPYCAT_STONE_BUTTON,
-            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
-            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
-            CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
-            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+
             /* Simple copycats */
             CCBlocks.COPYCAT_VERTICAL_STEP,
             CCBlocks.COPYCAT_BEAM,
@@ -45,7 +32,7 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_GHOST_BLOCK,
             CCBlocks.COPYCAT_LAYER,
             CCBlocks.COPYCAT_HALF_PANEL,
-            /* Multistates */
+            /* Multi-states */
             CCBlocks.COPYCAT_BYTE,
             CCBlocks.COPYCAT_BOARD,
             CCItems.COPYCAT_CATWALK,
@@ -54,14 +41,34 @@ public class CCCreativeTabs {
             /* Slopes */
             CCBlocks.COPYCAT_SLOPE,
             CCBlocks.COPYCAT_VERTICAL_SLOPE,
-            CCBlocks.COPYCAT_SLOPE_LAYER,
-            /*Misc*/
-            CCBlocks.COPYCAT_SHAFT
+            CCBlocks.COPYCAT_SLOPE_LAYER
     );
 
-    public static class MainCreativeModeTab extends CreativeModeTab {
+    public static final List<ItemProviderEntry<?>> FUNCTIONAL = List.of(
+            /* Vanilla */
+            CCBlocks.COPYCAT_DOOR,
+            CCBlocks.COPYCAT_IRON_DOOR,
+            CCBlocks.COPYCAT_TRAPDOOR,
+            CCBlocks.COPYCAT_IRON_TRAPDOOR,
+            CCBlocks.COPYCAT_FENCE_GATE,
+            CCBlocks.COPYCAT_WOODEN_BUTTON,
+            CCBlocks.COPYCAT_STONE_BUTTON,
+            CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_LADDER,
 
-        public MainCreativeModeTab() {
+            /* Create */
+            CCBlocks.COPYCAT_FLUID_PIPE,
+            CCBlocks.COPYCAT_SHAFT,
+            CCBlocks.COPYCAT_COGWHEEL,
+            CCBlocks.COPYCAT_LARGE_COGWHEEL
+    );
+
+    public static class BaseCreativeModeTab extends CreativeModeTab {
+
+        public BaseCreativeModeTab() {
             super(((CreativeTabExpander) CreativeModeTab.TAB_BUILDING_BLOCKS).copycats$expandTabCount(), Copycats.MODID + ".main");
         }
 
@@ -72,10 +79,32 @@ public class CCCreativeTabs {
 
         @Override
         public void fillItemList(@NotNull NonNullList<ItemStack> pItems) {
-            for (ItemProviderEntry<?> item : ITEMS) {
+            for (ItemProviderEntry<?> item : DECORATIVE) {
                 if (FeatureToggle.isEnabled(item.getId()))
-                    item.get().asItem().fillItemCategory(this, pItems);
+                    // todo: Item.fillItemCategory should be called but we are not registering creative tabs properly with Registrate yet
+                    pItems.add(new ItemStack(item.get().asItem()));
             }
         }
     }
+
+    public static class FunctionalCreativeModeTab extends CreativeModeTab {
+
+        public FunctionalCreativeModeTab() {
+            super(((CreativeTabExpander) CreativeModeTab.TAB_BUILDING_BLOCKS).copycats$expandTabCount(), Copycats.MODID + ".functional");
+        }
+
+        @Override
+        public ItemStack makeIcon() {
+            return CCBlocks.COPYCAT_DOOR.asStack();
+        }
+
+        @Override
+        public void fillItemList(@NotNull NonNullList<ItemStack> pItems) {
+            for (ItemProviderEntry<?> item : FUNCTIONAL) {
+                if (FeatureToggle.isEnabled(item.getId()))
+                    // todo: Item.fillItemCategory should be called but we are not registering creative tabs properly with Registrate yet
+                    pItems.add(new ItemStack(item.get().asItem()));
+            }
+        }
     }
+}

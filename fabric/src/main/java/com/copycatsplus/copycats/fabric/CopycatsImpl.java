@@ -2,7 +2,7 @@ package com.copycatsplus.copycats.fabric;
 
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.recipes.fabric.CCCraftingConditions;
-import com.copycatsplus.copycats.multiloader.LogicalSidedProvider;
+import com.copycatsplus.copycats.utility.LogicalSidedProvider;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
