@@ -15,8 +15,8 @@ public class CopycatShaftModelCore extends CopycatModelCore {
 
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        super.registerModels(entries);
-        registerMultiStatePart(entries, "shaft");
+        entries.add(KINETIC_MATERIAL);
+        registerMultiStatePart(entries, "shaft", true);
     }
 
     @Override

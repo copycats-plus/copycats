@@ -22,7 +22,7 @@ public class CopycatMultiByteModelCore extends CopycatModelCore {
 
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        registerForMultiState(entries, CCBlocks.COPYCAT_BYTE.get());
+        registerForMultiState(entries, CCBlocks.COPYCAT_BYTE.get(), false);
     }
 
     @Override

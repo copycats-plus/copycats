@@ -3,6 +3,9 @@ package com.copycatsplus.copycats;
 import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.copycatsplus.copycats.content.copycat.button.CopycatStoneButtonBlock;
+import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCore;
+import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
+import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftModelCore;
 import com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock;
 import com.copycatsplus.copycats.foundation.copycat.WrappedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
@@ -575,7 +578,7 @@ public class CCBlocks {
                     .transform(CCBuilderTransformers.copycat())
                     .transform(FeatureToggle.register(FeatureCategory.FUNCTIONAL, FeatureCategory.CREATE))
                     .transform(BlockStressDefaults.setNoImpact())
-                    .onRegister(CreateRegistrate.blockModel(() -> model -> CopycatModelCore.createModel(new BracketedKineticBlockModel(model), CopycatModelCore.PASS_THROUGH)))
+                    .onRegister(CreateRegistrate.blockModel(() -> model -> CopycatModelCore.createModel(new BracketedKineticBlockModel(model), CopycatModelCore.kinetic(new CopycatShaftModelCore()))))
                     .item()
                     .onRegister(CopycatDescription.register(
                             CopycatCharacteristics.COPYCAT,
@@ -589,7 +592,7 @@ public class CCBlocks {
                     .transform(CCBuilderTransformers.copycat())
                     .transform(FeatureToggle.register(FeatureCategory.MULTISTATES, FeatureCategory.FUNCTIONAL, FeatureCategory.CREATE))
                     .transform(BlockStressDefaults.setNoImpact())
-                    .onRegister(CreateRegistrate.blockModel(() -> model -> CopycatModelCore.createModel(new BracketedKineticBlockModel(model), CopycatModelCore.PASS_THROUGH)))
+                    .onRegister(CreateRegistrate.blockModel(() -> model -> CopycatModelCore.createModel(new BracketedKineticBlockModel(model), CopycatModelCore.kinetic(new CopycatShaftModelCore(), new CopycatCogWheelModelCore()))))
                     .item(CogwheelBlockItem::new)
                     .onRegister(CopycatDescription.register(
                             CopycatCharacteristics.COPYCAT,
@@ -604,7 +607,7 @@ public class CCBlocks {
                     .transform(CCBuilderTransformers.copycat())
                     .transform(FeatureToggle.register(FeatureCategory.MULTISTATES, FeatureCategory.FUNCTIONAL, FeatureCategory.CREATE))
                     .transform(BlockStressDefaults.setNoImpact())
-                    .onRegister(CreateRegistrate.blockModel(() -> model -> CopycatModelCore.createModel(new BracketedKineticBlockModel(model), CopycatModelCore.PASS_THROUGH)))
+                    .onRegister(CreateRegistrate.blockModel(() -> model -> CopycatModelCore.createModel(new BracketedKineticBlockModel(model), CopycatModelCore.kinetic(new CopycatShaftModelCore(), new CopycatLargeCogWheelModelCore()))))
                     .item(CogwheelBlockItem::new)
                     .onRegister(CopycatDescription.register(
                             CopycatCharacteristics.COPYCAT,

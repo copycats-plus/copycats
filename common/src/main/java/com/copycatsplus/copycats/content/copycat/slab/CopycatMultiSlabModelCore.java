@@ -21,7 +21,7 @@ public class CopycatMultiSlabModelCore extends CopycatModelCore {
 
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        registerForMultiState(entries, CCBlocks.COPYCAT_SLAB.get());
+        registerForMultiState(entries, CCBlocks.COPYCAT_SLAB.get(), false);
     }
 
     @Override

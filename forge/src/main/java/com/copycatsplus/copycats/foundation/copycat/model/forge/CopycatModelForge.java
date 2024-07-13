@@ -83,7 +83,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         prepareModelCore(state, rand, data);
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
-            if (material == null && entry.useCopycatLogic())
+            if (material == null && entry.type().useCopycatLogic())
                 continue;
             BakedModel model = getModelForEntry(entry, state, material);
             if (model == null)
@@ -197,8 +197,9 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
 
-            if (entry.useCopycatLogic() && material == null) {
-                // Don't skip rendering if the world is empty since we might be rendering a placement helper
+            if (entry.type().onlyWhenVirtual() && !ModelUtil.isVirtual(data))
+                continue;
+            if (entry.type().useCopycatLogic() && material == null) {
                 if (materials.isEmpty() && ModelUtil.isVirtual(data)) {
                     material = AllBlocks.COPYCAT_BASE.getDefaultState();
                 } else continue;
@@ -209,7 +210,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
 
             BlockState wrappedState = state;
             ModelData wrappedData = data;
-            if (entry.useCopycatLogic()) {
+            if (entry.type().useCopycatLogic()) {
                 wrappedState = material;
                 wrappedData = wrappedDataMap.get(entry.key());
                 if (wrappedData == null)

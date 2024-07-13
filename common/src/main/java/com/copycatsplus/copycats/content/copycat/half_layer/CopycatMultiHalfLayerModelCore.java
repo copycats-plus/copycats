@@ -20,7 +20,7 @@ public class CopycatMultiHalfLayerModelCore extends CopycatModelCore {
 
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        registerForMultiState(entries, CCBlocks.COPYCAT_HALF_LAYER.get());
+        registerForMultiState(entries, CCBlocks.COPYCAT_HALF_LAYER.get(), false);
     }
 
     @Override

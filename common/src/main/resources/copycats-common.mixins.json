@@ -33,6 +33,7 @@
     "minecraft.CreativeModeTabMixin"
   ],
   "client": [
+    "copycat.base.ClientLevelMixin",
     "copycat.base.CTModelMixin",
     "copycat.base.LiquidBlockRendererMixin",
     "copycat.base.multistate.ModelBlockRendererMixin",

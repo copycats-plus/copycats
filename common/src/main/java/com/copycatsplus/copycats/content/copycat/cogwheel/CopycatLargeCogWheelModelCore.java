@@ -16,8 +16,8 @@ public class CopycatLargeCogWheelModelCore extends CopycatModelCore {
 
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        super.registerModels(entries);
-        registerMultiStatePart(entries, "cogwheel");
+        entries.add(KINETIC_MATERIAL);
+        registerMultiStatePart(entries, "cogwheel", true);
     }
 
     @Override

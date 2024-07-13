@@ -122,15 +122,19 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
 
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
-            if (material == null && entry.useCopycatLogic()) {
+
+            if (material == null && entry.type().useCopycatLogic()) {
                 // Don't skip rendering if the world is empty since we might be rendering a placement helper
                 if (materials.isEmpty() && VirtualEmptyBlockGetter.is(blockView)) {
                     material = AllBlocks.COPYCAT_BASE.getDefaultState();
                 } else continue;
             }
+            if (entry.type().onlyWhenVirtual() && !VirtualEmptyBlockGetter.is(blockView))
+                continue;
+
             Object remainingData = remainingDataMap.get(entry.key());
             prepareModelCore(blockView, state, pos, randomSupplier, material, remainingData);
-            if (entry.useCopycatLogic()) {
+            if (entry.type().useCopycatLogic()) {
                 OcclusionData occlusionData = new OcclusionData();
 
                 // fabric: If it is the default state do not push transformations, will cause issues with GhostBlockRenderer

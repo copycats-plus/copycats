@@ -23,7 +23,7 @@ public class CopycatMultiBoardModelCore extends CopycatModelCore {
 
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        registerForMultiState(entries, CCBlocks.COPYCAT_BOARD.get());
+        registerForMultiState(entries, CCBlocks.COPYCAT_BOARD.get(), false);
     }
 
     @Override

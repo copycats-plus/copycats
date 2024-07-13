@@ -50,6 +50,7 @@ import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMate
         CopycatPressurePlateBlock.class,
         CopycatWeightedPressurePlate.class,
         CopycatStairsBlock.class,
+        CopycatDoorBlock.class,
         CopycatTrapdoorBlock.class,
         CopycatWallBlock.class,
         CopycatShaftBlock.class,

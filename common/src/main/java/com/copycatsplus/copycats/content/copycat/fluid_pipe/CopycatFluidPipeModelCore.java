@@ -22,7 +22,7 @@ public class CopycatFluidPipeModelCore extends CopycatModelCore.WithData<Copycat
     @Override
     public void registerModels(List<ModelEntry> entries) {
         super.registerModels(entries);
-        entries.add(new ModelEntry("bracket", (state, material) -> getData().getBracket(), null, false));
+        entries.add(new ModelEntry("bracket", (state, material) -> getData().getBracket(), null, EntryType.STATIC));
     }
 
     @Override
