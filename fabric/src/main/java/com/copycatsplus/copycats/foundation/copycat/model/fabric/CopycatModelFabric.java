@@ -21,6 +21,7 @@ import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
@@ -182,7 +183,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                     }
                     return false;
                 });
-                ((ForwardingBakedModel) model).emitBlockQuads(renderWorld, material, pos, randomSupplier, context);
+                ((FabricBakedModel) model).emitBlockQuads(renderWorld, material, pos, randomSupplier, context);
                 context.popTransform();
 
                 CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);
@@ -200,7 +201,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 if (model == null) continue;
 
                 if (entry.part() == null) {
-                    ((ForwardingBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                    ((FabricBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
                     continue;
                 }
 
@@ -215,7 +216,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                     quads.add(newQuad);
                     return false;
                 });
-                ((ForwardingBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                ((FabricBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
                 context.popTransform();
 
                 CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);

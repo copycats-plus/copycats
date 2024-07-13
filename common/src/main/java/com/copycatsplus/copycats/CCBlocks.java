@@ -171,6 +171,7 @@ public class CCBlocks {
     public static final BlockEntry<CopycatWoodButtonBlock> COPYCAT_WOODEN_BUTTON =
             REGISTRATE.block("copycat_wooden_button", CopycatWoodButtonBlock::new)
                     .transform(CCBuilderTransformers.copycat())
+                    .initialProperties(SharedProperties::wooden)
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
                             .noCollission())
                     .tag(BlockTags.BUTTONS)
@@ -327,6 +328,7 @@ public class CCBlocks {
     public static final BlockEntry<CopycatPressurePlateBlock> COPYCAT_WOODEN_PRESSURE_PLATE =
             REGISTRATE.block("copycat_wooden_pressure_plate", p -> new CopycatPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, p))
                     .transform(CCBuilderTransformers.copycat())
+                    .initialProperties(SharedProperties::wooden)
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
                             .noCollission())
                     .tag(BlockTags.PRESSURE_PLATES)
@@ -455,6 +457,7 @@ public class CCBlocks {
     public static final BlockEntry<CopycatTrapdoorBlock> COPYCAT_TRAPDOOR =
             REGISTRATE.block("copycat_trapdoor", CopycatTrapdoorBlock::new)
                     .transform(CCBuilderTransformers.copycat())
+                    .initialProperties(SharedProperties::wooden)
                     .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false))
                     .tag(BlockTags.TRAPDOORS)
                     .tag(BlockTags.WOODEN_TRAPDOORS)
@@ -635,6 +638,7 @@ public class CCBlocks {
     public static final BlockEntry<CopycatDoorBlock> COPYCAT_DOOR =
             REGISTRATE.block("copycat_door", CopycatDoorBlock::new)
                     .transform(CCBuilderTransformers.copycat())
+                    .initialProperties(SharedProperties::wooden)
                     .transform(FeatureToggle.register(FeatureCategory.FUNCTIONAL))
                     .onRegister(interactionBehaviour(new DoorMovingInteraction()))
                     .onRegister(createBlockModel(new CopycatDoorModelCore()))

@@ -81,7 +81,8 @@ public class CCCreativeTabs {
         public void fillItemList(@NotNull NonNullList<ItemStack> pItems) {
             for (ItemProviderEntry<?> item : DECORATIVE) {
                 if (FeatureToggle.isEnabled(item.getId()))
-                    item.get().asItem().fillItemCategory(this, pItems);
+                    // todo: Item.fillItemCategory should be called but we are not registering creative tabs properly with Registrate yet
+                    pItems.add(new ItemStack(item.get().asItem()));
             }
         }
     }
@@ -101,7 +102,8 @@ public class CCCreativeTabs {
         public void fillItemList(@NotNull NonNullList<ItemStack> pItems) {
             for (ItemProviderEntry<?> item : FUNCTIONAL) {
                 if (FeatureToggle.isEnabled(item.getId()))
-                    item.get().asItem().fillItemCategory(this, pItems);
+                    // todo: Item.fillItemCategory should be called but we are not registering creative tabs properly with Registrate yet
+                    pItems.add(new ItemStack(item.get().asItem()));
             }
         }
     }
