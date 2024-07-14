@@ -18,28 +18,14 @@ import java.util.List;
  */
 public abstract class CopycatModelCore implements CopycatModelPart {
 
-    /**
-     * A core that renders the original model without modifications, while still handles particles and other copycat logic.
-     */
-    public static final CopycatModelCore PASS_THROUGH = new CopycatModelCore() {
-        @Override
-        public void registerModels(List<ModelEntry> entries) {
-            entries.add(SUPER);
-        }
-
-        @Override
-        public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
-
-        }
-    };
-
-    protected static final ModelEntry SUPER = new ModelEntry("super", null, null, false);
+    protected static final ModelEntry SUPER = new ModelEntry("super", null, null, EntryType.STATIC);
 
     /**
      * Model key for the copied material in simple copycats.
      */
     public static final String MATERIAL_KEY = "material";
-    protected final ModelEntry MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(mat), this, true);
+    protected final ModelEntry MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(mat), this, EntryType.COPYCAT);
+    protected final ModelEntry KINETIC_MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(mat), this, EntryType.KINETIC_COPYCAT);
 
     /**
      * Whether this model core should render enhanced models.
@@ -70,12 +56,13 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * When implementing a model core for multi-state copycats, override {@link CopycatModelCore#registerModels}
      * and call this method without calling super.
      *
-     * @param entries The list to register the models to.
-     * @param block   The multi-state copycat that this model core is meant for.
+     * @param entries   The list to register the models to.
+     * @param block     The multi-state copycat that this model core is meant for.
+     * @param isKinetic Whether the copycat is kinetic.
      */
-    protected final void registerForMultiState(List<ModelEntry> entries, IMultiStateCopycatBlock block) {
+    protected final void registerForMultiState(List<ModelEntry> entries, IMultiStateCopycatBlock block, boolean isKinetic) {
         for (String property : block.storageProperties()) {
-            registerMultiStatePart(entries, property);
+            registerMultiStatePart(entries, property, isKinetic);
         }
     }
 
@@ -85,11 +72,12 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * When implementing a model core for a kinetic multi-state copycat, override {@link CopycatModelCore#registerModels}
      * and call this method for the specific part of the copycat that this model core is meant for.
      *
-     * @param entries  The list to register the models to.
-     * @param property The storage property of the copycat that this model core is meant for.
+     * @param entries   The list to register the models to.
+     * @param property  The storage property of the copycat that this model core is meant for.
+     * @param isKinetic Whether the copycat is kinetic.
      */
-    protected final void registerMultiStatePart(List<ModelEntry> entries, String property) {
-        entries.add(new ModelEntry(property, (state, mat) -> getModelOf(mat), this, true));
+    protected final void registerMultiStatePart(List<ModelEntry> entries, String property, boolean isKinetic) {
+        entries.add(new ModelEntry(property, (state, mat) -> getModelOf(mat), this, isKinetic ? EntryType.KINETIC_COPYCAT : EntryType.COPYCAT));
     }
 
     /**
@@ -161,6 +149,42 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     }
 
     /**
+     * A core that renders the original model without modifications, while still handles particles and other copycat logic.
+     */
+    public static final CopycatModelCore PASS_THROUGH = new CopycatModelCore() {
+        @Override
+        public void registerModels(List<ModelEntry> entries) {
+            entries.add(SUPER);
+        }
+
+        @Override
+        public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
+
+        }
+    };
+
+    /**
+     * A core that renders the original model and additional kinetic models when needed.
+     * <p>
+     * Should be used for copycats with purely kinetic parts.
+     */
+    public static CopycatModelCore kinetic(CopycatModelCore... cores) {
+        return new CopycatModelCore() {
+            @Override
+            public void registerModels(List<ModelEntry> entries) {
+                for (CopycatModelCore core : cores) {
+                    core.registerModels(entries);
+                }
+                entries.add(SUPER);
+            }
+
+            @Override
+            public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
+            }
+        };
+    }
+
+    /**
      * A model core that requires extra data for rendering. The stored data is thread-local and should not be retained between renders.
      *
      * @param <T> The type of data required for rendering.
@@ -187,13 +211,54 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     /**
      * A model entry to be rendered by a {@link CopycatModelCore}.
      *
-     * @param key             A custom key to identify the model entry during rendering.
-     * @param model           A getter that returns a {@link BakedModel} to be rendered for this entry, invoked for each render. Set to null to render the original model as specified by the copycat's block state file.
-     * @param part            A {@link CopycatModelPart} to assemble the model quads with. Set to null if the model should be rendered without modifications.
-     * @param useCopycatLogic Specifies that this model requires a copycat material and should use it for occlusion, culling and connected textures instead of the copycat's own block state.
+     * @param key   A custom key to identify the model entry during rendering.
+     * @param model A getter that returns a {@link BakedModel} to be rendered for this entry, invoked for each render. Set to null to render the original model as specified by the copycat's block state file.
+     * @param part  A {@link CopycatModelPart} to assemble the model quads with. Set to null if the model should be rendered without modifications.
+     * @param type  The type of the model entry, which determines how the model is rendered.
      */
     public record ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part,
-                             boolean useCopycatLogic) {
+                             EntryType type) {
+    }
+
+    public enum EntryType {
+        /**
+         * A static model that is rendered into the terrain mesh without needing the copycat material.
+         */
+        STATIC(false, false),
+        /**
+         * A copycat model that requires copycat material and is rendered into the terrain mesh.
+         */
+        COPYCAT(true, false),
+        /**
+         * A static model that is rendered into virtual environments, such as placement helpers or kinetic renderers.
+         */
+        KINETIC(false, true),
+        /**
+         * A copycat model that requires copycat material and is rendered into virtual environments.
+         */
+        KINETIC_COPYCAT(true, true);
+
+        private final boolean useCopycatLogic;
+        private final boolean onlyWhenVirtual;
+
+        EntryType(boolean useCopycatLogic, boolean onlyWhenVirtual) {
+            this.useCopycatLogic = useCopycatLogic;
+            this.onlyWhenVirtual = onlyWhenVirtual;
+        }
+
+        /**
+         * Specifies that this model requires a copycat material and should use it for occlusion, culling and connected textures instead of the copycat's own block state.
+         */
+        public boolean useCopycatLogic() {
+            return useCopycatLogic;
+        }
+
+        /**
+         * Specifies that this model should only be rendered when the rendering environment is virtual, such as in placement helpers or kinetic renderers.
+         */
+        public boolean onlyWhenVirtual() {
+            return onlyWhenVirtual;
+        }
     }
 
     /**

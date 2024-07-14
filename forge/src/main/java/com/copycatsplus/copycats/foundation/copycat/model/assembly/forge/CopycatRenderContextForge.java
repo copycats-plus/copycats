@@ -91,7 +91,7 @@ public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<Co
             transform.transformQuad(mutableQuad, src.getSprite());
         }
         if (!mutableQuad.disableFinalAutoCull)
-            QuadAutoCull.INSTANCE.transformQuad(mutableQuad, src.getSprite());
+            QuadAutoCull.BLOCK.transformQuad(mutableQuad, src.getSprite());
         mutableQuad.mutate();
         for (int i = 0; i < 4; i++) {
             BakedQuadHelper.setXYZ(vertices, i, mutableQuad.vertices.get(i).xyz.toVec3());

@@ -33,6 +33,7 @@
     "feature_toggle.CreativeModeTabsAccessor"
   ],
   "client": [
+    "copycat.base.ClientLevelMixin",
     "copycat.base.CTModelMixin",
     "copycat.base.LiquidBlockRendererMixin",
     "copycat.base.multistate.ModelBlockRendererMixin"

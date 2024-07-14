@@ -53,6 +53,10 @@ public class ScaledBlockAndTintGetter implements BlockAndTintGetter {
         return wrapped;
     }
 
+    public Vec3i getScale() {
+        return scale;
+    }
+
     public BlockPos getTruePos(BlockPos pos) {
         return new BlockPos(
                 origin.getX() + (int) Math.floor((pos.getX() + originInner.getX() - origin.getX()) / (double) scale.getX()),

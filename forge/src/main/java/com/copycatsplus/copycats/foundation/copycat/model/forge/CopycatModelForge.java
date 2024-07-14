@@ -24,6 +24,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
@@ -82,7 +83,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         prepareModelCore(state, rand, data);
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
-            if (material == null && entry.useCopycatLogic())
+            if (material == null && entry.type().useCopycatLogic())
                 continue;
             BakedModel model = getModelForEntry(entry, state, material);
             if (model == null)
@@ -113,30 +114,42 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         if (!(state.getBlock() instanceof ICopycatBlock copycatBlock))
             return builder;
 
-        Map<String, OcclusionData> occlusionMap = materials.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, s -> {
-            OcclusionData occlusionData = new OcclusionData();
-            if (!ModelUtil.isVirtual(blockEntityData))
-                gatherOcclusionData(world, pos, state, s.getValue(), occlusionData, copycatBlock);
-            return occlusionData;
-        }));
-        builder.with(OCCLUSION_PROPERTY, occlusionMap);
-
         if (copycatBlock instanceof IMultiStateCopycatBlock multiStateBlock) {
-            Map<String, ModelData> wrappedDataMap = materials.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, s -> {
+            Map<String, ModelData> wrappedDataMap = new HashMap<>();
+            Map<String, OcclusionData> occlusionMap = new HashMap<>();
+            for (Map.Entry<String, BlockState> s : materials.entrySet()) {
                 Vec3i inner = multiStateBlock.getVectorFromProperty(state, s.getKey());
                 boolean enableCT = !(world.getBlockEntity(pos) instanceof IMultiStateCopycatBlockEntity multiStateBE) || multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()).enableCT();
                 ScaledBlockAndTintGetter scaledWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, multiStateBlock.vectorScale(state), p -> true);
+
+                OcclusionData occlusionData = new OcclusionData();
+                if (!ModelUtil.isVirtual(blockEntityData))
+                    gatherOcclusionData(scaledWorld, pos, state, s.getValue(), occlusionData, copycatBlock);
+                occlusionMap.put(s.getKey(), occlusionData);
+
                 ScaledBlockAndTintGetter filteredWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, multiStateBlock.vectorScale(state),
                         targetPos -> {
                             if (!enableCT) return false;
                             return multiStateBlock.canConnectTexturesToward(s.getKey(), scaledWorld, pos, targetPos, state);
                         });
-                return getModelOf(s.getValue()).getModelData(
+                wrappedDataMap.put(s.getKey(), getModelOf(s.getValue()).getModelData(
                         filteredWorld,
-                        pos, s.getValue(), ModelData.EMPTY);
-            }));
-            return builder.with(WRAPPED_DATA_PROPERTY, wrappedDataMap);
+                        pos, s.getValue(), ModelData.EMPTY));
+            }
+            return builder.with(OCCLUSION_PROPERTY, occlusionMap).with(WRAPPED_DATA_PROPERTY, wrappedDataMap);
         } else {
+            BlockState material = materials.get(MATERIAL_KEY);
+            if (material == null) return builder;
+
+            OcclusionData occlusionData = new OcclusionData();
+            if (!ModelUtil.isVirtual(blockEntityData))
+                gatherOcclusionData(world, pos, state, material, occlusionData, copycatBlock);
+            Map<String, OcclusionData> occlusionMap = Map.of(
+                    MATERIAL_KEY,
+                    occlusionData
+            );
+            builder.with(OCCLUSION_PROPERTY, occlusionMap);
+
             FilteredBlockAndTintGetter filteredWorld = new FilteredBlockAndTintGetterForge(world,
                     targetPos -> {
                         BlockEntity be = world.getBlockEntity(pos);
@@ -144,7 +157,6 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                             if (!copycatBE.isCTEnabled()) return false;
                         return copycatBlock.canConnectTexturesToward(world, pos, targetPos, state);
                     });
-            BlockState material = materials.get(MATERIAL_KEY);
             Map<String, ModelData> wrappedDataMap = Map.of(
                     MATERIAL_KEY,
                     getModelOf(material).getModelData(
@@ -185,8 +197,9 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
 
-            if (entry.useCopycatLogic() && material == null) {
-                // Don't skip rendering if the world is empty since we might be rendering a placement helper
+            if (entry.type().onlyWhenVirtual() && !ModelUtil.isVirtual(data))
+                continue;
+            if (entry.type().useCopycatLogic() && material == null) {
                 if (materials.isEmpty() && ModelUtil.isVirtual(data)) {
                     material = AllBlocks.COPYCAT_BASE.getDefaultState();
                 } else continue;
@@ -197,7 +210,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
 
             BlockState wrappedState = state;
             ModelData wrappedData = data;
-            if (entry.useCopycatLogic()) {
+            if (entry.type().useCopycatLogic()) {
                 wrappedState = material;
                 wrappedData = wrappedDataMap.get(entry.key());
                 if (wrappedData == null)

@@ -6,6 +6,7 @@ import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopyca
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.google.common.collect.ImmutableMap;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
@@ -344,13 +345,15 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
         return Objects.requireNonNull(this.shapesCache.get(pState));
     }
 
-
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
     }
 
-
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir) {
-        return false;
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        return IMultiStateCopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 }

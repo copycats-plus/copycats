@@ -17,6 +17,7 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_SLAB,
             CCBlocks.COPYCAT_STAIRS,
             CCBlocks.COPYCAT_VERTICAL_STAIRS,
+            CCBlocks.COPYCAT_FENCE,
             CCBlocks.COPYCAT_WALL,
 
             /* Simple copycats */
@@ -42,18 +43,17 @@ public class CCCreativeTabs {
     public static final List<ItemProviderEntry<?>> FUNCTIONAL = List.of(
             /* Vanilla */
             CCBlocks.COPYCAT_DOOR,
-            CCBlocks.COPYCAT_FENCE,
-            CCBlocks.COPYCAT_FENCE_GATE,
-            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
             CCBlocks.COPYCAT_IRON_DOOR,
-            CCBlocks.COPYCAT_IRON_TRAPDOOR,
-            CCBlocks.COPYCAT_LADDER,
-            CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
-            CCBlocks.COPYCAT_STONE_BUTTON,
-            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
             CCBlocks.COPYCAT_TRAPDOOR,
+            CCBlocks.COPYCAT_IRON_TRAPDOOR,
+            CCBlocks.COPYCAT_FENCE_GATE,
             CCBlocks.COPYCAT_WOODEN_BUTTON,
+            CCBlocks.COPYCAT_STONE_BUTTON,
             CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_STONE_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_LIGHT_WEIGHTED_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_HEAVY_WEIGHTED_PRESSURE_PLATE,
+            CCBlocks.COPYCAT_LADDER,
 
             /* Create */
             CCBlocks.COPYCAT_FLUID_PIPE,

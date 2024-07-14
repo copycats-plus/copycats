@@ -183,8 +183,8 @@ public interface CopycatRenderContext {
      *
      * @param mapper The mapper function to determine the cull face.
      */
-    static QuadCullFace cullFace(QuadCullFace.CullFaceMapper mapper) {
-        return new QuadCullFace(mapper);
+    static QuadManualCull manualCull(QuadManualCull.CullFaceMapper mapper) {
+        return new QuadManualCull(mapper);
     }
 
     /**
@@ -192,8 +192,8 @@ public interface CopycatRenderContext {
      * <p>
      * Return null to specify that the quad should never be culled.
      */
-    static QuadCullFace cullFace(Direction face1, @Nullable Direction cull1) {
-        return new QuadCullFace((lightFace, cullFace) -> {
+    static QuadManualCull manualCull(Direction face1, @Nullable Direction cull1) {
+        return new QuadManualCull((lightFace, cullFace) -> {
             if (face1 == lightFace) {
                 return cull1;
             }
@@ -206,8 +206,8 @@ public interface CopycatRenderContext {
      * <p>
      * Return null to specify that the quad should never be culled.
      */
-    static QuadCullFace cullFace(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2) {
-        return new QuadCullFace((lightFace, cullFace) -> {
+    static QuadManualCull manualCull(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2) {
+        return new QuadManualCull((lightFace, cullFace) -> {
             if (face1 == lightFace) {
                 return cull1;
             } else if (face2 == lightFace) {
@@ -222,8 +222,8 @@ public interface CopycatRenderContext {
      * <p>
      * Return null to specify that the quad should never be culled.
      */
-    static QuadCullFace cullFace(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3) {
-        return new QuadCullFace((lightFace, cullFace) -> {
+    static QuadManualCull manualCull(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3) {
+        return new QuadManualCull((lightFace, cullFace) -> {
             if (face1 == lightFace) {
                 return cull1;
             } else if (face2 == lightFace) {
@@ -240,8 +240,8 @@ public interface CopycatRenderContext {
      * <p>
      * Return null to specify that the quad should never be culled.
      */
-    static QuadCullFace cullFace(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3, Direction face4, @Nullable Direction cull4) {
-        return new QuadCullFace((lightFace, cullFace) -> {
+    static QuadManualCull manualCull(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3, Direction face4, @Nullable Direction cull4) {
+        return new QuadManualCull((lightFace, cullFace) -> {
             if (face1 == lightFace) {
                 return cull1;
             } else if (face2 == lightFace) {
@@ -260,8 +260,8 @@ public interface CopycatRenderContext {
      * <p>
      * Return null to specify that the quad should never be culled.
      */
-    static QuadCullFace cullFace(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3, Direction face4, @Nullable Direction cull4, Direction face5, @Nullable Direction cull5) {
-        return new QuadCullFace((lightFace, cullFace) -> {
+    static QuadManualCull manualCull(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3, Direction face4, @Nullable Direction cull4, Direction face5, @Nullable Direction cull5) {
+        return new QuadManualCull((lightFace, cullFace) -> {
             if (face1 == lightFace) {
                 return cull1;
             } else if (face2 == lightFace) {
@@ -282,8 +282,8 @@ public interface CopycatRenderContext {
      * <p>
      * Return null to specify that the quad should never be culled.
      */
-    static QuadCullFace cullFace(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3, Direction face4, @Nullable Direction cull4, Direction face5, @Nullable Direction cull5, Direction face6, @Nullable Direction cull6) {
-        return new QuadCullFace((lightFace, cullFace) -> {
+    static QuadManualCull manualCull(Direction face1, @Nullable Direction cull1, Direction face2, @Nullable Direction cull2, Direction face3, @Nullable Direction cull3, Direction face4, @Nullable Direction cull4, Direction face5, @Nullable Direction cull5, Direction face6, @Nullable Direction cull6) {
+        return new QuadManualCull((lightFace, cullFace) -> {
             if (face1 == lightFace) {
                 return cull1;
             } else if (face2 == lightFace) {
@@ -304,15 +304,62 @@ public interface CopycatRenderContext {
     /**
      * Disable face culling for the quad.
      */
-    static QuadCullFace noCull() {
-        return cullFace((lightFace, cullFace) -> null);
+    static QuadManualCull noCull() {
+        return manualCull((lightFace, cullFace) -> null);
     }
 
     /**
      * Automatically assign cull face according to quad position and orientation.
      */
     static QuadAutoCull autoCull() {
-        return QuadAutoCull.INSTANCE;
+        return QuadAutoCull.BLOCK;
+    }
+
+    /**
+     * Automatically assign cull face according to quad position and orientation.
+     *
+     * @param cullingBox The bounding box to cull against. Faces that are touching the box are allowed to be culled.
+     */
+    static QuadAutoCull autoCull(MutableAABB cullingBox) {
+        return new QuadAutoCull(cullingBox);
+    }
+
+    /**
+     * Rotate the UV coordinates of a quad around a pivot point.
+     * <p>
+     * Rotations of any angle is allowed.
+     *
+     * @param face     The face to rotate the UV coordinates of.
+     * @param pivotU   The U coordinate of the pivot of rotation, in voxel space.
+     * @param pivotV   The V coordinate of the pivot of rotation, in voxel space.
+     * @param rotation The rotation to apply, in degrees.
+     */
+    static QuadUVRotate uvRotate(Direction face, float pivotU, float pivotV, float rotation) {
+        return new QuadUVRotate(face, pivotU, pivotV, rotation);
+    }
+
+    /**
+     * Translate the UV coordinates of a quad.
+     *
+     * @param face    The face to translate the UV coordinates of.
+     * @param offsetU The U coordinate offset in voxel space.
+     * @param offsetV The V coordinate offset in voxel space.
+     */
+    static QuadUVTranslate uvTranslate(Direction face, float offsetU, float offsetV) {
+        return new QuadUVTranslate(face, offsetU, offsetV);
+    }
+
+    /**
+     * Scale the UV coordinates of a quad around a pivot point.
+     *
+     * @param face   The face to scale the UV coordinates of.
+     * @param pivotU The U coordinate of the pivot of scaling, in voxel space.
+     * @param pivotV The V coordinate of the pivot of scaling, in voxel space.
+     * @param scaleU The U coordinate scale factor.
+     * @param scaleV The V coordinate scale factor.
+     */
+    static QuadUVScale uvScale(Direction face, float pivotU, float pivotV, float scaleU, float scaleV) {
+        return new QuadUVScale(face, pivotU, pivotV, scaleU, scaleV);
     }
 
     @ApiStatus.Internal

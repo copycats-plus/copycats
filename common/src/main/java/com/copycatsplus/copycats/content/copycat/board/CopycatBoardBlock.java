@@ -282,17 +282,16 @@ public class CopycatBoardBlock extends WaterloggedMultiStateCopycatBlock impleme
         };
     }
 
+    public boolean supportsExternalFaceHiding(BlockState state) {
+        return true;
+    }
 
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (state.is(this) && !state.getValue(byDirection(dir))) return false;
-        if (neighborState.is(this) && !neighborState.getValue(byDirection(dir.getOpposite()))) return false;
-        String property = getPropertyFromInteraction(state, level, pos, new BlockHitResult(Vec3.atCenterOf(pos), dir, pos, true), true);
-        if (state.is(this) == neighborState.is(this)) {
-            return (IMultiStateCopycatBlock.getMaterial(level, pos, property).skipRendering(ICopycatBlock.getMaterial(level, pos.relative(dir)), dir.getOpposite()));
-        }
-
-        return IMultiStateCopycatBlock.getMaterial(level, pos, property).skipRendering(neighborState, dir.getOpposite());
+        return IMultiStateCopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override

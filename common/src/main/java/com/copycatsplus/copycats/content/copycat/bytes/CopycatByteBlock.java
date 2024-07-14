@@ -255,6 +255,18 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
         return InteractionResult.SUCCESS;
     }
 
+    public boolean supportsExternalFaceHiding(BlockState state) {
+        return true;
+    }
+
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        return IMultiStateCopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
+    }
+
     @Override
     public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
         return mapBytes(pState, bite -> bite.rotate(pRotation));

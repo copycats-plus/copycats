@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.fabric.mixin.copycat.base;
 
+import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.content.copycat.button.CopycatButtonBlock;
@@ -57,6 +58,7 @@ import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMate
         CopycatPressurePlateBlock.class,
         CopycatWeightedPressurePlate.class,
         CopycatStairsBlock.class,
+        CopycatDoorBlock.class,
         CopycatTrapdoorBlock.class,
         CopycatWallBlock.class,
         CopycatShaftBlock.class,

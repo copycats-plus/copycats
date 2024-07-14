@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  *
  * @param mapper The mapper function to determine the cull face.
  */
-public record QuadCullFace(CullFaceMapper mapper) implements QuadTransform {
+public record QuadManualCull(CullFaceMapper mapper) implements QuadTransform {
 
     @Override
     public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {

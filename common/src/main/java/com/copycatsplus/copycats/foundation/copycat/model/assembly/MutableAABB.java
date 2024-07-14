@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.foundation.copycat.model.assembly;
 
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.phys.AABB;
 
 /**
@@ -122,5 +123,21 @@ public class MutableAABB implements AssemblyTransform.Transformable<MutableAABB>
         this.maxY = maxY;
         this.maxZ = maxZ;
         return this;
+    }
+
+    public double getMin(Axis axis) {
+        return switch (axis) {
+            case X -> minX;
+            case Y -> minY;
+            case Z -> minZ;
+        };
+    }
+
+    public double getMax(Axis axis) {
+        return switch (axis) {
+            case X -> maxX;
+            case Y -> maxY;
+            case Z -> maxZ;
+        };
     }
 }

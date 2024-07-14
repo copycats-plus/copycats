@@ -252,21 +252,16 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
         }
     }
 
-
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
     }
 
-
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (neighborState.getBlock() instanceof SlabBlock || neighborState.getBlock() instanceof CopycatSlabBlock) {
-            if (ICopycatBlock.getMaterial(level, pos).skipRendering(ICopycatBlock.getMaterial(level, pos.relative(dir)), dir.getOpposite()))
-                return getFaceShape(state, dir) == getFaceShape(neighborState, dir.getOpposite());
-        }
-
-        return getFaceShape(state, dir) == FaceShape.FULL
-                && ICopycatBlock.getMaterial(level, pos).skipRendering(neighborState, dir.getOpposite());
+        return IMultiStateCopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override

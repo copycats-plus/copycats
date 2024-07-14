@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.quad.QuadAutoCull;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class CopycatMultiByteModelCore extends CopycatModelCore {
 
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        registerForMultiState(entries, CCBlocks.COPYCAT_BYTE.get());
+        registerForMultiState(entries, CCBlocks.COPYCAT_BYTE.get(), false);
     }
 
     @Override
@@ -33,53 +34,63 @@ public class CopycatMultiByteModelCore extends CopycatModelCore {
         int offsetY = bite.y() ? 8 : 0;
         int offsetZ = bite.z() ? 8 : 0;
 
+        QuadAutoCull autoCull = autoCull(aabb(8, 8, 8).move(offsetX, offsetY, offsetZ));
+
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX, offsetY, offsetZ),
                 aabb(4, 4, 4),
-                cull(UP | EAST | SOUTH)
+                cull(UP | EAST | SOUTH),
+                autoCull
         );
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX + 4, offsetY, offsetZ),
                 aabb(4, 4, 4).move(12, 0, 0),
-                cull(UP | WEST | SOUTH)
+                cull(UP | WEST | SOUTH),
+                autoCull
         );
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX, offsetY, offsetZ + 4),
                 aabb(4, 4, 4).move(0, 0, 12),
-                cull(UP | EAST | NORTH)
+                cull(UP | EAST | NORTH),
+                autoCull
         );
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX + 4, offsetY, offsetZ + 4),
                 aabb(4, 4, 4).move(12, 0, 12),
-                cull(UP | WEST | NORTH)
+                cull(UP | WEST | NORTH),
+                autoCull
         );
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX, offsetY + 4, offsetZ),
                 aabb(4, 4, 4).move(0, 12, 0),
-                cull(DOWN | EAST | SOUTH)
+                cull(DOWN | EAST | SOUTH),
+                autoCull
         );
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX + 4, offsetY + 4, offsetZ),
                 aabb(4, 4, 4).move(12, 12, 0),
-                cull(DOWN | WEST | SOUTH)
+                cull(DOWN | WEST | SOUTH),
+                autoCull
         );
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX, offsetY + 4, offsetZ + 4),
                 aabb(4, 4, 4).move(0, 12, 12),
-                cull(DOWN | EAST | NORTH)
+                cull(DOWN | EAST | NORTH),
+                autoCull
         );
         context.assemblePiece(
                 AssemblyTransform.IDENTITY,
                 vec3(offsetX + 4, offsetY + 4, offsetZ + 4),
                 aabb(4, 4, 4).move(12, 12, 12),
-                cull(DOWN | WEST | NORTH)
+                cull(DOWN | WEST | NORTH),
+                autoCull
         );
     }
 
