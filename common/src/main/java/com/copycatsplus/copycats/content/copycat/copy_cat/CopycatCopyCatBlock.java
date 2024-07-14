@@ -1,8 +1,9 @@
 package com.copycatsplus.copycats.content.copycat.copy_cat;
 
-import com.copycatsplus.copycats.content.copycat.base.CCCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +49,7 @@ public class CopycatCopyCatBlock extends CCCopycatBlock implements IStateType {
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return Shapes.block();
+        return CCShapes.CAT_BOX.get(pState.getValue(FACING));
     }
 
     public boolean supportsExternalFaceHiding(BlockState state) {
