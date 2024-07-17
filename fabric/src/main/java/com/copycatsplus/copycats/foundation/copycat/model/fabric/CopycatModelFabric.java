@@ -190,7 +190,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 ((FabricBakedModel) model).emitBlockQuads(renderWorld, material, pos, randomSupplier, context);
                 context.popTransform();
 
-                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);
+                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter, entry.key());
                 entry.part().emitCopycatQuads(entry.key(), state, copycatContext, material);
 
                 context.pushTransform(quad -> !occlusionData.isOccluded(quad.cullFace()));
@@ -223,7 +223,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 ((FabricBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
                 context.popTransform();
 
-                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);
+                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter, entry.key());
                 entry.part().emitCopycatQuads(entry.key(), state, copycatContext, material);
 
                 context.meshConsumer().accept(meshBuilder.build());
