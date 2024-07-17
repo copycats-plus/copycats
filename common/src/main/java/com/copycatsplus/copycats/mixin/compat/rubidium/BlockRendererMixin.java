@@ -19,6 +19,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Record the currently rendering property for multi-state blocks so that block colors can be displayed properly.
+ * <p>
+ * Rubidium compatible version of {@link com.copycatsplus.copycats.mixin.copycat.base.multistate.ModelBlockRendererMixin}.
+ */
 @Mixin(BlockRenderer.class)
 @Pseudo
 public class BlockRendererMixin {

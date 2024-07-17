@@ -1,7 +1,5 @@
 package com.copycatsplus.copycats.foundation.tooltip;
 
-import com.mojang.bridge.game.Language;
-
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.simibubi.create.foundation.utility.Components;
