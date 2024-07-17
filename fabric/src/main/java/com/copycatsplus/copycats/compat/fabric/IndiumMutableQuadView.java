@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.compat.fabric;
 
 import link.infra.indium.renderer.mesh.EncodingFormat;
 import link.infra.indium.renderer.mesh.MutableQuadViewImpl;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -16,7 +17,7 @@ public class IndiumMutableQuadView extends MutableQuadViewImpl {
     }
 
     @Override
-    public void emitDirectly() {
-        throw new NotImplementedException("IntermediateMutableQuadView.emitDirectly() is not implemented");
+    public QuadEmitter emit() {
+        throw new NotImplementedException("IntermediateMutableQuadView.emit() is not implemented");
     }
 }

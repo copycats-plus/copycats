@@ -27,7 +27,8 @@ public class BlockRendererMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lme/jellysquid/mods/sodium/client/model/quad/blender/ColorBlender;getColors(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lme/jellysquid/mods/sodium/client/model/quad/ModelQuadView;Lme/jellysquid/mods/sodium/client/model/quad/blender/ColorSampler;Lnet/minecraft/world/level/block/state/StateHolder;)[I"
-            )
+            ),
+            require = 0
     )
     private void beforeColor(BlockAndTintGetter world, BlockState state, BlockPos pos, BlockPos origin, ModelVertexSink vertices, IndexBufferBuilder indices, Vec3 blockOffset, ColorSampler<BlockState> colorSampler, BakedQuad bakedQuad, QuadLightData light, ChunkModelBuilder model, CallbackInfo ci) {
         if (bakedQuad.getSprite() instanceof MultiStateTextureAtlasSprite sprite)
@@ -40,7 +41,8 @@ public class BlockRendererMixin {
                     value = "INVOKE",
                     target = "Lme/jellysquid/mods/sodium/client/model/quad/blender/ColorBlender;getColors(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/core/BlockPos;Lme/jellysquid/mods/sodium/client/model/quad/ModelQuadView;Lme/jellysquid/mods/sodium/client/model/quad/blender/ColorSampler;Lnet/minecraft/world/level/block/state/StateHolder;)[I",
                     shift = At.Shift.AFTER
-            )
+            ),
+            require = 0
     )
     private void afterColor(BlockAndTintGetter world, BlockState state, BlockPos pos, BlockPos origin, ModelVertexSink vertices, IndexBufferBuilder indices, Vec3 blockOffset, ColorSampler<BlockState> colorSampler, BakedQuad bakedQuad, QuadLightData light, ChunkModelBuilder model, CallbackInfo ci) {
         MultiStateRenderManager.setRenderingProperty(null);

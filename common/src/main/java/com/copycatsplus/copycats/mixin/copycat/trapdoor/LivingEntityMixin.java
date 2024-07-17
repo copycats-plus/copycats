@@ -25,7 +25,7 @@ public abstract class LivingEntityMixin extends Entity {
             cancellable = true
     )
     private void copycatUsableAsLadder(BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        BlockState blockState = this.level().getBlockState(pos.below());
+        BlockState blockState = this.level.getBlockState(pos.below());
         if (blockState.getBlock() instanceof LadderBlock)
             cir.setReturnValue(
                     state.getValue(TrapDoorBlock.OPEN) &&

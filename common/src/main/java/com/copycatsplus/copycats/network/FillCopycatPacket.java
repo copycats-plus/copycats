@@ -29,7 +29,7 @@ public record FillCopycatPacket(BlockPos pos, BlockState material, String proper
 
     @Override
     public void handle(ServerPlayer sender) {
-        Level level = sender.level();
+        Level level = sender.level;
         if (!level.isLoaded(pos)) return;
         BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof IMultiStateCopycatBlock copycatBlock)) return;

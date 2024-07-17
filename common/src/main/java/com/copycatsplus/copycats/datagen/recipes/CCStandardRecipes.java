@@ -156,7 +156,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .unlockedBy(CCBlocks.COPYCAT_HALF_LAYER::get)
             .requiresFeature(CCBlocks.COPYCAT_HALF_LAYER)
             .viaShaped(b -> b
-                    .define('s', CCBlocks.COPYCAT_HALF_LAYER)
+                    .define('s', CCBlocks.COPYCAT_HALF_LAYER.get().asItem())
                     .pattern("ss")
             );
 
@@ -179,7 +179,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .requiresResultFeature()
             .requiresFeature(CCBlocks.COPYCAT_VERTICAL_STAIRS)
             .viaShapeless(b -> b
-                    .requires(CCBlocks.COPYCAT_VERTICAL_STAIRS)
+                    .requires(CCBlocks.COPYCAT_VERTICAL_STAIRS.get().asItem())
             );
 
     GeneratedRecipe COPYCAT_STAIRS_CYCLE_2 = create(CCBlocks.COPYCAT_VERTICAL_STAIRS).withSuffix("_from_conversion")

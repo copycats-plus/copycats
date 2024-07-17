@@ -102,7 +102,7 @@ public class CopycatDescription {
     }
 
     private static boolean shouldInvalidateCache() {
-        String currentLanguage = Minecraft.getInstance()
+        Language currentLanguage = Minecraft.getInstance()
                 .getLanguageManager()
                 .getSelected();
         if (!currentLanguage.equals(cachedLanguage)) {

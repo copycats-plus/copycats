@@ -33,8 +33,7 @@
           "recipes": [
             "copycats:crafting/copycat_layer_from_half_layers"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {
