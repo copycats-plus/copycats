@@ -4,8 +4,10 @@ import com.copycatsplus.copycats.CCBlocks;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,6 +30,11 @@ public class CopycatCatwalkItem extends BlockItem {
 
     @Override
     public void registerBlocks(@NotNull Map<Block, Item> map, @NotNull Item self) {
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab category, NonNullList<ItemStack> items) {
+        items.add(new ItemStack(this));
     }
 
     @Override
