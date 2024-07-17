@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.foundation.copycat.model.assembly.forge;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.*;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.quad.QuadAutoCull;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.quad.QuadTransform;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateTextureAtlasSprite;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import com.simibubi.create.foundation.model.BakedQuadHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -21,10 +22,10 @@ import java.util.List;
 @ApiStatus.Internal
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<CopycatRenderContextForge.CullingBakedQuad>, List<CopycatRenderContextForge.CullingBakedQuad>> {
+public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<CopycatRenderContextForge.CopycatBakedQuad>, List<CopycatRenderContextForge.CopycatBakedQuad>> {
 
-    public CopycatRenderContextForge(List<CullingBakedQuad> source, List<CullingBakedQuad> destination) {
-        super(source, destination);
+    public CopycatRenderContextForge(List<CopycatBakedQuad> source, List<CopycatBakedQuad> destination, String property) {
+        super(source, destination, property);
     }
 
     @Override
@@ -34,11 +35,11 @@ public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<Co
         assemblyTransform.apply(cull);
         AABB aabb = select.toAABB();
         Vec3 vec3 = offset.toVec3().subtract(select.minX, select.minY, select.minZ);
-        for (CullingBakedQuad quad : source()) {
+        for (CopycatBakedQuad quad : source()) {
             if (cull.isCulled(quad.getDirection())) {
                 continue;
             }
-            assembleQuad(quad, destination(), aabb, vec3, assemblyTransform);
+            assembleQuad(quad, destination(), key(), aabb, vec3, assemblyTransform);
         }
     }
 
@@ -49,40 +50,40 @@ public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<Co
         assemblyTransform.apply(cull);
         AABB aabb = select.toAABB();
         Vec3 vec3 = offset.toVec3().subtract(select.minX, select.minY, select.minZ);
-        for (CullingBakedQuad quad : source()) {
+        for (CopycatBakedQuad quad : source()) {
             if (cull.isCulled(quad.getDirection())) {
                 continue;
             }
-            assembleQuad(quad, destination(), aabb, vec3, assemblyTransform, transforms);
+            assembleQuad(quad, destination(), key(), aabb, vec3, assemblyTransform, transforms);
         }
     }
 
     @Override
     public void assembleAll() {
-        for (CullingBakedQuad quad : source()) {
+        for (CopycatBakedQuad quad : source()) {
             assembleQuad(quad, destination());
         }
     }
 
-    private static void assembleQuad(CullingBakedQuad src, List<CullingBakedQuad> dest) {
+    private static void assembleQuad(CopycatBakedQuad src, List<CopycatBakedQuad> dest) {
         dest.add(src);
     }
 
     @Override
     public void assembleRaw(AABB crop, Vec3 move) {
-        for (CullingBakedQuad quad : source()) {
-            assembleQuad(quad, destination(), crop, move, AssemblyTransform.IDENTITY);
+        for (CopycatBakedQuad quad : source()) {
+            assembleQuad(quad, destination(), key(), crop, move, AssemblyTransform.IDENTITY);
         }
     }
 
     @Override
     public void assembleRaw(AABB crop, Vec3 move, QuadTransform... transforms) {
-        for (CullingBakedQuad quad : source()) {
-            assembleQuad(quad, destination(), crop, move, AssemblyTransform.IDENTITY, transforms);
+        for (CopycatBakedQuad quad : source()) {
+            assembleQuad(quad, destination(), key(), crop, move, AssemblyTransform.IDENTITY, transforms);
         }
     }
 
-    private static void assembleQuad(CullingBakedQuad src, List<CullingBakedQuad> dest, AABB crop, Vec3 move, AssemblyTransform assemblyTransform, QuadTransform... transforms) {
+    private static void assembleQuad(CopycatBakedQuad src, List<CopycatBakedQuad> dest, String key, AABB crop, Vec3 move, AssemblyTransform assemblyTransform, QuadTransform... transforms) {
         int[] vertices = BakedModelHelper.cropAndMove(src.getVertices(), src.getSprite(), crop, move);
         MutableQuad mutableQuad = getMutableQuad(vertices, src.cullFace);
         assemblyTransform.apply(mutableQuad);
@@ -98,7 +99,7 @@ public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<Co
             BakedQuadHelper.setU(vertices, i, mutableQuad.vertices.get(i).uv.u);
             BakedQuadHelper.setV(vertices, i, mutableQuad.vertices.get(i).uv.v);
         }
-        dest.add(new CullingBakedQuad(vertices, src.getTintIndex(), mutableQuad.computeLightFace(), src.getSprite(), src.isShade(), mutableQuad.cullFace));
+        dest.add(new CopycatBakedQuad(vertices, src.getTintIndex(), mutableQuad.computeLightFace(), src.getSprite(), src.isShade(), mutableQuad.cullFace, key));
     }
 
     public static MutableQuad getMutableQuad(int[] vertexData, @Nullable Direction cullFace) {
@@ -111,17 +112,23 @@ public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<Co
         return new MutableQuad(vertices, cullFace);
     }
 
-    public static class CullingBakedQuad extends BakedQuad {
+    public static class CopycatBakedQuad extends BakedQuad {
         @Nullable
         public final Direction cullFace;
+        public final String property;
 
-        public CullingBakedQuad(int[] vertices, int tintIndex, Direction direction, TextureAtlasSprite sprite, boolean shade, @Nullable Direction cullFace) {
+        public CopycatBakedQuad(int[] vertices, int tintIndex, Direction direction, TextureAtlasSprite sprite, boolean shade, @Nullable Direction cullFace, String property) {
             super(vertices, tintIndex, direction, sprite, shade);
             this.cullFace = cullFace;
+            this.property = property;
         }
 
-        public CullingBakedQuad(BakedQuad quad, @Nullable Direction cullFace) {
-            this(quad.getVertices(), quad.getTintIndex(), quad.getDirection(), quad.getSprite(), quad.isShade(), cullFace);
+        public CopycatBakedQuad(BakedQuad quad, @Nullable Direction cullFace, String property) {
+            this(quad.getVertices(), quad.getTintIndex(), quad.getDirection(), quad.getSprite(), quad.isShade(), cullFace, property);
+        }
+
+        public BakedQuad toBakedQuad() {
+            return new BakedQuad(getVertices(), getTintIndex(), getDirection(), new MultiStateTextureAtlasSprite(property, getSprite()), isShade());
         }
     }
 }

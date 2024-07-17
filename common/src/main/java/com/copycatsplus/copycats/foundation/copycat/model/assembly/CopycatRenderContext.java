@@ -366,10 +366,12 @@ public interface CopycatRenderContext {
     abstract class Base<Source, Destination> implements CopycatRenderContext {
         private final Source source;
         private final Destination destination;
+        private final String key;
 
-        public Base(Source source, Destination destination) {
+        public Base(Source source, Destination destination, String key) {
             this.source = source;
             this.destination = destination;
+            this.key = key;
         }
 
         public Source source() {
@@ -378,6 +380,10 @@ public interface CopycatRenderContext {
 
         public Destination destination() {
             return destination;
+        }
+
+        public String key() {
+            return key;
         }
     }
 }
