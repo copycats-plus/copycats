@@ -1,6 +1,8 @@
 package com.copycatsplus.copycats.foundation.tooltip;
 
 import com.mojang.bridge.game.Language;
+
+import com.copycatsplus.copycats.CCKeys;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.simibubi.create.foundation.utility.Components;
@@ -14,18 +16,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Supplier;
 
 import static net.minecraft.ChatFormatting.*;
 import static net.minecraft.ChatFormatting.DARK_GRAY;
@@ -44,6 +41,7 @@ public class CopycatDescription {
 
     protected final Item item;
     private static Language cachedLanguage = null;
+    private static Map<String, List<Object>> cachedArgs = new HashMap<>();
     private static Map<CopycatCharacteristics, Pair<List<Component>, List<Component>>> descriptions;
     @Nullable
     private List<Component> shortDescription = null;
@@ -88,7 +86,7 @@ public class CopycatDescription {
     }
 
     public void modify(Item item, List<Component> tooltip) {
-        if (checkLocale()) {
+        if (shouldInvalidateCache()) {
             populateDescriptions();
             loadDescriptions(item);
         }
@@ -103,12 +101,20 @@ public class CopycatDescription {
         }
     }
 
-    private static boolean checkLocale() {
-        Language currentLanguage = Minecraft.getInstance()
+    private static boolean shouldInvalidateCache() {
+        String currentLanguage = Minecraft.getInstance()
                 .getLanguageManager()
                 .getSelected();
         if (!currentLanguage.equals(cachedLanguage)) {
             cachedLanguage = currentLanguage;
+            return true;
+        }
+        Map<String, List<Object>> newArgs = new HashMap<>();
+        for (CopycatCharacteristics characteristics : CopycatCharacteristics.all()) {
+            newArgs.put(characteristics.getSerializedName(), Arrays.stream(characteristics.getArgs()).map(Supplier::get).toList());
+        }
+        if (!newArgs.equals(cachedArgs)) {
+            cachedArgs = newArgs;
             return true;
         }
         return false;
@@ -125,7 +131,7 @@ public class CopycatDescription {
 
             descriptions.put(characteristics, Pair.of(
                     List.of(Components.literal("- " + I18n.get(titleKey)).withStyle(GRAY)),
-                    TooltipHelper.cutStringTextComponent(I18n.get(descKey), TooltipHelper.Palette.STANDARD_CREATE)
+                    TooltipHelper.cutStringTextComponent(String.format(I18n.get(descKey), cachedArgs.get(characteristics.getSerializedName()).toArray()), TooltipHelper.Palette.STANDARD_CREATE)
             ));
         }
     }

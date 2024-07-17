@@ -1,0 +1,31 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_vertical_slope",
+          "invert": false
+        },
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_slope",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "copycats:copycat_vertical_slope"
+          }
+        ],
+        "result": {
+          "item": "copycats:copycat_slope"
+        }
+      }
+    }
+  ]
+}

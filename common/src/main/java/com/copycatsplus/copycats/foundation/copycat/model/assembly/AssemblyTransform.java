@@ -20,6 +20,13 @@ public interface AssemblyTransform {
      */
     void apply(Transformable<?> t);
 
+    default AssemblyTransform andThen(AssemblyTransform after) {
+        return t -> {
+            apply(t);
+            after.apply(t);
+        };
+    }
+
     interface Transformable<Self extends Transformable<Self>> {
         /**
          * Rotate in 90 degree increments around the X axis clockwise, centered around the center of the model.

@@ -12,7 +12,6 @@ import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
 import com.simibubi.create.foundation.placement.PoleHelper;
 import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -43,9 +42,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -63,15 +60,6 @@ public class CopycatHalfPanelBlock extends CCWaterloggedCopycatBlock implements 
      * The direction of the half panel within the block face.
      */
     public static final DirectionProperty OFFSET = DirectionProperty.create("offset", Direction.Plane.HORIZONTAL);
-
-    private static final Map<Direction, VoxelShaper> SHAPE_BY_OFFSET = new HashMap<>();
-
-    static {
-        SHAPE_BY_OFFSET.put(Direction.NORTH, CCShapes.HALF_PANEL_NORTH);
-        SHAPE_BY_OFFSET.put(Direction.SOUTH, CCShapes.HALF_PANEL_SOUTH);
-        SHAPE_BY_OFFSET.put(Direction.EAST, CCShapes.HALF_PANEL_EAST);
-        SHAPE_BY_OFFSET.put(Direction.WEST, CCShapes.HALF_PANEL_WEST);
-    }
 
     private static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
 
@@ -192,7 +180,7 @@ public class CopycatHalfPanelBlock extends CCWaterloggedCopycatBlock implements 
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return SHAPE_BY_OFFSET.get(pState.getValue(OFFSET)).get(pState.getValue(FACING));
+        return CCShapes.HALF_PANEL.get(pState.getValue(FACING)).get(pState.getValue(OFFSET)).toShape();
     }
 
 

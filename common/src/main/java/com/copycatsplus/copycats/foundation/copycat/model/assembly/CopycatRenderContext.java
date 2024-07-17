@@ -324,6 +324,44 @@ public interface CopycatRenderContext {
         return new QuadAutoCull(cullingBox);
     }
 
+    /**
+     * Rotate the UV coordinates of a quad around a pivot point.
+     * <p>
+     * Rotations of any angle is allowed.
+     *
+     * @param face     The face to rotate the UV coordinates of.
+     * @param pivotU   The U coordinate of the pivot of rotation, in voxel space.
+     * @param pivotV   The V coordinate of the pivot of rotation, in voxel space.
+     * @param rotation The rotation to apply, in degrees.
+     */
+    static QuadUVRotate uvRotate(Direction face, float pivotU, float pivotV, float rotation) {
+        return new QuadUVRotate(face, pivotU, pivotV, rotation);
+    }
+
+    /**
+     * Translate the UV coordinates of a quad.
+     *
+     * @param face    The face to translate the UV coordinates of.
+     * @param offsetU The U coordinate offset in voxel space.
+     * @param offsetV The V coordinate offset in voxel space.
+     */
+    static QuadUVTranslate uvTranslate(Direction face, float offsetU, float offsetV) {
+        return new QuadUVTranslate(face, offsetU, offsetV);
+    }
+
+    /**
+     * Scale the UV coordinates of a quad around a pivot point.
+     *
+     * @param face   The face to scale the UV coordinates of.
+     * @param pivotU The U coordinate of the pivot of scaling, in voxel space.
+     * @param pivotV The V coordinate of the pivot of scaling, in voxel space.
+     * @param scaleU The U coordinate scale factor.
+     * @param scaleV The V coordinate scale factor.
+     */
+    static QuadUVScale uvScale(Direction face, float pivotU, float pivotV, float scaleU, float scaleV) {
+        return new QuadUVScale(face, pivotU, pivotV, scaleU, scaleV);
+    }
+
     @ApiStatus.Internal
     abstract class Base<Source, Destination> implements CopycatRenderContext {
         private final Source source;

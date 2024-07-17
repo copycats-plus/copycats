@@ -70,7 +70,16 @@ public class MultiStateCopycatBlockEntity extends SmartBlockEntity implements IM
             ResourceLocation blockId = copycatBlockEntity.getBlockState().getBlock().builtInRegistryHolder().key().location();
             Copycats.LOGGER.debug("Converting block({}) at @{} to a multistate copycat", blockId.toString(), copycatBlockEntity.getBlockPos().toShortString());
             //Set the first property available to have the item and mat.
-            MaterialItemStorage.MaterialItem materialItem = materialItemStorage.getMaterialItem(getMaterialItemStorage().getAllProperties().stream().filter(prop -> mscb.partExists(getBlockState(), prop)).findFirst().get());
+            String firstProperty = getMaterialItemStorage().getAllProperties().stream()
+                    .filter(prop -> mscb.partExists(getBlockState(), prop))
+                    .findFirst()
+                    .orElse(null);
+            if (firstProperty == null) {
+                Copycats.LOGGER.error("Failed to convert block({}) at @{} to a multistate copycat: no valid properties found", blockId.toString(), copycatBlockEntity.getBlockPos().toShortString());
+                redraw();
+                return;
+            }
+            MaterialItemStorage.MaterialItem materialItem = materialItemStorage.getMaterialItem(firstProperty);
             materialItem.setMaterial(copycatBlockEntity.getMaterial());
             materialItem.setConsumedItem(copycatBlockEntity.getConsumedItem());
 

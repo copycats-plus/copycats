@@ -9,7 +9,6 @@ import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequi
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,8 +50,6 @@ public class CopycatVerticalSliceBlock extends CCWaterloggedCopycatBlock impleme
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
-
-    private static final VoxelShaper[] SHAPE_BY_LAYER = new VoxelShaper[]{CCShapes.EMPTY, CCShapes.SLICE_VERTICAL_2PX, CCShapes.SLICE_VERTICAL_4PX, CCShapes.SLICE_VERTICAL_6PX, CCShapes.SLICE_VERTICAL_8PX, CCShapes.SLICE_VERTICAL_10PX, CCShapes.SLICE_VERTICAL_12PX, CCShapes.SLICE_VERTICAL_14PX, CCShapes.SLICE_VERTICAL_16PX};
 
 
     public CopycatVerticalSliceBlock(Properties pProperties) {
@@ -210,7 +207,7 @@ public class CopycatVerticalSliceBlock extends CCWaterloggedCopycatBlock impleme
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+        return CCShapes.VERTICAL_SLICE.get(pState.getValue(FACING)).get(pState.getValue(LAYERS)).toShape();
     }
 
 

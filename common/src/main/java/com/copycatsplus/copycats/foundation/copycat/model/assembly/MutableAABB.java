@@ -115,6 +115,10 @@ public class MutableAABB implements AssemblyTransform.Transformable<MutableAABB>
         return new AABB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
+    public MutableAABB copy() {
+        return new MutableAABB(0, 0, 0).set(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
     public MutableAABB set(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         this.minX = minX;
         this.minY = minY;

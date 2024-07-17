@@ -7,7 +7,6 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -46,9 +45,6 @@ public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpe
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
-
-    private static final VoxelShaper[] BOTTOM_BY_LAYER = new VoxelShaper[]{CCShapes.EMPTY, CCShapes.SLICE_BOTTOM_2PX, CCShapes.SLICE_BOTTOM_4PX, CCShapes.SLICE_BOTTOM_6PX, CCShapes.SLICE_BOTTOM_8PX, CCShapes.SLICE_BOTTOM_10PX, CCShapes.SLICE_BOTTOM_12PX, CCShapes.SLICE_BOTTOM_14PX, CCShapes.SLICE_BOTTOM_16PX};
-    private static final VoxelShaper[] TOP_BY_LAYER = new VoxelShaper[]{CCShapes.EMPTY, CCShapes.SLICE_TOP_2PX, CCShapes.SLICE_TOP_4PX, CCShapes.SLICE_TOP_6PX, CCShapes.SLICE_TOP_8PX, CCShapes.SLICE_TOP_10PX, CCShapes.SLICE_TOP_12PX, CCShapes.SLICE_TOP_14PX, CCShapes.SLICE_TOP_16PX};
 
     public CopycatSliceBlock(Properties pProperties) {
         super(pProperties);
@@ -204,7 +200,7 @@ public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpe
 
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return (pState.getValue(HALF) == Half.BOTTOM ? BOTTOM_BY_LAYER : TOP_BY_LAYER)[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+        return CCShapes.SLICE.get(pState.getValue(FACING)).get(pState.getValue(HALF)).get(pState.getValue(LAYERS)).toShape();
     }
 
 

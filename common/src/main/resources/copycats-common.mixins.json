@@ -29,6 +29,7 @@
     "copycat.slab.TrackPlacementMixin",
     "copycat.slab.WalkNodeEvaluatorMixin",
     "copycat.step.CopycatStepBlockMixin",
+    "copycat.trapdoor.LivingEntityMixin",
     "entity.CatMixin",
     "minecraft.CreativeModeTabMixin"
   ],

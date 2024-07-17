@@ -224,6 +224,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
 
     @Override
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+        onWrenched(state, context);
         int byteCount = 0;
         for (Byte bite : allBytes) {
             if (state.getValue(byByte(bite))) byteCount++;
@@ -238,12 +239,6 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
         if (world instanceof ServerLevel) {
             if (player != null) {
                 List<ItemStack> drops = Block.getDrops(defaultBlockState().setValue(byByte(bite), true), (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand());
-                withBlockEntityDo(world, pos, ufte -> {
-                    String property = byByte(bite).getName();
-                    drops.add(ufte.getMaterialItemStorage().getMaterialItem(property).consumedItem());
-                    ufte.setMaterial(property, AllBlocks.COPYCAT_BASE.getDefaultState());
-                    ufte.setConsumedItem(property, ItemStack.EMPTY);
-                });
                 if (!player.isCreative()) {
                     for (ItemStack drop : drops) {
                         player.getInventory().placeItemBackInInventory(drop);

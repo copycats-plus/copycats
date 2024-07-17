@@ -50,11 +50,12 @@ dependencies {
     modImplementation("com.tterrag.registrate:Registrate:${registrate_forge_version}")
     modImplementation("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_forge_version}")
 
-    modLocalRuntime "curse.maven:jade-324717:${jade_forge_curse_id}"
+    modLocalRuntime("curse.maven:jade-324717:${jade_forge_curse_id}")
     modLocalRuntime("mezz.jei:jei-${minecraft_version}-forge:${jei_forge_version}")
 
     modLocalRuntime("curse.maven:rubidium-574856:${rubidium_forge_curse_id}")
     modImplementation("curse.maven:additional-placements-674852:${additionalplacements_forge_curse_id}")
+    modImplementation("curse.maven:athena-841890:${athena_forge_curse_id}")
 
     modCompileOnly("curse.maven:double-slabs-350179:${double_slabs_curse_id}")
 

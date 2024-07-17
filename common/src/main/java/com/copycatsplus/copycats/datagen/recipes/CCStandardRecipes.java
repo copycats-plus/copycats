@@ -79,6 +79,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_BEAM = copycat(CCBlocks.COPYCAT_BEAM, 4);
 
+    GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
+
     GeneratedRecipe COPYCAT_STEP_CYCLE_1 = create(AllBlocks.COPYCAT_STEP).withSuffix("_from_conversion")
             .unlockedByTag(() -> CCTags.Items.COPYCAT_VERTICAL_STEP.tag)
             .requiresFeature(CCBlocks.COPYCAT_VERTICAL_STEP)
@@ -92,8 +94,6 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
             .viaShapeless(b -> b
                     .requires(AllBlocks.COPYCAT_STEP.get())
             );
-
-    GeneratedRecipe COPYCAT_VERTICAL_STEP = copycat(CCBlocks.COPYCAT_VERTICAL_STEP, 4);
 
     GeneratedRecipe COPYCAT_HALF_PANEL = copycat(CCBlocks.COPYCAT_HALF_PANEL, 8);
 
@@ -115,8 +115,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_IRON_TRAPDOOR = copycat(CCBlocks.COPYCAT_IRON_TRAPDOOR, 2);
 
-    GeneratedRecipe COPYCAT_TRAPDOOR_CYCLE =
-            conversionCycle(ImmutableList.of(AllBlocks.COPYCAT_PANEL, CCBlocks.COPYCAT_TRAPDOOR));
+    GeneratedRecipe COPYCAT_TRAPDOOR_CYCLE = conversionCycle(AllBlocks.COPYCAT_PANEL, CCBlocks.COPYCAT_TRAPDOOR);
 
     GeneratedRecipe COPYCAT_WALL = copycat(CCBlocks.COPYCAT_WALL, 1);
 
@@ -149,10 +148,17 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_VERTICAL_SLICE = copycat(CCBlocks.COPYCAT_VERTICAL_SLICE, 16);
 
-    GeneratedRecipe COPYCAT_SLICE_CYCLE =
-            conversionCycle(ImmutableList.of(CCBlocks.COPYCAT_SLICE, CCBlocks.COPYCAT_VERTICAL_SLICE));
+    GeneratedRecipe COPYCAT_SLICE_CYCLE = conversionCycle(CCBlocks.COPYCAT_SLICE, CCBlocks.COPYCAT_VERTICAL_SLICE);
 
     GeneratedRecipe COPYCAT_HALF_LAYER = copycat(CCBlocks.COPYCAT_HALF_LAYER, 16);
+
+    GeneratedRecipe COPYCAT_LAYER_FROM_HALF_LAYERS = create(CCBlocks.COPYCAT_LAYER).withSuffix("_from_half_layers")
+            .unlockedBy(CCBlocks.COPYCAT_HALF_LAYER::get)
+            .requiresFeature(CCBlocks.COPYCAT_HALF_LAYER)
+            .viaShaped(b -> b
+                    .define('s', CCBlocks.COPYCAT_HALF_LAYER)
+                    .pattern("ss")
+            );
 
     GeneratedRecipe COPYCAT_WOODEN_BUTTON = copycat(CCBlocks.COPYCAT_WOODEN_BUTTON, 4);
 
@@ -168,6 +174,22 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_VERTICAL_STAIRS = copycat(CCBlocks.COPYCAT_VERTICAL_STAIRS, 1);
 
+    GeneratedRecipe COPYCAT_STAIRS_CYCLE_1 = create(CCBlocks.COPYCAT_STAIRS).withSuffix("_from_conversion")
+            .unlockedBy(CCBlocks.COPYCAT_VERTICAL_STAIRS::get)
+            .requiresResultFeature()
+            .requiresFeature(CCBlocks.COPYCAT_VERTICAL_STAIRS)
+            .viaShapeless(b -> b
+                    .requires(CCBlocks.COPYCAT_VERTICAL_STAIRS)
+            );
+
+    GeneratedRecipe COPYCAT_STAIRS_CYCLE_2 = create(CCBlocks.COPYCAT_VERTICAL_STAIRS).withSuffix("_from_conversion")
+            .unlockedByTag(() -> CCTags.Items.COPYCAT_STAIRS.tag)
+            .requiresResultFeature()
+            .requiresFeature(CCBlocks.COPYCAT_STAIRS)
+            .viaShapeless(b -> b
+                    .requires(CCTags.Items.COPYCAT_STAIRS.tag)
+            );
+
     GeneratedRecipe COPYCAT_GHOST_BLOCK = copycat(CCBlocks.COPYCAT_GHOST_BLOCK, 1);
 
     GeneratedRecipe COPYCAT_LADDER = copycat(CCBlocks.COPYCAT_LADDER, 6);
@@ -175,6 +197,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     GeneratedRecipe COPYCAT_SLOPE = copycat(CCBlocks.COPYCAT_SLOPE, 2);
 
     GeneratedRecipe COPYCAT_VERTICAL_SLOPE = copycat(CCBlocks.COPYCAT_VERTICAL_SLOPE, 2);
+
+    GeneratedRecipe COPYCAT_SLOPE_CYCLE = conversionCycle(CCBlocks.COPYCAT_SLOPE, CCBlocks.COPYCAT_VERTICAL_SLOPE);
 
     GeneratedRecipe COPYCAT_SLOPE_LAYER = copycat(CCBlocks.COPYCAT_SLOPE_LAYER, 8);
 
@@ -262,11 +286,12 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
                 .viaShapeless(b -> b.requires(base, resultCount).requires(AllItems.ZINC_INGOT.get()));
     }
 
-    GeneratedRecipe conversionCycle(List<ItemProviderEntry<? extends ItemLike>> cycle) {
+    @SafeVarargs
+    final GeneratedRecipe conversionCycle(ItemProviderEntry<? extends ItemLike>... cycle) {
         GeneratedRecipe result = null;
-        for (int i = 0; i < cycle.size(); i++) {
-            ItemProviderEntry<? extends ItemLike> currentEntry = cycle.get(i);
-            ItemProviderEntry<? extends ItemLike> nextEntry = cycle.get((i + 1) % cycle.size());
+        for (int i = 0; i < cycle.length; i++) {
+            ItemProviderEntry<? extends ItemLike> currentEntry = cycle[i];
+            ItemProviderEntry<? extends ItemLike> nextEntry = cycle[(i + 1) % cycle.length];
             result = create(nextEntry).withSuffix("_from_conversion")
                     .unlockedBy(currentEntry::get)
                     .requiresFeature(currentEntry.getId())

@@ -279,6 +279,9 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
             placer.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
     }
 
+    /**
+     * Implementation note: must be called before super.remove
+     */
     default void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.hasBlockEntity() || state.getBlock() == newState.getBlock())
             return;
