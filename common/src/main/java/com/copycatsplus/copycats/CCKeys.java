@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -55,6 +56,10 @@ public enum CCKeys {
         return GLFW.glfwGetMouseButton(Minecraft.getInstance()
                 .getWindow()
                 .getWindow(), button) == 1;
+    }
+
+    @ExpectPlatform
+    public static void register() {
     }
 
     public static boolean ctrlDown() {

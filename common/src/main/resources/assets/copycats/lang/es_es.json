@@ -50,6 +50,7 @@
   "tooltip.copycats.characteristics.functional.title": "Funcional",
   "tooltip.copycats.characteristics.ghost.description": "_No colisiones_ con entidades.",
   "tooltip.copycats.characteristics.ghost.title": "Fantasma",
+  "tooltip.copycats.characteristics.multi_state.description": "Pon _multiples copias_ con diferentes materiales en el mismo espacio de un bloque.",
   "tooltip.copycats.characteristics.multi_state.title": "Multi-estado",
   "tooltip.copycats.characteristics.pre_assembled.description": "Desmonta _partes individuales_ después de colocarlos.",
   "tooltip.copycats.characteristics.pre_assembled.title": "Preensamblado",

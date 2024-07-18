@@ -52,7 +52,7 @@
   "tooltip.copycats.characteristics.functional.title": "可交互",
   "tooltip.copycats.characteristics.ghost.description": "_不_与实体_碰撞_。",
   "tooltip.copycats.characteristics.ghost.title": "幽灵方块",
-  "tooltip.copycats.characteristics.multi_state.description": "可以在单个方块空间内放置_多个_不同材质的_伪装方块_。按住_%s_填充所有部分。",
+  "tooltip.copycats.characteristics.multi_state.description": "可以在单个方块空间内放置_多个_不同材质的_伪装方块_。",
   "tooltip.copycats.characteristics.multi_state.title": "复合状态",
   "tooltip.copycats.characteristics.pre_assembled.description": "放置后，拆除时仅拆除_单独的部分_。",
   "tooltip.copycats.characteristics.pre_assembled.title": "预装件",

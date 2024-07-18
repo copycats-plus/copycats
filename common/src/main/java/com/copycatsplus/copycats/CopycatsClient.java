@@ -13,6 +13,7 @@ public class CopycatsClient {
     public static void init() {
         LogicalSidedProvider.setClient(Minecraft::getInstance);
         CCPackets.PACKETS.registerS2CListener();
+        CCKeys.register();
         BUFFER_CACHE.registerCompartment(KineticCopycatRenderer.KINETIC_COPYCAT, 60);
     }
 
