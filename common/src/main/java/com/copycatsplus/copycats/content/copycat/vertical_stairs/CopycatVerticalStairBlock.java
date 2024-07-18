@@ -76,19 +76,9 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
     @Override
     public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         Direction facing = state.getValue(FACING);
-        boolean right = state.getValue(SIDE).isRight();
-        return switch (state.getValue(SHAPE)) {
-            case STRAIGHT ->
-                    right ? CCShapes.VERTICAL_STAIR_STRAIGHT_RIGHT.get(facing) : CCShapes.VERTICAL_STAIR_STRAIGHT_LEFT.get(facing);
-            case INNER_TOP ->
-                    right ? CCShapes.VERTICAL_STAIR_INNER_TOP_RIGHT.get(facing) : CCShapes.VERTICAL_STAIR_INNER_TOP_LEFT.get(facing);
-            case INNER_BOTTOM ->
-                    right ? CCShapes.VERTICAL_STAIR_INNER_BOTTOM_RIGHT.get(facing) : CCShapes.VERTICAL_STAIR_INNER_BOTTOM_LEFT.get(facing);
-            case OUTER_TOP ->
-                    right ? CCShapes.VERTICAL_STAIR_OUTER_TOP_RIGHT.get(facing) : CCShapes.VERTICAL_STAIR_OUTER_TOP_LEFT.get(facing);
-            case OUTER_BOTTOM ->
-                    right ? CCShapes.VERTICAL_STAIR_OUTER_BOTTOM_RIGHT.get(facing) : CCShapes.VERTICAL_STAIR_OUTER_BOTTOM_LEFT.get(facing);
-        };
+        Side side = state.getValue(SIDE);
+        VerticalStairShape shape = state.getValue(SHAPE);
+        return CCShapes.VERTICAL_STAIR.get(facing).get(side).get(shape).toShape();
     }
 
     @Override

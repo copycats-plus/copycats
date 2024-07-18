@@ -8,5 +8,6 @@ public class CopycatsClientImpl implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CopycatsClient.init();
+        CCKeysImpl.register();
     }
 }

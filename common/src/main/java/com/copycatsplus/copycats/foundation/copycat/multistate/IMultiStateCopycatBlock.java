@@ -1,12 +1,18 @@
 package com.copycatsplus.copycats.foundation.copycat.multistate;
 
+import com.copycatsplus.copycats.CCKeys;
+import com.copycatsplus.copycats.compat.AthenaCompat;
+import com.copycatsplus.copycats.compat.Mods;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.foundation.copycat.StateType;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.network.CCPackets;
+import com.copycatsplus.copycats.network.FillCopycatPacket;
 import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.AllKeys;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.block.IBE;
@@ -204,6 +210,17 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
 
         MaterialItemStorage.MaterialItem material = copycatBE.getMaterialItemStorage().getMaterialItem(property);
         ItemStack consumedItem = material.consumedItem();
+        if (!consumedItem.isEmpty()) {
+            for (String prop : copycatBE.getMaterialItemStorage().getAllProperties()) {
+                if (prop.equals(property)) continue;
+                MaterialItemStorage.MaterialItem materialItem = copycatBE.getMaterialItemStorage().getMaterialItem(prop);
+                if (materialItem.material().getBlock().equals(material.material().getBlock()) && materialItem.consumedItem().isEmpty()) {
+                    copycatBE.setConsumedItem(prop, consumedItem);
+                    consumedItem = ItemStack.EMPTY;
+                    break;
+                }
+            }
+        }
 
         if (!copycatBE.getMaterialItemStorage().hasCustomMaterial(property))
             return InteractionResult.PASS;
@@ -261,11 +278,20 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         }
         if (copycatBE.getMaterialItemStorage().hasCustomMaterial(property))
             return InteractionResult.PASS;
-        if (level.isClientSide())
+
+        if (level.isClientSide()) {
+            if (CCKeys.FILL_COPYCAT.isPressed()) {
+                fillEmptyParts(level, pos, state, material);
+                CCPackets.PACKETS.send(new FillCopycatPacket(pos, material, property));
+            }
             return InteractionResult.SUCCESS;
+        }
+
+        boolean freeToApply = copycatBE.getMaterialItemStorage().getAllConsumedItems().stream().anyMatch(s -> s.getItem() == itemInHand.getItem());
 
         copycatBE.setMaterial(property, material);
-        copycatBE.setConsumedItem(property, itemInHand);
+        if (!freeToApply)
+            copycatBE.setConsumedItem(property, itemInHand);
         copycatBE.getLevel()
                 .playSound(null, copycatBE.getBlockPos(), material.getSoundType()
                         .getPlaceSound(), SoundSource.BLOCKS, 1, .75f);
@@ -273,7 +299,8 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         if (player.isCreative())
             return InteractionResult.SUCCESS;
 
-        itemInHand.shrink(1);
+        if (!freeToApply)
+            itemInHand.shrink(1);
         if (itemInHand.isEmpty())
             player.setItemInHand(hand, ItemStack.EMPTY);
         return InteractionResult.SUCCESS;
@@ -311,6 +338,9 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         }
     }
 
+    /**
+     * Implementation note: must be called before super.remove
+     */
     @Override
     default void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.hasBlockEntity() || state.getBlock() == newState.getBlock())
@@ -332,6 +362,16 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         }
     }
 
+    default void fillEmptyParts(Level level, BlockPos pos, BlockState state, BlockState material) {
+        IMultiStateCopycatBlockEntity copycatBE = getCopycatBlockEntity(level, pos);
+        if (copycatBE == null) return;
+        for (String property : copycatBE.getMaterialItemStorage().getAllProperties()) {
+            if (copycatBE.getMaterialItemStorage().hasCustomMaterial(property)) continue;
+            if (!partExists(state, property)) continue;
+            copycatBE.setMaterial(property, material);
+        }
+    }
+
     @Nullable
     static VoxelShape blockShapeOverride(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         if (pLevel instanceof ScaledBlockAndTintGetter) {
@@ -343,16 +383,17 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
     static BlockState getAppearance(IMultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
                                     BlockState queryState, BlockPos queryPos) {
         String property;
-        if (level instanceof ScaledBlockAndTintGetter scaledLevel) {
+        BlockAndTintGetter reader = Mods.ATHENA.runIfInstalled(() -> () -> AthenaCompat.unwrapAthenaGetter(level)).orElse(level);
+        if (reader instanceof ScaledBlockAndTintGetter scaledLevel) {
             property = scaledLevel.getPropertyForRender(state, pos);
         } else {
             property = block.defaultProperty();
         }
-        IMultiStateCopycatBlockEntity be = block.getCopycatBlockEntity(level, queryPos);
-        if (block.isIgnoredConnectivitySide(property, level, state, side, pos, queryPos))
+        IMultiStateCopycatBlockEntity be = block.getCopycatBlockEntity(reader, queryPos);
+        if (block.isIgnoredConnectivitySide(property, reader, state, side, pos, queryPos))
             return state;
 
-        BlockState material = IMultiStateCopycatBlock.getMaterial(level, pos, property);
+        BlockState material = IMultiStateCopycatBlock.getMaterial(reader, pos, property);
         return material.is(Blocks.AIR) ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
     }
 

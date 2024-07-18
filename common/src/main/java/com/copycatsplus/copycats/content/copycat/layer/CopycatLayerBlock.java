@@ -7,7 +7,6 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,11 +42,8 @@ import static net.minecraft.core.Direction.UP;
 @MethodsReturnNonnullByDefault
 public class CopycatLayerBlock extends CCWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
 
-
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
-
-    private static final VoxelShaper[] SHAPE_BY_LAYER = new VoxelShaper[]{CCShapes.EMPTY, CCShapes.LAYER_2PX, CCShapes.LAYER_4PX, CCShapes.LAYER_6PX, CCShapes.LAYER_8PX, CCShapes.LAYER_10PX, CCShapes.LAYER_12PX, CCShapes.LAYER_14PX, CCShapes.LAYER_16PX};
 
     public CopycatLayerBlock(Properties pProperties) {
         super(pProperties);
@@ -177,7 +173,7 @@ public class CopycatLayerBlock extends CCWaterloggedCopycatBlock implements ISpe
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+        return CCShapes.LAYER.get(pState.getValue(FACING)).get(pState.getValue(LAYERS)).toShape();
     }
 
 
@@ -192,11 +188,6 @@ public class CopycatLayerBlock extends CCWaterloggedCopycatBlock implements ISpe
                                      BlockState neighborState,
                                      Direction dir) {
         return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
-    }
-
-    @Override
-    public @NotNull VoxelShape getOcclusionShape(BlockState pState, BlockGetter level, BlockPos pos) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
     }
 
     @Override

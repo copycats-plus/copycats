@@ -24,8 +24,8 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatRenderContextFabric extends CopycatRenderContext.Base<List<MutableQuadView>, QuadEmitter> {
-    public CopycatRenderContextFabric(List<MutableQuadView> source, QuadEmitter destination) {
-        super(source, destination);
+    public CopycatRenderContextFabric(List<MutableQuadView> source, QuadEmitter destination, String key) {
+        super(source, destination, key); // todo: find a way to store the key in quads
     }
 
     static SpriteFinder spriteFinder = SpriteFinder.get(Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS));

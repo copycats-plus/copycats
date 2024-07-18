@@ -7,8 +7,6 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
-import com.copycatsplus.copycats.utility.shape.NoneVoxelShape;
-import com.copycatsplus.copycats.utility.shape.VoxelUtils;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -35,7 +33,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -162,65 +159,7 @@ public class CopycatSlopeBlock extends CCWaterloggedCopycatBlock implements ISta
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        Direction facing = pState.getValue(FACING);
-        boolean isBottom = pState.getValue(HALF) == Half.BOTTOM;
-        Vec3[] triangleVertices = switch (facing) {
-            case WEST -> new Vec3[]{
-                    new Vec3(0, (isBottom ? 0 : 1), 0),
-                    new Vec3(0, (isBottom ? 0 : 1), 0),
-                    new Vec3(1, (isBottom ? 0 : 1), 0),
-                    new Vec3(0, (isBottom ? 1 : 0), 0),
-                    new Vec3(0, (isBottom ? 0 : 1), 1),
-                    new Vec3(0, (isBottom ? 0 : 1), 1),
-                    new Vec3(1, (isBottom ? 0 : 1), 1),
-                    new Vec3(0, (isBottom ? 1 : 0), 1)
-            };
-            case EAST -> new Vec3[]{
-                    new Vec3(1, (isBottom ? 0 : 1), 1),
-                    new Vec3(1, (isBottom ? 0 : 1), 1),
-                    new Vec3(0, (isBottom ? 0 : 1), 1),
-                    new Vec3(1, (isBottom ? 1 : 0), 1),
-                    new Vec3(1, (isBottom ? 0 : 1), 0),
-                    new Vec3(1, (isBottom ? 0 : 1), 0),
-                    new Vec3(0, (isBottom ? 0 : 1), 0),
-                    new Vec3(1, (isBottom ? 1 : 0), 0)
-            };
-            case NORTH -> new Vec3[]{
-                    new Vec3(0, (isBottom ? 0 : 1), 0),
-                    new Vec3(0, (isBottom ? 0 : 1), 0),
-                    new Vec3(0, (isBottom ? 0 : 1), 1),
-                    new Vec3(0, (isBottom ? 1 : 0), 0),
-                    new Vec3(1, (isBottom ? 0 : 1), 0),
-                    new Vec3(1, (isBottom ? 0 : 1), 0),
-                    new Vec3(1, (isBottom ? 0 : 1), 1),
-                    new Vec3(1, (isBottom ? 1 : 0), 0)
-            };
-            case SOUTH -> new Vec3[]{
-                    new Vec3(1, (isBottom ? 0 : 1), 1),
-                    new Vec3(1, (isBottom ? 0 : 1), 1),
-                    new Vec3(1, (isBottom ? 0 : 1), 0),
-                    new Vec3(1, (isBottom ? 1 : 0), 1),
-                    new Vec3(0, (isBottom ? 0 : 1), 1),
-                    new Vec3(0, (isBottom ? 0 : 1), 1),
-                    new Vec3(0, (isBottom ? 0 : 1), 0),
-                    new Vec3(0, (isBottom ? 1 : 0), 1)
-            };
-            default -> throw new AssertionError("Direction shouldn't appear as this is a horizontal facing block only");
-        };
-
-        Vec3[] shape = VoxelUtils.create12Edges(triangleVertices);
-
-        //Accidentally made a corner version
-/*        new Vec3(0.0, (isBottom ? 0 : 1), -0.0),
-                new Vec3(0.0, (isBottom ? 0 : 1), -0.0),
-                new Vec3(0.0, (isBottom ? 0 : 1), -1),
-                new Vec3(1, (isBottom ? 1 : 0), 0),
-                new Vec3(1, (isBottom ? 0 : 1), -0.0),
-                new Vec3(1, (isBottom ? 0 : 1), -0.0),
-                new Vec3(1, (isBottom ? 0 : 1), -1),
-                new Vec3(1, (isBottom ? 1 : 0), 0)*/
-
-        return new NoneVoxelShape((isBottom ? CCShapes.SLOPE_BOTTOM.get(facing) : CCShapes.SLOPE_TOP.get(facing)), shape);
+        return CCShapes.SLOPE.get(pState.getValue(FACING)).get(pState.getValue(HALF)).toShape();
     }
 
 

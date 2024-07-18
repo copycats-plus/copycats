@@ -2,13 +2,11 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
 import com.copycatsplus.copycats.utility.InteractionUtils;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -129,6 +127,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
 
     @Override
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+        onWrenched(state, context);
         if (state.getValue(SLAB_TYPE) != SlabType.DOUBLE) return super.onSneakWrenched(state, context);
 
         Level world = context.getLevel();
@@ -139,11 +138,6 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
         if (world instanceof ServerLevel) {
             if (player != null) {
                 List<ItemStack> drops = Block.getDrops(defaultBlockState().setValue(SLAB_TYPE, property.equals(SlabType.BOTTOM.getSerializedName()) ? SlabType.BOTTOM : SlabType.TOP), (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand());
-                withBlockEntityDo(world, pos, ufte -> {
-                    drops.add(ufte.getMaterialItemStorage().getMaterialItem(property).consumedItem());
-                    ufte.setMaterial(property, AllBlocks.COPYCAT_BASE.getDefaultState());
-                    ufte.setConsumedItem(property, ItemStack.EMPTY);
-                });
                 if (!player.isCreative()) {
                     for (ItemStack drop : drops) {
                         player.getInventory().placeItemBackInInventory(drop);
@@ -246,9 +240,9 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
         if (type == SlabType.DOUBLE) {
             return Shapes.block();
         } else if (type == SlabType.BOTTOM) {
-            return CCShapes.CASING_8PX.get(axis);
+            return CCShapes.SLAB_BOTTOM.get(axis).toShape();
         } else {
-            return CCShapes.CASING_8PX_TOP.get(axis);
+            return CCShapes.SLAB_TOP.get(axis).toShape();
         }
     }
 

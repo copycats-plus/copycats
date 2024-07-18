@@ -26,16 +26,15 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.copycatsplus.copycats.CCBlockStateProperties.BASE_TYPE;
 import static com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock.BASE_TYPE_COUNT;
@@ -164,11 +163,11 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         }
     }
 
-    protected @NotNull List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data) {
+    protected @NotNull List<CopycatRenderContextForge.CopycatBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data) {
 
         prepareModelCore(state, rand, data);
 
-        List<CopycatRenderContextForge.CullingBakedQuad> allQuads = new ArrayList<>();
+        List<CopycatRenderContextForge.CopycatBakedQuad> allQuads = new ArrayList<>();
         Map<String, BlockState> materials = getMaterials(data);
         Map<String, OcclusionData> occlusionDataMap = getOcclusion(data);
         Map<String, IModelData> wrappedDataMap = getWrappedData(data);
@@ -202,22 +201,22 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                     continue;
             }
 
-            List<CopycatRenderContextForge.CullingBakedQuad> quads = new ArrayList<>();
+            List<CopycatRenderContextForge.CopycatBakedQuad> quads = new ArrayList<>();
             for (Direction side : Iterate.directions) {
                 List<BakedQuad> templateQuads = model.getQuads(wrappedState, side, rand, wrappedData);
                 for (BakedQuad templateQuad : templateQuads) {
-                    quads.add(new CopycatRenderContextForge.CullingBakedQuad(templateQuad, side));
+                    quads.add(new CopycatRenderContextForge.CopycatBakedQuad(templateQuad, side, entry.key()));
                 }
             }
             List<BakedQuad> templateQuads = model.getQuads(wrappedState, null, rand, wrappedData);
             for (BakedQuad templateQuad : templateQuads) {
-                quads.add(new CopycatRenderContextForge.CullingBakedQuad(templateQuad, null));
+                quads.add(new CopycatRenderContextForge.CopycatBakedQuad(templateQuad, null, entry.key()));
             }
 
-            List<CopycatRenderContextForge.CullingBakedQuad> croppedQuads = getCroppedQuads(entry, state, quads, material);
+            List<CopycatRenderContextForge.CopycatBakedQuad> croppedQuads = getCroppedQuads(entry, state, quads, material);
 
             CopycatModelForge.OcclusionData occlusionData = occlusionDataMap.get(entry.key());
-            for (CopycatRenderContextForge.CullingBakedQuad croppedQuad : croppedQuads) {
+            for (CopycatRenderContextForge.CopycatBakedQuad croppedQuad : croppedQuads) {
                 if (occlusionData != null && occlusionData.isOccluded(croppedQuad.cullFace))
                     continue;
 
@@ -230,21 +229,21 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
 
     @Override
     public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull Random rand, @NotNull IModelData data) {
-        List<CopycatRenderContextForge.CullingBakedQuad> templateQuads = renderSession.get().getQuads(state, rand, data);
+        List<CopycatRenderContextForge.CopycatBakedQuad> templateQuads = renderSession.get().getQuads(state, rand, data);
         List<BakedQuad> quads = new ArrayList<>();
-        for (CopycatRenderContextForge.CullingBakedQuad quad : templateQuads) {
+        for (CopycatRenderContextForge.CopycatBakedQuad quad : templateQuads) {
             if (side != quad.cullFace)
                 continue;
-            quads.add(new BakedQuad(quad.getVertices(), quad.getTintIndex(), quad.getDirection(), quad.getSprite(), quad.isShade()));
+            quads.add(quad.toBakedQuad());
         }
         return quads;
     }
 
-    private List<CopycatRenderContextForge.CullingBakedQuad> getCroppedQuads(CopycatModelCore.ModelEntry entry, BlockState state, List<CopycatRenderContextForge.CullingBakedQuad> templateQuads, BlockState material) {
+    private List<CopycatRenderContextForge.CopycatBakedQuad> getCroppedQuads(CopycatModelCore.ModelEntry entry, BlockState state, List<CopycatRenderContextForge.CopycatBakedQuad> templateQuads, BlockState material) {
         if (entry.part() == null)
             return templateQuads;
-        List<CopycatRenderContextForge.CullingBakedQuad> quads = new ArrayList<>();
-        CopycatRenderContextForge context = new CopycatRenderContextForge(templateQuads, quads);
+        List<CopycatRenderContextForge.CopycatBakedQuad> quads = new ArrayList<>();
+        CopycatRenderContextForge context = new CopycatRenderContextForge(templateQuads, quads, entry.key());
         entry.part().emitCopycatQuads(entry.key(), state, context, material);
         return quads;
     }
@@ -314,7 +313,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
 
     @FunctionalInterface
     public interface Renderer {
-        List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data);
+        List<CopycatRenderContextForge.CopycatBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data);
     }
 
     public static class RenderSession implements Renderer {
@@ -322,14 +321,14 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         private BlockState state = null;
         private Random rand = null;
         private IModelData data = null;
-        private List<CopycatRenderContextForge.CullingBakedQuad> result = null;
+        private List<CopycatRenderContextForge.CopycatBakedQuad> result = null;
 
         public RenderSession(Renderer renderer) {
             this.renderer = renderer;
         }
 
         @Override
-        public List<CopycatRenderContextForge.CullingBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data) {
+        public List<CopycatRenderContextForge.CopycatBakedQuad> getQuads(BlockState state, @NotNull Random rand, @NotNull IModelData data) {
             if (Objects.equals(this.state, state) && this.rand == rand && this.data == data && this.result != null) {
                 return result;
             }

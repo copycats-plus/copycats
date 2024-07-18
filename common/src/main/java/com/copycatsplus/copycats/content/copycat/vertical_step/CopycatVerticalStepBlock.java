@@ -160,7 +160,7 @@ public class CopycatVerticalStepBlock extends CCWaterloggedCopycatBlock implemen
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return CCShapes.CASING_8PX_VERTICAL.get(pState.getValue(FACING));
+        return CCShapes.VERTICAL_STEP.get(pState.getValue(FACING)).toShape();
     }
 
 

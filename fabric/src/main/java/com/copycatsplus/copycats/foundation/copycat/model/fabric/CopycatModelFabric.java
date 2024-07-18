@@ -180,7 +180,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                         quad.copyTo(emitter);
                         emitter.emit();
                     } else {
-                        MutableQuadView newQuad = new IntermediateMutableQuadView();
+                        MutableQuadView newQuad = IntermediateMutableQuadView.create();
                         quad.copyTo(newQuad);
                         quads.add(newQuad);
                     }
@@ -189,7 +189,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 ((FabricBakedModel) model).emitBlockQuads(renderWorld, material, pos, randomSupplier, context);
                 context.popTransform();
 
-                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);
+                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter, entry.key());
                 entry.part().emitCopycatQuads(entry.key(), state, copycatContext, material);
 
                 context.pushTransform(quad -> !occlusionData.isOccluded(quad.cullFace()));
@@ -214,7 +214,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
 
                 List<MutableQuadView> quads = new ArrayList<>();
                 context.pushTransform(quad -> {
-                    MutableQuadView newQuad = new IntermediateMutableQuadView();
+                    MutableQuadView newQuad = IntermediateMutableQuadView.create();
                     quad.copyTo(newQuad);
                     quads.add(newQuad);
                     return false;
@@ -222,7 +222,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 ((FabricBakedModel) model).emitBlockQuads(blockView, state, pos, randomSupplier, context);
                 context.popTransform();
 
-                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter);
+                CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter, entry.key());
                 entry.part().emitCopycatQuads(entry.key(), state, copycatContext, material);
 
                 context.meshConsumer().accept(meshBuilder.build());

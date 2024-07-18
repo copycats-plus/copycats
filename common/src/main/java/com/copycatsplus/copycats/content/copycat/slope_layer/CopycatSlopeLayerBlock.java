@@ -7,7 +7,6 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,29 +44,6 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
-
-    private static final VoxelShaper[] BOTTOM_SHAPE_BY_LAYER = new VoxelShaper[]{
-            CCShapes.EMPTY,
-            CCShapes.SLOPE_LAYER_BOTTOM_1,
-            CCShapes.SLOPE_LAYER_BOTTOM_2,
-            CCShapes.SLOPE_LAYER_BOTTOM_3,
-            CCShapes.SLOPE_LAYER_BOTTOM_4,
-            CCShapes.SLOPE_LAYER_BOTTOM_5,
-            CCShapes.SLOPE_LAYER_BOTTOM_6,
-            CCShapes.SLOPE_LAYER_BOTTOM_7,
-            CCShapes.LAYER_16PX
-    };
-    private static final VoxelShaper[] TOP_SHAPE_BY_LAYER = new VoxelShaper[]{
-            CCShapes.EMPTY,
-            CCShapes.SLOPE_LAYER_TOP_1,
-            CCShapes.SLOPE_LAYER_TOP_2,
-            CCShapes.SLOPE_LAYER_TOP_3,
-            CCShapes.SLOPE_LAYER_TOP_4,
-            CCShapes.SLOPE_LAYER_TOP_5,
-            CCShapes.SLOPE_LAYER_TOP_6,
-            CCShapes.SLOPE_LAYER_TOP_7,
-            CCShapes.LAYER_16PX
-    };
 
     public CopycatSlopeLayerBlock(Properties pProperties) {
         super(pProperties);
@@ -117,6 +93,8 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
         if (!itemstack.is(this.asItem())) return false;
         if (pState.getValue(LAYERS) == 8) return false;
         Half half = pState.getValue(HALF);
+        Direction facing = pState.getValue(FACING);
+        if (pUseContext.getClickedFace() == facing.getOpposite()) return true;
         if (half == Half.TOP && pUseContext.getClickedFace() == Direction.DOWN) return true;
         if (half == Half.BOTTOM && pUseContext.getClickedFace() == Direction.UP) return true;
         return false;
@@ -213,9 +191,7 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return pState.getValue(HALF) == Half.TOP
-                ? TOP_SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING))
-                : BOTTOM_SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+        return CCShapes.SLOPE_LAYER.get(pState.getValue(FACING)).get(pState.getValue(HALF)).get(pState.getValue(LAYERS)).toShape();
     }
 
 

@@ -1,449 +1,450 @@
 package com.copycatsplus.copycats;
 
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.copycatsplus.copycats.CCBlockStateProperties.Side;
+import com.copycatsplus.copycats.CCBlockStateProperties.VerticalStairShape;
+import com.copycatsplus.copycats.content.copycat.half_layer.CopycatHalfLayerBlock;
+import com.copycatsplus.copycats.content.copycat.half_panel.CopycatHalfPanelBlock;
+import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableAABB;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableVec3;
+import com.copycatsplus.copycats.utility.shape.OutlinedVoxelShape;
+import com.simibubi.create.foundation.utility.Pair;
+import com.tterrag.registrate.fabric.TriFunction;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.apache.commons.lang3.function.TriFunction;
-import org.apache.commons.lang3.mutable.MutableObject;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static net.minecraft.core.Direction.UP;
+import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 public class CCShapes {
-    public static final VoxelShaper CASING_1PX = shape(0, 15, 0, 16, 16, 16).forDirectional();
-    public static final VoxelShaper CASING_8PX = shape(0, 0, 0, 16, 8, 16).forAxis();
-    public static final VoxelShaper CASING_8PX_TOP = shape(0, 8, 0, 16, 16, 16).forAxis();
-    public static final VoxelShaper CASING_8PX_CENTERED = shape(4, 0, 4, 12, 16, 12).forAxis();
-    public static final VoxelShaper CASING_8PX_VERTICAL = shape(0, 0, 0, 8, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper EMPTY = shape(0.0, 0.0, 0.0, 0, 0, 0).forDirectional();
-    public static final VoxelShaper LAYER_2PX = shape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0).forDirectional();
-    public static final VoxelShaper LAYER_4PX = shape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0).forDirectional();
-    public static final VoxelShaper LAYER_6PX = shape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0).forDirectional();
-    public static final VoxelShaper LAYER_8PX = shape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0).forDirectional();
-    public static final VoxelShaper LAYER_10PX = shape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0).forDirectional();
-    public static final VoxelShaper LAYER_12PX = shape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0).forDirectional();
-    public static final VoxelShaper LAYER_14PX = shape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0).forDirectional();
-    public static final VoxelShaper LAYER_16PX = shape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0).forDirectional();
-    public static final VoxelShaper HALF_PANEL_NORTH = shape(0.0, 0.0, 0.0, 16.0, 3.0, 8.0).forOffsetDirectional(Direction.DOWN, Direction.NORTH);
-    public static final VoxelShaper HALF_PANEL_SOUTH = shape(0.0, 0.0, 8.0, 16.0, 3.0, 16.0).forOffsetDirectional(Direction.DOWN, Direction.SOUTH);
-    public static final VoxelShaper HALF_PANEL_EAST = shape(8.0, 0.0, 0.0, 16.0, 3.0, 16.0).forOffsetDirectional(Direction.DOWN, Direction.EAST);
-    public static final VoxelShaper HALF_PANEL_WEST = shape(0.0, 0.0, 0.0, 8.0, 3.0, 16.0).forOffsetDirectional(Direction.DOWN, Direction.WEST);
-    public static final VoxelShaper SLICE_BOTTOM_2PX = shape(0, 0, 14, 16, 2, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_BOTTOM_4PX = shape(0, 0, 12, 16, 4, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_BOTTOM_6PX = shape(0, 0, 10, 16, 6, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_BOTTOM_8PX = shape(0, 0, 8, 16, 8, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_BOTTOM_10PX = shape(0, 0, 6, 16, 10, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_BOTTOM_12PX = shape(0, 0, 4, 16, 12, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_BOTTOM_14PX = shape(0, 0, 2, 16, 14, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_BOTTOM_16PX = shape(0, 0, 0, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_2PX = shape(0, 14, 14, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_4PX = shape(0, 12, 12, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_6PX = shape(0, 10, 10, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_8PX = shape(0, 8, 8, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_10PX = shape(0, 6, 6, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_12PX = shape(0, 4, 4, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_14PX = shape(0, 2, 2, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_TOP_16PX = shape(0, 0, 0, 16, 16, 16).forHorizontal(Direction.SOUTH);
-    public static final VoxelShaper SLICE_VERTICAL_2PX = shape(0, 0, 0, 2, 16, 2).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper SLICE_VERTICAL_4PX = shape(0, 0, 0, 4, 16, 4).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper SLICE_VERTICAL_6PX = shape(0, 0, 0, 6, 16, 6).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper SLICE_VERTICAL_8PX = shape(0, 0, 0, 8, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper SLICE_VERTICAL_10PX = shape(0, 0, 0, 10, 16, 10).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper SLICE_VERTICAL_12PX = shape(0, 0, 0, 12, 16, 12).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper SLICE_VERTICAL_14PX = shape(0, 0, 0, 14, 16, 14).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper SLICE_VERTICAL_16PX = shape(0, 0, 0, 16, 16, 16).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_2PX = shape(0, 0, 0, 16, 2, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_4PX = shape(0, 0, 0, 16, 4, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_6PX = shape(0, 0, 0, 16, 6, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_8PX = shape(0, 0, 0, 16, 8, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_10PX = shape(0, 0, 0, 16, 10, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_12PX = shape(0, 0, 0, 16, 12, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_14PX = shape(0, 0, 0, 16, 14, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_BOTTOM_16PX = shape(0, 0, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_2PX = shape(0, 14, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_4PX = shape(0, 12, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_6PX = shape(0, 10, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_8PX = shape(0, 8, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_10PX = shape(0, 6, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_12PX = shape(0, 4, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_14PX = shape(0, 2, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper HALF_LAYER_TOP_16PX = shape(0, 0, 0, 16, 16, 8).forHorizontal(Direction.NORTH);
-    public static final VoxelShaper LADDER_RAILS = shape(Shapes.empty()).build((voxelShape, direction) -> {
-        VoxelShape shape = Shapes.empty();
-        shape = Shapes.join(shape, Shapes.box(0.125, 0, 0, 0.25, 1, 0.0625), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.75, 0, 0, 0.875, 1, 0.0625), BooleanOp.OR);
-        return shape(shape).forDirectional(Direction.SOUTH);
-    }, Direction.SOUTH);
-    public static final VoxelShaper LADDER_STEPS = shape(Shapes.empty()).build((voxelShape, direction) -> {
-        VoxelShape shape = Shapes.empty();
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.0625, 0.00625, 0.9375, 0.1875, 0.05624999999999999), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.3125, 0.00625, 0.9375, 0.4375, 0.05624999999999999), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.5625, 0.00625, 0.9375, 0.6875, 0.05624999999999999), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.8125, 0.00625, 0.9375, 0.9375, 0.05624999999999999), BooleanOp.OR);
-        return shape(shape).forDirectional(Direction.SOUTH);
-    }, Direction.SOUTH);
 
-    public static final VoxelShaper LADDER_BOTH = shape(Shapes.empty()).build((voxelShape, direction) -> {
-        VoxelShape shape = Shapes.empty();
-        shape = Shapes.join(shape, Shapes.box(0.125, 0, 0, 0.25, 1, 0.0625), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.75, 0, 0, 0.875, 1, 0.0625), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.0625, 0.00625, 0.9375, 0.1875, 0.05624999999999999), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.3125, 0.00625, 0.9375, 0.4375, 0.05624999999999999), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.5625, 0.00625, 0.9375, 0.6875, 0.05624999999999999), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.0625, 0.8125, 0.00625, 0.9375, 0.9375, 0.05624999999999999), BooleanOp.OR);
-        return shape(shape).forDirectional(Direction.SOUTH);
-    }, Direction.SOUTH);
-    public static final VoxelShaper VERTICAL_STAIR_STRAIGHT_LEFT = shape(0, 0, 0, 16, 16, 8)
-            .add(0, 0, 8, 8, 16, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_STRAIGHT_RIGHT = shape(0, 0, 0, 16, 16, 8)
-            .add(8, 0, 8, 16, 16, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_OUTER_TOP_LEFT = shape(0, 0, 0, 16, 16, 8)
-            .add(0, 8, 8, 8, 16, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_OUTER_TOP_RIGHT = shape(0, 0, 0, 16, 16, 8)
-            .add(8, 8, 8, 16, 16, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_OUTER_BOTTOM_LEFT = shape(0, 0, 0, 16, 16, 8)
-            .add(0, 0, 8, 8, 8, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_OUTER_BOTTOM_RIGHT = shape(0, 0, 0, 16, 16, 8)
-            .add(8, 0, 8, 16, 8, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_INNER_TOP_LEFT = shape(0, 0, 0, 16, 16, 8)
-            .add(8, 8, 8, 16, 16, 16)
-            .add(0, 0, 8, 8, 16, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_INNER_TOP_RIGHT = shape(0, 0, 0, 16, 16, 8)
-            .add(0, 8, 8, 8, 16, 16)
-            .add(8, 0, 8, 16, 16, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_INNER_BOTTOM_LEFT = shape(0, 0, 0, 16, 16, 8)
-            .add(8, 0, 8, 16, 8, 16)
-            .add(0, 0, 8, 8, 16, 16)
-            .forDirectional(Direction.NORTH);
-    public static final VoxelShaper VERTICAL_STAIR_INNER_BOTTOM_RIGHT = shape(0, 0, 0, 16, 16, 8)
-            .add(0, 0, 8, 8, 8, 16)
-            .add(8, 0, 8, 16, 16, 16)
-            .forDirectional(Direction.NORTH);
+    public static final Map<Direction, MutableShape> BOARD =
+            forDirections(shape(aabb(16, 16, 1).move(0, 0, 15)));
+    public static final Map<Axis, MutableShape> SLAB_BOTTOM =
+            forAxes(shape(aabb(16, 16, 8)));
+    public static final Map<Axis, MutableShape> SLAB_TOP =
+            forAxes(shape(aabb(16, 16, 8).move(0, 0, 8)));
+    public static final Map<Axis, MutableShape> BEAM =
+            forAxes(shape(aabb(8, 8, 16).move(4, 4, 0)));
+    public static final Map<Direction, MutableShape> VERTICAL_STEP =
+            forHorizontalDirections(shape(aabb(8, 16, 8).move(8, 0, 8)));
+    public static final Map<Direction, Map<Integer, MutableShape>> LAYER =
+            forDirections(forAll(LAYERS,
+                    layer -> shape(
+                            aabb(16, 16, layer * 2)
+                    )
+            ));
+    public static final Map<Direction, Map<Direction, MutableShape>> HALF_PANEL =
+            forAll(CopycatHalfPanelBlock.FACING, CopycatHalfPanelBlock.OFFSET,
+                    (direction, offset) -> {
+                        MutableShape shape = shape(
+                                aabb(16, 8, 3).move(0, 8, 13)
+                        ).rotateZ((int) -offset.toYRot());
+                        directions(direction).apply(shape);
+                        // todo: clean up this cryptic mess
+                        if (direction.getAxis() == Axis.X) {
+                            shape.rotateX(-90).flipY(direction == Direction.WEST);
+                        }
+                        if (direction == Direction.NORTH) {
+                            shape.flipX(true);
+                        }
+                        if (direction == Direction.UP) {
+                            shape.flipZ(true);
+                        }
+                        return shape;
+                    }
+            );
+    public static final Map<Direction, Map<Half, Map<Integer, MutableShape>>> SLICE =
+            forHorizontalDirections(forHalves(forAll(LAYERS,
+                    layer -> shape(
+                            aabb(16, layer * 2, layer * 2).move(0, 0, 16 - layer * 2)
+                    )
+            )));
+    public static final Map<Direction, Map<Integer, MutableShape>> VERTICAL_SLICE =
+            forHorizontalDirections(forAll(LAYERS,
+                    layer -> shape(
+                            aabb(layer * 2, 16, layer * 2).move(16 - layer * 2, 0, 16 - layer * 2)
+                    )
+            ));
+    public static final Map<Axis, Map<Integer, MutableShape>> HALF_LAYER_BOTTOM =
+            forHorizontalAxes(forAll(CopycatHalfLayerBlock.NEGATIVE_LAYERS,
+                    layer -> shape(
+                            aabb(16, layer * 2, 8)
+                    )
+            ));
+    public static final Map<Axis, Map<Integer, MutableShape>> HALF_LAYER_TOP =
+            forHorizontalAxes(forAll(CopycatHalfLayerBlock.POSITIVE_LAYERS,
+                    layer -> shape(
+                            aabb(16, layer * 2, 8).move(0, 0, 8)
+                    )
+            ));
+    public static final Map<Direction, Map<Side, Map<VerticalStairShape, MutableShape>>> VERTICAL_STAIR =
+            forHorizontalDirections(forAll(CopycatVerticalStairBlock.SIDE, CopycatVerticalStairBlock.SHAPE,
+                    (side, shape) ->
+                            (switch (shape) {
+                                case STRAIGHT -> shape(
+                                        aabb(16, 16, 8).move(0, 0, 8),
+                                        aabb(8, 16, 8).move(8, 0, 0)
+                                );
+                                case OUTER_TOP, OUTER_BOTTOM -> shape(
+                                        aabb(16, 16, 8).move(0, 0, 8),
+                                        aabb(8, 8, 8).move(8, 0, 0)
+                                ).flipY(shape == VerticalStairShape.OUTER_TOP);
+                                case INNER_TOP, INNER_BOTTOM -> shape(
+                                        aabb(16, 16, 8).move(0, 0, 8),
+                                        aabb(8, 16, 8).move(8, 0, 0),
+                                        aabb(8, 8, 8)
+                                ).flipY(shape == VerticalStairShape.INNER_TOP);
+                            })
+                                    .flipX(side == Side.RIGHT)
+            ));
     private static final int SLOPE_SUBDIVISIONS = 16;
-    public static final VoxelShaper SLOPE_BOTTOM = shape(Shapes.empty()).build((voxelShape, direction) -> {
-        VoxelShape shape = Shapes.empty();
-        for (int i = 0; i < SLOPE_SUBDIVISIONS - 1; i++) {
-            shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 0, 0, 1, 1 - 1d / SLOPE_SUBDIVISIONS * (i + 1), 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
+    public static final Map<Direction, Map<Half, MutableShape>> SLOPE =
+            forHorizontalDirections(forHalves(shape(
+                    IntStream.range(0, SLOPE_SUBDIVISIONS)
+                            .mapToObj(i -> aabb(16, i + 1, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                            .toArray(MutableAABB[]::new)
+            ).outline(
+                    line(vec3(0, 0, 0), vec3(16, 0, 0)),
+                    line(vec3(0, 0, 16), vec3(16, 0, 16)),
+                    line(vec3(0, 0, 0), vec3(0, 0, 16)),
+                    line(vec3(16, 0, 0), vec3(16, 0, 16)),
+                    line(vec3(0, 0, 16), vec3(0, 16, 16)),
+                    line(vec3(16, 0, 16), vec3(16, 16, 16)),
+                    line(vec3(0, 16, 16), vec3(16, 16, 16)),
+                    line(vec3(0, 0, 0), vec3(0, 16, 16)),
+                    line(vec3(16, 0, 0), vec3(16, 16, 16))
+            )));
+    public static final Map<Direction, MutableShape> VERTICAL_SLOPE =
+            forHorizontalDirections(shape(
+                    IntStream.range(0, SLOPE_SUBDIVISIONS)
+                            .mapToObj(i -> aabb(i + 1, 16, 16.0 / SLOPE_SUBDIVISIONS).move(15 - i, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                            .toArray(MutableAABB[]::new)
+            ).outline(
+                    line(vec3(0, 0, 16), vec3(16, 0, 16)),
+                    line(vec3(0, 0, 16), vec3(0, 16, 16)),
+                    line(vec3(16, 0, 16), vec3(16, 16, 16)),
+                    line(vec3(0, 16, 16), vec3(16, 16, 16)),
+                    line(vec3(16, 0, 0), vec3(16, 0, 16)),
+                    line(vec3(16, 16, 0), vec3(16, 16, 16)),
+                    line(vec3(16, 0, 0), vec3(16, 16, 0)),
+                    line(vec3(16, 0, 0), vec3(0, 0, 16)),
+                    line(vec3(16, 16, 0), vec3(0, 16, 16))
+            ));
+    public static final Map<Direction, Map<Half, Map<Integer, MutableShape>>> SLOPE_LAYER =
+            forHorizontalDirections(forHalves(forAll(LAYERS,
+                    layer -> layer <= 4 ?
+                            shape(
+                                    IntStream.range(0, SLOPE_SUBDIVISIONS)
+                                            .mapToObj(i -> aabb(16, (i + 1) * layer / 4.0, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                                            .toArray(MutableAABB[]::new)
+                            ).outline(
+                                    line(vec3(0, 0, 0), vec3(16, 0, 0)),
+                                    line(vec3(0, 0, 16), vec3(16, 0, 16)),
+                                    line(vec3(0, 0, 0), vec3(0, 0, 16)),
+                                    line(vec3(16, 0, 0), vec3(16, 0, 16)),
+                                    line(vec3(0, 0, 16), vec3(0, 4 * layer, 16)),
+                                    line(vec3(16, 0, 16), vec3(16, 4 * layer, 16)),
+                                    line(vec3(0, 4 * layer, 16), vec3(16, 4 * layer, 16)),
+                                    line(vec3(0, 0, 0), vec3(0, 4 * layer, 16)),
+                                    line(vec3(16, 0, 0), vec3(16, 4 * layer, 16))
+                            ) :
+                            shape(
+                                    IntStream.range(0, SLOPE_SUBDIVISIONS)
+                                            .mapToObj(i -> aabb(16, 16 * (layer - 4) / 4.0 + (i + 1) * (1 - (layer - 4) / 4.0), 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                                            .toArray(MutableAABB[]::new)
+                            ).outline(
+                                    line(vec3(0, 0, 0), vec3(16, 0, 0)),
+                                    line(vec3(0, 0, 16), vec3(16, 0, 16)),
+                                    line(vec3(0, 0, 0), vec3(0, 0, 16)),
+                                    line(vec3(16, 0, 0), vec3(16, 0, 16)),
+                                    line(vec3(0, 0, 0), vec3(0, (layer - 4) * 4, 0)),
+                                    line(vec3(16, 0, 0), vec3(16, (layer - 4) * 4, 0)),
+                                    line(vec3(0, 0, 16), vec3(0, 16, 16)),
+                                    line(vec3(16, 0, 16), vec3(16, 16, 16)),
+                                    line(vec3(0, 16, 16), vec3(16, 16, 16)),
+                                    line(vec3(0, (layer - 4) * 4, 0), vec3(16, (layer - 4) * 4, 0)),
+                                    line(vec3(0, (layer - 4) * 4, 0), vec3(0, 16, 16)),
+                                    line(vec3(16, (layer - 4) * 4, 0), vec3(16, 16, 16))
+                            )
+            )));
+
+    public static AssemblyTransform halves(Half half) {
+        return t -> t.flipY(half == Half.TOP);
+    }
+
+    public static AssemblyTransform axes(Axis axis) {
+        if (axis == Axis.Z)
+            return AssemblyTransform.IDENTITY;
+        else if (axis == Axis.Y)
+            return t -> t.rotateX(90);
+        else
+            return t -> t.rotateY(-90);
+    }
+
+    public static AssemblyTransform directions(Direction direction) {
+        if (direction.getAxis().isHorizontal())
+            return t -> t.rotateY((int) direction.toYRot());
+        else if (direction == Direction.UP)
+            return t -> t.rotateX(90);
+        else if (direction == Direction.DOWN)
+            return t -> t.rotateX(-90);
+        else
+            return AssemblyTransform.IDENTITY;
+    }
+
+    private static <T, U> Map<T, U> applyTransform(Map<T, U> source, AssemblyTransform transform) {
+        Map<T, U> copy = new HashMap<>();
+        for (Map.Entry<T, U> entry : source.entrySet()) {
+            copy.put(entry.getKey(), applyTransform(entry.getValue(), transform));
         }
-        shape = shape.optimize();
-        return shape(shape).forDirectional(Direction.NORTH);
-    }, Direction.SOUTH);
-    public static final VoxelShaper SLOPE_TOP = shape(Shapes.empty()).build((voxelShape, direction) -> {
-        VoxelShape shape = Shapes.empty();
-        for (int i = 0; i < SLOPE_SUBDIVISIONS - 1; i++) {
-            shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 1d / SLOPE_SUBDIVISIONS * (i + 1), 0, 1, 1, 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
+        return copy;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <U> U applyTransform(U source, AssemblyTransform transform) {
+        if (source instanceof MutableShape shape) {
+            MutableShape copy = shape.copy();
+            transform.apply(copy);
+            return (U) copy;
+        } else if (source instanceof Map<?, ?> map) {
+            return (U) applyTransform(map, transform);
+        } else {
+            throw new RuntimeException("Unsupported type: " + source.getClass().getName());
         }
-        shape = shape.optimize();
-        return shape(shape).forDirectional(Direction.NORTH);
-    }, Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LEFT = shape(Shapes.empty()).build((voxelShape, direction) -> {
-        VoxelShape shape = Shapes.empty();
-        for (int i = 0; i < SLOPE_SUBDIVISIONS - 1; i++) {
-            shape = Shapes.joinUnoptimized(shape, Shapes.box(1 - 1d / SLOPE_SUBDIVISIONS * (i + 1), 0, 1d / SLOPE_SUBDIVISIONS * (i + 1), 1, 1, 1d / SLOPE_SUBDIVISIONS * (i + 2)), BooleanOp.OR);
+    }
+
+    /**
+     * Create a map for all possible values of {@link Axis}. The input shape should be modeled for the Z axis.
+     */
+    public static <U> Map<Axis, U> forAxes(U factory) {
+        return forAll(AXIS, axis -> applyTransform(factory, axes(axis)));
+    }
+
+    /**
+     * Create a map for all possible horizontal values of {@link Axis}. The input shape should be modeled for the Z axis.
+     */
+    public static <U> Map<Axis, U> forHorizontalAxes(U factory) {
+        return forAll(HORIZONTAL_AXIS, axis -> applyTransform(factory, axes(axis)));
+    }
+
+    /**
+     * Create a map for all possible values of {@link Direction}. The input shape should be modeled for the SOUTH direction
+     */
+    public static <U> Map<Direction, U> forDirections(U factory) {
+        return forAll(FACING, direction -> applyTransform(factory, directions(direction)));
+    }
+
+    /**
+     * Create a map for all possible horizontal values of {@link Direction}. The input shape should be modeled for the SOUTH direction
+     */
+    public static <U> Map<Direction, U> forHorizontalDirections(U factory) {
+        return forAll(HORIZONTAL_FACING, direction -> applyTransform(factory, directions(direction)));
+    }
+
+    /**
+     * Create a map for all possible values of {@link Half}. The input shape should be modeled for the BOTTOM half.
+     */
+    public static <U> Map<Half, U> forHalves(U factory) {
+        return forAll(HALF, halves -> applyTransform(factory, halves(halves)));
+    }
+
+    /**
+     * Create a map for all possible values of a property.
+     */
+    public static <T extends Comparable<T>, U> Map<T, U> forAll(Property<T> property, Function<T, U> factory) {
+        return property.getPossibleValues().stream().collect(
+                Collectors.toMap(
+                        Function.identity(),
+                        factory
+                )
+        );
+    }
+
+    /**
+     * Create a map of maps for all possible combinations of two properties.
+     */
+    public static <T1 extends Comparable<T1>, T2 extends Comparable<T2>, U> Map<T1, Map<T2, U>> forAll(Property<T1> property1,
+                                                                                                       Property<T2> property2,
+                                                                                                       BiFunction<T1, T2, U> factory) {
+        return property1.getPossibleValues().stream().collect(
+                Collectors.toMap(
+                        Function.identity(),
+                        t1 -> forAll(property2, t2 -> factory.apply(t1, t2))
+                )
+        );
+    }
+
+    /**
+     * Create a map of maps for all possible combinations of three properties.
+     */
+    public static <T1 extends Comparable<T1>, T2 extends Comparable<T2>, T3 extends Comparable<T3>, U> Map<T1, Map<T2, Map<T3, U>>> forAll(Property<T1> property1,
+                                                                                                                                           Property<T2> property2,
+                                                                                                                                           Property<T3> property3,
+                                                                                                                                           TriFunction<T1, T2, T3, U> factory) {
+        return property1.getPossibleValues().stream().collect(
+                Collectors.toMap(
+                        Function.identity(),
+                        t1 -> forAll(property2, property3, (t2, t3) -> factory.apply(t1, t2, t3))
+                )
+        );
+    }
+
+    /**
+     * Create a mutable shape consisting of multiple {@link MutableAABB}s.
+     */
+    public static MutableShape shape(MutableAABB... boxes) {
+        List<MutableAABB> newBoxes = new LinkedList<>();
+        Collections.addAll(newBoxes, boxes);
+        return new MutableShape(newBoxes, new ArrayList<>());
+    }
+
+    /**
+     * Create a mutable line consisting of two {@link MutableVec3}s.
+     */
+    public static Pair<MutableVec3, MutableVec3> line(MutableVec3 start, MutableVec3 end) {
+        return Pair.of(start, end);
+    }
+
+    public static class MutableShape implements AssemblyTransform.Transformable<MutableShape> {
+        public List<MutableAABB> boxes;
+        public List<Pair<MutableVec3, MutableVec3>> outlines;
+
+        private VoxelShape output = null;
+
+        public MutableShape(List<MutableAABB> boxes, List<Pair<MutableVec3, MutableVec3>> outlines) {
+            this.boxes = boxes;
+            this.outlines = outlines;
         }
-        shape = shape.optimize();
-        return shape(shape).forDirectional(Direction.SOUTH);
-    }, Direction.SOUTH);
 
-    private static BiFunction<VoxelShape, Direction, VoxelShaper> slopeLayerBottom(double minHeight, double maxHeight) {
-        return (voxelShape, direction) -> {
-            VoxelShape shape = Shapes.empty();
-            for (int i = 0; i < SLOPE_SUBDIVISIONS; i++) {
-                shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 0, 1d / SLOPE_SUBDIVISIONS * i, 1, minHeight + (maxHeight - minHeight) / SLOPE_SUBDIVISIONS * i, 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
-            }
-            shape = shape.optimize();
-            return shape(shape).forDirectional(Direction.SOUTH);
-        };
-    }
-
-    public static final VoxelShaper SLOPE_LAYER_BOTTOM_1 = shape(Shapes.empty()).build(slopeLayerBottom(0, 4 / 16d), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_BOTTOM_2 = shape(Shapes.empty()).build(slopeLayerBottom(0, 8 / 16d), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_BOTTOM_3 = shape(Shapes.empty()).build(slopeLayerBottom(0, 12 / 16d), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_BOTTOM_4 = shape(Shapes.empty()).build(slopeLayerBottom(0, 1), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_BOTTOM_5 = shape(Shapes.empty()).build(slopeLayerBottom(4 / 16d, 1), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_BOTTOM_6 = shape(Shapes.empty()).build(slopeLayerBottom(8 / 16d, 1), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_BOTTOM_7 = shape(Shapes.empty()).build(slopeLayerBottom(12 / 16d, 1), Direction.SOUTH);
-
-    private static BiFunction<VoxelShape, Direction, VoxelShaper> slopeLayerTop(double minHeight, double maxHeight) {
-        return (voxelShape, direction) -> {
-            VoxelShape shape = Shapes.empty();
-            for (int i = 0; i < SLOPE_SUBDIVISIONS; i++) {
-                shape = Shapes.joinUnoptimized(shape, Shapes.box(0, 1d - minHeight - (maxHeight - minHeight) / SLOPE_SUBDIVISIONS * i, 1d / SLOPE_SUBDIVISIONS * i, 1, 1, 1d / SLOPE_SUBDIVISIONS * (i + 1)), BooleanOp.OR);
-            }
-            shape = shape.optimize();
-            return shape(shape).forDirectional(Direction.SOUTH);
-        };
-    }
-
-    public static final VoxelShaper SLOPE_LAYER_TOP_1 = shape(Shapes.empty()).build(slopeLayerTop(0, 4 / 16d), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_TOP_2 = shape(Shapes.empty()).build(slopeLayerTop(0, 8 / 16d), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_TOP_3 = shape(Shapes.empty()).build(slopeLayerTop(0, 12 / 16d), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_TOP_4 = shape(Shapes.empty()).build(slopeLayerTop(0, 1), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_TOP_5 = shape(Shapes.empty()).build(slopeLayerTop(4 / 16d, 1), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_TOP_6 = shape(Shapes.empty()).build(slopeLayerTop(8 / 16d, 1), Direction.SOUTH);
-    public static final VoxelShaper SLOPE_LAYER_TOP_7 = shape(Shapes.empty()).build(slopeLayerTop(12 / 16d, 1), Direction.SOUTH);
-
-
-    private static Builder shape(VoxelShape shape) {
-        return new Builder(shape);
-    }
-
-    private static Builder shape(double x1, double y1, double z1, double x2, double y2, double z2) {
-        return shape(cuboid(x1, y1, z1, x2, y2, z2));
-    }
-
-    private static VoxelShape cuboid(double x1, double y1, double z1, double x2, double y2, double z2) {
-        return Block.box(x1, y1, z1, x2, y2, z2);
-    }
-
-    public static class Builder {
-
-        private VoxelShape shape;
-
-        public Builder(VoxelShape shape) {
-            this.shape = shape;
+        public MutableShape() {
+            this.boxes = new LinkedList<>();
+            this.outlines = new LinkedList<>();
         }
 
-        public Builder add(VoxelShape shape) {
-            this.shape = Shapes.or(this.shape, shape);
+        @SafeVarargs
+        public final MutableShape outline(Pair<MutableVec3, MutableVec3>... lines) {
+            Collections.addAll(outlines, lines);
             return this;
         }
 
-        public Builder add(double x1, double y1, double z1, double x2, double y2, double z2) {
-            return add(cuboid(x1, y1, z1, x2, y2, z2));
-        }
-
-        public Builder erase(double x1, double y1, double z1, double x2, double y2, double z2) {
-            this.shape = Shapes.join(shape, cuboid(x1, y1, z1, x2, y2, z2), BooleanOp.ONLY_FIRST);
-            return this;
-        }
-
-        public VoxelShape build() {
-            return shape;
-        }
-
-        public VoxelShaper build(BiFunction<VoxelShape, Direction, VoxelShaper> factory, Direction direction) {
-            return factory.apply(shape, direction);
-        }
-
-        public VoxelShaper build(TriFunction<VoxelShape, Direction, Direction, VoxelShaper> factory, Direction direction, Direction offset) {
-            return factory.apply(shape, direction, offset);
-        }
-
-        public VoxelShaper build(BiFunction<VoxelShape, Direction.Axis, VoxelShaper> factory, Direction.Axis axis) {
-            return factory.apply(shape, axis);
-        }
-
-        public VoxelShaper forDirectional(Direction direction) {
-            return build(VoxelShaper::forDirectional, direction);
-        }
-
-        public VoxelShaper forOffsetDirectional(Direction direction, Direction offset) {
-            return build(VoxelShaper::forOffsetDirectional, direction, offset);
-        }
-
-        public VoxelShaper forAxis() {
-            return build(VoxelShaper::forAxis, Direction.Axis.Y);
-        }
-
-        public VoxelShaper forHorizontalAxis() {
-            return build(VoxelShaper::forHorizontalAxis, Direction.Axis.Z);
-        }
-
-        public VoxelShaper forHorizontal(Direction direction) {
-            return build(VoxelShaper::forHorizontal, direction);
-        }
-
-        public VoxelShaper forDirectional() {
-            return forDirectional(UP);
-        }
-
-        public VoxelShaper forOffsetDirectional(Direction offset) {
-            return forOffsetDirectional(UP, offset);
-        }
-
-    }
-
-    public static class VoxelShaper extends com.simibubi.create.foundation.utility.VoxelShaper {
-
-        private Map<Direction, VoxelShape> shapes = new HashMap<>();
-
-        public VoxelShape get(Direction direction) {
-            return shapes.get(direction);
-        }
-
-        public VoxelShape get(Direction.Axis axis) {
-            return shapes.get(axisAsFace(axis));
-        }
-
-        public static VoxelShaper forVertical(VoxelShape shape, Direction facing) {
-            return forDirectionsWithRotation(shape, facing, Direction.Plane.VERTICAL, new VoxelShaper.DefaultRotationValues());
-        }
-
-        public static VoxelShaper forHorizontal(VoxelShape shape, Direction facing) {
-            return forDirectionsWithRotation(shape, facing, Direction.Plane.HORIZONTAL, new VoxelShaper.HorizontalRotationValues());
-        }
-
-        public static VoxelShaper forHorizontalAxis(VoxelShape shape, Direction.Axis along) {
-            return forDirectionsWithRotation(shape, axisAsFace(along), Arrays.asList(Direction.SOUTH, Direction.EAST),
-                    new VoxelShaper.HorizontalRotationValues());
-        }
-
-        public static VoxelShaper forDirectional(VoxelShape shape, Direction facing) {
-            return forDirectionsWithRotation(shape, facing, Arrays.asList(Iterate.directions), new VoxelShaper.DefaultRotationValues());
-        }
-
-        public static VoxelShaper forOffsetDirectional(VoxelShape shape, Direction facing, Direction offset) {
-            return forDirectionsWithRotation(shape, facing, Arrays.asList(Iterate.directions), new OffsetRotationValues(offset));
-        }
-
-        public static VoxelShaper forAxis(VoxelShape shape, Direction.Axis along) {
-            return forDirectionsWithRotation(shape, axisAsFace(along),
-                    Arrays.asList(Direction.SOUTH, Direction.EAST, Direction.UP), new VoxelShaper.DefaultRotationValues());
-        }
-
-        public VoxelShaper withVerticalShapes(VoxelShape upShape) {
-            shapes.put(Direction.UP, upShape);
-            shapes.put(Direction.DOWN, rotatedCopy(upShape, new Vec3(180, 0, 0)));
-            return this;
-        }
-
-        public VoxelShaper withShape(VoxelShape shape, Direction facing) {
-            shapes.put(facing, shape);
-            return this;
-        }
-
-        public static Direction axisAsFace(Direction.Axis axis) {
-            return Direction.get(Direction.AxisDirection.POSITIVE, axis);
-        }
-
-        protected static float horizontalAngleFromDirection(Direction direction) {
-            return (float) ((Math.max(direction.get2DDataValue(), 0) & 3) * 90);
-        }
-
-        protected static VoxelShaper forDirectionsWithRotation(VoxelShape shape, Direction facing,
-                                                               Iterable<Direction> directions, Function<Direction, Vec3> rotationValues) {
-            VoxelShaper voxelShaper = new VoxelShaper();
-            for (Direction dir : directions) {
-                voxelShaper.shapes.put(dir, rotate(shape, facing, dir, rotationValues));
-            }
-            return voxelShaper;
-        }
-
-        protected static VoxelShape rotate(VoxelShape shape, Direction from, Direction to,
-                                           Function<Direction, Vec3> usingValues) {
-            if (from == to)
-                return shape;
-
-            return rotatedCopy(shape, usingValues.apply(from)
-                    .reverse()
-                    .add(usingValues.apply(to)));
-        }
-
-        protected static VoxelShape rotatedCopy(VoxelShape shape, Vec3 rotation) {
-            if (rotation.equals(Vec3.ZERO))
-                return shape;
-
-            MutableObject<VoxelShape> result = new MutableObject<>(Shapes.empty());
-            Vec3 center = new Vec3(8, 8, 8);
-
-            shape.forAllBoxes((x1, y1, z1, x2, y2, z2) -> {
-                Vec3 v1 = new Vec3(x1, y1, z1).scale(16)
-                        .subtract(center);
-                Vec3 v2 = new Vec3(x2, y2, z2).scale(16)
-                        .subtract(center);
-
-                v1 = VecHelper.rotate(v1, (float) rotation.x, Direction.Axis.X);
-                v1 = VecHelper.rotate(v1, (float) rotation.y, Direction.Axis.Y);
-                v1 = VecHelper.rotate(v1, (float) rotation.z, Direction.Axis.Z)
-                        .add(center);
-
-                v2 = VecHelper.rotate(v2, (float) rotation.x, Direction.Axis.X);
-                v2 = VecHelper.rotate(v2, (float) rotation.y, Direction.Axis.Y);
-                v2 = VecHelper.rotate(v2, (float) rotation.z, Direction.Axis.Z)
-                        .add(center);
-
-                VoxelShape rotated = blockBox(v1, v2);
-                result.setValue(Shapes.or(result.getValue(), rotated));
-            });
-
-            return result.getValue();
-        }
-
-        protected static VoxelShape blockBox(Vec3 v1, Vec3 v2) {
-            return Block.box(
-                    Math.min(v1.x, v2.x),
-                    Math.min(v1.y, v2.y),
-                    Math.min(v1.z, v2.z),
-                    Math.max(v1.x, v2.x),
-                    Math.max(v1.y, v2.y),
-                    Math.max(v1.z, v2.z)
+        public MutableShape copy() {
+            return new MutableShape(
+                    boxes.stream().map(MutableAABB::copy).collect(Collectors.toList()),
+                    outlines.stream().map(p -> Pair.of(p.getFirst().copy(), p.getSecond().copy())).collect(Collectors.toList())
             );
         }
 
-        protected static class OffsetRotationValues implements Function<Direction, Vec3> {
-            private final Direction offset;
-
-            public OffsetRotationValues(Direction offset) {
-                this.offset = offset;
+        public VoxelShape toShape() {
+            if (output == null) {
+                VoxelShape shape = Shapes.empty();
+                for (MutableAABB box : boxes) {
+                    shape = Shapes.joinUnoptimized(shape, Shapes.box(
+                            Math.min(box.minX, box.maxX),
+                            Math.min(box.minY, box.maxY),
+                            Math.min(box.minZ, box.maxZ),
+                            Math.max(box.maxX, box.minX),
+                            Math.max(box.maxY, box.minY),
+                            Math.max(box.maxZ, box.minZ)
+                    ), BooleanOp.OR);
+                }
+                shape = shape.optimize();
+                if (!outlines.isEmpty()) {
+                    shape = new OutlinedVoxelShape(shape, outlines.stream().map(p -> Pair.of(p.getFirst().toVec3(), p.getSecond().toVec3())).collect(Collectors.toList()));
+                }
+                output = shape;
             }
-
-            // assume facing up as the default rotation
-            @Override
-            public Vec3 apply(Direction direction) {
-                boolean positive = direction.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-                if (direction.getAxis() != offset.getAxis())
-                    return switch (direction.getAxis()) {
-                        case X -> new Vec3(0, 0, positive ? -90 : 90);
-                        case Y -> offset.getAxis() == Direction.Axis.X
-                                ? new Vec3(0, positive ? 0 : 180, positive ? 0 : 180)
-                                : new Vec3(positive ? 0 : 180, positive ? 0 : 180, 0);
-                        case Z -> new Vec3(positive ? 90 : -90, 0, 0);
-                    };
-                else
-                    return switch (direction.getAxis()) {
-                        case X ->
-                                new Vec3(0, direction.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 180 : 0, positive ? -90 : 90);
-                        case Y -> new Vec3(positive ? 0 : 180, positive ? 0 : 180, 0);
-                        case Z ->
-                                new Vec3(positive ? -90 : 90, 0, direction.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 180 : 0);
-                    };
-            }
+            return output;
         }
 
-        protected static class DefaultRotationValues implements Function<Direction, Vec3> {
-            // assume facing up as the default rotation
-            @Override
-            public Vec3 apply(Direction direction) {
-                return new Vec3(direction == Direction.UP ? 0 : (Direction.Plane.VERTICAL.test(direction) ? 180 : 90),
-                        -horizontalAngleFromDirection(direction), 0);
+        @Override
+        public MutableShape rotateX(int angle) {
+            if (output != null) throw new IllegalStateException("Cannot modify a shape after it has been built");
+            for (MutableAABB box : boxes) {
+                box.rotateX(angle);
             }
+            for (Pair<MutableVec3, MutableVec3> outline : outlines) {
+                outline.getFirst().rotateX(angle);
+                outline.getSecond().rotateX(angle);
+            }
+            return this;
         }
 
-        protected static class HorizontalRotationValues implements Function<Direction, Vec3> {
-            @Override
-            public Vec3 apply(Direction direction) {
-                return new Vec3(0, -horizontalAngleFromDirection(direction), 0);
+        @Override
+        public MutableShape rotateY(int angle) {
+            if (output != null) throw new IllegalStateException("Cannot modify a shape after it has been built");
+            for (MutableAABB box : boxes) {
+                box.rotateY(angle);
             }
+            for (Pair<MutableVec3, MutableVec3> outline : outlines) {
+                outline.getFirst().rotateY(angle);
+                outline.getSecond().rotateY(angle);
+            }
+            return this;
         }
 
+        @Override
+        public MutableShape rotateZ(int angle) {
+            if (output != null) throw new IllegalStateException("Cannot modify a shape after it has been built");
+            for (MutableAABB box : boxes) {
+                box.rotateZ(angle);
+            }
+            for (Pair<MutableVec3, MutableVec3> outline : outlines) {
+                outline.getFirst().rotateZ(angle);
+                outline.getSecond().rotateZ(angle);
+            }
+            return this;
+        }
+
+        @Override
+        public MutableShape flipX(boolean flip) {
+            if (output != null) throw new IllegalStateException("Cannot modify a shape after it has been built");
+            for (MutableAABB box : boxes) {
+                box.flipX(flip);
+            }
+            for (Pair<MutableVec3, MutableVec3> outline : outlines) {
+                outline.getFirst().flipX(flip);
+                outline.getSecond().flipX(flip);
+            }
+            return this;
+        }
+
+        @Override
+        public MutableShape flipY(boolean flip) {
+            if (output != null) throw new IllegalStateException("Cannot modify a shape after it has been built");
+            for (MutableAABB box : boxes) {
+                box.flipY(flip);
+            }
+            for (Pair<MutableVec3, MutableVec3> outline : outlines) {
+                outline.getFirst().flipY(flip);
+                outline.getSecond().flipY(flip);
+            }
+            return this;
+        }
+
+        @Override
+        public MutableShape flipZ(boolean flip) {
+            if (output != null) throw new IllegalStateException("Cannot modify a shape after it has been built");
+            for (MutableAABB box : boxes) {
+                box.flipZ(flip);
+            }
+            for (Pair<MutableVec3, MutableVec3> outline : outlines) {
+                outline.getFirst().flipZ(flip);
+                outline.getSecond().flipZ(flip);
+            }
+            return this;
+        }
     }
 }

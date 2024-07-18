@@ -82,8 +82,8 @@ public class CopycatGlassFluidPipeBlock extends GlassFluidPipeBlock implements I
 
     @Override
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-        super.onRemove(state, world, pos, newState, isMoving);
         ICopycatBlock.super.onRemove(state, world, pos, newState, isMoving);
+        super.onRemove(state, world, pos, newState, isMoving);
     }
 
     @Override

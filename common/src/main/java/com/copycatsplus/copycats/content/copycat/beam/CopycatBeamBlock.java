@@ -129,7 +129,7 @@ public class CopycatBeamBlock extends CCWaterloggedCopycatBlock implements IStat
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return CCShapes.CASING_8PX_CENTERED.get(pState.getValue(AXIS));
+        return CCShapes.BEAM.get(pState.getValue(AXIS)).toShape();
     }
 
 

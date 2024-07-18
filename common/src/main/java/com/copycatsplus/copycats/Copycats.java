@@ -17,6 +17,10 @@ import org.slf4j.LoggerFactory;
 
 public class Copycats {
     public static final String MODID = "copycats";
+    /**
+     * For user-facing non-translatable display names
+     */
+    public static final String NAME = "Copycats";
     //Only used for the data fixers!!!
     public static final int DATA_FIXER_VERSION = 1;
     public static final Logger LOGGER = LoggerFactory.getLogger("Copycats+");

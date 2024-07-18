@@ -193,7 +193,7 @@ public class CopycatVerticalSlopeBlock extends CCWaterloggedCopycatBlock impleme
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return CCShapes.SLOPE_LEFT.get(pState.getValue(FACING));
+        return CCShapes.VERTICAL_SLOPE.get(pState.getValue(FACING)).toShape();
     }
 
 
