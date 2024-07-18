@@ -31,17 +31,19 @@ public class MutableQuad implements AssemblyTransform.Transformable<MutableQuad>
         };
     }
 
-    private static Axis longestAxis(double normalX, double normalY, double normalZ) {
+    private static final double EPSILON = 0.05;
+
+    public static Axis longestAxis(double normalX, double normalY, double normalZ) {
         Axis result = Axis.Y;
         double longest = Math.abs(normalY);
         double a = Math.abs(normalX);
 
-        if (a > longest) {
+        if (a > longest + EPSILON) {
             result = Axis.X;
             longest = a;
         }
 
-        return Math.abs(normalZ) > longest
+        return Math.abs(normalZ) > longest + EPSILON
                 ? Axis.Z : result;
     }
 

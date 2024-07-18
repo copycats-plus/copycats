@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.0 - 2024-07-18
+
+### Added
+
+- Copycat Door
+  - Allows different materials for top and bottom halves
+- Copycat Iron Trapdoor/Door
+  - Can only be opened with redstone
+- Copycat Fluid Pipe
+  - Can be wrenched to add a window
+  - Accepts transparent materials to display the fluid inside
+- Copycat Cogwheel/Large Cogwheel
+  - Allows different materials for the shaft and the gear
+- A new accessibility option to colorize multi-state copycats
+- Conversion recipes between horizontal and vertical copycats
+- A shortcut key (left alt by default) to fill all parts of a multi-state copycat with the held item
+
+### Changed
+
+- **Major internal rewrite**
+    - For developers, please refer to [the wiki](https://github.com/copycats-plus/copycats/wiki/v2.0-Refactor) for a summary of changes. Most code in the `foundation` package is also documented.
+- Optimized rendering on both platforms
+- Separated creative tabs for decorative and functional copycats
+- Re-ordered items in the creative tab for easy access
+- Reverted the shape of Copycat Ladder to match vanilla ladders
+- Reworked tooltips to be more concise and removed duplicate strings
+- Reworked multi-state copycats to no longer consume items when the same material is already present
+- Improved block outlines for Copycat Vertical Slope and Copycat Slope Layers
+
+### Fixed
+
+- Inconsistent connected textures on various copycats on Fabric and in 1.18.2
+- Inconsistent behavior of CT toggle across versions
+- Multi-state copycats not rotating properly until a block update is received
+- Face culling not working for all copycats
+- Transparent face hiding not working for multi-state copycats
+- Transparent face hiding not working between copycats of different types
+- Potentially buggy quad lighting on Forge
+- Buggy connected textures between two Copycat Slabs with different orientations
+- Placement helpers not rendering for various copycats
+- Incorrect/missing destroy particles in various copycats
+- Crash due to null pointer exception when migrating old copycats to multi-state copycats
+- Incompatibility with Athena's connected textures
+- Incompatibility with Indium on Fabric
+- Copycat Trapdoor not climbable when above a ladder
+- Various block interactions due to Copycat Slopes not having a full face on the back
+- Crash due to biomes not being accessible in a superflat world on Fabric
+- Buggy quad lighting on Copycat Slopes on Fabric
+
 ## 1.3.8 - 2024-06-28
 
 ### Fixed

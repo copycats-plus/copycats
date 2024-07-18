@@ -31,7 +31,8 @@ All the copycats you've ever wanted, combined into a single mod!
 - Copycat Stairs
 - Copycat Fence
 - Copycat Fence Gate
-- Copycat Trapdoor
+- Copycat Trapdoor/Iron Trapdoor
+- Copycat Door/Iron Door
 - Copycat Wall
 - Copycat Board
   - A 1-pixel thick panel. Multiple boards can be placed in the same block space like glow lichen.
@@ -52,6 +53,9 @@ All the copycats you've ever wanted, combined into a single mod!
 - Copycat Wooden/Stone Button
 - Copycat Wooden/Stone Pressure Plate
 - Copycat Light/Heavy Weighted Pressure Plate
+- Copycat Fluid Pipe
+- Copycat Shaft
+- Copycat Cogwheel/Large Cogwheel
 
 ## Download
 
