@@ -26,11 +26,11 @@ public class FluidPipeBlockMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z")
     )
     private boolean onWrenched(Level instance, BlockPos pos, BlockState state, Operation<Boolean> original) {
-/*        if (state.is(AllBlocks.GLASS_FLUID_PIPE.get()) && instance.getBlockState(pos).is(CCBlocks.COPYCAT_FLUID_PIPE.get())) {
+        if (state.is(AllBlocks.GLASS_FLUID_PIPE.get()) && instance.getBlockState(pos).is(CCBlocks.COPYCAT_FLUID_PIPE.get())) {
             return original.call(instance, pos, CCBlocks.COPYCAT_GLASS_FLUID_PIPE.getDefaultState()
                     .setValue(CopycatGlassFluidPipeBlock.AXIS, state.getValue(GlassFluidPipeBlock.AXIS))
                     .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED)));
-        }*/
+        }
         return original.call(instance, pos, state);
     }
 }
