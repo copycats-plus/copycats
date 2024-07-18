@@ -47,7 +47,7 @@ public class CCBuilderTransformersImpl {
 
     public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> copycatBase() {
         return b -> b.initialProperties(SharedProperties::softMetal)
-                .properties(p -> p.mapColor(MapColor.GLOW_LICHEN).noOcclusion())
+                .properties(p -> p.color(MaterialColor.GLOW_LICHEN).noOcclusion())
                 .addLayer(() -> RenderType::cutoutMipped)
                 .tag(AllTags.AllBlockTags.FAN_TRANSPARENT.tag)
                 .transform(pickaxeOnly());
