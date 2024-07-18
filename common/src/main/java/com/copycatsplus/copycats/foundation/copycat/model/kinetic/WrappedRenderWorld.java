@@ -157,10 +157,10 @@ public class WrappedRenderWorld implements VirtualEmptyBlockGetter {
     public int getBlockTint(@NotNull BlockPos pos, @NotNull ColorResolver resolver) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
         if (connection == null)
-            return GrassColor.getDefaultColor();
+            return GrassColor.get(0.5, 1);
         Biome plainsBiome = connection.registryAccess().registry(Registry.BIOME_REGISTRY).map(r -> r.get(Biomes.PLAINS)).orElse(null);
         if (plainsBiome == null)
-            return GrassColor.getDefaultColor();
+            return GrassColor.get(0.5, 1);
         return resolver.getColor(plainsBiome, pos.getX(), pos.getZ());
     }
 }
