@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.utility;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -38,6 +39,22 @@ public enum Platform {
         public void runIfCurrent(Supplier<Runnable> run) {
             if (isCurrent())
                 run.get().run();
+        }
+
+        @Nullable
+        public <T> T returnElseCurrent(Supplier<T> supplier) {
+            if (isCurrent())
+                return supplier.get();
+
+            return null;
+        }
+
+        @Nullable
+        public <T> T returnElseCurrent(Supplier<T> supplier, T returned) {
+            if (isCurrent())
+                return supplier.get();
+
+            return returned;
         }
 
         @ApiStatus.Internal

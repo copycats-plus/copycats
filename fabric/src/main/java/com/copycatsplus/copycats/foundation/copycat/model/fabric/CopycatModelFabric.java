@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 import static com.copycatsplus.copycats.CCBlockStateProperties.BASE_TYPE;
 import static com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock.BASE_TYPE_COUNT;
 import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.MATERIAL_KEY;
-import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.getModelOf;
+import static com.copycatsplus.copycats.foundation.copycat.model.ModelUtils.getModelOf;
 
 public class CopycatModelFabric extends ForwardingBakedModel implements CustomParticleIconModel {
 
