@@ -50,6 +50,7 @@
   "tooltip.copycats.characteristics.functional.title": "Funkcionálne",
   "tooltip.copycats.characteristics.ghost.description": "_Bez kolízie_ s entitami.",
   "tooltip.copycats.characteristics.ghost.title": "Falošný blok",
+  "tooltip.copycats.characteristics.multi_state.description": "Umiestniť viacero kópií s rôznymi materiálmi do rovnakého blokového priestoru.",
   "tooltip.copycats.characteristics.multi_state.title": "Viac stavový",
   "tooltip.copycats.characteristics.pre_assembled.description": "Demontuje _individuálne časti_ po ich umiestnení.",
   "tooltip.copycats.characteristics.pre_assembled.title": "Predmontované",

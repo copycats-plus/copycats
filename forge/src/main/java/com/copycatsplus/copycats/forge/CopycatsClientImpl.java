@@ -4,7 +4,7 @@ import com.copycatsplus.copycats.CopycatsClient;
 
 public class CopycatsClientImpl {
 
-    public CopycatsClientImpl() {
+    public static void init() {
         CopycatsClient.init();
     }
 }

@@ -11,6 +11,10 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CCKeysImpl {
 
+    public static void register() {
+        // no-op: registration is handled by the event subscriber
+    }
+
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         for (CCKeys key : CCKeys.values()) {
