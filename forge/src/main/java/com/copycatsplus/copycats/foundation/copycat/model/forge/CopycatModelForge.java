@@ -36,7 +36,7 @@ import java.util.*;
 import static com.copycatsplus.copycats.CCBlockStateProperties.BASE_TYPE;
 import static com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock.BASE_TYPE_COUNT;
 import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.MATERIAL_KEY;
-import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.getModelOf;
+import static com.simibubi.create.content.decoration.copycat.CopycatModel.getModelOf;
 
 public class CopycatModelForge extends BakedModelWrapperWithData {
 

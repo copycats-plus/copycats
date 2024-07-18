@@ -1,6 +1,8 @@
 package com.copycatsplus.copycats.foundation.copycat.model.kinetic;
 
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.Blocks;
@@ -16,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.Property;
  * <p>
  * Use {@link com.jozufozu.flywheel.core.PartialModel} instead if dynamic assembly is not required.
  */
+@Environment(EnvType.CLIENT)
 public interface ICopycatPartialModel {
 
     /**
