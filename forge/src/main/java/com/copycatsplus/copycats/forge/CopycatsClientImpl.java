@@ -6,6 +6,5 @@ public class CopycatsClientImpl {
 
     public static void init() {
         CopycatsClient.init();
-        CCKeysImpl.register();
     }
 }
