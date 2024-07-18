@@ -17,6 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class CopycatsImpl {
 
     static IEventBus bus;
+
     public CopycatsImpl() {
         bus = FMLJavaModLoadingContext.get().getModEventBus();
         Copycats.init();
@@ -24,7 +25,7 @@ public class CopycatsImpl {
         CCCraftingConditions.register();
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 
-        Platform.Environment.CLIENT.runIfCurrent(() -> CopycatsClient::init);
+        Platform.Environment.CLIENT.runIfCurrent(() -> CopycatsClientImpl::init);
         bus.addListener(EventPriority.LOWEST, CCDatagenImpl::gatherData);
     }
 

@@ -17,13 +17,13 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public record FillCopycatPacket(BlockPos pos, BlockState material, String property) implements PacketSystem.C2SPacket {
     public FillCopycatPacket(FriendlyByteBuf buf) {
-        this(buf.readBlockPos(), buf.readById(Block.BLOCK_STATE_REGISTRY), buf.readUtf());
+        this(buf.readBlockPos(), Block.BLOCK_STATE_REGISTRY.byId(buf.readVarInt()), buf.readUtf());
     }
 
     @Override
     public void write(FriendlyByteBuf buffer) {
         buffer.writeBlockPos(pos);
-        buffer.writeId(Block.BLOCK_STATE_REGISTRY, material);
+        buffer.writeVarInt(Block.getId(material));
         buffer.writeUtf(property);
     }
 
