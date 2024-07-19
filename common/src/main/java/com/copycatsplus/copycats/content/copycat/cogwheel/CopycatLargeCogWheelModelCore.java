@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlock;
+import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -14,15 +15,39 @@ import static com.copycatsplus.copycats.foundation.copycat.model.assembly.Mutabl
 
 public class CopycatLargeCogWheelModelCore extends CopycatModelCore {
 
+    private static BlockState prepareMaterial(BlockState state, BlockState material) {
+        if (material.getBlock() instanceof CogWheelBlock) {
+            return state.getOptionalValue(CogWheelBlock.AXIS)
+                    .map(val -> material.trySetValue(CogWheelBlock.AXIS, val))
+                    .orElse(material);
+        }
+        return material;
+    }
+
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        entries.add(KINETIC_MATERIAL);
-        registerMultiStatePart(entries, "cogwheel", true);
+        entries.add(new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
+        entries.add(new ModelEntry("cogwheel", (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
     }
 
     @Override
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
         Direction.Axis axis = state.getValue(CopycatShaftBlock.AXIS);
+
+        if (material.getBlock() instanceof CogWheelBlock) {
+            context.assemblePiece(
+                    t -> t.rotateX(axis == Direction.Axis.Z ? 90 : 0).rotateZ(axis == Direction.Axis.X ? 90 : 0),
+                    vec3(-8, 6, -8),
+                    aabb(32, 4, 32).move(-8, 6, -8),
+                    cull(0),
+                    noCull(),
+                    scale(
+                            pivot(8, 8, 8),
+                            scale(0.99, 0.99, 0.99)
+                    )
+            );
+            return;
+        }
 
         for (int i = 0; i < 4; i++) {
             int rotation = i * 90;

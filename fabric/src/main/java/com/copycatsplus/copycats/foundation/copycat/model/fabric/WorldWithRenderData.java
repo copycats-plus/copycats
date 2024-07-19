@@ -12,9 +12,21 @@ import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 @SuppressWarnings("deprecation")
-public record WorldWithRenderData(BlockAndTintGetter blockView, Object renderData,
-                                  BlockPos origin) implements RenderAttachedBlockView {
+public class WorldWithRenderData implements RenderAttachedBlockView {
+    private final BlockAndTintGetter blockView;
+    private final Object renderData;
+    private final BlockPos origin;
+
+    private WorldWithRenderData(BlockAndTintGetter blockView, Object renderData,
+                               BlockPos origin) {
+        this.blockView = blockView;
+        this.renderData = renderData;
+        this.origin = origin;
+    }
+
     @Override
     public float getShade(@NotNull Direction direction, boolean shade) {
         return blockView.getShade(direction, shade);
@@ -65,5 +77,18 @@ public record WorldWithRenderData(BlockAndTintGetter blockView, Object renderDat
             return renderView.getBlockEntityRenderAttachment(pos);
         }
         return null;
+    }
+
+    public static WorldWithRenderData create(boolean isVirtual, BlockAndTintGetter blockView, Object renderData, BlockPos origin) {
+        if (isVirtual)
+            return new Virtual(blockView, renderData, origin);
+        else
+            return new WorldWithRenderData(blockView, renderData, origin);
+    }
+
+    public static class Virtual extends WorldWithRenderData implements RenderAttachedBlockView {
+        private Virtual(BlockAndTintGetter blockView, Object renderData, BlockPos origin) {
+            super(blockView, renderData, origin);
+        }
     }
 }

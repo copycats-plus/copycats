@@ -2,16 +2,13 @@ package com.copycatsplus.copycats.fabric;
 
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
-import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.simibubi.create.foundation.data.TagGen;
 import com.tterrag.registrate.builders.BlockBuilder;
-import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.level.block.Block;
+import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.world.level.material.MaterialColor;
-
-import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
+import net.minecraft.world.level.block.Block;
 
 public class CCBuilderTransformersImpl {
 
@@ -41,13 +38,5 @@ public class CCBuilderTransformersImpl {
                 .addLayer(() -> RenderType::translucent)
                 .color(() -> IMultiStateCopycatBlock::wrappedColor)
                 .transform(TagGen.axeOrPickaxe());
-    }
-
-    public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> copycatBase() {
-        return b -> b.initialProperties(SharedProperties::softMetal)
-                .properties(p -> p.color(MaterialColor.GLOW_LICHEN).noOcclusion())
-                .addLayer(() -> RenderType::cutoutMipped)
-                .tag(AllTags.AllBlockTags.FAN_TRANSPARENT.tag)
-                .transform(pickaxeOnly());
     }
 }

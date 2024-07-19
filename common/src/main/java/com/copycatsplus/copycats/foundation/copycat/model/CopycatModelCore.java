@@ -5,8 +5,7 @@ import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatModelP
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -14,12 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.copycatsplus.copycats.foundation.copycat.model.ModelUtils.getModelFor;
-
 /**
  * Block-specific but platform-independent model generation logic for copycats.
  */
-
 public abstract class CopycatModelCore implements CopycatModelPart {
 
     protected static final ModelEntry SUPER = new ModelEntry("super", null, null, EntryType.STATIC);
@@ -27,12 +23,9 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     /**
      * Model key for the copied material in simple copycats.
      */
-    @Environment(EnvType.CLIENT)
     public static final String MATERIAL_KEY = "material";
-    @Environment(EnvType.CLIENT)
-    protected final ModelEntry MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelFor(mat), this, EntryType.COPYCAT);
-    @Environment(EnvType.CLIENT)
-    protected final ModelEntry KINETIC_MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelFor(mat), this, EntryType.KINETIC_COPYCAT);
+    protected final ModelEntry MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(mat), this, EntryType.COPYCAT);
+    protected final ModelEntry KINETIC_MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(mat), this, EntryType.KINETIC_COPYCAT);
 
     /**
      * Whether this model core should render enhanced models.
@@ -53,7 +46,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      *
      * @param entries The list to register the models to.
      */
-    @Environment(EnvType.CLIENT)
     public void registerModels(List<ModelEntry> entries) {
         entries.add(MATERIAL);
     }
@@ -68,7 +60,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * @param block     The multi-state copycat that this model core is meant for.
      * @param isKinetic Whether the copycat is kinetic.
      */
-    @Environment(EnvType.CLIENT)
     protected final void registerForMultiState(List<ModelEntry> entries, IMultiStateCopycatBlock block, boolean isKinetic) {
         for (String property : block.storageProperties()) {
             registerMultiStatePart(entries, property, isKinetic);
@@ -85,9 +76,8 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * @param property  The storage property of the copycat that this model core is meant for.
      * @param isKinetic Whether the copycat is kinetic.
      */
-    @Environment(EnvType.CLIENT)
     protected final void registerMultiStatePart(List<ModelEntry> entries, String property, boolean isKinetic) {
-        entries.add(new ModelEntry(property, (state, mat) -> getModelFor(mat), this, isKinetic ? EntryType.KINETIC_COPYCAT : EntryType.COPYCAT));
+        entries.add(new ModelEntry(property, (state, mat) -> getModelOf(mat), this, isKinetic ? EntryType.KINETIC_COPYCAT : EntryType.COPYCAT));
     }
 
     /**
@@ -95,7 +85,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * <p>
      * This method is likely to be called on the render thread and might be called multiple times in each render.
      */
-    @Environment(EnvType.CLIENT)
     public void prepareForRender() {
         enhanced = CCConfigs.client().useEnhancedModels.get();
         colorize = CCConfigs.client().colorizeMultiStates.get();
@@ -113,9 +102,20 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * @param context  The context to assemble the quads with.
      * @param material The block state of the copied material. This matches the key provided for both simple and multi-state copycats.
      */
-    @Environment(EnvType.CLIENT)
     @Override
     public abstract void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material);
+
+    /**
+     * Helper method to get the model of a block state.
+     *
+     * @param state The block state to get the model of.
+     * @return The baked model of the block state.
+     */
+    public static BakedModel getModelOf(BlockState state) {
+        return Minecraft.getInstance()
+                .getBlockRenderer()
+                .getBlockModel(state);
+    }
 
     /**
      * Create a platform-specific {@link BakedModel} implementation for a copycat which wraps the original model and
@@ -126,7 +126,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      */
     @ExpectPlatform
     @NotNull
-    @Environment(EnvType.CLIENT)
     public static BakedModel createModel(BakedModel original, CopycatModelCore core) {
         //noinspection DataFlowIssue
         return null;
@@ -144,16 +143,7 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      */
     @ExpectPlatform
     @NotNull
-    @Environment(EnvType.CLIENT)
     public static BakedModel createKineticModel(BakedModel original, CopycatModelCore core) {
-        //noinspection DataFlowIssue
-        return null;
-    }
-
-    @Environment(EnvType.CLIENT)
-    @NotNull
-    @ExpectPlatform
-    public static BakedModel createFluidPipeModel(BakedModel original, CopycatModelCore copycat) {
         //noinspection DataFlowIssue
         return null;
     }
@@ -161,7 +151,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     /**
      * A core that renders the original model without modifications, while still handles particles and other copycat logic.
      */
-    @Environment(EnvType.CLIENT)
     public static final CopycatModelCore PASS_THROUGH = new CopycatModelCore() {
         @Override
         public void registerModels(List<ModelEntry> entries) {
@@ -179,7 +168,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * <p>
      * Should be used for copycats with purely kinetic parts.
      */
-    @Environment(EnvType.CLIENT)
     public static CopycatModelCore kinetic(CopycatModelCore... cores) {
         return new CopycatModelCore() {
             @Override
@@ -228,12 +216,10 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * @param part  A {@link CopycatModelPart} to assemble the model quads with. Set to null if the model should be rendered without modifications.
      * @param type  The type of the model entry, which determines how the model is rendered.
      */
-    @Environment(EnvType.CLIENT)
     public record ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part,
                              EntryType type) {
     }
 
-    @Environment(EnvType.CLIENT)
     public enum EntryType {
         /**
          * A static model that is rendered into the terrain mesh without needing the copycat material.
@@ -279,7 +265,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * A functional interface to get the {@link BakedModel} when rendering a {@link ModelEntry}. For model cores with
      * extra data, the data should be set before invoking this getter, so that the getter is safe to access the data.
      */
-    @Environment(EnvType.CLIENT)
     @FunctionalInterface
     public interface ModelGetter {
         /**

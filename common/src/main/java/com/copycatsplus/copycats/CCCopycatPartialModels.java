@@ -6,8 +6,6 @@ import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelMo
 import com.copycatsplus.copycats.foundation.copycat.model.kinetic.ICopycatPartialModel;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.kinetic.KineticCopycatRenderData;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -15,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 /**
  * An enum containing all {@link ICopycatPartialModel}s.
  */
-@Environment(EnvType.CLIENT)
 public enum CCCopycatPartialModels implements ICopycatPartialModel {
     SHAFT(new CopycatShaftModelCore(), BlockStateProperties.AXIS),
     COGWHEEL(new CopycatCogWheelModelCore(), BlockStateProperties.AXIS),
@@ -42,7 +39,6 @@ public enum CCCopycatPartialModels implements ICopycatPartialModel {
     private final BakedModel model;
     private final Property<?>[] properties;
 
-    @Environment(EnvType.CLIENT)
     @Override
     public BakedModel getModel() {
         return model;

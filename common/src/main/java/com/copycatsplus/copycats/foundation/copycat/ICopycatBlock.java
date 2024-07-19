@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.foundation.copycat;
 
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -36,6 +37,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import java.util.Optional;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
@@ -101,7 +104,7 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
             if (!canToggleCT(pState, pLevel, pPos))
                 return InteractionResult.PASS;
             fbe.setCTEnabled(!fbe.isCTEnabled());
-            fbe.redraw();
+            BlockEntityUtils.redraw((BlockEntity) fbe);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -462,6 +465,23 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
         BlockState material = getMaterial(level, pos);
         if (AllBlocks.COPYCAT_BASE.has(material)) return false; // copycat_base is incorrectly set to occlude
         return material.canOcclude();
+    }
+
+    /**
+     * Whether the shape of this copycat can occlude the face of an adjacent block.
+     * <p>
+     * Implementations of this method should not consider occlusion criteria that are based on the material of the copycat.
+     * Only properties intrinsic to the copycat block, such as its shape, should be considered.
+     *
+     * @param level       The world.
+     * @param pos         The position of the copycat block.
+     * @param state       The state of the copycat block.
+     * @param neighborPos The position of the adjacent block.
+     * @param dir         The direction from the copycat block to the adjacent block.
+     * @return Whether the shape of the copycat can occlude the face of the adjacent block. If empty, the vanilla occlusion logic is used.
+     */
+    default Optional<Boolean> shapeCanOccludeNeighbor(BlockGetter level, BlockPos pos, BlockState state, BlockPos neighborPos, Direction dir) {
+        return Optional.empty();
     }
 
     /**

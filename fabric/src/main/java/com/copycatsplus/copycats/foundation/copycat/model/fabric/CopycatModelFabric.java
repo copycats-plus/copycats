@@ -45,7 +45,7 @@ import java.util.function.Supplier;
 import static com.copycatsplus.copycats.CCBlockStateProperties.BASE_TYPE;
 import static com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock.BASE_TYPE_COUNT;
 import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.MATERIAL_KEY;
-import static com.copycatsplus.copycats.foundation.copycat.model.ModelUtils.getModelOf;
+import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.getModelOf;
 
 public class CopycatModelFabric extends ForwardingBakedModel implements CustomParticleIconModel {
 
@@ -119,17 +119,18 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
             materials = new HashMap<>();
             remainingDataMap = new HashMap<>();
         }
+        final boolean isVirtual = VirtualEmptyBlockGetter.is(blockView);
 
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
 
             if (material == null && entry.type().useCopycatLogic()) {
                 // Don't skip rendering if the world is empty since we might be rendering a placement helper
-                if (materials.isEmpty() && VirtualEmptyBlockGetter.is(blockView)) {
+                if (materials.isEmpty() && isVirtual) {
                     material = AllBlocks.COPYCAT_BASE.getDefaultState();
                 } else continue;
             }
-            if (entry.type().onlyWhenVirtual() && !VirtualEmptyBlockGetter.is(blockView))
+            if (entry.type().onlyWhenVirtual() && !isVirtual)
                 continue;
 
             Object remainingData = remainingDataMap.get(entry.key());
@@ -147,8 +148,8 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 if (state.getBlock() instanceof IMultiStateCopycatBlock multiStateBlock) {
                     Vec3i inner = multiStateBlock.getVectorFromProperty(state, entry.key());
                     boolean enableCT = !(blockView.getBlockEntity(pos) instanceof IMultiStateCopycatBlockEntity multiStateBE) || multiStateBE.isCTEnabled();
-                    ScaledBlockAndTintGetter scaledWorld = new ScaledBlockAndTintGetterFabric(entry.key(), remainingData, blockView, pos, inner, multiStateBlock.vectorScale(state), p -> true);
-                    renderWorld = new ScaledBlockAndTintGetterFabric(entry.key(), remainingData, blockView, pos, inner, multiStateBlock.vectorScale(state),
+                    ScaledBlockAndTintGetter scaledWorld = ScaledBlockAndTintGetterFabric.create(isVirtual, entry.key(), remainingData, blockView, pos, inner, multiStateBlock.vectorScale(state), p -> true);
+                    renderWorld = ScaledBlockAndTintGetterFabric.create(isVirtual, entry.key(), remainingData, blockView, pos, inner, multiStateBlock.vectorScale(state),
                             targetPos -> {
                                 if (!enableCT) return false;
                                 return multiStateBlock.canConnectTexturesToward(entry.key(), scaledWorld, pos, targetPos, state);
@@ -156,7 +157,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                     gatherOcclusionData(scaledWorld, pos, state, material, occlusionData, multiStateBlock);
                 } else if (state.getBlock() instanceof ICopycatBlock copycatBlock) {
                     gatherOcclusionData(blockView, pos, state, material, occlusionData, copycatBlock);
-                    renderWorld = new FilteredBlockAndTintGetterFabric(remainingData, blockView, pos, t -> {
+                    renderWorld = FilteredBlockAndTintGetterFabric.create(isVirtual, remainingData, blockView, pos, t -> {
                         BlockEntity be = blockView.getBlockEntity(pos);
                         if (be instanceof ICopycatBlockEntity ctbe)
                             if (!ctbe.isCTEnabled())
@@ -164,7 +165,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                         return copycatBlock.canConnectTexturesToward(blockView, pos, t, state);
                     });
                 } else {
-                    renderWorld = new WorldWithRenderData(blockView, remainingData, pos);
+                    renderWorld = WorldWithRenderData.create(isVirtual, blockView, remainingData, pos);
                 }
 
                 BakedModel model = getModelForEntry(entry, state, material);

@@ -3,11 +3,10 @@ package com.copycatsplus.copycats.forge.mixin.copycat.base;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.forge.CopycatModelForge;
-import com.copycatsplus.copycats.foundation.copycat.model.kinetic.forge.KineticCopycatRendererImpl;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeBlockEntity;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatStraightPipeBlockEntity;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;
-import com.copycatsplus.copycats.utility.BlockEntityUtils;
+import com.copycatsplus.copycats.utility.forge.ModelDataUtils;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -34,15 +33,8 @@ public abstract class CopycatBlockEntityMixin extends SmartBlockEntity implement
     }
 
     @Override
-    public void redraw() {
-        if (!isVirtual())
-            requestModelDataUpdate();
-        BlockEntityUtils.redraw(this);
-    }
-
-    @Override
     public @NotNull ModelData getModelData() {
-        return KineticCopycatRendererImpl.mergeData(
+        return ModelDataUtils.mergeData(
                 super.getModelData(),
                 ModelData.builder()
                         .with(CopycatModelForge.MATERIAL_PROPERTY, getMaterial())

@@ -7,9 +7,9 @@ import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.FilteredBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.forge.CopycatRenderContextForge;
-import com.copycatsplus.copycats.foundation.copycat.model.kinetic.forge.KineticCopycatRendererImpl;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.utility.forge.ModelDataUtils;
 import com.jozufozu.flywheel.core.model.ModelUtil;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.model.BakedModelWrapperWithData;
@@ -36,7 +36,7 @@ import java.util.*;
 import static com.copycatsplus.copycats.CCBlockStateProperties.BASE_TYPE;
 import static com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock.BASE_TYPE_COUNT;
 import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.MATERIAL_KEY;
-import static com.simibubi.create.content.decoration.copycat.CopycatModel.getModelOf;
+import static com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore.getModelOf;
 
 public class CopycatModelForge extends BakedModelWrapperWithData {
 
@@ -95,7 +95,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
     public ModelData.Builder gatherModelData(ModelData.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
                                              ModelData blockEntityData) {
         if (!(originalModel instanceof BakedModelWrapperWithData)) {
-            KineticCopycatRendererImpl.copyModelData(originalModel.getModelData(world, pos, state, blockEntityData), builder);
+            ModelDataUtils.copyModelData(originalModel.getModelData(world, pos, state, blockEntityData), builder);
         }
 
         Map<String, BlockState> materials = getMaterials(blockEntityData);
@@ -192,13 +192,14 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         Map<String, BlockState> materials = getMaterials(data);
         Map<String, OcclusionData> occlusionDataMap = getOcclusion(data);
         Map<String, ModelData> wrappedDataMap = getWrappedData(data);
+        final boolean isVirtual = ModelUtil.isVirtual(data);
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = materials.get(entry.key());
 
-            if (entry.type().onlyWhenVirtual() && !ModelUtil.isVirtual(data))
+            if (entry.type().onlyWhenVirtual() && !isVirtual)
                 continue;
             if (entry.type().useCopycatLogic() && material == null) {
-                if (materials.isEmpty() && ModelUtil.isVirtual(data)) {
+                if (materials.isEmpty() && isVirtual) {
                     material = AllBlocks.COPYCAT_BASE.getDefaultState();
                 } else continue;
             }
@@ -217,6 +218,9 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
             if (renderType != null) {
                 if (!model.getRenderTypes(wrappedState, rand, wrappedData).contains(renderType))
                     continue;
+            }
+            if (ModelUtil.isVirtual(wrappedData) != isVirtual) {
+                wrappedData = ModelDataUtils.mergeData(wrappedData, ModelUtil.VIRTUAL_DATA).build();
             }
 
             List<CopycatRenderContextForge.CopycatBakedQuad> quads = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.foundation.copycat.multistate;
 
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
+import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.redstone.RoseQuartzLampBlock;
@@ -11,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.ApiStatus;
@@ -115,7 +117,7 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
             notifyUpdate();
             return;
         }
-        redraw();
+        BlockEntityUtils.redraw((BlockEntity) this);
     }
 
     default boolean cycleMaterial(String property) {
@@ -167,7 +169,7 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
             boolean anyUpdated = self.getMaterialItemStorage().deserialize(tag.getCompound("material_data"));
 
             if (clientPacket && anyUpdated)
-                self.redraw();
+                BlockEntityUtils.redraw((BlockEntity) self); // not calling self.redraw() because Extended Cogwheels overwrites it to be protected
         }
     }
 

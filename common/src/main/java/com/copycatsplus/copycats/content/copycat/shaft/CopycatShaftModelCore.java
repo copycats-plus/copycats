@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.shaft;
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
+import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -13,14 +14,28 @@ import static com.copycatsplus.copycats.foundation.copycat.model.assembly.Mutabl
 
 public class CopycatShaftModelCore extends CopycatModelCore {
 
+    private static BlockState prepareMaterial(BlockState state, BlockState material) {
+        if (material.getBlock() instanceof ShaftBlock) {
+            return state.getOptionalValue(ShaftBlock.AXIS)
+                    .map(val -> material.trySetValue(ShaftBlock.AXIS, val))
+                    .orElse(material);
+        }
+        return material;
+    }
+
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        entries.add(KINETIC_MATERIAL);
-        registerMultiStatePart(entries, "shaft", true);
+        entries.add(new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
+        entries.add(new ModelEntry("shaft", (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
     }
 
     @Override
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
+        if (material.getBlock() instanceof ShaftBlock) {
+            context.assembleAll();
+            return;
+        }
+
         Axis axis = state.getValue(CopycatShaftBlock.AXIS);
 
         AssemblyTransform transform = t -> t.rotateY(axis == Axis.X ? 90 : 0).rotateX(axis == Axis.Y ? 90 : 0);

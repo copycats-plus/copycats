@@ -5,8 +5,6 @@ import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRender
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -454,7 +452,6 @@ public class CopycatFluidPipeModelCore extends CopycatModelCore.WithData<Copycat
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class PipeModelData {
         private final FluidTransportBehaviour.AttachmentTypes[] attachments;
         private boolean encased;

@@ -56,6 +56,7 @@ dependencies {
     modImplementation("curse.maven:indium-459496:${indium_fabric_curse_id}")
     localRuntime("org.joml:joml:1.10.7") // required by sodium
     modLocalRuntime("maven.modrinth:sodium:${sodium_fabric_version}")
+//    modLocalRuntime("maven.modrinth:extended-cogwheels:${extended_cogwheels_fabric_version}")
 
     annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-fabric:${mixin_extras_version}")))
 

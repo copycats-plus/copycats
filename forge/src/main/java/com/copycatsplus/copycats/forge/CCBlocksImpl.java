@@ -9,5 +9,4 @@ public class CCBlocksImpl {
     public static void getWrappedBlockState(DataGenContext<Block, ? extends Block> c, RegistrateBlockstateProvider p, String name) {
         p.simpleBlock(c.getEntry(), p.models().withExistingParent(name, "block/barrier"));
     }
-
 }
