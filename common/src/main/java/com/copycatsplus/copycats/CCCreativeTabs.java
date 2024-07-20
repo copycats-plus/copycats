@@ -95,7 +95,7 @@ public class CCCreativeTabs {
 
         @Override
         public ItemStack makeIcon() {
-            return CCBlocks.COPYCAT_DOOR.asStack();
+            return CCBlocks.COPYCAT_COGWHEEL.asStack();
         }
 
         @Override
