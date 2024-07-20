@@ -92,7 +92,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.MaterialColor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -120,7 +120,7 @@ public class CCBlocks {
     public static final BlockEntry<CopycatBaseBlock> COPYCAT_BASE =
             REGISTRATE.block("copycat_base", CopycatBaseBlock::new)
                     .initialProperties(SharedProperties::softMetal)
-                    .properties(p -> p.mapColor(MapColor.GLOW_LICHEN).noOcclusion())
+                    .properties(p -> p.color(MaterialColor.GLOW_LICHEN).noOcclusion())
                     .addLayer(() -> RenderType::cutoutMipped)
                     .tag(AllTags.AllBlockTags.FAN_TRANSPARENT.tag)
                     .transform(pickaxeOnly())

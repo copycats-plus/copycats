@@ -13,13 +13,14 @@ import java.util.List;
 
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
+import static com.copycatsplus.copycats.utility.BackportUtils.trySetValue;
 
 public class CopycatCogWheelModelCore extends CopycatModelCore {
 
     private static BlockState prepareMaterial(BlockState state, BlockState material) {
         if (material.getBlock() instanceof CogWheelBlock) {
             return state.getOptionalValue(CogWheelBlock.AXIS)
-                    .map(val -> material.trySetValue(CogWheelBlock.AXIS, val))
+                    .map(val -> trySetValue(material, CogWheelBlock.AXIS, val))
                     .orElse(material);
         }
         return material;

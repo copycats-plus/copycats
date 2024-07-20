@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.shaft;
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
+import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,13 +12,14 @@ import java.util.List;
 
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
+import static com.copycatsplus.copycats.utility.BackportUtils.trySetValue;
 
 public class CopycatShaftModelCore extends CopycatModelCore {
 
     private static BlockState prepareMaterial(BlockState state, BlockState material) {
         if (material.getBlock() instanceof ShaftBlock) {
             return state.getOptionalValue(ShaftBlock.AXIS)
-                    .map(val -> material.trySetValue(ShaftBlock.AXIS, val))
+                    .map(val -> trySetValue(material, CogWheelBlock.AXIS, val))
                     .orElse(material);
         }
         return material;

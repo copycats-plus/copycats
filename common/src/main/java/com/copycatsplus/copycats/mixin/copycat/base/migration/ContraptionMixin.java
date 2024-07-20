@@ -2,9 +2,7 @@ package com.copycatsplus.copycats.mixin.copycat.base.migration;
 
 import com.copycatsplus.copycats.foundation.copycat.MigrationManager;
 import com.simibubi.create.content.contraptions.Contraption;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.HashMapPalette;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -32,7 +30,7 @@ public class ContraptionMixin {
             at = @At("RETURN"),
             cancellable = true
     )
-    private static void legacyReadStructureBlockInfo(CompoundTag blockListEntry, HolderGetter<Block> holderGetter, CallbackInfoReturnable<StructureTemplate.StructureBlockInfo> cir) {
+    private static void legacyReadStructureBlockInfo(CompoundTag blockListEntry, CallbackInfoReturnable<StructureTemplate.StructureBlockInfo> cir) {
         cir.setReturnValue(MigrationManager.migrateStructure(cir.getReturnValue()));
     }
 }

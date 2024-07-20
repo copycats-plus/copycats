@@ -10,7 +10,7 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -31,10 +31,10 @@ public class MigrationManager {
     public static StructureBlockInfo migrateStructure(StructureBlockInfo info) {
         if (migrationDisabled()) return info;
 
-        BlockState state = info.state();
-        CompoundTag nbt = info.nbt();
+        BlockState state = info.state;
+        CompoundTag nbt = info.nbt;
         if (state.getBlock() instanceof MultiStateCopycatBlock && nbt != null && nbt.contains("Material")) {
-            BlockPos pos = info.pos();
+            BlockPos pos = info.pos;
             CopycatBlockEntity be = AllBlockEntityTypes.COPYCAT.create(pos, state);
             be.load(nbt);
             MultiStateCopycatBlockEntity multiBe = CCBlockEntityTypes.MULTI_STATE_COPYCAT.create(pos, state);
@@ -45,7 +45,7 @@ public class MigrationManager {
                 nbt != null &&
                 nbt.contains("id") &&
                 nbt.getString("id").equals(AllBlockEntityTypes.COPYCAT.getId().toString())) {
-            BlockPos pos = info.pos();
+            BlockPos pos = info.pos;
             CCCopycatBlockEntity be = CCBlockEntityTypes.COPYCAT.create(pos, state);
             be.load(nbt);
             nbt = be.saveWithId();
@@ -84,7 +84,7 @@ public class MigrationManager {
     }
 
     private static boolean isCopycatAndNeedingConversion(BlockState state, BlockEntity blockEntity) {
-        ResourceLocation id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType());
+        ResourceLocation id = Registry.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType());
         ResourceKey<Block> resourceKey = state.getBlock().builtInRegistryHolder().key();
         if (id.toString().equalsIgnoreCase("create:copycat")) {
             if (resourceKey.location().getNamespace().equalsIgnoreCase(Copycats.MODID)) {
