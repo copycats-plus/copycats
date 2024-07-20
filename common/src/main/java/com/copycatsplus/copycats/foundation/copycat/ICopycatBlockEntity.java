@@ -111,7 +111,7 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
             notifyUpdate();
             return;
         }
-        redraw();
+        BlockEntityUtils.redraw((BlockEntity) this);
     }
 
     default boolean cycleMaterial() {
@@ -193,7 +193,7 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
         }
 
         if (clientPacket && prevMaterial != self.getMaterial())
-            self.redraw();
+            BlockEntityUtils.redraw((BlockEntity) self); // not calling self.redraw() because Extended Cogwheels overwrites it to be protected
     }
 
     static void writeSafe(ICopycatBlockEntity self, CompoundTag tag) {
@@ -211,9 +211,5 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
         tag.put("Item", ItemUtils.serializeNBT(stack));
         tag.put("Material", NbtUtils.writeBlockState(material));
         tag.putBoolean("EnableCT", enableCT);
-    }
-
-    default void redraw() {
-        BlockEntityUtils.redraw((BlockEntity) this);
     }
 }

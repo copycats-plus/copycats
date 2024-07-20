@@ -90,6 +90,11 @@ public class CopycatShaftBlock extends ShaftBlock implements ICopycatBlock, ICus
     }
 
     @Override
+    public boolean isAcceptedRegardless(BlockState material) {
+        return material.getBlock() instanceof ShaftBlock;
+    }
+
+    @Override
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
         ICopycatBlock.super.setPlacedBy(worldIn, pos, state, placer, stack);

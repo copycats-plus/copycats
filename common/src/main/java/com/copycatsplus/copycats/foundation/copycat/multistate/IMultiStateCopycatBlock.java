@@ -9,6 +9,7 @@ import com.copycatsplus.copycats.foundation.copycat.StateType;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.network.CCPackets;
 import com.copycatsplus.copycats.network.FillCopycatPacket;
+import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -31,10 +32,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -47,6 +45,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -187,7 +186,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
             if (be == null)
                 return InteractionResult.PASS;
             be.setEnableCT(property, !be.getMaterialItemStorage().getMaterialItem(property).enableCT());
-            be.redraw();
+            BlockEntityUtils.redraw((BlockEntity) be);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -239,6 +238,11 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         return InteractionResult.SUCCESS;
     }
 
+    @Nullable
+    default BlockState getAcceptedBlockState(String property, Level pLevel, BlockPos pPos, ItemStack item, Direction face) {
+        return getAcceptedBlockState(pLevel, pPos, item, face);
+    }
+
     @Override
     default InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         // prioritize wrench interactions over others
@@ -255,9 +259,11 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         if (player == null || !player.mayBuild())
             return InteractionResult.PASS;
 
+        String property = getPropertyFromInteraction(state, level, pos, hit, true);
+
         Direction face = hit.getDirection();
         ItemStack itemInHand = player.getItemInHand(hand);
-        BlockState material = getAcceptedBlockState(level, pos, itemInHand, face);
+        BlockState material = getAcceptedBlockState(property, level, pos, itemInHand, face);
 
         if (material != null)
             material = prepareMaterial(level, pos, state, player, hand, hit, material);
@@ -267,7 +273,6 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         IMultiStateCopycatBlockEntity copycatBE = getCopycatBlockEntity(level, pos);
         if (copycatBE == null)
             return InteractionResult.PASS;
-        String property = getPropertyFromInteraction(state, level, pos, hit, true);
         if (!partExists(state, property)) return InteractionResult.PASS;
         if (copycatBE.getMaterialItemStorage().getMaterialItem(property).material()
                 .is(material.getBlock())) {
@@ -466,6 +471,12 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         BlockState material = getMaterial(level, pos, property);
         if (AllBlocks.COPYCAT_BASE.has(material)) return false; // copycat_base is incorrectly set to occlude
         return material.canOcclude();
+    }
+
+    @Override
+    default Optional<Boolean> shapeCanOccludeNeighbor(BlockGetter level, BlockPos pos, BlockState state, BlockPos neighborPos, Direction dir) {
+        BlockState neighborState = level.getBlockState(neighborPos);
+        return Optional.of(BlockFaceUtils.facesMatch(level, neighborState, neighborPos, state, pos, dir.getOpposite()));
     }
 
     /**

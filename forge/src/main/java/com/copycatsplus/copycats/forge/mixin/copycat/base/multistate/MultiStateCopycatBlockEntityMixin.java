@@ -1,10 +1,9 @@
 package com.copycatsplus.copycats.forge.mixin.copycat.base.multistate;
 
-import com.copycatsplus.copycats.foundation.copycat.model.kinetic.forge.KineticCopycatRendererImpl;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
-import com.copycatsplus.copycats.utility.BlockEntityUtils;
+import com.copycatsplus.copycats.utility.forge.ModelDataUtils;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -34,15 +33,8 @@ public abstract class MultiStateCopycatBlockEntityMixin extends SmartBlockEntity
     }
 
     @Override
-    public void redraw() {
-        if (!isVirtual())
-            requestModelDataUpdate();
-        BlockEntityUtils.redraw(this);
-    }
-
-    @Override
     public @NotNull IModelData getModelData() {
-        return KineticCopycatRendererImpl.mergeData(
+        return ModelDataUtils.mergeData(
                 super.getModelData(),
                 new ModelDataMap.Builder()
                         .withInitial(MATERIALS_PROPERTY, Collections.synchronizedMap(getMaterialItemStorage().getMaterialMap()))

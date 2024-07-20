@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public class BackportUtils {
     public static BlockPos blockPosContaining(Position pos) {
@@ -36,5 +38,9 @@ public class BackportUtils {
         }
 
         return null;
+    }
+
+    public static <T extends Comparable<T>> BlockState trySetValue(BlockState state, Property<T> property, T value) {
+        return state.hasProperty(property) ? state.setValue(property, value) : state;
     }
 }

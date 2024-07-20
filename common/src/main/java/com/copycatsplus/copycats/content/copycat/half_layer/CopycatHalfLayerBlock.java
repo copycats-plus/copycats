@@ -271,7 +271,7 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
         Axis axis = state.getValue(AXIS);
-        if (transform.rotationAxis.isVertical()) {
+        if (transform.rotationAxis != null && transform.rotationAxis.isVertical()) {
             if (transform.rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
                     transform.rotation == Rotation.CLOCKWISE_180 ||
                     transform.rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {

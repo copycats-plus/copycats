@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.foundation.copycat.multistate;
 
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
+import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -76,7 +77,7 @@ public class MultiStateCopycatBlockEntity extends SmartBlockEntity implements IM
                     .orElse(null);
             if (firstProperty == null) {
                 Copycats.LOGGER.error("Failed to convert block({}) at @{} to a multistate copycat: no valid properties found", blockId.toString(), copycatBlockEntity.getBlockPos().toShortString());
-                redraw();
+                BlockEntityUtils.redraw(this);
                 return;
             }
             MaterialItemStorage.MaterialItem materialItem = materialItemStorage.getMaterialItem(firstProperty);
@@ -93,7 +94,7 @@ public class MultiStateCopycatBlockEntity extends SmartBlockEntity implements IM
                     }
                 }
             }
-            redraw();
+            BlockEntityUtils.redraw(this);
         }
     }
 }

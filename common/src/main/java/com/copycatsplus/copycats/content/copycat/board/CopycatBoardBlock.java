@@ -299,7 +299,7 @@ public class CopycatBoardBlock extends WaterloggedMultiStateCopycatBlock impleme
 
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
-        if (transform.rotationAxis.isVertical())
+        if (transform.rotationAxis != null && transform.rotationAxis.isVertical())
             be.getMaterialItemStorage().remapStorage(key -> directionToProperty(transform.rotation.rotate(propertyToDirection(key))));
         be.getMaterialItemStorage().remapStorage(key -> directionToProperty(transform.mirror.mirror(propertyToDirection(key))));
     }

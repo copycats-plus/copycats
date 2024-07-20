@@ -1,12 +1,14 @@
 package com.copycatsplus.copycats.content.copycat.cogwheel;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.bracket.BracketBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
+import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -120,9 +122,13 @@ public class CopycatCogWheelBlock extends CogWheelBlock implements IMultiStateCo
 
     @Nullable
     @Override
-    public BlockState getAcceptedBlockState(Level pLevel, BlockPos pPos, ItemStack item, Direction face) {
+    public BlockState getAcceptedBlockState(String property, Level pLevel, BlockPos pPos, ItemStack item, Direction face) {
         if (item.getItem() instanceof BlockItem bi) {
             if (bi.getBlock() instanceof BracketBlock) return null;
+            if (bi.getBlock() instanceof ShaftBlock && !(bi.getBlock() instanceof ICopycatBlock))
+                return property.equals(Part.SHAFT.getSerializedName()) ? bi.getBlock().defaultBlockState() : null;
+            if (bi.getBlock() instanceof CogWheelBlock cogwheelBlock && !(bi.getBlock() instanceof ICopycatBlock))
+                return property.equals(Part.COGWHEEL.getSerializedName()) && cogwheelBlock.isLargeCog() == this.isLargeCog() ? bi.getBlock().defaultBlockState() : null;
         }
 
         return IMultiStateCopycatBlock.super.getAcceptedBlockState(pLevel, pPos, item, face);
