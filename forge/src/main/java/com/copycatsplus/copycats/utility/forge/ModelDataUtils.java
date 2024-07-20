@@ -1,23 +1,34 @@
 package com.copycatsplus.copycats.utility.forge;
 
-import net.minecraftforge.client.model.data.ModelData;
+import com.copycatsplus.copycats.forge.mixin.copycat.base.ModelDataMapAccessor;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 
+import java.util.Set;
+
 public class ModelDataUtils {
-    public static ModelData.Builder mergeData(ModelData data1, ModelData data2) {
-        ModelData.Builder builder = ModelData.builder();
+    public static ModelDataMap.Builder mergeData(IModelData data1, IModelData data2) {
+        ModelDataMap.Builder builder = new ModelDataMap.Builder();
         copyModelData(data1, builder);
         copyModelData(data2, builder);
         return builder;
     }
 
-    public static void copyModelData(ModelData from, ModelData.Builder to) {
-        for (ModelProperty<?> property : from.getProperties()) {
+    public static void copyModelData(IModelData from, ModelDataMap.Builder to) {
+        for (ModelProperty<?> property : getProperties(from)) {
             copyModelProperty(to, from, property);
         }
     }
 
-    static <T> void copyModelProperty(ModelData.Builder to, ModelData from, ModelProperty<T> property) {
-        to.with(property, from.get(property));
+    static Set<ModelProperty<?>> getProperties(IModelData data) {
+        if (data instanceof ModelDataMap map) {
+            return ((ModelDataMapAccessor) map).getBackingMap().keySet();
+        }
+        return Set.of();
+    }
+
+    static <T> void copyModelProperty(ModelDataMap.Builder to, IModelData from, ModelProperty<T> property) {
+        to.withInitial(property, from.getData(property));
     }
 }

@@ -36,11 +36,4 @@ public class KineticCopycatRendererImpl {
                 .withData(builder.build())
                 .build();
     }
-
-    static Set<ModelProperty<?>> getProperties(IModelData data) {
-        if (data instanceof ModelDataMap map) {
-            return ((ModelDataMapAccessor) map).getBackingMap().keySet();
-        }
-        return Set.of();
-    }
 }
