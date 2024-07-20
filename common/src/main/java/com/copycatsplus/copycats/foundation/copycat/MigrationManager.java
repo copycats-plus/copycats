@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class MigrationManager {
     public static boolean migrationDisabled() {
-        return CCConfigs.safeGetter(CCConfigs.common().disableConversion::get, false).get();
+        return CCConfigs.safeGetter(() -> CCConfigs.common().disableConversion.get(), false).get();
     }
 
     public static StructureBlockInfo migrateStructure(StructureBlockInfo info) {
