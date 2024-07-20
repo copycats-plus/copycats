@@ -514,6 +514,8 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
         @Override
         public int getColor(BlockState pState, @Nullable BlockAndTintGetter pLevel, @Nullable BlockPos pPos,
                             int pTintIndex) {
+            if (pLevel == null || pPos == null)
+                return GrassColor.getDefaultColor();
             return Minecraft.getInstance()
                     .getBlockColors()
                     .getColor(getMaterial(pLevel, pPos), pLevel, pPos, pTintIndex);
