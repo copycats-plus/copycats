@@ -36,7 +36,9 @@ public class CopycatBoxItem extends BlockItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab category, NonNullList<ItemStack> items) {
-        items.add(new ItemStack(this));
+        if (this.allowdedIn(category)) {
+            items.add(new ItemStack(this));
+        }
     }
 
     @Override
