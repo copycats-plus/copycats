@@ -5,7 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.3 - 2024-07-20
+
+### Changed
+
+- Allow Shafts and Cogwheels to be put inside Copycat Shafts and Cogwheels for their original look
+- Changed the icon of the functional tab to a Copycat Cogwheel
+
+### Fixed
+
+- Copycat Fluid Pipes turning into normal pipes when being wrenched
+- Pillar blocks having incorrect connected textures
+- Incorrect occlusion of the inner faces of Copycat Half Layer
+- Schematics from old versions of Copycats+ losing their NBT data
+- Incompatibility with Create: Extended Cogwheels
+- Train disassembly not working with multi-state copycats
+- Crash when multi-state copycats are moved by mechanical pistons
+- Crash when copycats are fired from a schematicannon
+
 ## 2.0.2 - 2024-07-18
+
 ### Fixed
 
 - Re-release of the 2.0.1 hotfix version for 1.18.2 and 1.19.2
@@ -13,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2.0.1 - 2024-07-18
 
 ### Fixed
+
 - Fixed class loading issue on servers.
 - Fixed compatibility with Create: The Factory Must Grow
 

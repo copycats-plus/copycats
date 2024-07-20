@@ -41,7 +41,7 @@ public class BlockMixin {
 
     @Inject(
             method = "shouldRenderFace",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;canOcclude()Z"),
+            at = @At(value = "NEW", target = "net/minecraft/world/level/block/Block$BlockStatePairKey"),
             cancellable = true
     )
     private static void calculateOcclusionShape(BlockState state, BlockGetter level, BlockPos offset, Direction face, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
