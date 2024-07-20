@@ -276,7 +276,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
 
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
-        if (transform.rotationAxis.isVertical())
+        if (transform.rotationAxis != null && transform.rotationAxis.isVertical())
             be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).rotate(transform.rotation)).getName());
         be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).mirror(transform.mirror)).getName());
     }
