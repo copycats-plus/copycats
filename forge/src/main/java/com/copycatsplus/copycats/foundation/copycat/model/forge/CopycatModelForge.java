@@ -61,6 +61,11 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
     }
 
     @Override
+    public boolean isCustomRenderer() {
+        return true;
+    }
+
+    @Override
     public boolean useAmbientOcclusion() {
         return !disableAO && super.useAmbientOcclusion();
     }

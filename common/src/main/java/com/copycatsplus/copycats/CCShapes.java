@@ -78,18 +78,18 @@ public class CCShapes {
                             aabb(layer * 2, 16, layer * 2).move(16 - layer * 2, 0, 16 - layer * 2)
                     )
             ));
-    public static final Map<Axis, Map<Integer, MutableShape>> HALF_LAYER_BOTTOM =
-            forHorizontalAxes(forAll(CopycatHalfLayerBlock.NEGATIVE_LAYERS,
+    public static final Map<Axis, Map<Half, Map<Integer, MutableShape>>> HALF_LAYER_BOTTOM =
+            forHorizontalAxes(forHalves(forAll(CopycatHalfLayerBlock.NEGATIVE_LAYERS,
                     layer -> shape(
                             aabb(16, layer * 2, 8)
                     )
-            ));
-    public static final Map<Axis, Map<Integer, MutableShape>> HALF_LAYER_TOP =
-            forHorizontalAxes(forAll(CopycatHalfLayerBlock.POSITIVE_LAYERS,
+            )));
+    public static final Map<Axis, Map<Half, Map<Integer, MutableShape>>> HALF_LAYER_TOP =
+            forHorizontalAxes(forHalves(forAll(CopycatHalfLayerBlock.POSITIVE_LAYERS,
                     layer -> shape(
                             aabb(16, layer * 2, 8).move(0, 0, 8)
                     )
-            ));
+            )));
     public static final Map<Direction, Map<Side, Map<VerticalStairShape, MutableShape>>> VERTICAL_STAIR =
             forHorizontalDirections(forAll(CopycatVerticalStairBlock.SIDE, CopycatVerticalStairBlock.SHAPE,
                     (side, shape) ->

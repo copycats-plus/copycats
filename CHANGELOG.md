@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.5 - 2024-07-21
+
+### Fixed
+
+- Copycat Slabs not having connected textures when using Fusion CT
+- Crash/issues with train disassembly when certain complex blocks are put inside copycats on Forge
+- Crash when simple copycats are put near enchanting tables on Fabric
+- Bookshelves in copycats not contributing to enchanting power on Fabric
+- Incorrect block mirroring for Copycat Slabs, Vertical Stairs and various other copycats
+- Incorrect block shape for upside-down Copycat Half Layers
+- Incompatibility with Continuity (not available until next Continuity release)
+
 ## 2.0.4 - 2024-07-20
 
 ### Fixed

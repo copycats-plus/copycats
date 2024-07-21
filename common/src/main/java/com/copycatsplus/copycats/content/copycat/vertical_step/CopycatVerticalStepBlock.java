@@ -193,7 +193,7 @@ public class CopycatVerticalStepBlock extends CCWaterloggedCopycatBlock implemen
             }
         }
         if (mirrorAxis == null || mirrorAxis.isVertical()) {
-            return super.mirror(pState, pMirror);
+            return pState;
         }
         Direction facing = pState.getValue(FACING);
         if (facing.getAxis() != mirrorAxis) {

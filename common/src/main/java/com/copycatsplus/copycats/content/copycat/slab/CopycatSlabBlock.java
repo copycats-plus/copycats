@@ -7,6 +7,7 @@ import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopyca
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
 import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
@@ -153,6 +154,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
 
     @Override
     public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
+        if (fromPos.equals(toPos)) return false; // Compat with Fusion CT: allow connection to self
         BlockState toState = reader.getBlockState(toPos);
         if (reader instanceof ScaledBlockAndTintGetter scaledReader) {
             BlockPos fromTruePos = scaledReader.getTruePos(fromPos);
@@ -164,6 +166,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
 
     @Override
     public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+        if (fromPos.equals(toPos)) return true; // Compat with Fusion CT: allow connection to self
         BlockState toState = reader.getBlockState(toPos);
         if (reader instanceof ScaledBlockAndTintGetter scaledReader) {
             BlockPos fromTruePos = scaledReader.getTruePos(fromPos);
@@ -280,8 +283,10 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
             }
         }
         if (axis == Axis.Y) return;
-        if (transform.mirror == Mirror.FRONT_BACK && axis == Axis.Z || transform.mirror == Mirror.LEFT_RIGHT && axis == Axis.X) {
-            be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
+        if (transform.mirror != null) {
+            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Z && axis == Axis.Z || transform.mirror.rotation() == OctahedralGroup.INVERT_X && axis == Axis.X) {
+                be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
+            }
         }
     }
 

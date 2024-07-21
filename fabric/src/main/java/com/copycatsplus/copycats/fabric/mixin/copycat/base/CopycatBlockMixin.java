@@ -24,6 +24,7 @@ import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,6 +33,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
@@ -144,7 +146,7 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock,
         return maybeMaterialAs(
                 level, pos, EnchantmentBonusBlock.class,
                 (material, block) -> block.getEnchantPowerBonus(material, level, pos),
-                material -> EnchantmentBonusBlock.super.getEnchantPowerBonus(material, level, pos)
+                material -> material.is(Blocks.BOOKSHELF) ? 1f : 0f
         );
     }
 
