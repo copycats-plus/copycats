@@ -7,6 +7,7 @@ import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopyca
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;
+import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -278,8 +279,10 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
                 be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
             }
         }
-        if (transform.mirror == Mirror.FRONT_BACK && axis == Axis.Z || transform.mirror == Mirror.LEFT_RIGHT && axis == Axis.X) {
-            be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
+        if (transform.mirror != null) {
+            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Z && axis == Axis.Z || transform.mirror.rotation() == OctahedralGroup.INVERT_X && axis == Axis.X) {
+                be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
+            }
         }
     }
 
@@ -296,8 +299,8 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
 
     private static VoxelShape calculateMultiFaceShape(BlockState pState) {
         VoxelShape shape = Shapes.empty();
-        shape = Shapes.joinUnoptimized(shape, CCShapes.HALF_LAYER_BOTTOM.get(pState.getValue(AXIS)).get(pState.getValue(NEGATIVE_LAYERS)).toShape(), BooleanOp.OR);
-        shape = Shapes.joinUnoptimized(shape, CCShapes.HALF_LAYER_TOP.get(pState.getValue(AXIS)).get(pState.getValue(POSITIVE_LAYERS)).toShape(), BooleanOp.OR);
+        shape = Shapes.joinUnoptimized(shape, CCShapes.HALF_LAYER_BOTTOM.get(pState.getValue(AXIS)).get(pState.getValue(HALF)).get(pState.getValue(NEGATIVE_LAYERS)).toShape(), BooleanOp.OR);
+        shape = Shapes.joinUnoptimized(shape, CCShapes.HALF_LAYER_TOP.get(pState.getValue(AXIS)).get(pState.getValue(HALF)).get(pState.getValue(POSITIVE_LAYERS)).toShape(), BooleanOp.OR);
         return shape.optimize();
     }
 

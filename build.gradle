@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.5.+" apply false
+    id "dev.architectury.loom" version "1.7.+" apply false
 }
 
 boolean ci = System.getenv("CI") != null ? System.getenv("CI").toBoolean() : false
@@ -178,4 +178,8 @@ allprojects {
     java {
         withSourcesJar()
     }
+}
+
+wrapper {
+    gradleVersion = "8.8"
 }

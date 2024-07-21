@@ -190,9 +190,9 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
     public @NotNull BlockState mirror(@NotNull BlockState state, @NotNull Mirror mirror) {
         Direction facing = state.getValue(FACING);
         Side side = state.getValue(SIDE);
-        Axis axis = switch (mirror) {
-            case LEFT_RIGHT -> Axis.X;
-            case FRONT_BACK -> Axis.Z;
+        Axis axis = switch (mirror.rotation()) {
+            case INVERT_X -> Axis.X;
+            case INVERT_Z -> Axis.Z;
             default -> Axis.Y;
         };
         if (axis == Axis.Y) return state;

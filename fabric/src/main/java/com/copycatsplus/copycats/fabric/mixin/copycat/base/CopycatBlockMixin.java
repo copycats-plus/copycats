@@ -22,6 +22,7 @@ import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -142,7 +143,7 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock,
         return maybeMaterialAs(
                 level, pos, EnchantmentBonusBlock.class,
                 (material, block) -> block.getEnchantPowerBonus(material, level, pos),
-                material -> EnchantmentBonusBlock.super.getEnchantPowerBonus(material, level, pos)
+                material -> material.is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1f : 0f
         );
     }
 

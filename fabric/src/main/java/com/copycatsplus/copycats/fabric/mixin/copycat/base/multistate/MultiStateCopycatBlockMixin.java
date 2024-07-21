@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -185,7 +186,7 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IMult
                         bonus.accumulateAndGet(
                                 maybeMaterialAs(level, pos, EnchantmentBonusBlock.class, mat,
                                         (material, enchantmentBlock) -> enchantmentBlock.getEnchantPowerBonus(material, level, pos),
-                                        (material) -> 0f
+                                        (material) -> material.is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1f : 0f
                                 ),
                                 Float::max
                         );

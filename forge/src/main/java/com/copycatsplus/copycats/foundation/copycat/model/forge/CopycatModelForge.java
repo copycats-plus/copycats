@@ -60,6 +60,11 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
     }
 
     @Override
+    public boolean isCustomRenderer() {
+        return true;
+    }
+
+    @Override
     public boolean useAmbientOcclusion() {
         return !disableAO && super.useAmbientOcclusion();
     }
@@ -86,7 +91,12 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
             BakedModel model = getModelForEntry(entry, state, material);
             if (model == null)
                 continue;
-            renderTypes = ChunkRenderTypeSet.union(renderTypes, model.getRenderTypes(state, rand, data));
+            if (entry.type().useCopycatLogic()) {
+                if (material != null)
+                    renderTypes = ChunkRenderTypeSet.union(renderTypes, model.getRenderTypes(material, rand, data));
+            } else {
+                renderTypes = ChunkRenderTypeSet.union(renderTypes, model.getRenderTypes(state, rand, data));
+            }
         }
         return renderTypes;
     }

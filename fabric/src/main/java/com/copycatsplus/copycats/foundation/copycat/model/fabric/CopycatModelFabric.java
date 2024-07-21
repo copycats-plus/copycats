@@ -60,6 +60,11 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
         core.registerModels(entries);
     }
 
+    @Override
+    public boolean isCustomRenderer() {
+        return true; // Stops Continuity from trying to wrap this model
+    }
+
     private void gatherOcclusionData(BlockAndTintGetter world, BlockPos pos, BlockState state, BlockState material,
                                      OcclusionData occlusionData, ICopycatBlock copycatBlock) {
         if (VirtualEmptyBlockGetter.is(world))
