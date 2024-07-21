@@ -186,7 +186,7 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IMult
                         bonus.accumulateAndGet(
                                 maybeMaterialAs(level, pos, EnchantmentBonusBlock.class, mat,
                                         (material, enchantmentBlock) -> enchantmentBlock.getEnchantPowerBonus(material, level, pos),
-                                        (material) -> material.is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1f : 0f
+                                        (material) -> material.is(Blocks.BOOKSHELF) ? 1f : 0f
                                 ),
                                 Float::max
                         );

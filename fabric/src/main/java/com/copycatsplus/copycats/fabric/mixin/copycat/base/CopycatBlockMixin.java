@@ -31,6 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
@@ -143,7 +144,7 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock,
         return maybeMaterialAs(
                 level, pos, EnchantmentBonusBlock.class,
                 (material, block) -> block.getEnchantPowerBonus(material, level, pos),
-                material -> material.is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1f : 0f
+                material -> material.is(Blocks.BOOKSHELF) ? 1f : 0f
         );
     }
 
