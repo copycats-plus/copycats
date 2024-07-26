@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.utility.forge;
 
-import com.copycatsplus.copycats.forge.mixin.copycat.base.ModelDataMapAccessor;
+import com.copycatsplus.copycats.forge.mixin.foundation.copycat.ModelDataMapAccessor;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;

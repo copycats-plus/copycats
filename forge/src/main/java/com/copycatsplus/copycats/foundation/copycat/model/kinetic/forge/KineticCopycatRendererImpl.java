@@ -1,7 +1,5 @@
 package com.copycatsplus.copycats.foundation.copycat.model.kinetic.forge;
 
-import com.copycatsplus.copycats.forge.mixin.copycat.base.ModelDataMapAccessor;
-
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.kinetic.WrappedRenderWorld;
 import com.copycatsplus.copycats.utility.forge.ModelDataUtils;
@@ -12,8 +10,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
-
-import java.util.Set;
 
 public class KineticCopycatRendererImpl {
 
