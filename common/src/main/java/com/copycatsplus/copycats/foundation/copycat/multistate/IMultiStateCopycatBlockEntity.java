@@ -5,16 +5,22 @@ import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.redstone.RoseQuartzLampBlock;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -84,7 +90,62 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
 
     @Override
     default IMultiStateCopycatBlock getBlock() {
-        return (IMultiStateCopycatBlock) getBlockState().getBlock();
+        Block block = getBlockState().getBlock();
+        if (block instanceof IMultiStateCopycatBlock copycatBlock)
+            return copycatBlock;
+        // the block state might not be a copycat block in some virtual worlds
+        // return sensible defaults in those cases
+        return new IMultiStateCopycatBlock() {
+            @Override
+            public String defaultProperty() {
+                return getMaterialItemStorage().getAllProperties().stream().findFirst().orElse("material");
+            }
+
+            @Override
+            public Vec3i vectorScale(BlockState state) {
+                return new Vec3i(1, 1, 1);
+            }
+
+            @Override
+            public Set<String> storageProperties() {
+                return Set.of(defaultProperty());
+            }
+
+            @Override
+            public int getColorIndex(String property) {
+                return 0;
+            }
+
+            @Override
+            public boolean partExists(BlockState state, String property) {
+                return false;
+            }
+
+            @Override
+            public Vec3i getVectorFromProperty(BlockState state, String property) {
+                return new Vec3i(0, 0, 0);
+            }
+
+            @Override
+            public String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit) {
+                return defaultProperty();
+            }
+
+            @Override
+            public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
+
+            }
+
+            @Override
+            public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
+                return true;
+            }
+
+            @Override
+            public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+                return false;
+            }
+        };
     }
 
     @Override
@@ -153,6 +214,15 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
     default void setEnableCT(String property, boolean value) {
         getMaterialItemStorage().getMaterialItem(property).setEnableCT(value);
         notifyUpdate();
+    }
+
+    @Override
+    default ItemRequirement getRequiredItems(BlockState state) {
+        return new ItemRequirement(
+                getMaterialItemStorage().getAllConsumedItems().stream()
+                        .map(stack -> new ItemRequirement.StackRequirement(stack, ItemRequirement.ItemUseType.CONSUME))
+                        .toList()
+        );
     }
 
     @Override

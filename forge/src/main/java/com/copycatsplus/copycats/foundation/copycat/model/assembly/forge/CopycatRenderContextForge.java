@@ -114,7 +114,7 @@ public class CopycatRenderContextForge extends CopycatRenderContext.Base<List<Co
 
     public static class CopycatBakedQuad extends BakedQuad {
         @Nullable
-        public final Direction cullFace;
+        public Direction cullFace;
         public final String property;
 
         public CopycatBakedQuad(int[] vertices, int tintIndex, Direction direction, TextureAtlasSprite sprite, boolean shade, @Nullable Direction cullFace, String property) {

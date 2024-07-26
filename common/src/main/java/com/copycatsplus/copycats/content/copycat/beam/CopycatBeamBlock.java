@@ -116,7 +116,7 @@ public class CopycatBeamBlock extends CCWaterloggedCopycatBlock implements IStat
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         Axis axis = context.getNearestLookingDirection().getAxis();
         return stateForPlacement.setValue(AXIS, axis);
     }

@@ -23,6 +23,7 @@ public enum Mods {
      */
     ADDITIONAL_PLACEMENTS("additionalplacements"),
     DIAGONAL_FENCES("diagonalfences"),
+    DIAGONAL_WALLS("diagonalwalls"),
     ATHENA("athena"),
     INDIUM("indium");
 

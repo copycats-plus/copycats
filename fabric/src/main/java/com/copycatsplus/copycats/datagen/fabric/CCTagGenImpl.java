@@ -18,5 +18,7 @@ public class CCTagGenImpl {
     private static void genBlockTags(RegistrateTagsProvider<Block> provIn) {
         provIn.tag(TagKey.create(Registry.BLOCK.key(), Mods.DIAGONAL_FENCES.rl("non_diagonal_fences")))
                 .add(CCBlocks.COPYCAT_FENCE.get());
+        provIn.tag(TagKey.create(Registry.BLOCK.key(), Mods.DIAGONAL_WALLS.rl("non_diagonal_walls")))
+                .add(CCBlocks.COPYCAT_WALL.get());
     }
 }

@@ -6,11 +6,11 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "compat.doubleslabs.DSConfigCommonMixin",
-    "copycat.base.CopycatBlockEntityMixin",
-    "copycat.base.CopycatBlockMixin",
-    "copycat.base.ModelDataMapAccessor",
-    "copycat.base.multistate.MultiStateCopycatBlockEntityMixin",
-    "copycat.base.multistate.MultiStateCopycatBlockMixin",
+    "foundation.copycat.CopycatBlockEntityMixin",
+    "foundation.copycat.CopycatBlockMixin",
+    "foundation.copycat.ModelDataMapAccessor",
+    "foundation.copycat.multistate.MultiStateCopycatBlockEntityMixin",
+    "foundation.copycat.multistate.MultiStateCopycatBlockMixin",
     "network.ServerGamePacketListenerImplMixin"
   ],
   "client": [

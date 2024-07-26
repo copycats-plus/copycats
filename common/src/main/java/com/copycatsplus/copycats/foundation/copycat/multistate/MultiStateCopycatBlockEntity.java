@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.foundation.copycat.multistate;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -46,6 +47,11 @@ public class MultiStateCopycatBlockEntity extends SmartBlockEntity implements IM
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+    }
+
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state) {
+        return IMultiStateCopycatBlockEntity.super.getRequiredItems(state);
     }
 
     @Override

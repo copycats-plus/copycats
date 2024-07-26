@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
@@ -9,6 +10,8 @@ import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiS
 import com.copycatsplus.copycats.utility.InteractionUtils;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
@@ -29,6 +32,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -50,7 +54,7 @@ import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
+public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implements ISpecialBlockItemRequirement {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
     public static final EnumProperty<SlabType> SLAB_TYPE = BlockStateProperties.SLAB_TYPE;
@@ -153,6 +157,17 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
     }
 
     @Override
+    public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
+        return new ItemRequirement(
+                ItemRequirement.ItemUseType.CONSUME,
+                new ItemStack(asItem(), switch (state.getValue(SLAB_TYPE)) {
+                    case BOTTOM, TOP -> 1;
+                    case DOUBLE -> 2;
+                })
+        );
+    }
+
+    @Override
     public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
         if (fromPos.equals(toPos)) return false; // Compat with Fusion CT: allow connection to self
         BlockState toState = reader.getBlockState(toPos);
@@ -179,7 +194,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         if (state.is(this)) {

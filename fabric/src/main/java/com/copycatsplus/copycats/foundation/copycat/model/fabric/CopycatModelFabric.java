@@ -198,7 +198,13 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter, entry.key());
                 entry.part().emitCopycatQuads(entry.key(), state, copycatContext, material);
 
-                context.pushTransform(quad -> !occlusionData.isOccluded(quad.cullFace()));
+                context.pushTransform(quad -> {
+                    if (occlusionData.isOccluded(quad.cullFace()))
+                        return false;
+                    // Set cull face to null after culling to avoid interference from sodium
+                    quad.cullFace(null);
+                    return true;
+                });
                 context.meshConsumer().accept(meshBuilder.build());
                 context.popTransform();
 

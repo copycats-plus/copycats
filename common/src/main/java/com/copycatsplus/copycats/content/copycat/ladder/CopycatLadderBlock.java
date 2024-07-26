@@ -66,7 +66,7 @@ public class CopycatLadderBlock extends LadderBlock implements ICopycatBlock, IB
     @Override
     public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
         BlockState stateForPlacement = super.getStateForPlacement(pContext);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         return stateForPlacement.setValue(FACING, pContext.getHorizontalDirection().getOpposite());
     }
 

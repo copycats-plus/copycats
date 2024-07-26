@@ -8,6 +8,8 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -45,7 +48,7 @@ import static com.copycatsplus.copycats.utility.BackportUtils.blockPosContaining
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
+public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implements ISpecialBlockItemRequirement {
     public static BooleanProperty TOP_NE = BooleanProperty.create("top_northeast");
     public static BooleanProperty TOP_NW = BooleanProperty.create("top_northwest");
     public static BooleanProperty TOP_SE = BooleanProperty.create("top_southeast");
@@ -182,7 +185,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         Vec3 bias = Vec3.atLowerCornerOf(context.getClickedFace().getNormal()).scale(1 / 16f);
@@ -250,6 +253,11 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
             playRemoveSound(world, pos);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
+        return IMultiStateCopycatBlock.getRequiredItemsForParts(state, TOP_NE, TOP_NW, TOP_SE, TOP_SW, BOTTOM_NE, BOTTOM_NW, BOTTOM_SE, BOTTOM_SW);
     }
 
     public boolean supportsExternalFaceHiding(BlockState state) {

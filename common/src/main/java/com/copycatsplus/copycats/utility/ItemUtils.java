@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.utility;
 
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;

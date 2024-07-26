@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Locale;
 import java.util.Set;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
@@ -182,7 +183,7 @@ public class CopycatCogWheelBlock extends CogWheelBlock implements IMultiStateCo
 
         @Override
         public String getSerializedName() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ROOT);
         }
     }
 }
