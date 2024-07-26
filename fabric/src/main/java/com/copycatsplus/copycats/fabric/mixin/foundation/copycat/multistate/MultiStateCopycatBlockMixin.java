@@ -182,7 +182,7 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IMult
 
             IMultiStateCopycatBlockEntity copycatBE = copycatBlock.getCopycatBlockEntity(level, pos);
             if (copycatBE == null)
-                return state.is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1f : 0f;
+                return state.is(Blocks.BOOKSHELF) ? 1 : 0;
             copycatBE
                     .getMaterialItemStorage()
                     .getAllMaterials()
@@ -197,7 +197,7 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IMult
                     });
             return bonus.get();
         }
-        return state.is(BlockTags.ENCHANTMENT_POWER_PROVIDER) ? 1f : 0f;
+        return state.is(Blocks.BOOKSHELF) ? 1 : 0;
     }
 
     @Override
