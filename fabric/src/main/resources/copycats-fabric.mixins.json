@@ -7,13 +7,13 @@
   "mixins": [
     "HolderReferenceMixin",
     "compat.indium.GeometryHelperMixin",
-    "copycat.base.CopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
-    "copycat.base.CopycatBlockEntityMixin$FluidPipeData",
-    "copycat.base.CopycatBlockEntityMixin$StraightPipeData",
-    "copycat.base.CopycatBlockMixin",
-    "copycat.base.GeometryHelperMixin",
-    "copycat.base.multistate.MultiStateCopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
-    "copycat.base.multistate.MultiStateCopycatBlockMixin"
+    "foundation.copycat.CopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
+    "foundation.copycat.CopycatBlockEntityMixin$FluidPipeData",
+    "foundation.copycat.CopycatBlockEntityMixin$StraightPipeData",
+    "foundation.copycat.CopycatBlockMixin",
+    "foundation.copycat.GeometryHelperMixin",
+    "foundation.copycat.multistate.MultiStateCopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
+    "foundation.copycat.multistate.MultiStateCopycatBlockMixin"
   ],
   "client": [
     "featuretoggle.SubMenuConfigScreenMixin"

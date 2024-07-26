@@ -53,6 +53,7 @@ dependencies {
     modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_fabric_version}")
 
     modImplementation("curse.maven:continuity-531351:${continuity_curse_version}")
+//    modImplementation("blank:continuity-3.0.0:beta.6+1.19.2.build.105")
     modImplementation("curse.maven:indium-459496:${indium_fabric_curse_id}")
     localRuntime("org.joml:joml:1.10.7") // required by sodium
     modLocalRuntime("maven.modrinth:sodium:${sodium_fabric_version}")

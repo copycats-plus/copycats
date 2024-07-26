@@ -133,7 +133,7 @@ public class CopycatHalfPanelBlock extends CCWaterloggedCopycatBlock implements 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
 
         Direction facing = context.getClickedFace().getOpposite();
         double offset1, offset2;

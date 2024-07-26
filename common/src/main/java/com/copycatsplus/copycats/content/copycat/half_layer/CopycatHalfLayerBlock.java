@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.half_layer;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
@@ -9,6 +10,8 @@ import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiS
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -50,7 +54,7 @@ import static net.minecraft.core.Direction.AxisDirection;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
+public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock implements ISpecialBlockItemRequirement {
 
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
@@ -125,7 +129,7 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         if (state.is(this)) {
@@ -213,6 +217,11 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock {
             playRemoveSound(world, pos);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
+        return ICopycatBlock.getRequiredItemsForLayer(state, POSITIVE_LAYERS).union(ICopycatBlock.getRequiredItemsForLayer(state, NEGATIVE_LAYERS));
     }
 
     @Override

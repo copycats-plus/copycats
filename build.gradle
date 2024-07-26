@@ -136,6 +136,23 @@ allprojects {
                 includeGroup "maven.modrinth"
             }
         }
+        flatDir {
+            dirs "lib"
+        }
+    }
+
+    configurations{
+        findAndDelete
+    }
+
+    // special task used to invalidate gradle cache for specific dependencies
+    tasks.register('seekAndDestroy') {
+        doLast {
+            configurations.findAndDelete.each {
+                println 'Deleting: ' + it
+                delete it.parent
+            }
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {

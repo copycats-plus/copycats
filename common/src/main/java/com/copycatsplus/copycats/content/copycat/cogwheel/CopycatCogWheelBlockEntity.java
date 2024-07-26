@@ -1,8 +1,10 @@
 package com.copycatsplus.copycats.content.copycat.cogwheel;
 
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MaterialItemStorage;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -29,6 +31,11 @@ public class CopycatCogWheelBlockEntity extends BracketedKineticBlockEntity impl
     @Override
     public void setMaterialItemStorageInternal(MaterialItemStorage storage) {
         this.storage = storage;
+    }
+
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state) {
+        return IMultiStateCopycatBlockEntity.super.getRequiredItems(state);
     }
 
     @Override

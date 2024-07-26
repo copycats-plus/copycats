@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.foundation.copycat;
 
 import java.util.List;
 
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
@@ -93,6 +94,11 @@ public class CCCopycatBlockEntity extends SmartBlockEntity implements ICopycatBl
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+    }
+
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state) {
+        return ICopycatBlockEntity.super.getRequiredItems(state);
     }
 
     @Override

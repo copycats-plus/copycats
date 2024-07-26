@@ -9,6 +9,7 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.content.contraptions.ITransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -323,6 +324,16 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
     }
 
     /**
+     * Utility to get the required items for a layer of a block state.
+     */
+    static ItemRequirement getRequiredItemsForLayer(BlockState state, IntegerProperty property) {
+        return new ItemRequirement(
+                ItemRequirement.ItemUseType.CONSUME,
+                new ItemStack(state.getBlock().asItem(), state.getValue(property))
+        );
+    }
+
+    /**
      * Transform the block state of the copycat according to the provided transform.
      * <p>
      * Possible transforms include single-axis rotation of 90 degree increments and mirroring in any axis.
@@ -498,7 +509,7 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
                                      Direction dir) {
         BlockPos toPos = pos.relative(dir);
         if (getMaterial(level, pos).skipRendering(getMaterial(level, toPos), dir.getOpposite())) {
-            return BlockFaceUtils.facesMatch(level, neighborState, toPos, state, pos, dir.getOpposite());
+            return BlockFaceUtils.canOcclude(level, neighborState, toPos, state, pos, dir.getOpposite());
         }
         return false;
     }

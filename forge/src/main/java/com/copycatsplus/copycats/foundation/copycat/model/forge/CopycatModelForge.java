@@ -252,6 +252,10 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                 if (occlusionData != null && occlusionData.isOccluded(croppedQuad.cullFace))
                     continue;
 
+                // Copycat quads are already culled. Set it to null to avoid interference from sodium
+                if (entry.type().useCopycatLogic())
+                    croppedQuad.cullFace = null;
+
                 allQuads.add(croppedQuad);
             }
         }

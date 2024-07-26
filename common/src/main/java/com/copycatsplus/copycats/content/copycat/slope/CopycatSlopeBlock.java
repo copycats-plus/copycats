@@ -139,7 +139,7 @@ public class CopycatSlopeBlock extends CCWaterloggedCopycatBlock implements ISta
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         Direction facing = context.getHorizontalDirection();
         Half half = context.getClickedFace() == Direction.DOWN
                 ? Half.TOP

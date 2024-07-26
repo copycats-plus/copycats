@@ -115,7 +115,7 @@ public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpe
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         if (state.is(this)) {
@@ -187,10 +187,7 @@ public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpe
 
     @Override
     public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
-        return new ItemRequirement(
-                ItemRequirement.ItemUseType.CONSUME,
-                new ItemStack(asItem(), state.getValue(LAYERS))
-        );
+        return ICopycatBlock.getRequiredItemsForLayer(state, LAYERS);
     }
 
     @Override

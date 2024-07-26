@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
@@ -33,7 +34,7 @@ public class CopycatMultiBoardModelCore extends CopycatModelCore {
             sides.put(direction, state.getValue(byDirection(direction)));
         }
 
-        Direction direction = Direction.byName(key.toLowerCase());
+        Direction direction = Direction.byName(key.toLowerCase(Locale.ROOT));
 
         if (!sides.get(direction))
             return;

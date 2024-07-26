@@ -5,6 +5,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 import static com.copycatsplus.copycats.foundation.copycat.CopycatBaseBlock.BASE_TYPE_COUNT;
 
 public class CCBlockStateProperties {
@@ -27,7 +29,7 @@ public class CCBlockStateProperties {
 
         @Override
         public @NotNull String getSerializedName() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ROOT);
         }
     }
 
@@ -40,7 +42,7 @@ public class CCBlockStateProperties {
 
         @Override
         public @NotNull String getSerializedName() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ROOT);
         }
 
         public boolean isOuter() {
