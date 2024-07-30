@@ -317,7 +317,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
     }
 
     public enum TaggedIngredients {
-        ZINC(CCTags.commonItemTag("ingots/zinc"), CCTags.commonItemTag("zinc_ingots"));
+        ZINC(CCTags.commonItemTag("ingots/zinc"), CCTags.commonItemTag("ingots/zinc"));
 
 
         private final TagKey<Item> forge;
