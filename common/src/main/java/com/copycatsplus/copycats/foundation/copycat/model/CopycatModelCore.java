@@ -225,14 +225,14 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     public record ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part,
                              MaterialMapper materialMapper,
                              EntryType type,
-							 @Nullable RenderType renderType) {
+                             @Nullable RenderType renderType) {
         public ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part, EntryType type) {
             this(key, model, part, MaterialMapper.IDENTITY, type, null);
-    }
-	
+        }
+
         public ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part, MaterialMapper materialMapper, EntryType type) {
             this(key, model, part, materialMapper, type, null);
-    }
+        }
     }
 
     public enum EntryType {

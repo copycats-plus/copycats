@@ -16,7 +16,7 @@ public class CopycatStraightPipeModelCore extends CopycatFluidPipeModelCore {
     @Override
     public void registerModels(List<ModelEntry> entries) {
         super.registerModels(entries);
-        entries.add(new ModelEntry("super", null, null, EntryType.STATIC, RenderType.cutoutMipped()));
+        entries.add(new ModelEntry("super", null, null, MaterialMapper.IDENTITY, EntryType.STATIC, RenderType.cutoutMipped()));
     }
 
     @Override
