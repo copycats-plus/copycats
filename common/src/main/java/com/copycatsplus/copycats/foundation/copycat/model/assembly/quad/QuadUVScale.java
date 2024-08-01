@@ -21,7 +21,7 @@ public record QuadUVScale(Direction face,
                           float scaleU, float scaleV) implements QuadTransform {
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         if (quad.computeLightFace() == face) {
             for (int vertex = 0; vertex < 4; vertex++) {
                 float u = getUnInterpolatedU(sprite, quad.vertices.get(vertex).uv.u) - pivotU;
@@ -31,5 +31,6 @@ public record QuadUVScale(Direction face,
                 quad.vertices.get(vertex).uv.v = sprite.getV(v * scaleV + pivotV);
             }
         }
+        return true;
     }
 }

@@ -106,6 +106,11 @@ public class CopycatLadderBlock extends LadderBlock implements ICopycatBlock, IB
     }
 
     @Override
+    public boolean isAcceptedRegardless(BlockState material) {
+        return material.getBlock() instanceof LadderBlock;
+    }
+
+    @Override
     public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @javax.annotation.Nullable LivingEntity pPlacer, ItemStack pStack) {
         ICopycatBlock.super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);

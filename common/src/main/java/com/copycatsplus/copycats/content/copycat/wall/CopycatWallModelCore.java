@@ -5,11 +5,13 @@ import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRender
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WallSide;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
@@ -18,7 +20,17 @@ import static com.copycatsplus.copycats.foundation.copycat.model.assembly.Mutabl
 public class CopycatWallModelCore extends CopycatModelCore {
 
     @Override
+    public void registerModels(List<ModelEntry> entries) {
+        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesIfMatch(WallBlock.class), EntryType.COPYCAT));
+    }
+
+    @Override
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
+        if (material.getBlock() instanceof WallBlock) {
+            context.assembleAll();
+            return;
+        }
+
         boolean pole = state.getValue(WallBlock.UP);
         if (pole) {
             // Assemble piece by piece if the central pole exists

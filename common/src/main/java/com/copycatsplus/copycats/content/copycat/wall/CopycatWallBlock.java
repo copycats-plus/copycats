@@ -69,6 +69,11 @@ public class CopycatWallBlock extends WallBlock implements ICopycatBlock, IBE<CC
     }
 
     @Override
+    public boolean isAcceptedRegardless(BlockState material) {
+        return material.getBlock() instanceof WallBlock;
+    }
+
+    @Override
     public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         ICopycatBlock.super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);

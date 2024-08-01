@@ -20,7 +20,7 @@ import static com.simibubi.create.foundation.block.render.SpriteShiftEntry.getUn
 public record QuadUVRotate(Direction face, float pivotU, float pivotV, float rotation) implements QuadTransform {
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         if (quad.computeLightFace() == face) {
             for (int vertex = 0; vertex < 4; vertex++) {
                 float u = getUnInterpolatedU(sprite, quad.vertices.get(vertex).uv.u) - pivotU;
@@ -33,5 +33,6 @@ public record QuadUVRotate(Direction face, float pivotU, float pivotV, float rot
                 quad.vertices.get(vertex).uv.v = sprite.getV(u * sin + v * cos + pivotV);
             }
         }
+        return true;
     }
 }

@@ -16,19 +16,10 @@ import static com.copycatsplus.copycats.utility.BackportUtils.trySetValue;
 
 public class CopycatShaftModelCore extends CopycatModelCore {
 
-    private static BlockState prepareMaterial(BlockState state, BlockState material) {
-        if (material.getBlock() instanceof ShaftBlock) {
-            return state.getOptionalValue(ShaftBlock.AXIS)
-                    .map(val -> trySetValue(material, CogWheelBlock.AXIS, val))
-                    .orElse(material);
-        }
-        return material;
-    }
-
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        entries.add(new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
-        entries.add(new ModelEntry("shaft", (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
+        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesIfMatch(ShaftBlock.class), EntryType.KINETIC_COPYCAT));
+        entries.add(new ModelEntry("shaft", ModelGetter.MATERIAL, this, updatePropertiesIfMatch(ShaftBlock.class), EntryType.KINETIC_COPYCAT));
     }
 
     @Override

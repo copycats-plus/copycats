@@ -19,7 +19,7 @@ public record QuadAutoCull(MutableAABB cullingBox) implements QuadTransform {
     private static final double EPSILON = 0.02 / 16;
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         Direction lightFace = quad.computeLightFace();
         Axis axis = lightFace.getAxis();
         double target = lightFace.getAxisDirection() == Direction.AxisDirection.POSITIVE
@@ -29,10 +29,11 @@ public record QuadAutoCull(MutableAABB cullingBox) implements QuadTransform {
             if (Math.abs(vertex.xyz.get(axis) - target) > EPSILON) {
                 quad.cullFace = null;
                 quad.disableFinalAutoCull = true;
-                return;
+                return true;
             }
         }
         quad.cullFace = lightFace;
         quad.disableFinalAutoCull = true;
+        return true;
     }
 }

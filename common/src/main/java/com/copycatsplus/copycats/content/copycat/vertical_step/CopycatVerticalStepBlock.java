@@ -5,7 +5,10 @@ import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.BlockUtils;
 import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -176,31 +179,9 @@ public class CopycatVerticalStepBlock extends CCWaterloggedCopycatBlock implemen
         return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, Rotation pRot) {
-        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
-        Axis mirrorAxis = null;
-        for (Axis axis : Iterate.axes) {
-            if (pMirror.rotation().inverts(axis)) {
-                mirrorAxis = axis;
-                break;
-            }
-        }
-        if (mirrorAxis == null || mirrorAxis.isVertical()) {
-            return pState;
-        }
-        Direction facing = pState.getValue(FACING);
-        if (facing.getAxis() != mirrorAxis) {
-            return pState.setValue(FACING, facing.getClockWise());
-        } else {
-            return pState.setValue(FACING, facing.getCounterClockWise());
-        }
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return BlockUtils.transformStepLikeVertical(state, transform, AllBlocks.COPYCAT_STEP.getDefaultState());
     }
 
     @MethodsReturnNonnullByDefault

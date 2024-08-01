@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.foundation.copycat;
 
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.mixin.foundation.copycat.ChunkAccessAccessor;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.simibubi.create.AllBlocks;
@@ -35,6 +36,8 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -53,6 +56,8 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
  * {@link IBE#getBlockEntityType} in the concrete class, and redirect calls of
  * {@link ICopycatBlock#use},
  * {@link ICopycatBlock#hidesNeighborFace},
+ * {@link ICopycatBlock#rotate},
+ * {@link ICopycatBlock#mirror},
  * {@link ICopycatBlock#setPlacedBy},
  * {@link ICopycatBlock#onRemove} and
  * {@link ICopycatBlock#playerWillDestroy} to this interface.
@@ -294,7 +299,6 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
             if (copycatBE != null)
                 Block.popResource(world, pos, copycatBE.getConsumedItem());
         }
-        world.removeBlockEntity(pos);
     }
 
     default void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
@@ -324,6 +328,16 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
     }
 
     /**
+     * Get the material of the copycat at the given position when not executing on the main thread.
+     * Block entity access is unsafe on other threads, so this method should be used with caution.
+     */
+    static BlockState getMaterialCrossThread(BlockGetter reader, BlockPos targetPos) {
+        if (BlockEntityUtils.getBlockEntityCrossThread(reader, targetPos) instanceof ICopycatBlockEntity cbe)
+            return cbe.getMaterial();
+        return Blocks.AIR.defaultBlockState();
+    }
+
+    /**
      * Utility to get the required items for a layer of a block state.
      */
     static ItemRequirement getRequiredItemsForLayer(BlockState state, IntegerProperty property) {
@@ -334,9 +348,25 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
     }
 
     /**
-     * Transform the block state of the copycat according to the provided transform.
+     * DO NOT override the {@link Block#rotate} implementation with this if the default {@link ICopycatBlock#transform} implementation is used.
+     */
+    default @NotNull BlockState rotate(@NotNull BlockState pState, Rotation pRot) {
+        return transform(pState, new StructureTransform(BlockPos.ZERO, Direction.Axis.Y, pRot, Mirror.NONE));
+    }
+
+    /**
+     * DO NOT override the {@link Block#mirror} implementation with this if the default {@link ICopycatBlock#transform} implementation is used.
+     */
+    default @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
+        return transform(pState, new StructureTransform(BlockPos.ZERO, null, Rotation.NONE, pMirror));
+    }
+
+    /**
+     * Transform the block state of the copycat according to the provided transform. Possible transforms include
+     * single-axis rotation of 90 degree increments and mirroring in any axis.
      * <p>
-     * Possible transforms include single-axis rotation of 90 degree increments and mirroring in any axis.
+     * Note: you must override this method if the implementations of {@link ICopycatBlock#rotate} and
+     * {@link ICopycatBlock#mirror} are used.
      */
     @Override
     default BlockState transform(BlockState state, StructureTransform transform) {
@@ -508,7 +538,13 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
                                      BlockState neighborState,
                                      Direction dir) {
         BlockPos toPos = pos.relative(dir);
-        if (getMaterial(level, pos).skipRendering(getMaterial(level, toPos), dir.getOpposite())) {
+        BlockState material = state.getBlock() instanceof ICopycatBlock
+                ? getMaterial(level, pos)
+                : state;
+        BlockState neighborMaterial = neighborState.getBlock() instanceof ICopycatBlock
+                ? getMaterial(level, toPos)
+                : neighborState;
+        if (material.skipRendering(neighborMaterial, dir.getOpposite())) {
             return BlockFaceUtils.canOcclude(level, neighborState, toPos, state, pos, dir.getOpposite());
         }
         return false;

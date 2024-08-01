@@ -7,13 +7,25 @@ import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 
+import java.util.List;
+
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 
 public class CopycatButtonModelCore extends CopycatModelCore {
 
     @Override
+    public void registerModels(List<ModelEntry> entries) {
+        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesIfMatch(ButtonBlock.class), EntryType.COPYCAT));
+    }
+
+    @Override
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
+        if (material.getBlock() instanceof ButtonBlock) {
+            context.assembleAll();
+            return;
+        }
+
         AttachFace face = state.getValue(ButtonBlock.FACE);
         int rot = (int) state.getValue(ButtonBlock.FACING).toYRot();
         boolean pressed = state.getValue(ButtonBlock.POWERED);

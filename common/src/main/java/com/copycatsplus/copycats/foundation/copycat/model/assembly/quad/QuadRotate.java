@@ -15,9 +15,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 public record QuadRotate(MutableVec3.AsPivot pivot, MutableVec3.AsAngle rotation) implements QuadTransform {
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         for (int i = 0; i < 4; i++) {
             quad.vertices.get(i).xyz.subtract(this.pivot).rotate(this.rotation).add(this.pivot);
         }
+        return true;
     }
 }

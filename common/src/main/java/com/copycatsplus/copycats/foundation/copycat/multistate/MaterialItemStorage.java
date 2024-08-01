@@ -8,10 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -63,6 +60,13 @@ public class MaterialItemStorage {
     }
 
     /**
+     * Get all material items stored in this storage, regardless of whether they have a custom material or whether they exist according to the copycat's block state.
+     */
+    public Set<MaterialItem> getAllMaterialItems() {
+        return new HashSet<>(storage.values());
+    }
+
+    /**
      * Get all consumed items stored in this storage. Empty stacks are not included.
      */
     public List<ItemStack> getAllConsumedItems() {
@@ -80,7 +84,7 @@ public class MaterialItemStorage {
      * Check if a specific property has a custom material.
      */
     public boolean hasCustomMaterial(String property) {
-        return !storage.get(property).material().is(AllBlocks.COPYCAT_BASE.get());
+        return storage.get(property).hasCustomMaterial();
     }
 
     /**
@@ -187,6 +191,10 @@ public class MaterialItemStorage {
 
         public void setEnableCT(boolean enableCT) {
             this.enableCT = enableCT;
+        }
+
+        public boolean hasCustomMaterial() {
+            return !material.is(AllBlocks.COPYCAT_BASE.get());
         }
     }
 

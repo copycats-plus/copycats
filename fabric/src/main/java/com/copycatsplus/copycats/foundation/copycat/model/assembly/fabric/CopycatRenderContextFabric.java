@@ -94,10 +94,12 @@ public class CopycatRenderContextFabric extends CopycatRenderContext.Base<List<M
         assemblyTransform.apply(mutableQuad);
         mutableQuad.undoMutate();
         for (QuadTransform transform : transforms) {
-            transform.transformQuad(mutableQuad, sprite);
+            if (!transform.transformQuad(mutableQuad, sprite))
+                return;
         }
         if (!mutableQuad.disableFinalAutoCull)
-            QuadAutoCull.BLOCK.transformQuad(mutableQuad, sprite);
+            if (!QuadAutoCull.BLOCK.transformQuad(mutableQuad, sprite))
+                return;
         mutableQuad.mutate();
         for (int i = 0; i < 4; i++) {
             BakedQuadHelper.setXYZ(dest, i, mutableQuad.vertices.get(i).xyz.toVec3());

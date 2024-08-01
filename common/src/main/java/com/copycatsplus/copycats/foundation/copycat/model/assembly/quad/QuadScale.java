@@ -13,9 +13,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 public record QuadScale(MutableVec3.AsPivot pivot, MutableVec3.AsScale scale) implements QuadTransform {
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         for (int i = 0; i < 4; i++) {
             quad.vertices.get(i).xyz.subtract(this.pivot).multiply(this.scale).add(this.pivot);
         }
+        return true;
     }
 }

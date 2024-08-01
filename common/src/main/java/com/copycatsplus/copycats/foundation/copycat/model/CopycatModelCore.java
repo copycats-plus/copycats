@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.config.CCConfigs;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatModelPart;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.BlockUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
@@ -11,7 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Block-specific but platform-independent model generation logic for copycats.
@@ -24,8 +27,7 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      * Model key for the copied material in simple copycats.
      */
     public static final String MATERIAL_KEY = "material";
-    protected final ModelEntry MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(mat), this, EntryType.COPYCAT);
-    protected final ModelEntry KINETIC_MATERIAL = new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(mat), this, EntryType.KINETIC_COPYCAT);
+    protected final ModelEntry MATERIAL = new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, EntryType.COPYCAT);
 
     /**
      * Whether this model core should render enhanced models.
@@ -118,6 +120,21 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     }
 
     /**
+     * Helper method to copy block state properties from the copycat to the material.
+     * This is useful for copycats that allow blocks similar to themselves to be used as materials.
+     */
+    public static MaterialMapper updatePropertiesIfMatch(Class<?> clazz) {
+        return (state, mat) -> {
+            if (mat == null)
+                return null;
+            if (clazz.isInstance(mat.getBlock())) {
+                return BlockUtils.tryCopyProperties(state, mat);
+            }
+            return mat;
+        };
+    }
+
+    /**
      * Create a platform-specific {@link BakedModel} implementation for a copycat which wraps the original model and
      * renders with the provided core.
      *
@@ -147,21 +164,6 @@ public abstract class CopycatModelCore implements CopycatModelPart {
         //noinspection DataFlowIssue
         return null;
     }
-
-    /**
-     * A core that renders the original model without modifications, while still handles particles and other copycat logic.
-     */
-    public static final CopycatModelCore PASS_THROUGH = new CopycatModelCore() {
-        @Override
-        public void registerModels(List<ModelEntry> entries) {
-            entries.add(SUPER);
-        }
-
-        @Override
-        public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
-
-        }
-    };
 
     /**
      * A core that renders the original model and additional kinetic models when needed.
@@ -211,13 +213,19 @@ public abstract class CopycatModelCore implements CopycatModelPart {
     /**
      * A model entry to be rendered by a {@link CopycatModelCore}.
      *
-     * @param key   A custom key to identify the model entry during rendering.
-     * @param model A getter that returns a {@link BakedModel} to be rendered for this entry, invoked for each render. Set to null to render the original model as specified by the copycat's block state file.
-     * @param part  A {@link CopycatModelPart} to assemble the model quads with. Set to null if the model should be rendered without modifications.
-     * @param type  The type of the model entry, which determines how the model is rendered.
+     * @param key            A custom key to identify the model entry during rendering.
+     * @param model          A getter that returns a {@link BakedModel} to be rendered for this entry, invoked for each render. Set to null to render the original model as specified by the copycat's block state file.
+     * @param part           A {@link CopycatModelPart} to assemble the model quads with. Set to null if the model should be renderekd without modifications.
+     * @param materialMapper A function to modify the block state of the material at render time. Use {@link MaterialMapper#IDENTITY} if no modifications are needed.
+     * @param type           The type of the model entry, which determines how the model is rendered.
      */
+    @ParametersAreNonnullByDefault
     public record ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part,
+                             MaterialMapper materialMapper,
                              EntryType type) {
+        public ModelEntry(String key, @Nullable ModelGetter model, @Nullable CopycatModelPart part, EntryType type) {
+            this(key, model, part, MaterialMapper.IDENTITY, type);
+        }
     }
 
     public enum EntryType {
@@ -267,6 +275,8 @@ public abstract class CopycatModelCore implements CopycatModelPart {
      */
     @FunctionalInterface
     public interface ModelGetter {
+        ModelGetter MATERIAL = (state, material) -> getModelOf(material);
+
         /**
          * Get the model for the given block state and material.
          *
@@ -274,5 +284,21 @@ public abstract class CopycatModelCore implements CopycatModelPart {
          * @param material The block state of the copied material.
          */
         BakedModel getModel(BlockState state, BlockState material);
+    }
+
+    /**
+     * A functional interface to map the block state of the material at render time.
+     */
+    @FunctionalInterface
+    public interface MaterialMapper {
+        MaterialMapper IDENTITY = (state, material) -> material;
+
+        /**
+         * Modifies the block state of the material at render time. Use {@link MaterialMapper#IDENTITY} if no modifications are needed.
+         *
+         * @param state    The block state of the copycat.
+         * @param material The block state of the copied material.
+         */
+        BlockState map(BlockState state, BlockState material);
     }
 }

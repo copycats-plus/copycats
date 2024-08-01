@@ -6,6 +6,7 @@ import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PoleHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -132,6 +133,13 @@ public class CopycatBeamBlock extends CCWaterloggedCopycatBlock implements IStat
         return CCShapes.BEAM.get(pState.getValue(AXIS)).toShape();
     }
 
+    @Override
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        if (transform.rotationAxis != null) {
+            state = state.setValue(AXIS, transform.rotateAxis(state.getValue(AXIS)));
+        }
+        return state;
+    }
 
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
@@ -144,23 +152,6 @@ public class CopycatBeamBlock extends CCWaterloggedCopycatBlock implements IStat
                                      BlockState neighborState,
                                      Direction dir) {
         return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
-        switch (rot) {
-            case COUNTERCLOCKWISE_90, CLOCKWISE_90 -> {
-                return switch (state.getValue(AXIS)) {
-                    case X -> state.setValue(AXIS, Axis.Z);
-                    case Z -> state.setValue(AXIS, Axis.X);
-                    default -> state;
-                };
-            }
-            default -> {
-                return state;
-            }
-        }
     }
 
     @MethodsReturnNonnullByDefault

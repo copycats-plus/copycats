@@ -17,7 +17,7 @@ import static com.simibubi.create.foundation.block.render.SpriteShiftEntry.getUn
 public record QuadUVTranslate(Direction face, float offsetU, float offsetV) implements QuadTransform {
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         if (quad.computeLightFace() == face) {
             for (int vertex = 0; vertex < 4; vertex++) {
                 float u = getUnInterpolatedU(sprite, quad.vertices.get(vertex).uv.u) + offsetU;
@@ -27,5 +27,6 @@ public record QuadUVTranslate(Direction face, float offsetU, float offsetV) impl
                 quad.vertices.get(vertex).uv.v = sprite.getV(v);
             }
         }
+        return true;
     }
 }

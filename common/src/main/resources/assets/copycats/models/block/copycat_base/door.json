@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"parent": "block/thin_block",
 	"textures": {
 		"0": "create:block/copycat_base",
 		"particle": "create:block/copycat_base"
@@ -91,12 +92,12 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 3, 1],
-			"scale": [0.55, 0.55, 0.55]
+			"translation": [0, 3, 3],
+			"scale": [0.35, 0.35, 0.35]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 3, 1],
-			"scale": [0.55, 0.55, 0.55]
+			"translation": [0, 3, 3],
+			"scale": [0.35, 0.35, 0.35]
 		},
 		"firstperson_righthand": {
 			"rotation": [0, -90, 25],
@@ -113,8 +114,9 @@
 			"scale": [0.25, 0.25, 0.25]
 		},
 		"gui": {
-			"translation": [0, -4, 0],
-			"scale": [0.45, 0.45, 0.45]
+			"rotation": [30, 225, 0],
+			"translation": [-1.75, -1.75, 0],
+			"scale": [0.4, 0.4, 0.4]
 		},
 		"head": {
 			"rotation": [0, 180, 0],

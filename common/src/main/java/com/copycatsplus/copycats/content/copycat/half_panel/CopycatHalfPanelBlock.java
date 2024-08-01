@@ -6,12 +6,14 @@ import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItem;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
 import com.simibubi.create.foundation.placement.PoleHelper;
 import com.simibubi.create.foundation.utility.Iterate;
+import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -37,6 +39,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +50,8 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -197,26 +202,12 @@ public class CopycatHalfPanelBlock extends CCWaterloggedCopycatBlock implements 
         return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, Rotation pRot) {
-        Direction facing = pState.getValue(FACING);
-        Direction offset = pState.getValue(OFFSET);
-        Vec3i offsetNormal = getOffsetFacing(facing, offset).getNormal();
-        switch (pRot) {
-            case CLOCKWISE_90:
-                offsetNormal = new Vec3i(-offsetNormal.getZ(), offsetNormal.getY(), offsetNormal.getX());
-                break;
-            case CLOCKWISE_180:
-                offsetNormal = new Vec3i(-offsetNormal.getX(), offsetNormal.getY(), -offsetNormal.getZ());
-                break;
-            case COUNTERCLOCKWISE_90:
-                offsetNormal = new Vec3i(offsetNormal.getZ(), offsetNormal.getY(), -offsetNormal.getX());
-                break;
-            default:
-                break;
-        }
-        Direction newFacing = pRot.rotate(facing);
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        Direction facing = state.getValue(FACING);
+        Direction offset = state.getValue(OFFSET);
+        Vec3i offsetNormal = transform.applyWithoutOffset(new BlockPos(getOffsetFacing(facing, offset).getNormal()));
+        Direction newFacing = transformFacing(transform, facing);
         Vec3i facingNormal = newFacing.getNormal();
         if (offsetNormal.getY() != 0) {
             if (offsetNormal.getX() == 0 && facingNormal.getX() != 0) {
@@ -225,33 +216,9 @@ public class CopycatHalfPanelBlock extends CCWaterloggedCopycatBlock implements 
                 offsetNormal = new Vec3i(offsetNormal.getX(), offsetNormal.getZ(), offsetNormal.getY());
             }
         }
-        return pState
+        return state
                 .setValue(FACING, newFacing)
                 .setValue(OFFSET, Objects.requireNonNull(directionFromDelta(offsetNormal.getX(), offsetNormal.getY(), offsetNormal.getZ())));
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
-        Axis mirrorAxis = null;
-        for (Axis axis : Iterate.axes) {
-            if (pMirror.rotation().inverts(axis)) {
-                mirrorAxis = axis;
-                break;
-            }
-        }
-        if (mirrorAxis == null) {
-            return pState;
-        }
-        Direction facing = pState.getValue(FACING);
-        Direction offset = pState.getValue(OFFSET);
-        if (facing.getAxis() == mirrorAxis) {
-            return pState.setValue(FACING, facing.getOpposite());
-        } else if (offset.getAxis() == mirrorAxis) {
-            return pState.setValue(OFFSET, offset.getOpposite());
-        } else {
-            return pState;
-        }
     }
 
     /**

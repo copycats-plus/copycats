@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlock;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableVertex;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -17,19 +18,10 @@ import static com.copycatsplus.copycats.utility.BackportUtils.trySetValue;
 
 public class CopycatCogWheelModelCore extends CopycatModelCore {
 
-    private static BlockState prepareMaterial(BlockState state, BlockState material) {
-        if (material.getBlock() instanceof CogWheelBlock) {
-            return state.getOptionalValue(CogWheelBlock.AXIS)
-                    .map(val -> trySetValue(material, CogWheelBlock.AXIS, val))
-                    .orElse(material);
-        }
-        return material;
-    }
-
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        entries.add(new ModelEntry(MATERIAL_KEY, (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
-        entries.add(new ModelEntry("cogwheel", (state, mat) -> getModelOf(prepareMaterial(state, mat)), this, EntryType.KINETIC_COPYCAT));
+        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesIfMatch(CogWheelBlock.class), EntryType.KINETIC_COPYCAT));
+        entries.add(new ModelEntry("cogwheel", ModelGetter.MATERIAL, this, updatePropertiesIfMatch(CogWheelBlock.class), EntryType.KINETIC_COPYCAT));
     }
 
     @Override
@@ -39,14 +31,17 @@ public class CopycatCogWheelModelCore extends CopycatModelCore {
         if (material.getBlock() instanceof CogWheelBlock) {
             context.assemblePiece(
                     t -> t.rotateX(axis == Axis.Z ? 90 : 0).rotateZ(axis == Axis.X ? 90 : 0),
-                    vec3(-8, 6, -8),
-                    aabb(32, 4, 32).move(-8, 6, -8),
+                    vec3(-8, -8, -8),
+                    aabb(32, 32, 32).move(-8, -8, -8),
                     cull(0),
                     noCull(),
-                    scale(
-                            pivot(8, 8, 8),
-                            scale(0.99, 0.99, 0.99)
-                    )
+                    (quad, sprite) -> {
+                        for (MutableVertex vertex : quad.vertices) {
+                            if (vertex.xyz.y < 0.01 || vertex.xyz.y > 0.99)
+                                return false;
+                        }
+                        return true;
+                    }
             );
             return;
         }

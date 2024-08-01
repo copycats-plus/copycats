@@ -6,12 +6,24 @@ import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTrans
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.List;
+
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
 
 public class CopycatLadderModelCore extends CopycatModelCore {
 
     @Override
+    public void registerModels(List<ModelEntry> entries) {
+        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesIfMatch(LadderBlock.class), EntryType.COPYCAT));
+    }
+
+    @Override
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
+        if (material.getBlock() instanceof LadderBlock) {
+            context.assembleAll();
+            return;
+        }
+
         int rot = (int) state.getValue(LadderBlock.FACING).toYRot();
         AssemblyTransform transform = t -> t.rotateY(rot);
         assemblePoles(context, transform);

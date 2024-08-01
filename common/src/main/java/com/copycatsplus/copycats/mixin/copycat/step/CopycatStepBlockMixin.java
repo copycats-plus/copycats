@@ -1,6 +1,10 @@
 package com.copycatsplus.copycats.mixin.copycat.step;
 
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
+import com.copycatsplus.copycats.utility.BlockUtils;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.decoration.copycat.CopycatStepBlock;
 import com.simibubi.create.content.decoration.copycat.WaterloggedCopycatBlock;
@@ -12,6 +16,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
@@ -50,5 +56,20 @@ public abstract class CopycatStepBlockMixin extends WaterloggedCopycatBlock impl
     @Override
     public CopycatBlockEntity getBlockEntity(BlockGetter worldIn, BlockPos pos) {
         return super.getBlockEntity(worldIn, pos);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return transform(state, new StructureTransform(BlockPos.ZERO, Direction.Axis.Y, rotation, Mirror.NONE));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return transform(state, new StructureTransform(BlockPos.ZERO, null, Rotation.NONE, mirror));
+    }
+
+    @Override
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return BlockUtils.transformStepLikeHorizontal(state, transform, CCBlocks.COPYCAT_VERTICAL_STEP.getDefaultState());
     }
 }
