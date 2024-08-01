@@ -16,6 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -72,6 +74,18 @@ public abstract class CCCopycatBlock extends Block implements IBE<CCCopycatBlock
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         super.playerWillDestroy(level, pos, state, player);
         ICopycatBlock.super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
+        return ICopycatBlock.super.rotate(state, rot);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirror) {
+        return ICopycatBlock.super.mirror(state, mirror);
     }
 
     @Override

@@ -126,7 +126,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
         final boolean isVirtual = VirtualEmptyBlockGetter.is(blockView);
 
         for (CopycatModelCore.ModelEntry entry : entries) {
-            BlockState material = materials.get(entry.key());
+            BlockState material = entry.materialMapper().map(state, materials.get(entry.key()));
 
             if (material == null && entry.type().useCopycatLogic()) {
                 // Don't skip rendering if the world is empty since we might be rendering a placement helper
@@ -250,20 +250,23 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
     public TextureAtlasSprite getParticleIcon(Object data) {
         if (data instanceof BlockState state) {
             BlockState material = getMaterial(state);
-            return getIcon(getModelOf(material), null);
+            if (!material.is(AllBlocks.COPYCAT_BASE.get()))
+                return getIcon(getModelOf(material), null);
         } else if (data instanceof Pair<?, ?> pair && pair.getSecond() instanceof BlockState material) {
-            return getIcon(getModelOf(material), pair.getFirst());
+            if (!material.is(AllBlocks.COPYCAT_BASE.get()))
+                return getIcon(getModelOf(material), pair.getFirst());
         } else if (data instanceof Map<?, ?> mats) {
             for (Map.Entry<?, ?> entry : mats.entrySet()) {
                 if (entry.getValue() instanceof Pair<?, ?> pair && pair.getSecond() instanceof BlockState material3) {
-                    return getIcon(getModelOf(material3), pair.getFirst());
+                    if (!material3.is(AllBlocks.COPYCAT_BASE.get()))
+                        return getIcon(getModelOf(material3), pair.getFirst());
                 } else if (entry.getValue() instanceof BlockState material4) {
-                    return getIcon(getModelOf(material4), null);
+                    if (!material4.is(AllBlocks.COPYCAT_BASE.get()))
+                        return getIcon(getModelOf(material4), null);
                 }
             }
         }
-
-        return CustomParticleIconModel.super.getParticleIcon(data);
+        return getIcon(getModelOf(AllBlocks.COPYCAT_BASE.getDefaultState()), null);
     }
 
     public BakedModel getModelForEntry(CopycatModelCore.ModelEntry entry, BlockState state, BlockState material) {

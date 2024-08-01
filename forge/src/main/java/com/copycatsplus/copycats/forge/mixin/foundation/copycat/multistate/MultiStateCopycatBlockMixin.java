@@ -3,8 +3,10 @@ package com.copycatsplus.copycats.forge.mixin.foundation.copycat.multistate;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MaterialItemStorage;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlock;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlock;
+import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.simibubi.create.AllBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -49,25 +52,40 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IForg
 
     @Override
     public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity) {
-        return ICopycatBlock.getMaterial(level, pos).getSoundType();
+        if (state.getBlock() instanceof IMultiStateCopycatBlock copycatBlock) {
+            IMultiStateCopycatBlockEntity copycatBE = copycatBlock.getCopycatBlockEntity(level, pos);
+            if (copycatBE == null)
+                return super.getSoundType(state, level, pos, entity);
+            for (MaterialItemStorage.MaterialItem materialItem : copycatBE.getMaterialItemStorage().getAllMaterialItems()) {
+                if (materialItem.hasCustomMaterial()) {
+                    return materialItem.material().getSoundType(level, pos, entity);
+                }
+            }
+            return ICopycatBlock.getMaterial(level, pos).getSoundType(level, pos, entity);
+        } else {
+            return super.getSoundType(state, level, pos, entity);
+        }
     }
 
     @Override
     public float getFriction(BlockState state, LevelReader level, BlockPos pos, Entity entity) {
         if (state.getBlock() instanceof IMultiStateCopycatBlock copycatBlock) {
-            AtomicReference<Float> bonus = new AtomicReference<>(0f);
-            AtomicInteger count = new AtomicInteger(0);
+            float bonus = 0f;
+            int count = 0;
 
             IMultiStateCopycatBlockEntity copycatBE = copycatBlock.getCopycatBlockEntity(level, pos);
             if (copycatBE == null)
                 return super.getFriction(state, level, pos, entity);
-            copycatBE.getMaterialItemStorage().getAllMaterials().forEach(mat -> {
-                count.getAndIncrement();
-                bonus.accumulateAndGet(mat.is(Blocks.AIR) ? state.getFriction(level, pos, entity) : mat.getFriction(level, pos, entity), Float::sum);
-            });
-            return bonus.get() / count.get();
+            for (String property : copycatBE.getMaterialItemStorage().getAllProperties()) {
+                if (!copycatBlock.partExists(state, property)) continue;
+                BlockState mat = copycatBE.getMaterialItemStorage().getMaterialItem(property).material();
+                count++;
+                bonus += mat.is(Blocks.AIR) ? super.getFriction(state, level, pos, entity) : mat.getFriction(level, pos, entity);
+            }
+            return bonus / count;
+        } else {
+            return super.getFriction(state, level, pos, entity);
         }
-        return super.getFriction(state, level, pos, entity);
     }
 
     @Override
@@ -75,8 +93,8 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IForg
         if (state.getBlock() instanceof IMultiStateCopycatBlock copycatBlock) {
             AtomicInteger light = new AtomicInteger(0);
 
-            IMultiStateCopycatBlockEntity copycatBE = copycatBlock.getCopycatBlockEntity(level, pos);
-            if (copycatBE == null)
+            BlockEntity be = BlockEntityUtils.getBlockEntityCrossThread(level, pos);
+            if (!(be instanceof IMultiStateCopycatBlockEntity copycatBE))
                 return super.getLightEmission(state, level, pos);
             copycatBE.getMaterialItemStorage().getAllMaterials().forEach(bs -> {
                 light.accumulateAndGet(bs.getLightEmission(), Math::max);

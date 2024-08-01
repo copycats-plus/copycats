@@ -174,10 +174,7 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
         MaterialItemStorage.MaterialItem materialItem = getMaterialItemStorage().getMaterialItem(property);
         materialItem.setMaterial(blockState);
         getMaterialItemStorage().storeMaterialItem(property, materialItem);
-        if (!getLevel().isClientSide()) {
-            notifyUpdate();
-            return;
-        }
+
         BlockEntityUtils.redraw((BlockEntity) this);
     }
 
@@ -238,7 +235,7 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
         if (self.getBlockState().getBlock() instanceof IMultiStateCopycatBlock) {
             boolean anyUpdated = self.getMaterialItemStorage().deserialize(tag.getCompound("material_data"));
 
-            if (clientPacket && anyUpdated)
+            if (anyUpdated)
                 BlockEntityUtils.redraw((BlockEntity) self); // not calling self.redraw() because Extended Cogwheels overwrites it to be protected
         }
     }

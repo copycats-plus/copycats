@@ -81,7 +81,13 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
     }
 
     default ICopycatBlock getBlock() {
-        return (ICopycatBlock) getBlockState().getBlock();
+        Block block = getBlockState().getBlock();
+        if (block instanceof ICopycatBlock copycatBlock)
+            return copycatBlock;
+        // the block state might not be a copycat block in some virtual worlds
+        // return sensible defaults in those cases
+        return new ICopycatBlock() {
+        };
     }
 
     default boolean hasCustomMaterial() {
@@ -107,10 +113,7 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
             }
 
         setMaterialInternal(blockState);
-        if (!getLevel().isClientSide()) {
-            notifyUpdate();
-            return;
-        }
+
         BlockEntityUtils.redraw((BlockEntity) this);
     }
 
@@ -192,7 +195,7 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
             self.setMaterialInternal(AllBlocks.COPYCAT_BASE.getDefaultState());
         }
 
-        if (clientPacket && prevMaterial != self.getMaterial())
+        if (prevMaterial != self.getMaterial())
             BlockEntityUtils.redraw((BlockEntity) self); // not calling self.redraw() because Extended Cogwheels overwrites it to be protected
     }
 

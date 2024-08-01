@@ -49,6 +49,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatBoardBlock extends WaterloggedMultiStateCopycatBlock implements ICustomCTBlocking, ISpecialBlockItemRequirement {
@@ -297,20 +299,13 @@ public class CopycatBoardBlock extends WaterloggedMultiStateCopycatBlock impleme
     }
 
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, Rotation pRotation) {
-        return mapDirections(pState, pRotation::rotate);
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, Mirror pMirror) {
-        return mapDirections(pState, pMirror::mirror);
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return mapDirections(state, dir -> transformFacing(transform, dir));
     }
 
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
-        if (transform.rotationAxis != null && transform.rotationAxis.isVertical())
-            be.getMaterialItemStorage().remapStorage(key -> directionToProperty(transform.rotation.rotate(propertyToDirection(key))));
-        be.getMaterialItemStorage().remapStorage(key -> directionToProperty(transform.mirror.mirror(propertyToDirection(key))));
+        be.getMaterialItemStorage().remapStorage(key -> directionToProperty(transformFacing(transform, propertyToDirection(key))));
     }
 
     private static Direction propertyToDirection(String property) {

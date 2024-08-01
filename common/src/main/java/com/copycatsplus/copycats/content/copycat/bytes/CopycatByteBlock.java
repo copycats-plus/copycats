@@ -273,20 +273,26 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
     }
 
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
-        return mapBytes(pState, bite -> bite.rotate(pRotation));
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, Mirror pMirror) {
-        return mapBytes(pState, bite -> bite.mirror(pMirror));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return mapBytes(state, bite -> transformByte(transform, bite));
     }
 
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
-        if (transform.rotationAxis != null && transform.rotationAxis.isVertical())
-            be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).rotate(transform.rotation)).getName());
-        be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).mirror(transform.mirror)).getName());
+        be.getMaterialItemStorage().remapStorage(key -> byByte(transformByte(transform, byteMap.get(key))).getName());
+    }
+
+    private static Byte transformByte(StructureTransform transform, Byte bite) {
+        if (transform.mirror != null)
+            bite = bite.mirror(transform.mirror);
+        if (transform.rotationAxis != null) {
+            bite = switch (transform.rotationAxis) {
+                case X -> bite.rotateX(transform.rotation);
+                case Y -> bite.rotateY(transform.rotation);
+                case Z -> bite.rotateZ(transform.rotation);
+            };
+        }
+        return bite;
     }
 
     public static Vec3 clampToBlockPos(Vec3 vec, BlockPos pos) {
@@ -387,7 +393,19 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
             return set(direction.getAxis(), !get(direction.getAxis()));
         }
 
-        public Byte rotate(Rotation rotation) {
+        public Byte rotateX(Rotation rotation) {
+            if (rotation == Rotation.CLOCKWISE_90) {
+                return new Byte(this.x, this.z, !this.y);
+            } else if (rotation == Rotation.CLOCKWISE_180) {
+                return new Byte(this.x, this.y, this.z);
+            } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
+                return new Byte(this.x, !this.z, this.y);
+            } else {
+                return this;
+            }
+        }
+
+        public Byte rotateY(Rotation rotation) {
             if (rotation == Rotation.CLOCKWISE_90) {
                 return new Byte(!this.z, this.y, this.x);
             } else if (rotation == Rotation.CLOCKWISE_180) {
@@ -399,10 +417,23 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
             }
         }
 
+        public Byte rotateZ(Rotation rotation) {
+            if (rotation == Rotation.CLOCKWISE_90) {
+                return new Byte(this.y, !this.x, this.z);
+            } else if (rotation == Rotation.CLOCKWISE_180) {
+                return new Byte(this.x, this.y, this.z);
+            } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
+                return new Byte(!this.y, this.x, this.z);
+            } else {
+                return this;
+            }
+        }
+
         public Byte mirror(Mirror mirror) {
             boolean invertX = mirror.rotation() == OctahedralGroup.INVERT_X;
+            boolean invertY = mirror.rotation() == OctahedralGroup.INVERT_Y;
             boolean invertZ = mirror.rotation() == OctahedralGroup.INVERT_Z;
-            return new Byte(invertX != this.x, this.y, invertZ != this.z);
+            return new Byte(invertX != this.x, invertY != this.y, invertZ != this.z);
         }
 
         @Override

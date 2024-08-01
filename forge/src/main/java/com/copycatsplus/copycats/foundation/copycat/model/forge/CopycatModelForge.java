@@ -158,7 +158,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
             // seems to be missing in Block.shouldRenderFace
             BlockPos.MutableBlockPos neighbourPos = mutablePos.setWithOffset(pos, face);
             BlockState neighbourState = world.getBlockState(neighbourPos);
-            if (state.supportsExternalFaceHiding() && neighbourState.hidesNeighborFace(world, neighbourPos, state, face.getOpposite())) {
+            if (state.supportsExternalFaceHiding() && neighbourState.hidesNeighborFace(world, neighbourPos, material, face.getOpposite())) {
                 occlusionData.occlude(face);
                 continue;
             }
@@ -178,7 +178,7 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         Map<String, IModelData> wrappedDataMap = getWrappedData(data);
         final boolean isVirtual = ModelUtils.isVirtual(data);
         for (CopycatModelCore.ModelEntry entry : entries) {
-            BlockState material = materials.get(entry.key());
+            BlockState material = entry.materialMapper().map(state, materials.get(entry.key()));
 
             if (entry.type().onlyWhenVirtual() && !isVirtual)
                 continue;
@@ -283,7 +283,10 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
         if (material.isEmpty())
             return super.getParticleIcon(data);
 
-        Map.Entry<String, BlockState> key = material.entrySet().stream().findFirst().get();
+        Map.Entry<String, BlockState> key = material.entrySet().stream()
+                .filter(s -> !s.getValue().is(AllBlocks.COPYCAT_BASE.get()))
+                .findFirst()
+                .orElse(material.entrySet().iterator().next());
 
         return getModelOf(key.getValue()).getParticleIcon(getWrappedData(data).get(key.getKey()));
     }

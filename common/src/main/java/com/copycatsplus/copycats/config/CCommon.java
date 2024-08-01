@@ -15,7 +15,7 @@ public class CCommon extends SyncConfigBase {
         return "common";
     }
 
-    public final ConfigBool disableConversion = b(false, "disableConversion", Comments.disableConversion);
+    public final ConfigBool disableMigration = b(false, "disableMigration", Comments.disableMigration);
 
     public final CFeatures toggle = nested(0, CFeatures::new, Comments.toggle);
 
@@ -28,6 +28,6 @@ public class CCommon extends SyncConfigBase {
         static String toggle = "Enable/disable features. Values on server override clients";
         static String categories = "Enable/disable categories of features. Disabling a category hides all related features. Values on server override clients";
 
-        static String disableConversion = "Enables/Disables the conversion of placed copycats from old versions to new ones. Set this to false to enable conversion! (only happens on world load, so if changed while in-game you will need to load the world again)";
+        static String disableMigration = "Disables the migration of placed copycats from old versions to new ones. Setting this to true may cause copycats to lose their textures when you upgrade this mod. Restart the game to apply changes.";
     }
 }

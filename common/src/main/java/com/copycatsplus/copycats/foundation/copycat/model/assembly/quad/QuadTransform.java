@@ -7,5 +7,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  * Transforms a quad by mutating its vertices or other properties.
  */
 public interface QuadTransform {
-    void transformQuad(MutableQuad quad, TextureAtlasSprite sprite);
+    /**
+     * Transforms the quad by mutating its vertices or other properties.
+     * <p>
+     * Return false to discard the quad.
+     */
+    boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite);
 }

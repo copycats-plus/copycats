@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -51,6 +52,11 @@ public class CopycatPressurePlateBlock extends PressurePlateBlock implements ICo
                 () -> ICopycatBlock.super.use(state, level, pos, player, hand, hit),
                 () -> super.use(state, level, pos, player, hand, hit)
         );
+    }
+
+    @Override
+    public boolean isAcceptedRegardless(BlockState material) {
+        return material.getBlock() instanceof BasePressurePlateBlock;
     }
 
     @Override

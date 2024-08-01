@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.foundation.copycat.multistate;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -65,6 +66,18 @@ public abstract class MultiStateCopycatBlock extends Block implements IMultiStat
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         super.playerWillDestroy(level, pos, state, player);
         IMultiStateCopycatBlock.super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
+        return IMultiStateCopycatBlock.super.rotate(state, rot);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirror) {
+        return IMultiStateCopycatBlock.super.mirror(state, mirror);
     }
 
     @Override

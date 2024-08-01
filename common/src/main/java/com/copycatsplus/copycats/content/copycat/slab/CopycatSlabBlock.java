@@ -15,6 +15,7 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
+import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,6 +52,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -113,7 +116,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
 
     @Override
     public Set<String> storageProperties() {
-        return Set.of(SlabType.BOTTOM.getSerializedName(), SlabType.TOP.getSerializedName());
+        return Set.of(SlabType.TOP.getSerializedName(), SlabType.BOTTOM.getSerializedName());
     }
 
     @Override
@@ -277,31 +280,15 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
     }
 
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
-        return setApparentDirection(state, rot.rotate(getApparentDirection(state)));
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.getRotation(getApparentDirection(state)));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return setApparentDirection(state, transformFacing(transform, getApparentDirection(state)));
     }
 
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
         Axis axis = state.getValue(AXIS);
-        if (transform.rotationAxis != null && transform.rotationAxis.isVertical()) {
-            if (axis == Axis.Y) return;
-            if (transform.rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
-                    transform.rotation == Rotation.CLOCKWISE_180 ||
-                    transform.rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {
-                be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
-            }
-        }
-        if (axis == Axis.Y) return;
-        if (transform.mirror != null) {
-            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Z && axis == Axis.Z || transform.mirror.rotation() == OctahedralGroup.INVERT_X && axis == Axis.X) {
-                be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
-            }
+        if (transformFacing(transform, Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE)).getAxisDirection() == AxisDirection.POSITIVE) {
+            be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
         }
     }
 

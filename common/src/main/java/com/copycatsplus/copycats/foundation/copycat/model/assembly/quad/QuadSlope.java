@@ -23,7 +23,7 @@ public record QuadSlope(Direction face, QuadSlopeFunction func) implements QuadT
     private static final double EPSILON = 0.02 / 16;
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         for (int i = 0; i < 4; i++) {
             MutableVec3 vertex = quad.vertices.get(i).xyz;
 
@@ -79,6 +79,7 @@ public record QuadSlope(Direction face, QuadSlopeFunction func) implements QuadT
                     throw new RuntimeException("Unexpected value: " + this.face.getAxis());
             }
         }
+        return true;
     }
 
     /**

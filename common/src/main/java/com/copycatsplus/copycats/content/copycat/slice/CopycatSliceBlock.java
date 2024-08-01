@@ -1,10 +1,14 @@
 package com.copycatsplus.copycats.content.copycat.slice;
 
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.BlockUtils;
+import com.mojang.math.OctahedralGroup;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -37,6 +41,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -215,13 +221,7 @@ public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpe
     }
 
     @Override
-    public BlockState rotate(BlockState pState, Rotation pRot) {
-        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState pState, Mirror pMirror) {
-        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return BlockUtils.transformStepLikeHorizontal(state, transform, CCBlocks.COPYCAT_VERTICAL_SLICE.getDefaultState());
     }
 }

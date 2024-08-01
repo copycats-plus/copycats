@@ -1,10 +1,13 @@
 package com.copycatsplus.copycats.content.copycat.vertical_slice;
 
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.BlockUtils;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -30,6 +33,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -42,6 +46,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
+import static com.copycatsplus.copycats.content.copycat.slice.CopycatSliceBlock.HALF;
 import static net.minecraft.core.Direction.Axis;
 
 @ParametersAreNonnullByDefault
@@ -220,31 +226,8 @@ public class CopycatVerticalSliceBlock extends CCWaterloggedCopycatBlock impleme
         return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, Rotation pRot) {
-        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return BlockUtils.transformStepLikeVertical(state, transform, CCBlocks.COPYCAT_SLICE.getDefaultState());
     }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
-        Axis mirrorAxis = null;
-        for (Axis axis : Iterate.axes) {
-            if (pMirror.rotation().inverts(axis)) {
-                mirrorAxis = axis;
-                break;
-            }
-        }
-        if (mirrorAxis == null || mirrorAxis.isVertical()) {
-            return pState;
-        }
-        Direction facing = pState.getValue(FACING);
-        if (facing.getAxis() != mirrorAxis) {
-            return pState.setValue(FACING, facing.getClockWise());
-        } else {
-            return pState.setValue(FACING, facing.getCounterClockWise());
-        }
-    }
-
 }

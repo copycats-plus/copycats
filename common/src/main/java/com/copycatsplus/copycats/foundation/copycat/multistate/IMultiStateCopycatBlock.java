@@ -60,6 +60,8 @@ import java.util.Set;
  * {@link IMultiStateCopycatBlock#use},
  * {@link IMultiStateCopycatBlock#setPlacedBy},
  * {@link IMultiStateCopycatBlock#hidesNeighborFace},
+ * {@link IMultiStateCopycatBlock#rotate},
+ * {@link IMultiStateCopycatBlock#mirror},
  * {@link Block#getShape},
  * {@link IMultiStateCopycatBlock#onRemove} and
  * {@link IMultiStateCopycatBlock#playerWillDestroy} to this interface.
@@ -93,6 +95,8 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
 
     /**
      * When it is impossible to determine the specific part involved in an interaction, this property is used.
+     * The return value must be an element returned by {@link IMultiStateCopycatBlock#storageProperties}.
+     * It should represent one of the topmost parts of the copycat.
      */
     String defaultProperty();
 
@@ -103,6 +107,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
 
     /**
      * The string keys of all parts that can be stored in the copycat.
+     * Ideally, the keys should be sorted from top to bottom in 3D space.
      */
     Set<String> storageProperties();
 
@@ -334,12 +339,16 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
             if (copycatBE.getMaterialItemStorage().hasCustomMaterial(property))
                 continue;
 
+            boolean freeToApply = copycatBE.getMaterialItemStorage().getAllConsumedItems().stream().anyMatch(s -> s.getItem() == offhandItem.getItem());
+
             copycatBE.setMaterial(property, appliedState);
-            copycatBE.setConsumedItem(property, offhandItem);
+            if (!freeToApply)
+                copycatBE.setConsumedItem(property, offhandItem);
 
             if (placer instanceof Player player && player.isCreative())
                 continue;
-            offhandItem.shrink(1);
+            if (!freeToApply)
+                offhandItem.shrink(1);
             if (offhandItem.isEmpty()) {
                 placer.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
                 break;
@@ -359,7 +368,6 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
             if (copycatBE != null)
                 copycatBE.getMaterialItemStorage().getAllConsumedItems().forEach(stack -> Block.popResource(level, pos, stack));
         }
-        level.removeBlockEntity(pos);
     }
 
     @Override

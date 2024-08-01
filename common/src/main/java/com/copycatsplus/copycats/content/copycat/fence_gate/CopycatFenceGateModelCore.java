@@ -4,15 +4,30 @@ import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.List;
 
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext.*;
 import static com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableCullFace.*;
 import static net.minecraft.world.level.block.FenceGateBlock.*;
 
 public class CopycatFenceGateModelCore extends CopycatModelCore {
+
+    @Override
+    public void registerModels(List<ModelEntry> entries) {
+        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesIfMatch(FenceGateBlock.class), EntryType.COPYCAT));
+    }
+
     @Override
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
+        if (material.getBlock() instanceof FenceGateBlock) {
+            context.assembleAll();
+            return;
+        }
+
         int offsetWall = state.getValue(IN_WALL) ? -3 : 0;
         int rot = (int) state.getValue(FACING).toYRot();
         AssemblyTransform transform = t -> t.rotateY(rot);

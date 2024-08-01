@@ -5,6 +5,7 @@ import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -36,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
 import static net.minecraft.core.Direction.UP;
 
 @ParametersAreNonnullByDefault
@@ -141,16 +143,9 @@ public class CopycatLayerBlock extends CCWaterloggedCopycatBlock implements ISpe
         return pDirection.getAxis() != facing.getAxis();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return state.setValue(FACING, transformFacing(transform, state.getValue(FACING)));
     }
 
     @SuppressWarnings("deprecation")

@@ -13,7 +13,7 @@ public enum StateType {
     SINGULAR,
     MULTI;
 
-    StateType getTypeFromBlock(Block block) {
+    static StateType getTypeFromBlock(Block block) {
         if (block instanceof IStateType stateType) {
             return stateType.stateType();
         } else {

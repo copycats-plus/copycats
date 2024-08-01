@@ -72,6 +72,11 @@ public class CopycatTrapdoorBlock extends TrapDoorBlock implements ICopycatBlock
     }
 
     @Override
+    public boolean isAcceptedRegardless(BlockState material) {
+        return material.getBlock() instanceof TrapDoorBlock;
+    }
+
+    @Override
     public Class<CCCopycatBlockEntity> getBlockEntityClass() {
         return CCCopycatBlockEntity.class;
     }

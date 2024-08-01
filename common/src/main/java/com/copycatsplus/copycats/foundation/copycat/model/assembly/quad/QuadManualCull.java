@@ -17,9 +17,10 @@ import javax.annotation.Nullable;
 public record QuadManualCull(CullFaceMapper mapper) implements QuadTransform {
 
     @Override
-    public void transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
+    public boolean transformQuad(MutableQuad quad, TextureAtlasSprite sprite) {
         quad.cullFace = mapper.map(quad.computeLightFace(), quad.cullFace);
         quad.disableFinalAutoCull = true;
+        return true;
     }
 
     @FunctionalInterface

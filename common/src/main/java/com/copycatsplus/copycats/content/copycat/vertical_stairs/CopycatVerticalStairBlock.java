@@ -3,13 +3,18 @@ package com.copycatsplus.copycats.content.copycat.vertical_stairs;
 import com.copycatsplus.copycats.CCBlockStateProperties;
 import com.copycatsplus.copycats.CCBlockStateProperties.Side;
 import com.copycatsplus.copycats.CCBlockStateProperties.VerticalStairShape;
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.content.copycat.slice.CopycatSliceBlock;
 import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock.FaceShape;
+import com.copycatsplus.copycats.utility.BlockUtils;
+import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -182,25 +187,50 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
-        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState state, @NotNull Mirror mirror) {
-        Direction facing = state.getValue(FACING);
-        Side side = state.getValue(SIDE);
-        Axis axis = switch (mirror.rotation()) {
-            case INVERT_X -> Axis.X;
-            case INVERT_Z -> Axis.Z;
-            default -> Axis.Y;
-        };
-        if (axis == Axis.Y) return state;
-        if (facing.getAxis() == axis) {
-            return state.setValue(FACING, facing.getOpposite()).setValue(SIDE, side.getOpposite());
-        } else {
-            return state.setValue(SIDE, side.getOpposite());
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        if (transform.mirror != null) {
+            Direction.Axis mirrorAxis = null;
+            for (Direction.Axis axis : Iterate.axes) {
+                if (transform.mirror.rotation().inverts(axis)) {
+                    mirrorAxis = axis;
+                    break;
+                }
+            }
+            if (mirrorAxis != null && !mirrorAxis.isVertical()) {
+                Direction facing = state.getValue(FACING);
+                if (facing.getAxis() != mirrorAxis) {
+                    state = state.cycle(SIDE);
+                } else {
+                    state = state.setValue(FACING, facing.getOpposite()).cycle(SIDE);
+                }
+            }
         }
+        if (transform.rotationAxis != null) {
+            if (transform.rotationAxis == Direction.Axis.Y) {
+                state = state.setValue(FACING, transform.rotateFacing(state.getValue(FACING)));
+            } else {
+                Direction facing = state.getValue(FACING);
+                Side side = state.getValue(SIDE);
+                if (facing.getAxis() != transform.rotationAxis) {
+                    // realign axis
+                    if (side == Side.LEFT) {
+                        state = state.setValue(FACING, facing.getCounterClockWise()).cycle(SIDE);
+                    } else {
+                        state = state.setValue(FACING, facing.getClockWise()).cycle(SIDE);
+                    }
+                }
+                facing = state.getValue(FACING);
+                side = state.getValue(SIDE);
+                if (transform.rotation == Rotation.CLOCKWISE_180) {
+                    state = state.cycle(SIDE);
+                } else if (transform.rotation != Rotation.NONE) {
+                    Direction offset = transform.rotateFacing(side.isRight() ? facing.getClockWise() : facing.getCounterClockWise());
+                    state = BlockUtils.tryCopyProperties(state, CCBlocks.COPYCAT_STAIRS.getDefaultState())
+                            .setValue(HALF, offset == Direction.DOWN ? Half.BOTTOM : Half.TOP);
+                }
+            }
+        }
+        return state;
     }
 
     @Override

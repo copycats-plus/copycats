@@ -35,8 +35,9 @@ public interface IKineticCopycatBlockInstance {
     ICopycatBlockEntity getBlockEntity();
 
     default Material<RotatingData> getRotatingMaterial() {
-        RenderType type = RenderType.translucent(); // todo: find the correct render type
-        RenderLayer layer = RenderLayer.CUTOUT;
+        RenderType type = RenderType.translucent();
+        RenderLayer layer = RenderLayer.getLayer(type);
+        if (layer == null) layer = RenderLayer.TRANSPARENT;
 
         // workaround for flywheel crash when transparent layer is used in batching backend
         if (Backend.getBackendType() == BackendType.BATCHING && type == RenderType.translucent()) {

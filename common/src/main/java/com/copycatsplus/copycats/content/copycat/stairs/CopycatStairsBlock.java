@@ -1,13 +1,18 @@
 package com.copycatsplus.copycats.content.copycat.stairs;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
+import com.copycatsplus.copycats.CCBlockStateProperties;
+import com.copycatsplus.copycats.CCBlockStateProperties.Side;
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.BlockUtils;
 import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.mojang.math.OctahedralGroup;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -34,6 +39,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
+import static com.copycatsplus.copycats.CCBlockStateProperties.SIDE;
+import static com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock.getApparentDirection;
+import static com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock.setApparentDirection;
 import static net.minecraft.core.Direction.*;
 
 @ParametersAreNonnullByDefault
@@ -169,6 +178,47 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
         return CCBlocks.COPYCAT_VERTICAL_STAIRS.get().blockCTTowards(reader, state, pos, ctPos, connectingPos, face);
     }
 
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return ICopycatBlock.super.rotate(state, rotation);
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return ICopycatBlock.super.mirror(state, mirror);
+    }
+
+    @Override
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        if (transform.mirror != null) {
+            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Y) {
+                state = state.cycle(HALF);
+            } else {
+                state = state.setValue(FACING, transform.mirror.mirror(state.getValue(FACING)));
+            }
+        }
+        if (transform.rotationAxis != null) {
+            if (transform.rotationAxis == Direction.Axis.Y) {
+                state = state.setValue(FACING, transform.rotateFacing(state.getValue(FACING)));
+            } else {
+                Direction facing = state.getValue(FACING);
+                Half half = state.getValue(HALF);
+                if (transform.rotationAxis == facing.getAxis()) {
+                    if (transform.rotation == Rotation.CLOCKWISE_180) {
+                        state = state.cycle(HALF);
+                    } else if (transform.rotation != Rotation.NONE) {
+                        Direction offset = transform.rotateFacing(half == Half.TOP ? Direction.UP : Direction.DOWN);
+                        state = BlockUtils.tryCopyProperties(state, CCBlocks.COPYCAT_VERTICAL_STAIRS.getDefaultState())
+                                .setValue(FACING, offset)
+                                .setValue(SIDE, offset == facing.getClockWise() ? Side.LEFT : Side.RIGHT);
+                    }
+                } else {
+                    state = BlockUtils.setApparentDirection(state, transform.rotateFacing(BlockUtils.getApparentDirection(state)));
+                }
+            }
+        }
+        return state;
+    }
 
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
