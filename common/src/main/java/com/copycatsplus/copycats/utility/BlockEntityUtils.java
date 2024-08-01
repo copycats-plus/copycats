@@ -65,8 +65,6 @@ public class BlockEntityUtils {
         if (level != null) {
             BlockPos pos = blockEntity.getBlockPos();
             ProfilerFiller profilerFiller = level.getProfiler();
-            profilerFiller.push("updateSkyLightSources");
-            level.getChunk(pos).getSkyLightSources().update(level, pos.getX() & 0xF, pos.getY(), pos.getZ() & 0xF);
             profilerFiller.popPush("queueCheckLight");
             level.getChunkSource().getLightEngine().checkBlock(pos);
             profilerFiller.pop();
