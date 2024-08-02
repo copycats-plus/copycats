@@ -289,9 +289,9 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
     }
 
     /**
-     * Implementation note: must be called before super.remove
+     * Implementation note: super.onRemove should be passed in as the onRemove handler.
      */
-    default void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
+    default void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving, OnRemoveHandler handler) {
         if (!state.hasBlockEntity() || state.getBlock() == newState.getBlock())
             return;
         if (!isMoving) {
@@ -299,6 +299,13 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
             if (copycatBE != null)
                 Block.popResource(world, pos, copycatBE.getConsumedItem());
         }
+        handler.handle(state, world, pos, newState, isMoving);
+        world.removeBlockEntity(pos);
+    }
+
+    @FunctionalInterface
+    interface OnRemoveHandler {
+        void handle(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving);
     }
 
     default void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {

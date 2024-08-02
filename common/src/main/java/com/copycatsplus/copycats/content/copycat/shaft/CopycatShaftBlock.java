@@ -101,9 +101,8 @@ public class CopycatShaftBlock extends ShaftBlock implements ICopycatBlock, ICus
     }
 
     @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-        ICopycatBlock.super.onRemove(state, world, pos, newState, isMoving);
-        super.onRemove(state, world, pos, newState, isMoving);
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        ICopycatBlock.super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving, super::onRemove);
     }
 
     @Override
