@@ -357,10 +357,10 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
     }
 
     /**
-     * Implementation note: must be called before super.remove
+     * Implementation note: super.onRemove should be passed in as the onRemove handler.
      */
     @Override
-    default void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+    default void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving, OnRemoveHandler handler) {
         if (!state.hasBlockEntity() || state.getBlock() == newState.getBlock())
             return;
         if (!isMoving) {
@@ -368,6 +368,8 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
             if (copycatBE != null)
                 copycatBE.getMaterialItemStorage().getAllConsumedItems().forEach(stack -> Block.popResource(level, pos, stack));
         }
+        handler.handle(state, level, pos, newState, isMoving);
+        level.removeBlockEntity(pos);
     }
 
     @Override

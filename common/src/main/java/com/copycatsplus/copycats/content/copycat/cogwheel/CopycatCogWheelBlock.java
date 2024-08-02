@@ -143,8 +143,7 @@ public class CopycatCogWheelBlock extends CogWheelBlock implements IMultiStateCo
 
     @Override
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-        IMultiStateCopycatBlock.super.onRemove(state, world, pos, newState, isMoving);
-        super.onRemove(state, world, pos, newState, isMoving);
+        IMultiStateCopycatBlock.super.onRemove(state, world, pos, newState, isMoving, super::onRemove);
     }
 
     @Override

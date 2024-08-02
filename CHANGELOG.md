@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.1 - 2024-08-02
+
+### Changed
+
+- All copycats no longer get destroyed by flowing water
+
+### Fixed
+
+- Copycats retaining their textures when broken and placed back down
+
 ## 2.1.0 - 2024-08-01
 
 ### Changed
@@ -35,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bracket-able copycats not dropping the bracket item when broken
 - Bracket-able copycats not requiring a bracket item when placed with a schematicannon
 - Horizontal connected textures not working for Create's pillar blocks
+- Copycats not craftable in Fabric 1.18 due to incorrect item tags
 
 ## 2.0.5 - 2024-07-21
 

@@ -80,8 +80,7 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        ICopycatBlock.super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        ICopycatBlock.super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving, super::onRemove);
     }
 
     @Override
