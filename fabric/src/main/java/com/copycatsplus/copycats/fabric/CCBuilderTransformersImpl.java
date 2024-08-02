@@ -17,7 +17,7 @@ public class CCBuilderTransformersImpl {
                 .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
                         .getExistingFile(p.mcLoc("air"))))
                 .initialProperties(SharedProperties::softMetal)
-                .properties(p -> p.noOcclusion().color(MaterialColor.NONE).forceSolidOn())
+                .properties(p -> p.noOcclusion().color(MaterialColor.NONE))
                 // fabric: only render base model on cutout. When rendering the wrapped model's material is copied.
                 .addLayer(() -> RenderType::cutout)
                 .color(() -> ICopycatBlock::wrappedColor)
@@ -29,7 +29,7 @@ public class CCBuilderTransformersImpl {
                 .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
                         .getExistingFile(p.mcLoc("air"))))
                 .initialProperties(SharedProperties::softMetal)
-                .properties(p -> p.noOcclusion().color(MaterialColor.NONE).forceSolidOn())
+                .properties(p -> p.noOcclusion().color(MaterialColor.NONE))
                 .addLayer(() -> RenderType::solid)
                 .addLayer(() -> RenderType::cutout)
                 .addLayer(() -> RenderType::cutoutMipped)
