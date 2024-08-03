@@ -5,6 +5,7 @@ import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
@@ -29,7 +30,7 @@ public class BlockUtils {
     }
 
     public static Direction transformFacing(StructureTransform transform, Direction facing) {
-        if (transform.mirror != null)
+        if (transform.mirror != null && transform.mirror != Mirror.NONE)
             facing = transform.mirrorFacing(facing);
         if (transform.rotationAxis != null)
             facing = transform.rotateFacing(facing);
@@ -37,7 +38,7 @@ public class BlockUtils {
     }
 
     public static BlockState transformStepLikeHorizontal(BlockState state, StructureTransform transform, BlockState verticalState) {
-        if (transform.mirror != null) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
             if (transform.mirror.rotation() == OctahedralGroup.INVERT_Y) {
                 state = state.cycle(HALF);
             } else {
@@ -68,7 +69,7 @@ public class BlockUtils {
     }
 
     public static BlockState transformStepLikeVertical(BlockState state, StructureTransform transform, BlockState horizontalState) {
-        if (transform.mirror != null) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
             Direction.Axis mirrorAxis = null;
             for (Direction.Axis axis : Iterate.axes) {
                 if (transform.mirror.rotation().inverts(axis)) {

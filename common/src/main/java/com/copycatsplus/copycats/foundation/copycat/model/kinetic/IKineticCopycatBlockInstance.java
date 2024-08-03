@@ -10,7 +10,6 @@ import com.jozufozu.flywheel.backend.RenderLayer;
 import com.jozufozu.flywheel.config.BackendType;
 import com.simibubi.create.content.kinetics.base.flwdata.RotatingData;
 import com.simibubi.create.foundation.render.AllMaterialSpecs;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 
 import javax.annotation.Nullable;

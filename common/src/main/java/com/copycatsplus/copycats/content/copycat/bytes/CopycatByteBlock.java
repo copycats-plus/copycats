@@ -283,7 +283,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
     }
 
     private static Byte transformByte(StructureTransform transform, Byte bite) {
-        if (transform.mirror != null)
+        if (transform.mirror != null && transform.mirror != Mirror.NONE)
             bite = bite.mirror(transform.mirror);
         if (transform.rotationAxis != null) {
             bite = switch (transform.rotationAxis) {

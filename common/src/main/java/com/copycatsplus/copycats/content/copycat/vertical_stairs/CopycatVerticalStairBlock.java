@@ -188,7 +188,7 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
 
     @Override
     public BlockState transform(BlockState state, StructureTransform transform) {
-        if (transform.mirror != null) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
             Direction.Axis mirrorAxis = null;
             for (Direction.Axis axis : Iterate.axes) {
                 if (transform.mirror.rotation().inverts(axis)) {

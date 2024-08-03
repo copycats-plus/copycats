@@ -1,14 +1,16 @@
 package com.copycatsplus.copycats.utility;
 
+import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.CCConfigs;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class ChatUtils {
     public static Set<String> messages = new HashSet<>();
+
+    private static final Supplier<Boolean> disableWarnings = CCConfigs.safeGetter(() -> CCConfigs.client().disableGraphicsWarnings.get(), false);
 
     /**
      * Send a local warning message to the player once.
@@ -17,10 +19,11 @@ public class ChatUtils {
      * @param message The message to send.
      */
     public static void sendWarningOnce(String id, String message) {
-        if (Minecraft.getInstance().player == null) return;
-        if (CCConfigs.client().disableGraphicsWarnings.get()) return;
+        if (disableWarnings.get()) return;
         if (messages.contains(id)) return;
         messages.add(id);
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Warning: " + message));
+        if (!Platform.Environment.CLIENT.isCurrent() || !ClientUtils.sendSystemMessage("Warning: " + message)) {
+            Copycats.LOGGER.warn("Warning: {}", message);
+        }
     }
 }

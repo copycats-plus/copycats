@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.foundation.copycat.multistate;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -78,6 +79,9 @@ public abstract class MultiStateCopycatBlock extends Block implements IMultiStat
     public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirror) {
         return IMultiStateCopycatBlock.super.mirror(state, mirror);
     }
+
+    @Override
+    public abstract BlockState transform(BlockState state, StructureTransform transform);
 
     @Override
     public Class<MultiStateCopycatBlockEntity> getBlockEntityClass() {

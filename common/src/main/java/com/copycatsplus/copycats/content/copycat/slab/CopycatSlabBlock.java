@@ -287,7 +287,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
         Axis axis = state.getValue(AXIS);
-        if (transformFacing(transform, Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE)).getAxisDirection() == AxisDirection.POSITIVE) {
+        if (transformFacing(transform, Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE)).getAxisDirection() == AxisDirection.NEGATIVE) {
             be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
         }
     }
