@@ -1,7 +1,9 @@
 package com.copycatsplus.copycats.utility;
 
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 /**
  * This class should only be accessed on the client side.
@@ -12,7 +14,7 @@ public class ClientUtils {
         if (Minecraft.getInstance().player == null) {
             return false;
         }
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal(message));
+        Minecraft.getInstance().player.sendMessage(new TextComponent(message), Util.NIL_UUID);
         return true;
     }
 }
