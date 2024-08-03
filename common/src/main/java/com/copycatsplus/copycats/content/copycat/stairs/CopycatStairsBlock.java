@@ -189,7 +189,7 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
 
     @Override
     public BlockState transform(BlockState state, StructureTransform transform) {
-        if (transform.mirror != null) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
             if (transform.mirror.rotation() == OctahedralGroup.INVERT_Y) {
                 state = state.cycle(HALF);
             } else {

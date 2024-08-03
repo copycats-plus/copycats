@@ -243,53 +243,73 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock imp
     }
 
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
-        Function<Axis, Axis> swap = axis -> axis == Axis.Z ? Axis.X : Axis.Z;
-        return switch (rot) {
-            case NONE -> state;
-            case CLOCKWISE_90 -> {
-                Axis axis = state.getValue(AXIS);
-                if (axis == Axis.X) {
-                    yield state.setValue(AXIS, swap.apply(axis));
-                } else {
-                    yield state.setValue(AXIS, swap.apply(axis))
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
+            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Y) {
+                state = state.cycle(HALF);
+            } else {
+                state = state.rotate(transform.mirror.getRotation(Direction.get(AxisDirection.POSITIVE, state.getValue(AXIS))));
+            }
+        }
+        if (transform.rotationAxis != null) {
+            if (transform.rotationAxis == Axis.Y) {
+                Function<Axis, Axis> swap = axis -> axis == Axis.Z ? Axis.X : Axis.Z;
+                state = switch (transform.rotation) {
+                    case NONE -> state;
+                    case CLOCKWISE_90 -> {
+                        Axis axis = state.getValue(AXIS);
+                        if (axis == Axis.X) {
+                            yield state.setValue(AXIS, swap.apply(axis));
+                        } else {
+                            yield state.setValue(AXIS, swap.apply(axis))
+                                    .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
+                                    .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
+                        }
+                    }
+                    case CLOCKWISE_180 -> state
                             .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
                             .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
-                }
-            }
-            case CLOCKWISE_180 -> state
-                    .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
-                    .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
-            case COUNTERCLOCKWISE_90 -> {
-                Axis axis = state.getValue(AXIS);
-                if (axis == Axis.Z) {
-                    yield state.setValue(AXIS, swap.apply(axis));
-                } else {
-                    yield state.setValue(AXIS, swap.apply(axis))
+                    case COUNTERCLOCKWISE_90 -> {
+                        Axis axis = state.getValue(AXIS);
+                        if (axis == Axis.Z) {
+                            yield state.setValue(AXIS, swap.apply(axis));
+                        } else {
+                            yield state.setValue(AXIS, swap.apply(axis))
+                                    .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
+                                    .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
+                        }
+                    }
+                };
+            } else if (transform.rotation == Rotation.CLOCKWISE_180) {
+                if (transform.rotationAxis != state.getValue(AXIS)) {
+                    state = state
+                            .cycle(HALF)
                             .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
                             .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
+                } else {
+                    state = state.cycle(HALF);
                 }
             }
-        };
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.getRotation(Direction.get(AxisDirection.POSITIVE, state.getValue(AXIS))));
+        }
+        return state;
     }
 
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
         Axis axis = state.getValue(AXIS);
-        if (transform.mirror != null) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
             if (transform.mirror.rotation() == OctahedralGroup.INVERT_Z && axis == Axis.Z || transform.mirror.rotation() == OctahedralGroup.INVERT_X && axis == Axis.X) {
                 be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
             }
         }
-        if (transform.rotationAxis != null && transform.rotationAxis.isVertical()) {
-            if (transform.rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
-                    transform.rotation == Rotation.CLOCKWISE_180 ||
-                    transform.rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {
+        if (transform.rotationAxis != null) {
+            if (transform.rotationAxis.isVertical()) {
+                if (transform.rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
+                        transform.rotation == Rotation.CLOCKWISE_180 ||
+                        transform.rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {
+                    be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
+                }
+            } else if (transform.rotation == Rotation.CLOCKWISE_180 && transform.rotationAxis != axis) {
                 be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
             }
         }

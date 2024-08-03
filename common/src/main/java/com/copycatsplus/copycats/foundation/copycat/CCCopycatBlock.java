@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.copycatsplus.copycats.CCBlockEntityTypes;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -86,6 +87,9 @@ public abstract class CCCopycatBlock extends Block implements IBE<CCCopycatBlock
     public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirror) {
         return ICopycatBlock.super.mirror(state, mirror);
     }
+
+    @Override
+    public abstract BlockState transform(BlockState state, StructureTransform transform);
 
     @Override
     public Class<CCCopycatBlockEntity> getBlockEntityClass() {

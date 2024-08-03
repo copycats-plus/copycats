@@ -25,7 +25,8 @@ public enum Mods {
     DIAGONAL_FENCES("diagonalfences"),
     DIAGONAL_WALLS("diagonalwalls"),
     ATHENA("athena"),
-    INDIUM("indium");
+    INDIUM("indium"),
+    STARLIGHT("starlight");
 
     public final String id;
     public final boolean isLoaded;

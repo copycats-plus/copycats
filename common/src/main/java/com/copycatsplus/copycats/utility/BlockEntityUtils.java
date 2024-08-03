@@ -1,16 +1,15 @@
 package com.copycatsplus.copycats.utility;
 
+import com.copycatsplus.copycats.compat.Mods;
 import com.copycatsplus.copycats.mixin.foundation.copycat.ChunkAccessAccessor;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -47,6 +46,10 @@ public class BlockEntityUtils {
      */
     @Nullable
     public static BlockEntity getBlockEntityCrossThread(BlockGetter reader, BlockPos targetPos) {
+        if (Mods.STARLIGHT.getLoaded()) {
+            ChatUtils.sendWarningOnce("starlight_deadlock", "Starlight is incompatible with Copycats+ due to a deadlock during lighting computation. Please remove Starlight to restore light emission in copycats.");
+            return null;
+        }
         try {
             if (reader instanceof Level level) {
                 ChunkAccessAccessor chunkAccess = (ChunkAccessAccessor) level.getChunk(targetPos);

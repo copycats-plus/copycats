@@ -55,6 +55,8 @@ dependencies {
 
     modLocalRuntime("curse.maven:rubidium-574856:${rubidium_forge_curse_id}")
     modImplementation("curse.maven:additional-placements-674852:${additionalplacements_forge_curse_id}")
+    modLocalRuntime("curse.maven:create-industry-693815:${tfmg_forge_curse_id}")
+    modLocalRuntime("curse.maven:starlight-forge-526854:3836016")
 //    modLocalRuntime("curse.maven:create-extended-cogs-739973:${extended_cogwheels_forge_curse_id}")
 
     modCompileOnly("curse.maven:double-slabs-350179:${double_slabs_curse_id}")
