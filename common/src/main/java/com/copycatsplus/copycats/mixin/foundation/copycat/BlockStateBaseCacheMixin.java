@@ -5,6 +5,8 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.simibubi.create.content.decoration.bracket.BracketBlock;
+import net.minecraft.core.Registry;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +22,7 @@ public class BlockStateBaseCacheMixin {
     )
     private boolean canCopycatOcclude(BlockState instance,
                                       Operation<Boolean> original) {
-        if (instance.getBlockHolder().is(Mods.CREATE.rl("copycat_base"))) {
+        if (instance.is(TagKey.create(Registry.BLOCK.key(), Mods.CREATE.rl("copycat_base")))) {
             return false;
         }
         if (instance.getBlock() instanceof BracketBlock) {

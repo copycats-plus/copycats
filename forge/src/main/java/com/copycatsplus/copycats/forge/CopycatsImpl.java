@@ -7,9 +7,9 @@ import com.copycatsplus.copycats.foundation.copycat.CopycatMaterialStore;
 import com.copycatsplus.copycats.utility.LogicalSidedProvider;
 import com.copycatsplus.copycats.utility.Platform;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.ChunkEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -42,10 +42,10 @@ public class CopycatsImpl {
     }
 
     static void onChunkUnload(ChunkEvent.Unload event) {
-        CopycatMaterialStore.unloadChunk(event.getLevel(), event.getChunk().getPos());
+        CopycatMaterialStore.unloadChunk(event.getWorld(), event.getChunk().getPos());
     }
 
-    static void onLevelUnload(LevelEvent.Unload event) {
-        CopycatMaterialStore.unloadLevel(event.getLevel());
+    static void onLevelUnload(WorldEvent.Unload event) {
+        CopycatMaterialStore.unloadLevel(event.getWorld());
     }
 }
