@@ -20,8 +20,12 @@ public class BlockStateBaseCacheMixin {
     )
     private boolean canCopycatOcclude(BlockState instance,
                                       Operation<Boolean> original) {
-        if (instance.getBlockHolder().is(Mods.CREATE.rl("copycat_base"))) {
-            return false;
+        try {
+            if (instance.getBlockHolder().is(Mods.CREATE.rl("copycat_base"))) {
+                return false;
+            }
+        } catch (IllegalStateException e) {
+            // todo: illegal access if resource location is accessed before registry is initialized
         }
         if (instance.getBlock() instanceof BracketBlock) {
             return false;
