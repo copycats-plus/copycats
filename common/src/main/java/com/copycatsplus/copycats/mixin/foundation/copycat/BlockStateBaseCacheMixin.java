@@ -23,9 +23,9 @@ public class BlockStateBaseCacheMixin {
     private boolean canCopycatOcclude(BlockState instance,
                                       Operation<Boolean> original) {
         try {
-        if (instance.is(TagKey.create(Registry.BLOCK.key(), Mods.CREATE.rl("copycat_base")))) {
-            return false;
-        }
+            if (instance.is(TagKey.create(Registry.BLOCK.key(), Mods.CREATE.rl("copycat_base")))) {
+                return false;
+            }
         } catch (IllegalStateException e) {
             // todo: illegal access if resource location is accessed before registry is initialized
         }
