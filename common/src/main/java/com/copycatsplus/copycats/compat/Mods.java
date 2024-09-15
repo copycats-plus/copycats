@@ -18,12 +18,15 @@ public enum Mods {
      * For the feature toggle system
      */
     JEI("jei"),
+    CREATE("create"),
     /**
      * For copycat fence compatibility (only prevents crash)
      */
     ADDITIONAL_PLACEMENTS("additionalplacements"),
     DIAGONAL_FENCES("diagonalfences"),
     DIAGONAL_WALLS("diagonalwalls"),
+    FLYWHEEL("flywheel"),
+    SODIUM("sodium"),
     ATHENA("athena"),
     INDIUM("indium"),
     STARLIGHT("starlight");

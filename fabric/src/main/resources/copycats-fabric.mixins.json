@@ -7,6 +7,7 @@
   "mixins": [
     "HolderReferenceMixin",
     "compat.indium.GeometryHelperMixin",
+    "compat.moreculling.MoreCullingConfigMixin",
     "foundation.copycat.CopycatBlockEntityMixin$BlockEntityWithoutAttachmentData",
     "foundation.copycat.CopycatBlockEntityMixin$FluidPipeData",
     "foundation.copycat.CopycatBlockEntityMixin$StraightPipeData",

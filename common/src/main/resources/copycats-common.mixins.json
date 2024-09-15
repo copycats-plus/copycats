@@ -24,6 +24,7 @@
     "foundation.copycat.BearingContraptionMixin",
     "foundation.copycat.BlockMixin",
     "foundation.copycat.BlockStateBaseCacheMixin",
+    "foundation.copycat.BlockStateBaseMixin",
     "foundation.copycat.ChunkAccessAccessor",
     "foundation.copycat.ConnectedTextureBehaviourMixin",
     "foundation.copycat.CopycatBlockEntityMixin",

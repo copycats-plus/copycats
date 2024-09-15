@@ -122,8 +122,8 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
                     FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.X, directionOf(diff.getX())));
                     if (faceShape.isFull())
                         fullCount++;
-                    else if ((shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) && diff.getZ() != 0) {
-                        if (diff.getX() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getX() < 0 && faceShape.topPositive && faceShape.bottomPositive)
+                    else if (diff.getZ() != 0) {
+                        if (diff.getX() != 0 && faceShape.topNegative && faceShape.bottomNegative)
                             fullCount++;
                     }
                 }
@@ -131,8 +131,8 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
                     FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.Z, directionOf(diff.getZ())));
                     if (faceShape.isFull())
                         fullCount++;
-                    else if ((shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) && diff.getX() != 0) {
-                        if (diff.getZ() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getZ() < 0 && faceShape.topPositive && faceShape.bottomPositive)
+                    else if (diff.getX() != 0) {
+                        if (diff.getZ() != 0 && faceShape.topPositive && faceShape.bottomPositive)
                             fullCount++;
                     }
                 }

@@ -5,6 +5,7 @@ import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
 import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,12 +15,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
@@ -92,8 +95,31 @@ public class CopycatDoorBlock extends DoorBlock implements ICopycatBlock, IBE<CC
         return false;
     }
 
-
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
+    }
+
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        BlockPos toPos = pos.relative(dir);
+        BlockState toState = level.getBlockState(toPos);
+        BlockState material = state.getBlock() instanceof ICopycatBlock
+                ? ICopycatBlock.getMaterial(level, pos)
+                : state;
+        BlockState neighborMaterial = neighborState.getBlock() instanceof ICopycatBlock
+                ? ICopycatBlock.getMaterial(level, toPos)
+                : neighborState;
+        if (AllBlocks.COPYCAT_BASE.has(neighborMaterial) && AllBlocks.COPYCAT_BASE.has(material)) {
+            if (dir == Direction.UP && toState.is(this) && toState.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                return true;
+            }
+            if (dir == Direction.DOWN && toState.is(this) && toState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                return true;
+            }
+        }
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 }

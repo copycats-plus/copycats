@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.decoration.bracket.BracketBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -31,6 +32,9 @@ public class BlockMixin {
                                              @Local(argsOnly = true) BlockGetter level,
                                              @Local(argsOnly = true, ordinal = 1) BlockPos pos) {
         if (AllBlocks.COPYCAT_BASE.has(instance)) {
+            return false;
+        }
+        if (instance.getBlock() instanceof BracketBlock) {
             return false;
         }
         if (instance.getBlock() instanceof ICopycatBlock copycatBlock) {

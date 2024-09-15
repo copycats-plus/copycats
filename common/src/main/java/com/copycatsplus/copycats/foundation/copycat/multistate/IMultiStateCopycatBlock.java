@@ -49,6 +49,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 /**
  * An interface with implementation for all multi-state copycats.
@@ -435,10 +436,10 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
                 count++;
         }
         if (count == 0) return ItemRequirement.NONE;
-        return new ItemRequirement(
-                ItemRequirement.ItemUseType.CONSUME,
-                new ItemStack(state.getBlock().asItem(), count)
-        );
+        return new ItemRequirement(IntStream.range(0, count).mapToObj($ -> new ItemRequirement.StackRequirement(
+                new ItemStack(state.getBlock().asItem()),
+                ItemRequirement.ItemUseType.CONSUME
+        )).toList());
     }
 
     @Override
