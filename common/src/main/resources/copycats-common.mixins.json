@@ -11,6 +11,7 @@
     "compat.radium.PathNodeDefaultsMixin",
     "compat.rubidium.BlockOcclusionCacheMixin",
     "compat.rubidium.BlockRendererMixin",
+    "compat.rubidium.WorldSliceAccessor",
     "copycat.VoxelShapeAccessor",
     "copycat.cogwheel.CogWheelBlockItemMixin",
     "copycat.fluid_pipe.FluidPipeBlockMixin",
