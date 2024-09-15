@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
@@ -335,23 +336,16 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
     }
 
     /**
-     * Get the material of the copycat at the given position when not executing on the main thread.
-     * Block entity access is unsafe on other threads, so this method should be used with caution.
-     */
-    static BlockState getMaterialCrossThread(BlockGetter reader, BlockPos targetPos) {
-        if (BlockEntityUtils.getBlockEntityCrossThread(reader, targetPos) instanceof ICopycatBlockEntity cbe)
-            return cbe.getMaterial();
-        return Blocks.AIR.defaultBlockState();
-    }
-
-    /**
      * Utility to get the required items for a layer of a block state.
      */
     static ItemRequirement getRequiredItemsForLayer(BlockState state, IntegerProperty property) {
-        return new ItemRequirement(
-                ItemRequirement.ItemUseType.CONSUME,
-                new ItemStack(state.getBlock().asItem(), state.getValue(property))
-        );
+        int count = state.getValue(property);
+        if (count == 0)
+            return ItemRequirement.NONE;
+        return new ItemRequirement(IntStream.range(0, count).mapToObj($ -> new ItemRequirement.StackRequirement(
+                new ItemStack(state.getBlock().asItem()),
+                ItemRequirement.ItemUseType.CONSUME
+        )).toList());
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.copycatsplus.copycats.content.copycat.cogwheel;
 
-import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MaterialItemStorage;
 import com.simibubi.create.content.contraptions.StructureTransform;
@@ -32,6 +31,12 @@ public class CopycatCogWheelBlockEntity extends BracketedKineticBlockEntity impl
     @Override
     public void setMaterialItemStorageInternal(MaterialItemStorage storage) {
         this.storage = storage;
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        IMultiStateCopycatBlockEntity.super.invalidate();
     }
 
     @Override

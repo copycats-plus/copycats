@@ -70,7 +70,7 @@ public class MaterialItemStorage {
      * Get all consumed items stored in this storage. Empty stacks are not included.
      */
     public List<ItemStack> getAllConsumedItems() {
-        return storage.values().stream().map(MaterialItem::consumedItem).dropWhile(itemStack -> itemStack.equals(ItemStack.EMPTY)).collect(Collectors.toList());
+        return storage.values().stream().map(MaterialItem::consumedItem).filter(stack -> !stack.isEmpty()).collect(Collectors.toList());
     }
 
     /**

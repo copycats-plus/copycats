@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.fabric.mixin.foundation.copycat;
 
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.CopycatMaterialStore;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.content.copycat.button.CopycatWoodButtonBlock;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -94,7 +95,9 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock,
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-        BlockState material = ICopycatBlock.getMaterialCrossThread(level, pos);
+        BlockState material = CopycatMaterialStore.getMaterial(level, pos).left().orElse(null);
+        if (material == null)
+            return state.getLightEmission();
         Block block = material.getBlock();
         if (block instanceof LightEmissiveBlock lightEmissiveBlock)
             return lightEmissiveBlock.getLightEmission(material, level, pos);

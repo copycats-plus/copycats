@@ -93,6 +93,12 @@ public class CCCopycatBlockEntity extends SmartBlockEntity implements ICopycatBl
     }
 
     @Override
+    public void invalidate() {
+        super.invalidate();
+        ICopycatBlockEntity.super.invalidate();
+    }
+
+    @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
     }
 

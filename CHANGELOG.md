@@ -5,12 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.3 - 2024-09-15
+
+## Changed
+
+- Multistate copycats can now be mined with both pickaxes and axes
+
+### Fixed
+
+- Fixed light sources in copycats again to eliminate thread deadlocks and restore compatibility with Starlight
+- Fixed schematicannon sometimes requiring air to build multistate copycats
+- Fixed copycat slabs not connecting to full blocks
+- Added compatibility with More Culling
+- Fixed occlusion for brackets
+- Fixed the inner face of copycat doors when one side of the door is transparent but the other isn't
+- Fixed connected textures on the top face of copycat stairs
+- Added a workaround for schematicannons not getting the same stack of resources from two separate inventories
+- Fixed a crash in copycat migration when block entities from other mods are not properly registered
+- Fixed copycat slabs being transformed incorrectly in schematics
+
 ## 2.1.2 - 2024-08-03
 
 ### Fixed
 
-- Fixed stackoverflow issue with the lighting patch when starlight is loaded
-- Fix block transforms on a few blocks
+- Fixed stack overflow issue with the lighting patch when starlight is loaded
+- Fixed block transforms on a few blocks
 
 ## 2.1.1 - 2024-08-02
 

@@ -85,6 +85,7 @@ public class MigrationManager {
 
     private static boolean isCopycatAndNeedingConversion(BlockState state, BlockEntity blockEntity) {
         ResourceLocation id = Registry.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType());
+        if (id == null) return false;
         ResourceKey<Block> resourceKey = state.getBlock().builtInRegistryHolder().key();
         if (id.toString().equalsIgnoreCase("create:copycat")) {
             if (resourceKey.location().getNamespace().equalsIgnoreCase(Copycats.MODID)) {

@@ -43,7 +43,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(0, 12, 0),
                         aabb(16, 4, 2).move(0, 4, 0),
-                        cull(SOUTH | UP | DOWN));
+                        cull(SOUTH | DOWN));
                 //Back
                 context.assemblePiece(transform,
                         vec3(0, 0, 2),
@@ -52,7 +52,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(0, 12, 2),
                         aabb(16, 4, 1).move(0, 4, 15),
-                        cull(NORTH | UP | DOWN));
+                        cull(NORTH | DOWN));
             } else {
                 if (!rightHinge) {
                     transform = t -> t.flipX(true).rotateY(rot);
@@ -65,7 +65,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(0, 12, 0),
                         aabb(2, 4, 16).move(0, 4, 0),
-                        cull(EAST | UP | DOWN));
+                        cull(EAST | DOWN));
                 //Back
                 context.assemblePiece(transform,
                         vec3(2, 0, 0),
@@ -74,7 +74,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(2, 12, 0),
                         aabb(1, 4, 16).move(15, 4, 0),
-                        cull(WEST | UP | DOWN));
+                        cull(WEST | DOWN));
             }
         } else {
             if (!open) {
@@ -86,7 +86,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(0, 0, 0),
                         aabb(16, 4, 2).move(0, 8, 0),
-                        cull(SOUTH | UP | DOWN));
+                        cull(SOUTH | UP));
                 //Back
                 context.assemblePiece(transform,
                         vec3(0, 4, 2),
@@ -95,7 +95,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(0, 0, 2),
                         aabb(16, 4, 1).move(0, 8, 15),
-                        cull(NORTH | UP | DOWN));
+                        cull(NORTH | UP));
             } else {
                 if (!rightHinge) {
                     transform = t -> t.flipX(true).rotateY(rot);
@@ -108,7 +108,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(0, 0, 0),
                         aabb(2, 4, 16).move(0, 8, 0),
-                        cull(EAST | UP | DOWN));
+                        cull(EAST | UP));
                 //Back
                 context.assemblePiece(transform,
                         vec3(2, 4, 0),
@@ -117,7 +117,7 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(2, 0, 0),
                         aabb(1, 4, 16).move(15, 8, 0),
-                        cull(WEST | UP | DOWN));
+                        cull(WEST | UP));
             }
         }
     }

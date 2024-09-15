@@ -30,6 +30,7 @@ import java.util.Set;
  * An interface with implementation for all multi-state copycat block entities.
  * <p>
  * Implementors should create a field to store the materials and redirect calls of
+ * {@link IMultiStateCopycatBlockEntity#invalidate},
  * {@link IMultiStateCopycatBlockEntity#read},
  * {@link IMultiStateCopycatBlockEntity#writeSafe} and
  * {@link IMultiStateCopycatBlockEntity#write} to this interface.
