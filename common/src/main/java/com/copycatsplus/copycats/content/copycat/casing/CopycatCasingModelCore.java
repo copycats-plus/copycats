@@ -19,7 +19,7 @@ public class CopycatCasingModelCore extends CopycatModelCore {
     private static RenderStrategy getRenderStrategy(BlockState state) {
         if (CopycatCasingBlock.ACCEPTED_CASINGS.get().containsKey(state.getBlock()))
             return RenderStrategy.SWAPPED;
-        if (CopycatCasingBlock.ACCEPTED_CASINGS.get().containsValue(state.getBlock()))
+        if (CopycatCasingBlock.REVERSE_ACCEPTED_CASINGS.get().containsKey(state.getBlock()))
             return RenderStrategy.AS_IS;
         if (state.getBlock() instanceof GlassBlock)
             return RenderStrategy.AS_IS;

@@ -40,6 +40,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
@@ -54,6 +55,10 @@ public class CopycatCasingBlock extends CasingBlock implements IMultiStateCopyca
             AllBlocks.REFINED_RADIANCE_CASING.get(), CCBlocks.WRAPPED_REFINED_RADIANCE_CASING.get(),
             AllBlocks.SHADOW_STEEL_CASING.get(), CCBlocks.WRAPPED_SHADOW_STEEL_CASING.get()
     ));
+
+    // create a reverse lookup of ACCEPTED_CASINGS
+    public static final Lazy<Map<Block, Block>> REVERSE_ACCEPTED_CASINGS = Lazy.of(() -> ACCEPTED_CASINGS.get().entrySet().stream()
+            .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey)));
 
     public CopycatCasingBlock(Properties properties) {
         super(properties);
