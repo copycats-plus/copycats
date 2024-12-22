@@ -2,6 +2,8 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
+import com.copycatsplus.copycats.content.copycat.casing.CopycatCasingBlock;
+import com.copycatsplus.copycats.content.copycat.casing.CopycatCasingModelCore;
 import com.copycatsplus.copycats.content.copycat.casing.WrappedCasingBlock;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
@@ -753,6 +755,22 @@ public class CCBlocks {
     public static final BlockEntry<WrappedCasingBlock> WRAPPED_SHADOW_STEEL_CASING = REGISTRATE.block("wrapped_shadow_steel_casing", WrappedCasingBlock::new)
             .transform(CCBuilderTransformers.wrappedCasing(CCSpriteShifts.WRAPPED_SHADOW_STEEL_CASING))
             .register();
+
+    public static final BlockEntry<CopycatCasingBlock> COPYCAT_CASING =
+            REGISTRATE.block("copycat_casing", CopycatCasingBlock::new)
+                    .transform(CCBuilderTransformers.multiCopycat())
+                    .tag(AllTags.AllBlockTags.CASING.tag)
+                    .transform(FeatureToggle.register(FeatureCategory.MULTISTATES, FeatureCategory.CREATE))
+                    .onRegister(onClient(() -> createBlockModel(CopycatCasingModelCore::new)))
+                    .item()
+                    .tag(AllTags.AllItemTags.CASING.tag)
+                    .onRegister(CopycatDescription.register(
+                            CopycatCharacteristics.COPYCAT,
+                            CopycatCharacteristics.CT_TOGGLE,
+                            CopycatCharacteristics.MULTI_STATE
+                    ))
+                    .transform(customItemModel("copycat_base", "casing"))
+                    .register();
 
     @ExpectPlatform
     public static void getWrappedBlockState(DataGenContext<Block, ? extends Block> c, RegistrateBlockstateProvider p, String name) {

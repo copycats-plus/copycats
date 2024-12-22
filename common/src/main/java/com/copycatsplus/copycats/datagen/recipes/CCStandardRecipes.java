@@ -219,6 +219,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_SLIDING_DOOR_CYCLE = conversionCycle(CCBlocks.COPYCAT_SLIDING_DOOR, CCBlocks.COPYCAT_FOLDING_DOOR);
 
+    GeneratedRecipe COPYCAT_CASING = copycat(CCBlocks.COPYCAT_CASING, 1);
+
     Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
             CCBlocks.COPYCAT_BASE,
             CCBlocks.COPYCAT_GLASS_FLUID_PIPE

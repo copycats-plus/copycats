@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.forge.mixin.foundation.copycat.multistate;
 
+import com.copycatsplus.copycats.content.copycat.casing.CopycatCasingBlock;
 import com.copycatsplus.copycats.foundation.copycat.CopycatMaterialStore;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
@@ -41,7 +42,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Mixin({
         MultiStateCopycatBlock.class,
-        CopycatCogWheelBlock.class
+        CopycatCogWheelBlock.class,
+        CopycatCasingBlock.class
 })
 @Pseudo
 public abstract class MultiStateCopycatBlockMixin extends Block implements IForgeBlock, IMultiStateCopycatBlock {

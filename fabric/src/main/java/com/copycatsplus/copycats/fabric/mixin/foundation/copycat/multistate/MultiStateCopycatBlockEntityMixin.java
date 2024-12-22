@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.fabric.mixin.foundation.copycat.multistate;
 
+import com.copycatsplus.copycats.content.copycat.casing.CopycatCasingBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;

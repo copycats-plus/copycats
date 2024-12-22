@@ -59,7 +59,8 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_SLAB,
                             CCBlocks.COPYCAT_BYTE,
                             CCBlocks.COPYCAT_HALF_LAYER,
-                            CCBlocks.COPYCAT_BOARD
+                            CCBlocks.COPYCAT_BOARD,
+                            CCBlocks.COPYCAT_CASING
                     )
                     .register();
 
