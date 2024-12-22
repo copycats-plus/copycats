@@ -27,6 +27,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -170,6 +171,10 @@ public class CopycatCasingBlock extends CasingBlock implements IMultiStateCopyca
 
     @Override
     public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
+        if (property.equals(Part.OUTER.getSerializedName())) {
+            BlockState material = IMultiStateCopycatBlock.getMaterial(reader, fromPos, property);
+            return ACCEPTED_CASINGS.get().containsKey(material.getBlock()) || material.getBlock() instanceof GlassBlock;
+        }
         return true;
     }
 

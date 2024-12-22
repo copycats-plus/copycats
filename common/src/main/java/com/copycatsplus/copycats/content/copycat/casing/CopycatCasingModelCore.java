@@ -89,8 +89,17 @@ public class CopycatCasingModelCore extends CopycatModelCore {
     }
 
     enum RenderStrategy {
+        /**
+         * Render the block as-is for the outer frame. Suitable for blocks with a cutout texture.
+         */
         AS_IS,
+        /**
+         * Swap the block for a cutout version. Suitable for blocks with connected textures.
+         */
         SWAPPED,
+        /**
+         * Render the block as a cutout. Suitable for blocks without connected textures.
+         */
         CUTOUT
     }
 }
