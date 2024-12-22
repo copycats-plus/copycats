@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "copycats:block/wrapped_railway_casing",
+    "side": "copycats:block/wrapped_railway_casing_side"
+  }
+}

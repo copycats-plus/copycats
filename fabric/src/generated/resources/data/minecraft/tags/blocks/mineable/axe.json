@@ -39,6 +39,12 @@
     "copycats:copycat_door",
     "copycats:copycat_iron_door",
     "copycats:copycat_sliding_door",
-    "copycats:copycat_folding_door"
+    "copycats:copycat_folding_door",
+    "copycats:wrapped_andesite_casing",
+    "copycats:wrapped_brass_casing",
+    "copycats:wrapped_copper_casing",
+    "copycats:wrapped_railway_casing",
+    "copycats:wrapped_refined_radiance_casing",
+    "copycats:wrapped_shadow_steel_casing"
   ]
 }

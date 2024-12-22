@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "copycats:block/wrapped_copper_casing"
+  }
+}

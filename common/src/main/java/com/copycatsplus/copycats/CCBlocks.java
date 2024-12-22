@@ -2,6 +2,7 @@ package com.copycatsplus.copycats;
 
 import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
+import com.copycatsplus.copycats.content.copycat.casing.WrappedCasingBlock;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftModelCore;
@@ -728,6 +729,30 @@ public class CCBlocks {
                     .tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag)
                     .transform(customItemModel("copycat_base", "folding_door"))
                     .register();
+
+    public static final BlockEntry<WrappedCasingBlock> WRAPPED_ANDESITE_CASING = REGISTRATE.block("wrapped_andesite_casing", WrappedCasingBlock::new)
+            .transform(CCBuilderTransformers.wrappedCasing(CCSpriteShifts.WRAPPED_ANDESITE_CASING))
+            .register();
+
+    public static final BlockEntry<WrappedCasingBlock> WRAPPED_BRASS_CASING = REGISTRATE.block("wrapped_brass_casing", WrappedCasingBlock::new)
+            .transform(CCBuilderTransformers.wrappedCasing(CCSpriteShifts.WRAPPED_BRASS_CASING))
+            .register();
+
+    public static final BlockEntry<WrappedCasingBlock> WRAPPED_COPPER_CASING = REGISTRATE.block("wrapped_copper_casing", WrappedCasingBlock::new)
+            .transform(CCBuilderTransformers.wrappedCasing(CCSpriteShifts.WRAPPED_COPPER_CASING))
+            .register();
+
+    public static final BlockEntry<WrappedCasingBlock> WRAPPED_RAILWAY_CASING = REGISTRATE.block("wrapped_railway_casing", WrappedCasingBlock::new)
+            .transform(CCBuilderTransformers.wrappedLayeredCasing(CCSpriteShifts.WRAPPED_RAILWAY_CASING_SIDE, CCSpriteShifts.WRAPPED_RAILWAY_CASING))
+            .register();
+
+    public static final BlockEntry<WrappedCasingBlock> WRAPPED_REFINED_RADIANCE_CASING = REGISTRATE.block("wrapped_refined_radiance_casing", WrappedCasingBlock::new)
+            .transform(CCBuilderTransformers.wrappedCasing(CCSpriteShifts.WRAPPED_REFINED_RADIANCE_CASING))
+            .register();
+
+    public static final BlockEntry<WrappedCasingBlock> WRAPPED_SHADOW_STEEL_CASING = REGISTRATE.block("wrapped_shadow_steel_casing", WrappedCasingBlock::new)
+            .transform(CCBuilderTransformers.wrappedCasing(CCSpriteShifts.WRAPPED_SHADOW_STEEL_CASING))
+            .register();
 
     @ExpectPlatform
     public static void getWrappedBlockState(DataGenContext<Block, ? extends Block> c, RegistrateBlockstateProvider p, String name) {
