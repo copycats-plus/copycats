@@ -39,11 +39,7 @@ public class CopycatCasingModelCore extends CopycatModelCore {
     @Override
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
         if (key.equals(CopycatCasingBlock.Part.INNER.getSerializedName())) {
-            context.assemblePiece(AssemblyTransform.IDENTITY,
-                    vec3(0.01, 0.01, 0.01),
-                    aabb(15.98, 15.98, 15.98).move(0.01, 0.01, 0.01),
-                    cull(0)
-            );
+            context.assembleAll();
             return;
         }
 
@@ -54,21 +50,41 @@ public class CopycatCasingModelCore extends CopycatModelCore {
                 context.assemblePiece(transform,
                         vec3(0, 0, 0),
                         aabb(2, 2, 14),
-                        cull(EAST | UP | SOUTH)
+                        cull(EAST | UP | SOUTH),
+                        scale(
+                                pivot(8, 8, 8),
+                                scale(1.001, 1.001, 1.001)
+                        )
                 );
                 context.assemblePiece(transform,
                         vec3(0, 2, 0),
                         aabb(2, 12, 2).move(0, 2, 0),
-                        cull(EAST | UP | DOWN | SOUTH)
+                        cull(EAST | UP | DOWN | SOUTH),
+                        scale(
+                                pivot(8, 8, 8),
+                                scale(1.001, 1.001, 1.001)
+                        )
                 );
                 context.assemblePiece(transform,
                         vec3(0, 14, 0),
                         aabb(2, 2, 14).move(0, 14, 0),
-                        cull(EAST | DOWN | SOUTH)
+                        cull(EAST | DOWN | SOUTH),
+                        scale(
+                                pivot(8, 8, 8),
+                                scale(1.001, 1.001, 1.001)
+                        )
                 );
             }
         } else {
-            context.assembleAll();
+            context.assemblePiece(AssemblyTransform.IDENTITY,
+                    vec3(0, 0, 0),
+                    aabb(16, 16, 16),
+                    cull(0),
+                    scale(
+                            pivot(8, 8, 8),
+                            scale(1.001, 1.001, 1.001)
+                    )
+            );
         }
     }
 

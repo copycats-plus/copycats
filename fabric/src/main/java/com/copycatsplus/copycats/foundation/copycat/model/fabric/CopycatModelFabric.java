@@ -191,7 +191,8 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                     }
                     return false;
                 });
-                model.emitBlockQuads(renderWorld, material, pos, randomSupplier, context);
+                // provide the original material to the model instead of the mapped material so that CT works and treats the mapped material as the unmapped one
+                model.emitBlockQuads(renderWorld, materials.get(entry.key()), pos, randomSupplier, context);
                 context.popTransform();
 
                 CopycatRenderContextFabric copycatContext = new CopycatRenderContextFabric(quads, emitter, entry.key());

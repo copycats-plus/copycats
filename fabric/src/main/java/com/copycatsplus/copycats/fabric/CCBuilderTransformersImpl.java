@@ -51,7 +51,7 @@ public class CCBuilderTransformersImpl {
 
     public static <B extends WrappedCasingBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> wrappedCasing(CTSpriteShiftEntry spriteShift) {
         return b -> b.initialProperties(SharedProperties::stone)
-                .properties(p -> p.mapColor(MapColor.PODZOL).sound(SoundType.WOOD).noOcclusion())
+                .properties(p -> p.mapColor(MapColor.PODZOL).sound(SoundType.WOOD))
                 .transform(axeOrPickaxe())
                 .blockstate((c, p) -> p.simpleBlock(c.get()))
                 .addLayer(() -> RenderType::cutoutMipped)
@@ -63,7 +63,7 @@ public class CCBuilderTransformersImpl {
     public static <B extends CasingBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> wrappedLayeredCasing(
             CTSpriteShiftEntry ct, CTSpriteShiftEntry ct2) {
         return b -> b.initialProperties(SharedProperties::stone)
-                .properties(p -> p.mapColor(MapColor.PODZOL).sound(SoundType.WOOD).noOcclusion())
+                .properties(p -> p.mapColor(MapColor.PODZOL).sound(SoundType.WOOD))
                 .transform(axeOrPickaxe())
                 .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
                         .cubeColumn(c.getName(), ct.getOriginalResourceLocation(),
