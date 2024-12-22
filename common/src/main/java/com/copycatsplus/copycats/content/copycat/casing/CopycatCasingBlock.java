@@ -20,7 +20,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -34,12 +33,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.jozufozu.flywheel.util.Lazy;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("deprecation")
@@ -68,7 +67,7 @@ public class CopycatCasingBlock extends CasingBlock implements IMultiStateCopyca
 
     @Override
     public String defaultProperty() {
-        return Part.INNER.getSerializedName();
+        return Part.OUTER.getSerializedName();
     }
 
     @Override
@@ -78,7 +77,7 @@ public class CopycatCasingBlock extends CasingBlock implements IMultiStateCopyca
 
     @Override
     public Set<String> storageProperties() {
-        return Set.of(Part.INNER.getSerializedName(), Part.OUTER.getSerializedName());
+        return Set.of(Part.OUTER.getSerializedName(), Part.INNER.getSerializedName());
     }
 
     @Override
@@ -166,6 +165,11 @@ public class CopycatCasingBlock extends CasingBlock implements IMultiStateCopyca
     @Override
     public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
         return true;
+    }
+
+    @Override
+    public Optional<Boolean> shapeCanOccludeNeighbor(BlockGetter level, BlockPos pos, BlockState state, BlockPos neighborPos, Direction dir) {
+        return Optional.of(true);
     }
 
     @Override

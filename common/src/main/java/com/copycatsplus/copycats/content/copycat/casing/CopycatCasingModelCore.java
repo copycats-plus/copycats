@@ -40,8 +40,8 @@ public class CopycatCasingModelCore extends CopycatModelCore {
     public void emitCopycatQuads(String key, BlockState state, CopycatRenderContext context, BlockState material) {
         if (key.equals(CopycatCasingBlock.Part.INNER.getSerializedName())) {
             context.assemblePiece(AssemblyTransform.IDENTITY,
-                    vec3(0.02, 0.02, 0.02),
-                    aabb(15.96, 15.96, 15.96).move(0.02, 0.02, 0.02),
+                    vec3(0.01, 0.01, 0.01),
+                    aabb(15.98, 15.98, 15.98).move(0.01, 0.01, 0.01),
                     cull(0)
             );
             return;
