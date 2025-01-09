@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_iron_door",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "minecraft:iron_door"
+          },
+          {
+            "item": "create:zinc_ingot"
+          }
+        ],
+        "result": {
+          "item": "copycats:copycat_iron_door"
+        }
+      }
+    }
+  ]
+}

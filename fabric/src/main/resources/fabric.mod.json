@@ -2,24 +2,31 @@
   "schemaVersion": 1,
   "id": "copycats",
   "version": "${version}",
-
   "name": "${mod_name}",
   "description": "${mod_description}",
-  "authors": ["${mod_authors}"],
+  "authors": [
+    "${mod_authors}"
+  ],
   "contact": {},
-
   "license": "${mod_license}",
   "icon": "copycats_icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
       "com.copycatsplus.copycats.fabric.CopycatsImpl"
     ],
-    "client": ["com.copycatsplus.copycats.fabric.CopycatsClientImpl"
+    "client": [
+      "com.copycatsplus.copycats.fabric.CopycatsClientImpl"
     ],
-    "fabric-datagen": ["com.copycatsplus.copycats.datagen.fabric.CCDatagenImpl"],
-    "jei_mod_plugin": ["com.copycatsplus.copycats.compat.CopycatsJEI"]
+    "fabric-datagen": [
+      "com.copycatsplus.copycats.datagen.fabric.CCDatagenImpl"
+    ],
+    "jei_mod_plugin": [
+      "com.copycatsplus.copycats.compat.CopycatsJEI"
+    ],
+    "additional-placements-generators": [
+      "com.copycatsplus.copycats.compat.AdditionalPlacementsCompat"
+    ]
   },
   "mixins": [
     "copycats-fabric.mixins.json",

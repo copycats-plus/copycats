@@ -8,21 +8,33 @@ import net.minecraft.world.item.Item;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.copycatsplus.copycats.Lang.asId;
+import static com.copycatsplus.copycats.CCLang.asId;
 
 /**
- * For compatibility with and without another mod present, we have to define load conditions of the specific code
+ * For compatibility with and without another mod present, we have to define load conditions of the specific code.
+ * <p>
+ * Due to this class being used in the {@link com.copycatsplus.copycats.foundation.annotation.ModMixin} annotation,
+ * it cannot reference most Minecraft classes due to this class being loaded before Mixins are applied.
  */
 public enum Mods {
     /**
      * For the feature toggle system
      */
     JEI("jei"),
+    CREATE("create"),
     /**
      * For copycat fence compatibility (only prevents crash)
      */
     ADDITIONAL_PLACEMENTS("additionalplacements"),
-    DIAGONAL_FENCES("diagonalfences");
+    DIAGONAL_FENCES("diagonalfences"),
+    DIAGONAL_WALLS("diagonalwalls"),
+    FLYWHEEL("flywheel"),
+    SODIUM("sodium"),
+    ATHENA("athena"),
+    INDIUM("indium"),
+    STARLIGHT("starlight"),
+    DOUBLE_SLABS("doubleslabs"),
+    VERTICAL_SLAB_COMPAT("v_slab_compat");
 
     public final String id;
     public final boolean isLoaded;
@@ -37,24 +49,11 @@ public enum Mods {
         this.isLoaded = getLoaded(asId(id));
     }
 
-
     /**
      * @return the mod id
      */
     public String id() {
         return id;
-    }
-
-    public ResourceLocation rl(String path) {
-        return new ResourceLocation(id, path);
-    }
-
-    public Item getItem(String id) {
-        return BuiltInRegistries.ITEM.get(rl(id));
-    }
-
-    public Item getItem(ResourceLocation id) {
-        return BuiltInRegistries.ITEM.get(id);
     }
 
     public boolean getLoaded() {
@@ -64,8 +63,6 @@ public enum Mods {
     /**
      * @return a boolean of whether the mod is loaded or not based on mod id
      */
-
-
     @ExpectPlatform
     public static boolean getLoaded(String id) {
         throw new AssertionError();

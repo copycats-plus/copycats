@@ -1,259 +1,165 @@
 package com.copycatsplus.copycats.content.copycat.stairs;
 
+import com.copycatsplus.copycats.CCBlockEntityTypes;
+import com.copycatsplus.copycats.CCBlockStateProperties;
+import com.copycatsplus.copycats.CCBlockStateProperties.Side;
 import com.copycatsplus.copycats.CCBlocks;
-import com.copycatsplus.copycats.content.copycat.base.ICustomCTBlocking;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
-import com.copycatsplus.copycats.content.copycat.base.WaterloggedCopycatWrappedBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICustomCTBlocking;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.BlockUtils;
+import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.mojang.math.OctahedralGroup;
+import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.foundation.block.IBE;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.phys.BlockHitResult;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+import static com.copycatsplus.copycats.CCBlockStateProperties.SIDE;
+import static com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock.getApparentDirection;
+import static com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock.setApparentDirection;
 import static net.minecraft.core.Direction.*;
-import static net.minecraft.world.level.block.StairBlock.HALF;
-import static net.minecraft.world.level.block.StairBlock.SHAPE;
 
-@SuppressWarnings("deprecation")
-public class CopycatStairsBlock extends WaterloggedCopycatWrappedBlock<WrappedStairsBlock> implements ICustomCTBlocking, IStateType {
-
-    public static WrappedStairsBlock stairs;
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, ICustomCTBlocking, IBE<CCCopycatBlockEntity>, IStateType {
 
     public CopycatStairsBlock(Properties properties) {
-        super(properties);
-        registerDefaultState(defaultBlockState()
-                .setValue(StairBlock.FACING, NORTH)
-                .setValue(HALF, Half.BOTTOM)
-                .setValue(StairBlock.SHAPE, StairsShape.STRAIGHT)
+        super(Blocks.OAK_PLANKS.defaultBlockState(), properties);
+    }
+
+    @Nullable
+    @Override
+    public <S extends BlockEntity> BlockEntityTicker<S> getTicker(Level level, BlockState state, BlockEntityType<S> type) {
+        return null;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state,
+                                 Level level,
+                                 BlockPos pos,
+                                 Player player,
+                                 InteractionHand hand,
+                                 BlockHitResult hit) {
+        return InteractionUtils.sequential(
+                () -> ICopycatBlock.super.use(state, level, pos, player, hand, hit),
+                () -> super.use(state, level, pos, player, hand, hit)
         );
     }
 
     @Override
-    public WrappedStairsBlock getWrappedBlock() {
-        return stairs;
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> pBuilder) {
-        super.createBlockStateDefinition(pBuilder.add(StairBlock.FACING, HALF, StairBlock.SHAPE));
-    }
-
-    @Override
-    public BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
-        return to
-                .setValue(StairBlock.FACING, from.getValue(StairBlock.FACING))
-                .setValue(HALF, from.getValue(HALF))
-                .setValue(StairBlock.SHAPE, from.getValue(StairBlock.SHAPE))
-                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
-    }
-
-    @Override
-    public boolean useShapeForLightOcclusion(@NotNull BlockState pState) {
-        return true;
-    }
-
-    @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return stairs.getShape(pState, pLevel, pPos, pContext);
-    }
-
-    @Override
-    public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
-        stairs.animateTick(pState, pLevel, pPos, pRandom);
-    }
-
-    @Override
-    public void attack(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer) {
-        stairs.attack(pState, pLevel, pPos, pPlayer);
-    }
-
-    @Override
-    public void destroy(@NotNull LevelAccessor pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState) {
-        stairs.destroy(pLevel, pPos, pState);
-    }
-
-    @Override
-    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion) {
-        return super.getExplosionResistance(state, level, pos, explosion);
-    }
-
-    @Override
-    public void onPlace(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pOldState, boolean pIsMoving) {
-        stairs.onPlace(pState, pLevel, pPos, pOldState, pIsMoving);
+    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+        ICopycatBlock.super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
+        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
     }
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
-        stairs.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        ICopycatBlock.super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving, super::onRemove);
     }
 
     @Override
-    public boolean isRandomlyTicking(@NotNull BlockState pState) {
-        return stairs.isRandomlyTicking(pState);
+    public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+        ICopycatBlock.super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+        super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
     }
 
     @Override
-    public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
-        stairs.randomTick(pState, pLevel, pPos, pRandom);
+    public Class<CCCopycatBlockEntity> getBlockEntityClass() {
+        return CCCopycatBlockEntity.class;
     }
 
     @Override
-    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
-        stairs.tick(pState, pLevel, pPos, pRandom);
+    public BlockEntityType<? extends CCCopycatBlockEntity> getBlockEntityType() {
+        return CCBlockEntityTypes.COPYCAT.get();
     }
 
     @Override
-    public void wasExploded(@NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Explosion pExplosion) {
-        stairs.wasExploded(pLevel, pPos, pExplosion);
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return ICopycatBlock.super.rotate(state, rotation);
     }
 
     @Override
-    public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pDirection, @NotNull BlockState pNeighborState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pNeighborPos) {
-        return stairs.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return ICopycatBlock.super.mirror(state, mirror);
     }
 
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
-        return stairs.rotate(pState, pRotation);
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
-        return stairs.mirror(pState, pMirror);
-    }
-
-    @Override
-    public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
-        return stairs.isPathfindable(pState, pLevel, pPos, pType);
-    }
-
-    @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        boolean flipped = state.getValue(HALF) == Half.TOP;
-        Direction facing = state.getValue(StairBlock.FACING);
-        BlockState toState = reader.getBlockState(toPos);
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-
-        if (CopycatVerticalStairBlock.isStairs(toState)) {
-            return false;
-        } else {
-            if (diff.getY() == 0) {
-                // if target is level with this block,
-                // only allows it to connect if it's adjacent to a full face of this block
-                StairsShape shape = state.getValue(SHAPE);
-                int fullCount = 0;
-                if (diff.getX() != 0) {
-                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.X, directionOf(diff.getX())));
-                    if (faceShape.isFull())
-                        fullCount++;
-                    else if ((shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) && diff.getZ() != 0) {
-                        if (diff.getX() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getX() < 0 && faceShape.topPositive && faceShape.bottomPositive)
-                            fullCount++;
-                    }
-                }
-                if (diff.getZ() != 0) {
-                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.Z, directionOf(diff.getZ())));
-                    if (faceShape.isFull())
-                        fullCount++;
-                    else if ((shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT) && diff.getX() != 0) {
-                        if (diff.getZ() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getZ() < 0 && faceShape.topPositive && faceShape.bottomPositive)
-                            fullCount++;
-                    }
-                }
-                return fullCount < Mth.abs(diff.getX()) + Mth.abs(diff.getZ());
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
+            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Y) {
+                state = state.cycle(HALF);
             } else {
-                // if target is not level with this block,
-                // only allow connections below the base of this block
-                return (diff.getY() > 0) != flipped;
+                state = state.setValue(FACING, transform.mirror.mirror(state.getValue(FACING)));
             }
         }
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-        Direction side = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
-
-        if (side != null) {
-            FaceShape sideShape = getFaceShape(state, side);
-            if (!sideShape.canConnect()) return false;
-            if (CopycatVerticalStairBlock.isStairs(toState)) {
-                if (!sideShape.equals(getFaceShape(toState, side.getOpposite()))) return false;
+        if (transform.rotationAxis != null) {
+            if (transform.rotationAxis == Direction.Axis.Y) {
+                state = state.setValue(FACING, transform.rotateFacing(state.getValue(FACING)));
             } else {
-                if (!sideShape.isFull()) return false;
+                Direction facing = state.getValue(FACING);
+                Half half = state.getValue(HALF);
+                if (transform.rotationAxis == facing.getAxis()) {
+                    if (transform.rotation == Rotation.CLOCKWISE_180) {
+                        state = state.cycle(HALF);
+                    } else if (transform.rotation != Rotation.NONE) {
+                        Direction offset = transform.rotateFacing(half == Half.TOP ? Direction.UP : Direction.DOWN);
+                        state = BlockUtils.tryCopyProperties(state, CCBlocks.COPYCAT_VERTICAL_STAIRS.getDefaultState())
+                                .setValue(FACING, offset)
+                                .setValue(SIDE, offset == facing.getClockWise() ? Side.LEFT : Side.RIGHT);
+                    }
+                } else {
+                    state = BlockUtils.setApparentDirection(state, transform.rotateFacing(BlockUtils.getApparentDirection(state)));
+                }
             }
         }
-
-        return true;
+        return state;
     }
 
     @Override
     public Optional<Boolean> isCTBlocked(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos connectingPos, BlockPos blockingPos, Direction face) {
-        return CCBlocks.COPYCAT_VERTICAL_STAIRS.get().isCTBlocked(reader, state, pos, connectingPos, blockingPos, face);
+        return connectingPos.getY() >= pos.getY() ? Optional.empty() : Optional.of(false);
     }
 
     @Override
     public Optional<Boolean> blockCTTowards(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos ctPos, BlockPos connectingPos, Direction face) {
-        return CCBlocks.COPYCAT_VERTICAL_STAIRS.get().blockCTTowards(reader, state, pos, ctPos, connectingPos, face);
+        return Optional.of(false);
     }
-
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        int count = getFaceShape(state, face).countBlocks();
-        return count == 4 || count == 3 && state.getValue(StairBlock.SHAPE) == StairsShape.STRAIGHT;
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !canFaceBeOccluded(state, face);
-    }
-
 
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
     }
 
 
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (CopycatVerticalStairBlock.isStairs(neighborState)) {
-            if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite()))
-                return getFaceShape(state, dir).equals(getFaceShape(neighborState, dir.getOpposite()));
-        }
-
-        return getFaceShape(state, dir).isFull()
-                && getMaterial(level, pos).skipRendering(neighborState, dir.getOpposite());
-    }
-
-    public static BlockState getMaterial(BlockGetter reader, BlockPos targetPos) {
-        BlockState state = CopycatBlock.getMaterial(reader, targetPos);
-        if (state.is(Blocks.AIR)) return reader.getBlockState(targetPos);
-        return state;
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     private static AxisDirection directionOf(int value) {

@@ -3,13 +3,6 @@ plugins {
     id 'me.modmuss50.mod-publish-plugin' version "0.5.1"
 }
 
-def secrets = new Properties()
-if (file("./../secrets.properties").exists()) {
-    file("./../secrets.properties").withInputStream {
-        stream -> secrets.load(stream)
-    }
-}
-
 architectury {
     platformSetupLoomIde()
     fabric()
@@ -20,6 +13,7 @@ loom {
     runs {
         client {
             vmArg "-XX:+AllowEnhancedClassRedefinition"
+            programArgs "--username=Dev"
         }
         server {
             vmArg "-XX:+AllowEnhancedClassRedefinition"
@@ -53,12 +47,21 @@ dependencies {
 
     modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_fabric_version}")
     // because create fabric is a bit broken I think
-    modImplementation("net.minecraftforge:forgeconfigapiport-fabric:${config_port_version}")
+    modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_port_version}")
 
-    modLocalRuntime "curse.maven:jade-324717:${jade_fabric_curse_id}"
+    modLocalRuntime("curse.maven:jade-324717:${jade_fabric_curse_id}")
     modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_fabric_version}")
 
-    modImplementation "curse.maven:continuity-531351:${continuity_curse_version}"
+    modImplementation("curse.maven:continuity-531351:${continuity_curse_version}")
+//    modImplementation("blank:continuity-3.0.0:beta.6+1.20.1.build.105")
+    modImplementation("curse.maven:athena-841890:${athena_fabric_curse_id}")
+    modImplementation("curse.maven:indium-459496:${indium_fabric_curse_id}")
+    modLocalRuntime("maven.modrinth:sodium:${sodium_fabric_version}")
+//    modLocalRuntime("maven.modrinth:extended-cogwheels:${extended_cogwheels_fabric_version}")
+    modLocalRuntime("curse.maven:spark-361579:${spark_fabric_curse_id}")
+    modCompileOnly("curse.maven:selene-499980:${moonlight_curse_fabric_id}")
+    modCompileOnly("curse.maven:vertical-slabs-compat-724387:${vertical_slabs_curse_fabric_id}")
+    modImplementation("curse.maven:additional-placements-fabric-930469:${additionalplacements_fabric_curse_id}")
 
     annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-fabric:${mixin_extras_version}")))
 
@@ -108,20 +111,6 @@ components.java {
     }
 }
 
-publishing {
-    publications {
-        mavenFabric(MavenPublication) {
-            artifactId = archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-    }
-}
-
 tasks.publishMods.dependsOn(tasks.assemble)
 tasks.publishMods.mustRunAfter(tasks.build)
 
@@ -133,7 +122,7 @@ publishMods {
     modLoaders.add("fabric")
 
     modrinth {
-        accessToken = secrets.MODRINTH_TOKEN
+        accessToken = project.findProperty("MODRINTH_TOKEN")
         projectId = "UT2M39wf"
         minecraftVersions.add(minecraft_version)
 
@@ -146,7 +135,7 @@ publishMods {
     }
 
     curseforge {
-        accessToken = secrets.CURSEFORGE_TOKEN
+        accessToken = project.findProperty("CURSEFORGE_TOKEN")
         projectId = "968398"
         minecraftVersions.add(minecraft_version)
     }

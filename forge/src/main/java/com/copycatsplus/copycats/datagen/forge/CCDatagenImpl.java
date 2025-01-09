@@ -2,7 +2,6 @@ package com.copycatsplus.copycats.datagen.forge;
 
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.CCDatagen;
-import com.copycatsplus.copycats.datagen.recipes.CCStandardRecipes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;

@@ -1,8 +1,6 @@
 {
   "values": [
     "copycats:copycat_wooden_button",
-    "copycats:copycat_stone_button",
-    "copycats:wrapped_copycat_wooden_button",
-    "copycats:wrapped_copycat_stone_button"
+    "copycats:copycat_stone_button"
   ]
 }

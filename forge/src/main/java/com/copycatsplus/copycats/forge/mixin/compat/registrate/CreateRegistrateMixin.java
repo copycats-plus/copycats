@@ -7,6 +7,9 @@ import net.minecraftforge.registries.RegistryObject;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+/**
+ * Allow setting the creative tab during registration.
+ */
 @Mixin(CreateRegistrate.class)
 public class CreateRegistrateMixin implements CreateRegistrateAccessor {
     @Shadow protected RegistryObject<CreativeModeTab> currentTab;

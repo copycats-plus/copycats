@@ -7,9 +7,13 @@ import net.minecraft.world.item.CreativeModeTab;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+/**
+ * Allow setting the creative tab during registration.
+ */
 @Mixin(CreateRegistrate.class)
 public class CreateRegistrateMixin implements CreateRegistrateAccessor {
-    @Shadow protected ResourceKey<CreativeModeTab> currentTab;
+    @Shadow
+    protected ResourceKey<CreativeModeTab> currentTab;
 
     @Override
     public void copycats$setCreativeTab(ResourceKey<CreativeModeTab> tab) {

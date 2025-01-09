@@ -1,0 +1,39 @@
+{
+  "type": "porting_lib:conditional",
+  "recipes": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_large_cogwheel",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:large_cogwheel"
+          },
+          {
+            "item": "create:large_cogwheel"
+          },
+          {
+            "item": "create:large_cogwheel"
+          },
+          {
+            "item": "create:large_cogwheel"
+          },
+          {
+            "item": "create:zinc_ingot"
+          }
+        ],
+        "result": {
+          "count": 4,
+          "item": "copycats:copycat_large_cogwheel"
+        }
+      }
+    }
+  ]
+}

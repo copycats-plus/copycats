@@ -2,15 +2,20 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
-import com.copycatsplus.copycats.content.copycat.base.ICopycatWithWrappedBlock;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.ScaledBlockAndTintGetter;
-import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.decoration.copycat.CopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.mojang.math.OctahedralGroup;
+import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.placement.PlacementHelpers;
 import com.simibubi.create.foundation.placement.PlacementOffset;
+import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,7 +26,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
@@ -29,6 +33,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -43,11 +48,16 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implements ICopycatWithWrappedBlock<Block> {
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implements ISpecialBlockItemRequirement {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
     public static final EnumProperty<SlabType> SLAB_TYPE = BlockStateProperties.SLAB_TYPE;
@@ -62,8 +72,8 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
     }
 
     @Override
-    public int maxMaterials() {
-        return 2;
+    public String defaultProperty() {
+        return SlabType.TOP.getSerializedName();
     }
 
     @Override
@@ -106,48 +116,36 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
 
     @Override
     public Set<String> storageProperties() {
-        return Set.of(SlabType.BOTTOM.getSerializedName(), SlabType.TOP.getSerializedName());
+        return Set.of(SlabType.TOP.getSerializedName(), SlabType.BOTTOM.getSerializedName());
     }
 
     @Override
-    public Block getWrappedBlock() {
-        return Blocks.SMOOTH_STONE_SLAB;
+    public int getColorIndex(String property) {
+        return property.equals(SlabType.BOTTOM.getSerializedName()) ? 0 : 1;
     }
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
                                  BlockHitResult ray) {
-
-        if (!player.isShiftKeyDown() && player.mayBuild()) {
-            ItemStack heldItem = player.getItemInHand(hand);
-            IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
-            if (placementHelper.matchesItem(heldItem)) {
-                placementHelper.getOffset(player, world, state, pos, ray)
-                        .placeInWorld(world, (BlockItem) heldItem.getItem(), player, hand, ray);
-                return InteractionResult.SUCCESS;
-            }
-        }
-
-        return super.use(state, world, pos, player, hand, ray);
+        return InteractionUtils.sequential(
+                () -> InteractionUtils.usePlacementHelper(placementHelperId, state, world, pos, player, hand, ray),
+                () -> super.use(state, world, pos, player, hand, ray)
+        );
     }
 
     @Override
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+        onWrenched(state, context);
         if (state.getValue(SLAB_TYPE) != SlabType.DOUBLE) return super.onSneakWrenched(state, context);
 
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Player player = context.getPlayer();
-        String property = getProperty(state, context.getLevel(), context.getClickedPos(), context.getClickLocation(), context.getClickedFace(), true);
+        String property = getPropertyFromInteraction(state, context.getLevel(), context.getClickedPos(), context.getClickLocation(), context.getClickedFace(), true);
         if (!partExists(state, property)) return InteractionResult.FAIL;
         if (world instanceof ServerLevel) {
             if (player != null) {
                 List<ItemStack> drops = Block.getDrops(defaultBlockState().setValue(SLAB_TYPE, property.equals(SlabType.BOTTOM.getSerializedName()) ? SlabType.BOTTOM : SlabType.TOP), (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand());
-                withBlockEntityDo(world, pos, ufte -> {
-                    drops.add(ufte.getMaterialItemStorage().getMaterialItem(property).consumedItem());
-                    ufte.setMaterial(property, AllBlocks.COPYCAT_BASE.getDefaultState());
-                    ufte.setConsumedItem(property, ItemStack.EMPTY);
-                });
                 if (!player.isCreative()) {
                     for (ItemStack drop : drops) {
                         player.getInventory().placeItemBackInInventory(drop);
@@ -162,41 +160,20 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (reader instanceof ScaledBlockAndTintGetter scaledReader) {
-            BlockPos fromTruePos = scaledReader.getTruePos(fromPos);
-            BlockPos toTruePos = scaledReader.getTruePos(toPos);
-            return fromTruePos.equals(toTruePos);
-        }
-        return !toState.is(this);
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (reader instanceof ScaledBlockAndTintGetter scaledReader) {
-            BlockPos fromTruePos = scaledReader.getTruePos(fromPos);
-            BlockPos toTruePos = scaledReader.getTruePos(toPos);
-            return !fromTruePos.equals(toTruePos) && toState.is(this);
-        }
-        return toState.is(this);
-    }
-
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        return getFaceShape(state, face).hasContact();
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !getFaceShape(state, face).hasContact();
+    public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
+        return new ItemRequirement(
+                ItemRequirement.ItemUseType.CONSUME,
+                new ItemStack(asItem(), switch (state.getValue(SLAB_TYPE)) {
+                    case BOTTOM, TOP -> 1;
+                    case DOUBLE -> 2;
+                })
+        );
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         if (state.is(this)) {
@@ -253,70 +230,46 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        VoxelShape shapeOverride = multiPlatformGetShape(pState, pLevel, pPos, pContext);
-        if (shapeOverride != null) return shapeOverride;
         SlabType type = pState.getValue(SLAB_TYPE);
         Axis axis = pState.getValue(AXIS);
         if (type == SlabType.DOUBLE) {
             return Shapes.block();
         } else if (type == SlabType.BOTTOM) {
-            return CCShapes.CASING_8PX.get(axis);
+            return CCShapes.SLAB_BOTTOM.get(axis).toShape();
         } else {
-            return CCShapes.CASING_8PX_TOP.get(axis);
+            return CCShapes.SLAB_TOP.get(axis).toShape();
         }
     }
-
 
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
     }
 
-
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (neighborState.getBlock() instanceof SlabBlock || neighborState.getBlock() instanceof CopycatSlabBlock) {
-            if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite()))
-                return getFaceShape(state, dir) == getFaceShape(neighborState, dir.getOpposite());
-        }
-
-        return getFaceShape(state, dir) == FaceShape.FULL
-                && getMaterial(level, pos).skipRendering(neighborState, dir.getOpposite());
-    }
-
-    public static BlockState getMaterial(BlockGetter reader, BlockPos targetPos) {
-        BlockState state = CopycatBlock.getMaterial(reader, targetPos);
-        if (state.is(Blocks.AIR)) return reader.getBlockState(targetPos);
-        return state;
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rot) {
-        state = super.rotate(state, rot);
-        return setApparentDirection(state, rot.rotate(getApparentDirection(state)));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return setApparentDirection(state, transformFacing(transform, getApparentDirection(state)));
     }
 
     @Override
-    public void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation) {
+    public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
         Axis axis = state.getValue(AXIS);
-        if (axis == Axis.Y) return;
-        if (rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
-                rotation == Rotation.CLOCKWISE_180 ||
-                rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {
-            be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
+        // the given block state is post-transform, so we need to adjust the axis if the transform is a rotation
+        if (transform.rotationAxis != null && transform.rotation == Rotation.CLOCKWISE_90 || transform.rotation == Rotation.COUNTERCLOCKWISE_90) {
+            axis = switch (axis) {
+                case X -> Direction.Axis.Z;
+                case Z -> Direction.Axis.X;
+                default -> axis;
+            };
         }
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirrorIn) {
-        state = super.mirror(state, mirrorIn);
-        return state.rotate(mirrorIn.getRotation(getApparentDirection(state)));
-    }
-
-    @Override
-    public void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror) {
-        Axis axis = state.getValue(AXIS);
-        if (axis == Axis.Y) return;
-        if (mirror == Mirror.FRONT_BACK && axis == Axis.Z || mirror == Mirror.LEFT_RIGHT && axis == Axis.X) {
+        if (transformFacing(transform, Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE)).getAxisDirection() == AxisDirection.NEGATIVE) {
             be.getMaterialItemStorage().remapStorage(s -> s.equals(Half.BOTTOM.getSerializedName()) ? Half.TOP.getSerializedName() : Half.BOTTOM.getSerializedName());
         }
     }
@@ -354,7 +307,7 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
         }
     }
 
-    private enum FaceShape {
+    public enum FaceShape {
         FULL,
         TOP,
         BOTTOM,

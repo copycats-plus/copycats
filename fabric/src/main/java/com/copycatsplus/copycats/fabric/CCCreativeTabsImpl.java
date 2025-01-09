@@ -28,7 +28,13 @@ public class CCCreativeTabsImpl extends CCCreativeTabs {
     public static final AllCreativeModeTabs.TabInfo MAIN_TAB = register("main", () -> FabricItemGroup.builder()
             .title(Component.translatable("itemGroup.copycats.main"))
             .icon(CCBlocks.COPYCAT_SLAB::asStack)
-            .displayItems(new DisplayItemsGenerator(ITEMS))
+            .displayItems(new DisplayItemsGenerator(DECORATIVE))
+            .build());
+
+    public static final AllCreativeModeTabs.TabInfo FUNCTIONAL_TAB = register("functional", () -> FabricItemGroup.builder()
+            .title(Component.translatable("itemGroup.copycats.functional"))
+            .icon(CCBlocks.COPYCAT_COGWHEEL::asStack)
+            .displayItems(new DisplayItemsGenerator(FUNCTIONAL))
             .build());
 
     public static void setCreativeTab() {
@@ -44,11 +50,21 @@ public class CCCreativeTabsImpl extends CCCreativeTabs {
     }
 
     public static void register() {
-        ItemGroupEvents.modifyEntriesEvent(CCCreativeTabsImpl.MAIN_TAB.key()).register(CCCreativeTabsImpl::hideItems);
+        ItemGroupEvents.modifyEntriesEvent(CCCreativeTabsImpl.MAIN_TAB.key()).register(CCCreativeTabsImpl::hideDecorItems);
+        ItemGroupEvents.modifyEntriesEvent(CCCreativeTabsImpl.FUNCTIONAL_TAB.key()).register(CCCreativeTabsImpl::hideFunctionalItems);
     }
 
-    private static void hideItems(FabricItemGroupEntries event) {
-        Set<Item> hiddenItems = ITEMS.stream()
+    private static void hideDecorItems(FabricItemGroupEntries event) {
+        Set<Item> hiddenItems = DECORATIVE.stream()
+                .filter(x -> !FeatureToggle.isEnabled(x.getId()))
+                .map(ItemProviderEntry::asItem)
+                .collect(Collectors.toSet());
+        event.getDisplayStacks().removeIf(entry -> hiddenItems.contains(entry.getItem()));
+        event.getSearchTabStacks().removeIf(entry -> hiddenItems.contains(entry.getItem()));
+    }
+
+    private static void hideFunctionalItems(FabricItemGroupEntries event) {
+        Set<Item> hiddenItems = FUNCTIONAL.stream()
                 .filter(x -> !FeatureToggle.isEnabled(x.getId()))
                 .map(ItemProviderEntry::asItem)
                 .collect(Collectors.toSet());
@@ -64,5 +80,12 @@ public class CCCreativeTabsImpl extends CCCreativeTabs {
         return MAIN_TAB.key();
     }
 
+    public static CreativeModeTab getFunctionalTab() {
+        return FUNCTIONAL_TAB.tab();
+    }
+
+    public static ResourceKey<CreativeModeTab> getFunctionalTabKey() {
+        return FUNCTIONAL_TAB.key();
+    }
 
 }

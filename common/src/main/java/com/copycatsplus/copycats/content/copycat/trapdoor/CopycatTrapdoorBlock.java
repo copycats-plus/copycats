@@ -1,118 +1,112 @@
 package com.copycatsplus.copycats.content.copycat.trapdoor;
 
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
-import com.copycatsplus.copycats.content.copycat.base.WaterloggedCopycatWrappedBlock;
+import com.copycatsplus.copycats.CCBlockEntityTypes;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.simibubi.create.foundation.block.IBE;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.phys.BlockHitResult;
 
-import static net.minecraft.world.level.block.TrapDoorBlock.*;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @SuppressWarnings("deprecation")
-public class CopycatTrapdoorBlock extends WaterloggedCopycatWrappedBlock<WrappedTrapdoorBlock> implements IStateType {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatTrapdoorBlock extends TrapDoorBlock implements ICopycatBlock, IBE<CCCopycatBlockEntity>, IStateType {
 
-    public static WrappedTrapdoorBlock trapdoor;
+    public CopycatTrapdoorBlock(Properties properties, BlockSetType type) {
+        super(properties, type);
+    }
 
-    public CopycatTrapdoorBlock(Properties properties) {
-        super(properties);
-        registerDefaultState(defaultBlockState()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(OPEN, false)
-                .setValue(HALF, Half.BOTTOM)
-                .setValue(POWERED, false)
+    @Nullable
+    @Override
+    public <S extends BlockEntity> BlockEntityTicker<S> getTicker(Level level, BlockState state, BlockEntityType<S> type) {
+        return null;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state,
+                                 Level level,
+                                 BlockPos pos,
+                                 Player player,
+                                 InteractionHand hand,
+                                 BlockHitResult hit) {
+        return InteractionUtils.sequential(
+                () -> ICopycatBlock.super.use(state, level, pos, player, hand, hit),
+                () -> super.use(state, level, pos, player, hand, hit)
         );
     }
 
     @Override
-    public WrappedTrapdoorBlock getWrappedBlock() {
-        return trapdoor;
+    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+        ICopycatBlock.super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
+        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> pBuilder) {
-        super.createBlockStateDefinition(pBuilder.add(FACING, OPEN, HALF, POWERED));
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        ICopycatBlock.super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving, super::onRemove);
     }
 
     @Override
-    public BlockState copyState(BlockState from, BlockState to, boolean includeWaterlogged) {
-        return to
-                .setValue(FACING, from.getValue(FACING))
-                .setValue(OPEN, from.getValue(OPEN))
-                .setValue(HALF, from.getValue(HALF))
-                .setValue(POWERED, from.getValue(POWERED))
-                .setValue(WATERLOGGED, includeWaterlogged ? from.getValue(WATERLOGGED) : to.getValue(WATERLOGGED));
+    public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+        ICopycatBlock.super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+        super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return trapdoor.getShape(pState, pLevel, pPos, pContext);
+    public boolean isAcceptedRegardless(BlockState material) {
+        return material.getBlock() instanceof TrapDoorBlock;
     }
 
     @Override
-    public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
-        return trapdoor.isPathfindable(pState, pLevel, pPos, pType);
+    public Class<CCCopycatBlockEntity> getBlockEntityClass() {
+        return CCCopycatBlockEntity.class;
     }
 
     @Override
-    public void neighborChanged(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Block pBlock, @NotNull BlockPos pFromPos, boolean pIsMoving) {
-        trapdoor.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
-    }
-
-    @Override
-    public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
-        return trapdoor.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
-    }
-
-    //Doesnt exist in anything but forge
-/*    @Override
-    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity) {
-        return trapdoor.isLadder(state, level, pos, entity);
-    }*/
-
-    @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
-        return trapdoor.rotate(pState, pRotation);
-    }
-
-    @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
-        return trapdoor.mirror(pState, pMirror);
+    public BlockEntityType<? extends CCCopycatBlockEntity> getBlockEntityType() {
+        return CCBlockEntityTypes.COPYCAT.get();
     }
 
     @Override
     public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
+                                             BlockPos fromPos, BlockPos toPos, BlockState toState) {
         return true;
     }
 
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
         return false;
-    }
-
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        return false;
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return true;
     }
 
 
     public boolean supportsExternalFaceHiding(BlockState state) {
         return true;
+    }
+
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 }

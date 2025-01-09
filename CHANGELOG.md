@@ -5,6 +5,210 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.4 - 2024-09-15
+
+### Fixed
+
+- Fixed an incompatibility with Immersive Engineering due to block states being initialized before the block registry
+
+## 2.1.3 - 2024-09-15
+
+### Changed
+
+- Multistate copycats can now be mined with both pickaxes and axes
+
+### Fixed
+
+- Fixed light sources in copycats again to eliminate thread deadlocks and restore compatibility with Starlight
+- Fixed schematicannon sometimes requiring air to build multistate copycats
+- Fixed copycat slabs not connecting to full blocks
+- Added compatibility with More Culling
+- Fixed occlusion for brackets
+- Fixed the inner face of copycat doors when one side of the door is transparent but the other isn't
+- Fixed connected textures on the top face of copycat stairs
+- Added a workaround for schematicannons not getting the same stack of resources from two separate inventories
+- Fixed a crash in copycat migration when block entities from other mods are not properly registered
+- Fixed copycat slabs being transformed incorrectly in schematics
+
+## 2.1.2 - 2024-08-03
+
+### Fixed
+
+- Fixed stack overflow issue with the lighting patch when starlight is loaded
+- Fixed block transforms on a few blocks
+
+## 2.1.1 - 2024-08-02
+
+### Changed
+
+- All copycats no longer get destroyed by flowing water
+
+### Fixed
+
+- Copycats retaining their textures when broken and placed back down
+
+## 2.1.0 - 2024-08-01
+
+### Changed
+
+- Opted into Neruina's auto report system
+- The migration config option has been reset so that migration is on by default from this version onwards
+- The item models for Copycat Door and Copycat Iron Door are now 3D
+- In addition to Copycat Shafts, Cogwheels and Large Cogwheels, Copycat Trapdoors, Doors, Fences, Fence Gates, Ladders, Pressure Plates and Walls now accept their respective non-copycat counterparts as material
+- All copycats now support mirroring and 180-degree rotations. Those with vertical variants also support 90-degree rotations
+
+### Fixed
+
+- **Copycats not emitting light properly when a light source is used as material**
+- The 2.0 update sale is over. You now need to pay the full material price when building copycats with a schematicannon
+- Incorrect face culling when sodium is installed
+- Incompatibility with Diagonal Walls by disabling DW on Copycat Walls
+- Stack overflow crash when getting the destroy progress of a multi-state copycat
+- Crash when the multi-state copycat block entity isn't removed when the block no longer exists
+- Stack overflow crash when computing block friction/enchantment power for multi-state copycats
+- Incompatibility with Dynamic Crosshair due to state for placement being null
+- Crash due to case conversion with non-default locale
+- Incompatibility with Embeddium on Fabric due to missing Indium classes
+- Incorrect accessibility on the public `StateType` API
+- Face hiding not working in specific configurations
+- Multi-state copycats consuming too many items when they are filled by holding the material in the offhand
+- Incorrect footsteps when walking on multi-state copycats (Forge only)
+- Incorrect particles when running on multi-state copycats
+- Bracket-able copycats not dropping the bracket item when broken
+- Bracket-able copycats not requiring a bracket item when placed with a schematicannon
+- Horizontal connected textures not working for Create's pillar blocks
+- Copycats not craftable in Fabric 1.18 due to incorrect item tags
+
+## 2.0.5 - 2024-07-21
+
+### Fixed
+
+- Copycat Slabs not having connected textures when using Fusion CT
+- Crash/issues with train disassembly when certain complex blocks are put inside copycats on Forge
+- Crash when simple copycats are put near enchanting tables on Fabric
+- Bookshelves in copycats not contributing to enchanting power on Fabric
+- Incorrect block mirroring for Copycat Slabs, Vertical Stairs and various other copycats
+- Incorrect block shape for upside-down Copycat Half Layers
+- Incompatibility with Continuity (not available until next Continuity release)
+
+## 2.0.4 - 2024-07-20
+
+### Fixed
+
+- Incorrect face occlusion for Copycat Ladder
+- Incorrect link for Forge's update checker
+- Crash when Sinytra is installed due to late config initialization
+
+## 2.0.3 - 2024-07-20
+
+### Changed
+
+- Allow Shafts and Cogwheels to be put inside Copycat Shafts and Cogwheels for their original look
+- Changed the icon of the functional tab to a Copycat Cogwheel
+
+### Fixed
+
+- Copycat Fluid Pipes turning into normal pipes when being wrenched
+- Pillar blocks having incorrect connected textures
+- Incorrect occlusion of the inner faces of Copycat Half Layer
+- Schematics from old versions of Copycats+ losing their NBT data
+- Incompatibility with Create: Extended Cogwheels
+- Train disassembly not working with multi-state copycats
+- Crash when multi-state copycats are moved by mechanical pistons
+- Crash when copycats are fired from a schematicannon
+
+## 2.0.2 - 2024-07-18
+
+### Fixed
+
+- Re-release of the 2.0.1 hotfix version for 1.18.2 and 1.19.2
+
+## 2.0.1 - 2024-07-18
+
+### Fixed
+
+- Fixed class loading issue on servers.
+- Fixed compatibility with Create: The Factory Must Grow
+
+## 2.0.0 - 2024-07-18
+
+### Added
+
+- Copycat Door
+  - Allows different materials for top and bottom halves
+- Copycat Iron Trapdoor/Door
+  - Can only be opened with redstone
+- Copycat Fluid Pipe
+  - Can be wrenched to add a window
+  - Accepts transparent materials to display the fluid inside
+- Copycat Cogwheel/Large Cogwheel
+  - Allows different materials for the shaft and the gear
+- A new accessibility option to colorize multi-state copycats
+- Conversion recipes between horizontal and vertical copycats
+- A shortcut key (left alt by default) to fill all parts of a multi-state copycat with the held item
+
+### Changed
+
+- **Major internal rewrite**
+    - For developers, please refer to [the wiki](https://github.com/copycats-plus/copycats/wiki/v2.0-Refactor) for a summary of changes. Most code in the `foundation` package is also documented.
+- Optimized rendering on both platforms
+- Separated creative tabs for decorative and functional copycats
+- Re-ordered items in the creative tab for easy access
+- Reverted the shape of Copycat Ladder to match vanilla ladders
+- Reworked tooltips to be more concise and removed duplicate strings
+- Reworked multi-state copycats to no longer consume items when the same material is already present
+- Improved block outlines for Copycat Vertical Slope and Copycat Slope Layers
+
+### Fixed
+
+- Inconsistent connected textures on various copycats on Fabric and in 1.18.2
+- Inconsistent behavior of CT toggle across versions
+- Multi-state copycats not rotating properly until a block update is received
+- Face culling not working for all copycats
+- Transparent face hiding not working for multi-state copycats
+- Transparent face hiding not working between copycats of different types
+- Potentially buggy quad lighting on Forge
+- Buggy connected textures between two Copycat Slabs with different orientations
+- Placement helpers not rendering for various copycats
+- Incorrect/missing destroy particles in various copycats
+- Crash due to null pointer exception when migrating old copycats to multi-state copycats
+- Incompatibility with Athena's connected textures
+- Incompatibility with Indium on Fabric
+- Copycat Trapdoor not climbable when above a ladder
+- Various block interactions due to Copycat Slopes not having a full face on the back
+- Crash due to biomes not being accessible in a superflat world on Fabric
+- Buggy quad lighting on Copycat Slopes on Fabric
+
+## 1.3.8 - 2024-06-28
+
+### Fixed
+
+- Re-release of the 1.3.7 hotfix version
+
+## 1.3.7 - 2024-06-28
+
+### Fixed
+
+- Fixed crash issue on servers related to BlockColors
+
+## 1.3.6 - 2024-06-27
+
+### Fixed
+
+- Fixed a crash when copycats from other mods interact with multi-state copycats
+
+## 1.3.5 - 2024-06-27
+
+### Fixed
+
+- Fixed overflow issue with explosions on forge
+
+### Added
+
+- Added Vertical Slopes (better hitbox to come)
+- Added Slope Layers (better hitbox to come)
+- Added Copycat Shaft
+
 ## 1.3.4 - 2024-06-19
 
 ### Fixed

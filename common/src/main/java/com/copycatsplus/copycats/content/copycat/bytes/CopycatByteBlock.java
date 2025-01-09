@@ -1,12 +1,18 @@
 package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.Copycats;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateCopycatBlockEntity;
-import com.copycatsplus.copycats.content.copycat.base.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -23,6 +29,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -33,11 +40,14 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implements ISpecialBlockItemRequirement {
     public static BooleanProperty TOP_NE = BooleanProperty.create("top_northeast");
     public static BooleanProperty TOP_NW = BooleanProperty.create("top_northwest");
     public static BooleanProperty TOP_SE = BooleanProperty.create("top_southeast");
@@ -79,8 +89,8 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     }
 
     @Override
-    public int maxMaterials() {
-        return 8;
+    public String defaultProperty() {
+        return BOTTOM_NW.getName();
     }
 
     @Override
@@ -107,6 +117,12 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     }
 
     @Override
+    public int getColorIndex(String property) {
+        Byte bite = byteMap.get(property);
+        return bite.x ^ bite.y ^ bite.z ? 1 : 0;
+    }
+
+    @Override
     public String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit) {
         return byByte(hitLocation.getX() > 0, hitLocation.getY() > 0, hitLocation.getZ() > 0).getName();
     }
@@ -120,29 +136,6 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         super.createBlockStateDefinition(pBuilder.add(TOP_NE, TOP_NW, TOP_SE, TOP_SW, BOTTOM_NE, BOTTOM_NW, BOTTOM_SE, BOTTOM_SW));
-    }
-
-
-    @Override
-    public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        BlockState toState = reader.getBlockState(toPos);
-        return !toState.is(this);
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        return toState.is(this);
-    }
-
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        return false;
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return true;
     }
 
     private static VoxelShape calculateMultiFaceShape(BlockState pState) {
@@ -161,8 +154,6 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        VoxelShape shapeOverride = multiPlatformGetShape(pState, pLevel, pPos, pContext);
-        if (shapeOverride != null) return shapeOverride;
         return Objects.requireNonNull(this.shapesCache.get(pState));
     }
 
@@ -178,7 +169,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         Vec3 bias = Vec3.atLowerCornerOf(context.getClickedFace().getNormal()).scale(1 / 16f);
@@ -220,6 +211,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
 
     @Override
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+        onWrenched(state, context);
         int byteCount = 0;
         for (Byte bite : allBytes) {
             if (state.getValue(byByte(bite))) byteCount++;
@@ -234,12 +226,6 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
         if (world instanceof ServerLevel) {
             if (player != null) {
                 List<ItemStack> drops = Block.getDrops(defaultBlockState().setValue(byByte(bite), true), (ServerLevel) world, pos, world.getBlockEntity(pos), player, context.getItemInHand());
-                withBlockEntityDo(world, pos, ufte -> {
-                    String property = byByte(bite).getName();
-                    drops.add(ufte.getMaterialItemStorage().getMaterialItem(property).consumedItem());
-                    ufte.setMaterial(property, AllBlocks.COPYCAT_BASE.getDefaultState());
-                    ufte.setConsumedItem(property, ItemStack.EMPTY);
-                });
                 if (!player.isCreative()) {
                     for (ItemStack drop : drops) {
                         player.getInventory().placeItemBackInInventory(drop);
@@ -254,25 +240,43 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
     }
 
     @Override
-    public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
-        pState = super.rotate(pState, pRotation);
-        return mapBytes(pState, bite -> bite.rotate(pRotation));
+    public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
+        return IMultiStateCopycatBlock.getRequiredItemsForParts(state, TOP_NE, TOP_NW, TOP_SE, TOP_SW, BOTTOM_NE, BOTTOM_NW, BOTTOM_SE, BOTTOM_SW);
+    }
+
+    public boolean supportsExternalFaceHiding(BlockState state) {
+        return true;
+    }
+
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override
-    public void rotate(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Rotation rotation) {
-        be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).rotate(rotation)).getName());
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return mapBytes(state, bite -> transformByte(transform, bite));
     }
 
     @Override
-    public @NotNull BlockState mirror(@NotNull BlockState pState, Mirror pMirror) {
-        pState = super.mirror(pState, pMirror);
-        return mapBytes(pState, bite -> bite.mirror(pMirror));
+    public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
+        be.getMaterialItemStorage().remapStorage(key -> byByte(transformByte(transform, byteMap.get(key))).getName());
     }
 
-    @Override
-    public void mirror(@NotNull BlockState state, @NotNull MultiStateCopycatBlockEntity be, Mirror mirror) {
-        be.getMaterialItemStorage().remapStorage(key -> byByte(byteMap.get(key).mirror(mirror)).getName());
+    private static Byte transformByte(StructureTransform transform, Byte bite) {
+        if (transform.mirror != null && transform.mirror != Mirror.NONE)
+            bite = bite.mirror(transform.mirror);
+        if (transform.rotationAxis != null) {
+            bite = switch (transform.rotationAxis) {
+                case X -> bite.rotateX(transform.rotation);
+                case Y -> bite.rotateY(transform.rotation);
+                case Z -> bite.rotateZ(transform.rotation);
+            };
+        }
+        return bite;
     }
 
     public static Vec3 clampToBlockPos(Vec3 vec, BlockPos pos) {
@@ -373,7 +377,19 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
             return set(direction.getAxis(), !get(direction.getAxis()));
         }
 
-        public Byte rotate(Rotation rotation) {
+        public Byte rotateX(Rotation rotation) {
+            if (rotation == Rotation.CLOCKWISE_90) {
+                return new Byte(this.x, this.z, !this.y);
+            } else if (rotation == Rotation.CLOCKWISE_180) {
+                return new Byte(this.x, this.y, this.z);
+            } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
+                return new Byte(this.x, !this.z, this.y);
+            } else {
+                return this;
+            }
+        }
+
+        public Byte rotateY(Rotation rotation) {
             if (rotation == Rotation.CLOCKWISE_90) {
                 return new Byte(!this.z, this.y, this.x);
             } else if (rotation == Rotation.CLOCKWISE_180) {
@@ -385,10 +401,23 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock {
             }
         }
 
+        public Byte rotateZ(Rotation rotation) {
+            if (rotation == Rotation.CLOCKWISE_90) {
+                return new Byte(this.y, !this.x, this.z);
+            } else if (rotation == Rotation.CLOCKWISE_180) {
+                return new Byte(this.x, this.y, this.z);
+            } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
+                return new Byte(!this.y, this.x, this.z);
+            } else {
+                return this;
+            }
+        }
+
         public Byte mirror(Mirror mirror) {
             boolean invertX = mirror.rotation() == OctahedralGroup.INVERT_X;
+            boolean invertY = mirror.rotation() == OctahedralGroup.INVERT_Y;
             boolean invertZ = mirror.rotation() == OctahedralGroup.INVERT_Z;
-            return new Byte(invertX != this.x, this.y, invertZ != this.z);
+            return new Byte(invertX != this.x, invertY != this.y, invertZ != this.z);
         }
 
         @Override

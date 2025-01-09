@@ -1,7 +1,8 @@
 package com.copycatsplus.copycats.mixin.compat.diagonalfences;
 
-import com.copycatsplus.copycats.content.copycat.base.ICopycatWithWrappedBlock;
-import com.copycatsplus.copycats.content.copycat.fence.WrappedFenceBlock;
+import com.copycatsplus.copycats.compat.Mods;
+import com.copycatsplus.copycats.foundation.annotation.ModMixin;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,8 +11,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
+ * Makes sure that copycat fences are not processed by Diagonal Fences
+ * <p>
  * This patch has to be applied after Diagonal Fences modifies the FenceBlock class
  */
+@ModMixin(requiredMods = Mods.DIAGONAL_FENCES)
 @Mixin(value = FenceBlock.class, priority = 1100)
 public abstract class FenceBlockMixin extends CrossCollisionBlock {
 
@@ -19,17 +23,14 @@ public abstract class FenceBlockMixin extends CrossCollisionBlock {
         super(pNodeWidth, pExtensionWidth, pNodeHeight, pExtensionHeight, pCollisionHeight, pProperties);
     }
 
-    /**
-     * Makes sure that copycat fences are not processed by Diagonal Fences
-     */
     @Inject(
             at = @At("HEAD"),
             method = "hasProperties()Z",
             cancellable = true,
             remap = false,
-            require = 0, expect = 0
+            require = 0
     )
     public void hasProperties(CallbackInfoReturnable<Boolean> cir) {
-        if (ICopycatWithWrappedBlock.unwrap(this) instanceof WrappedFenceBlock) cir.setReturnValue(false);
+        if (this instanceof ICopycatBlock) cir.setReturnValue(false);
     }
 }

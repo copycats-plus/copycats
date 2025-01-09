@@ -1,0 +1,39 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_fluid_pipe",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:fluid_pipe"
+          },
+          {
+            "item": "create:fluid_pipe"
+          },
+          {
+            "item": "create:fluid_pipe"
+          },
+          {
+            "item": "create:fluid_pipe"
+          },
+          {
+            "item": "create:zinc_ingot"
+          }
+        ],
+        "result": {
+          "count": 4,
+          "item": "copycats:copycat_fluid_pipe"
+        }
+      }
+    }
+  ]
+}

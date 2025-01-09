@@ -1,12 +1,17 @@
 package com.copycatsplus.copycats.content.copycat.slice;
 
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
-import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.utility.BlockUtils;
+import com.mojang.math.OctahedralGroup;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -32,16 +37,18 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatSliceBlock extends CCWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
 
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
-
-    private static final VoxelShaper[] BOTTOM_BY_LAYER = new VoxelShaper[]{CCShapes.EMPTY, CCShapes.SLICE_BOTTOM_2PX, CCShapes.SLICE_BOTTOM_4PX, CCShapes.SLICE_BOTTOM_6PX, CCShapes.SLICE_BOTTOM_8PX, CCShapes.SLICE_BOTTOM_10PX, CCShapes.SLICE_BOTTOM_12PX, CCShapes.SLICE_BOTTOM_14PX, CCShapes.SLICE_BOTTOM_16PX};
-    private static final VoxelShaper[] TOP_BY_LAYER = new VoxelShaper[]{CCShapes.EMPTY, CCShapes.SLICE_TOP_2PX, CCShapes.SLICE_TOP_4PX, CCShapes.SLICE_TOP_6PX, CCShapes.SLICE_TOP_8PX, CCShapes.SLICE_TOP_10PX, CCShapes.SLICE_TOP_12PX, CCShapes.SLICE_TOP_14PX, CCShapes.SLICE_TOP_16PX};
 
     public CopycatSliceBlock(Properties pProperties) {
         super(pProperties);
@@ -50,67 +57,6 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
                 .setValue(FACING, Direction.SOUTH)
                 .setValue(LAYERS, 1)
         );
-    }
-
-    @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        BlockState toState = reader.getBlockState(toPos);
-
-        if (toState.is(this)) {
-            // connecting to another copycat beam
-            Direction facing = state.getValue(FACING);
-            Half half = state.getValue(HALF);
-            int layers = state.getValue(LAYERS);
-            return toState.getValue(FACING) != facing || toState.getValue(HALF) != half || toState.getValue(LAYERS) != layers;
-        } else {
-            // doesn't connect to any other blocks
-            return true;
-        }
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                            BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-        Direction face = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
-        if (face == null) {
-            return false;
-        }
-
-        Direction facing = state.getValue(FACING);
-        Half half = state.getValue(HALF);
-        int layers = state.getValue(LAYERS);
-
-        if (toState.is(this)) {
-            try {
-                return toState.getValue(FACING) == facing &&
-                        toState.getValue(HALF) == half &&
-                        toState.getValue(LAYERS) == layers &&
-                        face.getAxis() == facing.getClockWise().getAxis();
-            } catch (IllegalStateException ignored) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean canFaceBeOccluded(BlockState state, Direction face) {
-        if (face.getAxis() == Axis.Y)
-            return (state.getValue(HALF) == Half.TOP) == (face == Direction.UP);
-        return state.getValue(FACING) != face.getOpposite();
-    }
-
-    @Override
-    public boolean shouldFaceAlwaysRender(BlockState state, Direction face) {
-        return !canFaceBeOccluded(state, face);
     }
 
     @Override
@@ -124,7 +70,7 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         if (state.is(this)) {
@@ -196,10 +142,7 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
 
     @Override
     public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
-        return new ItemRequirement(
-                ItemRequirement.ItemUseType.CONSUME,
-                new ItemStack(asItem(), state.getValue(LAYERS))
-        );
+        return ICopycatBlock.getRequiredItemsForLayer(state, LAYERS);
     }
 
     @Override
@@ -209,7 +152,7 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
 
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return (pState.getValue(HALF) == Half.BOTTOM ? BOTTOM_BY_LAYER : TOP_BY_LAYER)[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+        return CCShapes.SLICE.get(pState.getValue(FACING)).get(pState.getValue(HALF)).get(pState.getValue(LAYERS)).toShape();
     }
 
 
@@ -218,29 +161,16 @@ public class CopycatSliceBlock extends CTWaterloggedCopycatBlock implements ISpe
     }
 
 
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState,
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
                                      Direction dir) {
-        if (state.is(this) == neighborState.is(this)
-                && getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite())) {
-            int layers = state.getValue(LAYERS);
-            int neighborLayers = neighborState.getValue(LAYERS);
-            if (layers == 8 && neighborLayers == 8) return true;
-            return neighborState.getValue(FACING) == state.getValue(FACING) &&
-                    neighborState.getValue(HALF) == state.getValue(HALF) &&
-                    layers == neighborLayers &&
-                    state.getValue(FACING).getClockWise().getAxis() == dir.getAxis();
-        }
-        return false;
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override
-    public BlockState rotate(BlockState pState, Rotation pRot) {
-        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState pState, Mirror pMirror) {
-        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return BlockUtils.transformStepLikeHorizontal(state, transform, CCBlocks.COPYCAT_VERTICAL_SLICE.getDefaultState());
     }
 }

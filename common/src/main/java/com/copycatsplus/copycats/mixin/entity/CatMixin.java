@@ -30,6 +30,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
+/**
+ * Add a copycat variant to cats.
+ */
 @Mixin(Cat.class)
 public abstract class CatMixin extends TamableAnimal {
     @Shadow

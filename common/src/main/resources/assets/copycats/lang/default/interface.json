@@ -1,3 +1,5 @@
 {
-  "itemGroup.copycats.main": "Create: Copycats+"
+  "itemGroup.copycats.main": "Create: Copycats+ | Decorative",
+  "itemGroup.copycats.functional": "Create: Copycats+ | Functional",
+  "keyinfo.copycats.fill_copycat": "Fill Copycat with Material"
 }

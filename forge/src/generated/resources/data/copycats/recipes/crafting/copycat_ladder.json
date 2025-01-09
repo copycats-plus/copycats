@@ -1,0 +1,22 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_ladder",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "count": 6,
+        "ingredient": {
+          "tag": "forge:ingots/zinc"
+        },
+        "result": "copycats:copycat_ladder"
+      }
+    }
+  ]
+}

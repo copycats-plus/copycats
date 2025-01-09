@@ -2,11 +2,13 @@ package com.copycatsplus.copycats.content.copycat.layer;
 
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
-import com.copycatsplus.copycats.content.copycat.base.CTWaterloggedCopycatBlock;
-import com.copycatsplus.copycats.content.copycat.base.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CCWaterloggedCopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
-import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -32,17 +34,18 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
 import static net.minecraft.core.Direction.UP;
 
-public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
-
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CopycatLayerBlock extends CCWaterloggedCopycatBlock implements ISpecialBlockItemRequirement, IStateType {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
-
-    private static final VoxelShaper[] SHAPE_BY_LAYER = new VoxelShaper[]{CCShapes.EMPTY, CCShapes.LAYER_2PX, CCShapes.LAYER_4PX, CCShapes.LAYER_6PX, CCShapes.LAYER_8PX, CCShapes.LAYER_10PX, CCShapes.LAYER_12PX, CCShapes.LAYER_14PX, CCShapes.LAYER_16PX};
 
     public CopycatLayerBlock(Properties pProperties) {
         super(pProperties);
@@ -50,17 +53,9 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        Direction facing = state.getValue(FACING);
-        BlockState toState = reader.getBlockState(toPos);
-
-        return !toState.is(this);
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
-        assert stateForPlacement != null;
+        if (stateForPlacement == null) return null;
         BlockPos blockPos = context.getClickedPos();
         BlockState state = context.getLevel().getBlockState(blockPos);
         if (state.is(this)) {
@@ -110,49 +105,12 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
 
     @Override
     public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
-        return new ItemRequirement(
-                ItemRequirement.ItemUseType.CONSUME,
-                new ItemStack(asItem(), state.getValue(LAYERS))
-        );
+        return ICopycatBlock.getRequiredItemsForLayer(state, LAYERS);
     }
 
     @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
-        Direction facing = state.getValue(FACING);
-
-        if (toPos.equals(fromPos.relative(facing))) return false;
-
-        BlockPos diff = fromPos.subtract(toPos);
-        int coord = facing.getAxis().choose(diff.getX(), diff.getY(), diff.getZ());
-
-        if (!toState.is(this)) return coord != -facing.getAxisDirection().getStep();
-
-        if (isOccluded(state, toState, facing)) return true;
-        if (toState.setValue(WATERLOGGED, false) == state.setValue(WATERLOGGED, false) && coord == 0) return true;
-        return false;
-    }
-
-    private static boolean isOccluded(BlockState state, BlockState other, Direction pDirection) {
-        state = state.setValue(WATERLOGGED, false);
-        other = other.setValue(WATERLOGGED, false);
-        Direction facing = state.getValue(FACING);
-        if (facing.getOpposite() == other.getValue(FACING) && pDirection == facing) return true;
-        if (other.getValue(FACING) != facing) return false;
-        return pDirection.getAxis() != facing.getAxis();
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return state.setValue(FACING, transformFacing(transform, state.getValue(FACING)));
     }
 
     @SuppressWarnings("deprecation")
@@ -172,7 +130,7 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+        return CCShapes.LAYER.get(pState.getValue(FACING)).get(pState.getValue(LAYERS)).toShape();
     }
 
 
@@ -181,26 +139,12 @@ public class CopycatLayerBlock extends CTWaterloggedCopycatBlock implements ISpe
     }
 
 
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir) {
-        Direction facing = state.getValue(FACING);
-        int layers = state.getValue(LAYERS);
-        if (state.is(this) == neighborState.is(this)) {
-            Direction neighborFacing = neighborState.getValue(FACING);
-            int neighborLayers = neighborState.getValue(LAYERS);
-            if (getMaterial(level, pos).skipRendering(getMaterial(level, pos.relative(dir)), dir.getOpposite())) {
-                return neighborFacing == facing && neighborLayers == layers || // cull the sides if two copycats of the same height are next to each other
-                        // cull if both sides have a square block face
-                        (neighborFacing == facing.getOpposite() || neighborLayers == 8) && facing == dir.getOpposite() ||
-                        (neighborFacing == facing.getOpposite() || layers == 8) && neighborFacing == dir ||
-                        layers == 8 && neighborLayers == 8;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public @NotNull VoxelShape getOcclusionShape(BlockState pState, BlockGetter level, BlockPos pos) {
-        return SHAPE_BY_LAYER[pState.getValue(LAYERS)].get(pState.getValue(FACING));
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override

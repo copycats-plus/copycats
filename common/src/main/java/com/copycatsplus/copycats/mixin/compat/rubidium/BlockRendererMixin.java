@@ -1,7 +1,9 @@
 package com.copycatsplus.copycats.mixin.compat.rubidium;
 
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateRenderManager;
-import com.copycatsplus.copycats.content.copycat.base.multistate.MultiStateTextureAtlasSprite;
+import com.copycatsplus.copycats.compat.Mods;
+import com.copycatsplus.copycats.foundation.annotation.ModMixin;
+import com.copycatsplus.copycats.foundation.copycat.CopycatExternalContext;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateTextureAtlasSprite;
 import me.jellysquid.mods.sodium.client.model.color.ColorProvider;
 import me.jellysquid.mods.sodium.client.model.quad.BakedQuadView;
 import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockRenderContext;
@@ -13,6 +15,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Record the currently rendering property for multi-state blocks so that block colors can be displayed properly.
+ * <p>
+ * Rubidium compatible version of {@link com.copycatsplus.copycats.mixin.foundation.copycat.multistate.ModelBlockRendererMixin}.
+ */
+@ModMixin(requiredMods = Mods.SODIUM)
 @Mixin(BlockRenderer.class)
 @Pseudo
 public class BlockRendererMixin {
@@ -21,11 +29,12 @@ public class BlockRendererMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lme/jellysquid/mods/sodium/client/model/color/ColorProvider;getColors(Lme/jellysquid/mods/sodium/client/world/WorldSlice;Lnet/minecraft/core/BlockPos;Ljava/lang/Object;Lme/jellysquid/mods/sodium/client/model/quad/ModelQuadView;[I)V"
-            )
+            ),
+            require = 0
     )
     private void beforeColor(BlockRenderContext ctx, ColorProvider<BlockState> colorProvider, BakedQuadView quad, CallbackInfoReturnable<int[]> cir) {
         if (quad.getSprite() instanceof MultiStateTextureAtlasSprite sprite)
-            MultiStateRenderManager.setRenderingProperty(sprite.getProperty());
+            CopycatExternalContext.setRenderingProperty(sprite.getProperty());
     }
 
     @Inject(
@@ -34,9 +43,10 @@ public class BlockRendererMixin {
                     value = "INVOKE",
                     target = "Lme/jellysquid/mods/sodium/client/model/color/ColorProvider;getColors(Lme/jellysquid/mods/sodium/client/world/WorldSlice;Lnet/minecraft/core/BlockPos;Ljava/lang/Object;Lme/jellysquid/mods/sodium/client/model/quad/ModelQuadView;[I)V",
                     shift = At.Shift.AFTER
-            )
+            ),
+            require = 0
     )
     private void afterColor(BlockRenderContext ctx, ColorProvider<BlockState> colorProvider, BakedQuadView quad, CallbackInfoReturnable<int[]> cir) {
-        MultiStateRenderManager.setRenderingProperty(null);
+        CopycatExternalContext.setRenderingProperty(null);
     }
 }
