@@ -1,6 +1,8 @@
 package com.copycatsplus.copycats.forge;
 
 import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.compat.Mods;
+import com.copycatsplus.copycats.compat.forge.AdditionalPlacementsCompatForge;
 import com.copycatsplus.copycats.datagen.forge.CCDatagenImpl;
 import com.copycatsplus.copycats.datagen.recipes.forge.CCCraftingConditions;
 import com.copycatsplus.copycats.foundation.copycat.CopycatMaterialStore;
@@ -32,6 +34,7 @@ public class CopycatsImpl {
 
         Platform.Environment.CLIENT.runIfCurrent(() -> CopycatsClientImpl::init);
         bus.addListener(EventPriority.LOWEST, CCDatagenImpl::gatherData);
+        Mods.ADDITIONAL_PLACEMENTS.executeIfInstalled(() -> AdditionalPlacementsCompatForge::register);
     }
 
     private void serverStarting(ServerStartingEvent event) {
