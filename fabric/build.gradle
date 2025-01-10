@@ -62,6 +62,7 @@ dependencies {
     modCompileOnly("curse.maven:selene-499980:${moonlight_curse_fabric_id}")
     modCompileOnly("curse.maven:vertical-slabs-compat-724387:${vertical_slabs_curse_fabric_id}")
     modImplementation("curse.maven:additional-placements-fabric-930469:${additionalplacements_fabric_curse_id}")
+    modImplementation("curse.maven:create-steam-n-rails-688231:${steam_n_rails_fabric_curse_id}")
 
     annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-fabric:${mixin_extras_version}")))
 
