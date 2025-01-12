@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.content.copycat.configurable_block.CopycatConfigurableBlockBlockEntity;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlockEntity;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorRenderer;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;

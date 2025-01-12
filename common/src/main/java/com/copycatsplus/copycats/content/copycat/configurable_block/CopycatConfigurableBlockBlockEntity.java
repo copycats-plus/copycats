@@ -1,20 +1,32 @@
 package com.copycatsplus.copycats.content.copycat.configurable_block;
 
+import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
+import com.copycatsplus.copycats.utility.MathUtils;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-public class CopycatConfigurableBlockBlockEntity extends CopycatBlockEntity {
+import java.util.Arrays;
+
+public class CopycatConfigurableBlockBlockEntity extends CCCopycatBlockEntity {
 
     private Vec3 size;
     private Vec3 offset;
+
+    private int packedOffsets = 0;
 
     public CopycatConfigurableBlockBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -22,8 +34,77 @@ public class CopycatConfigurableBlockBlockEntity extends CopycatBlockEntity {
         this.offset = new Vec3(0, 0, 0);
     }
 
+    public void configure(Player player) {
+        HitResult hit = player.pick(10D, 1F, false);
+        if (!(hit instanceof BlockHitResult blockHit)) {
+            return;
+        }
+
+        Direction direction = blockHit.getDirection();
+        boolean sneaking = player.isCrouching();
+        boolean changed = false;
+        int offset = getFaceOffset(direction);
+        if (sneaking && offset > 0) {
+            setFaceOffset(direction, offset - 1);
+            changed = true;
+        }
+        else if (!sneaking && offset < 15 - getFaceOffset(direction.getOpposite())) {
+            setFaceOffset(direction, offset + 1);
+            changed = true;
+        }
+        if (changed) {
+            if (!updateFaceSolidity()) {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                this.notifyUpdate();
+                Arrays.stream(Direction.values()).forEach(dir -> Copycats.LOGGER.info("Direction: {} Offset: {}", dir, getFaceOffset(dir)));
+            }
+        }
+    }
+
+    public boolean updateFaceSolidity() {
+        BlockState state = getBlockState();
+        int solid = computeSolidFaces(packedOffsets);
+        if (state.getValue(CopycatConfigurableBlock.SOLID_FACES) != solid) {
+            level.setBlockAndUpdate(worldPosition, state.setValue(CopycatConfigurableBlock.SOLID_FACES, solid));
+            return true;
+        }
+        return false;
+    }
+
+    public static byte[] unpackOffsets(int packed) {
+        byte[] offsets = new byte[Direction.values().length];
+        for (int i = 0; i < Direction.values().length; i++) {
+            offsets[i] = (byte) (packed >> (i * 4) & 0xF);
+        }
+        return offsets;
+    }
+
+    public static int computeSolidFaces(int packedOffsets) {
+        int solid = 0;
+        for (Direction face : Direction.values()) {
+            if (((packedOffsets >> (face.ordinal() * 4)) & 0xF) == 0) {
+                solid |= (1 << face.ordinal());
+            }
+        }
+        return solid;
+    }
+
+    private void setFaceOffset(Direction side, int offset) {
+        int idx = side.ordinal() * 4;
+        int mask = 0x0F << idx;
+        packedOffsets = (packedOffsets & ~mask) | (offset << idx);
+    }
+
+    public int getFaceOffset(Direction side) {
+        return (byte) (packedOffsets >> (side.ordinal() * 4) & 0xF);
+    }
+
     public void adjustSize(Player player) {
-        Direction direction = Minecraft.getInstance().getCameraEntity().getDirection();
+        HitResult hit = player.pick(10D, 1F, false);
+        if (!(hit instanceof BlockHitResult blockHit)) {
+            return;
+        }
+        Direction direction = blockHit.getDirection();
         if (player.isCrouching()) {
             if (direction.getAxis().equals(Direction.Axis.X) && size.x() > 1 && size.x() <= 16 && size.relative(direction, -1).x() >= 1 && size.relative(direction, -1).x() <= 16) {
                 setSize(size.relative(player.getDirection(), -1));
@@ -44,7 +125,7 @@ public class CopycatConfigurableBlockBlockEntity extends CopycatBlockEntity {
     }
 
     @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
+    public void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
         CompoundTag sizeTag = new CompoundTag();
         sizeTag.putDouble("X", size.x());
@@ -59,7 +140,7 @@ public class CopycatConfigurableBlockBlockEntity extends CopycatBlockEntity {
     }
 
     @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
+    public void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         if (this.getBlockState().getBlock() instanceof CopycatConfigurableBlock configurable) {
             CompoundTag sizeTag = tag.getCompound("Size");
@@ -114,7 +195,7 @@ public class CopycatConfigurableBlockBlockEntity extends CopycatBlockEntity {
     }
 
     @ExpectPlatform
-    public static void cc$requestModelDataUpdate(CopycatBlockEntity instance) {
+    public static void cc$requestModelDataUpdate(CCCopycatBlockEntity instance) {
 
     }
 

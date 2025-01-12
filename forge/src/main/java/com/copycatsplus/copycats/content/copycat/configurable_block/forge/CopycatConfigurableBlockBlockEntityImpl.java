@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.configurable_block.forge;
 
+import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -10,7 +11,7 @@ public abstract class CopycatConfigurableBlockBlockEntityImpl extends CopycatBlo
         super(type, pos, state);
     }
 
-    public static void cc$requestModelDataUpdate(CopycatBlockEntity instance) {
+    public static void cc$requestModelDataUpdate(CCCopycatBlockEntity instance) {
         instance.requestModelDataUpdate();
     }
 }
