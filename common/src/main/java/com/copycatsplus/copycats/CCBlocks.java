@@ -8,6 +8,8 @@ import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCo
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneBlock;
 import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneModelCore;
+import com.copycatsplus.copycats.content.copycat.half_stairs.CopycatHalfStairsBlock;
+import com.copycatsplus.copycats.content.copycat.half_stairs.CopycatHalfStairsMultiModelCore;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftModelCore;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatFoldingDoorModelCore;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlock;
@@ -832,6 +834,21 @@ public class CCBlocks {
                             CopycatCharacteristics.CT_TOGGLE
                     ))
                     .transform(customItemModel("copycat_base", "flat_pane"))
+                    .register();
+
+    public static final BlockEntry<CopycatHalfStairsBlock> COPYCAT_HALF_STAIR =
+            REGISTRATE.block("copycat_half_stair", CopycatHalfStairsBlock::new)
+                    .transform(CCBuilderTransformers.multiCopycat())
+                    .transform(FeatureToggle.register(FeatureCategory.MULTISTATES))
+                    .loot((lt, block) -> lt.add(block, lt.createSlabItemTable(block)))
+                    .onRegister(onClient(() -> blockModel(() -> model -> CopycatModelCore.createModel(model, new CopycatHalfStairsMultiModelCore()))))
+                    .item()
+                    .onRegister(CopycatDescription.register(
+                            CopycatCharacteristics.COPYCAT,
+                            CopycatCharacteristics.CT_TOGGLE,
+                            CopycatCharacteristics.MULTI_STATE
+                    ))
+                    .transform(customItemModel("copycat_base", "half_stairs"))
                     .register();
 
     @ExpectPlatform

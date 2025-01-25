@@ -13,6 +13,7 @@ public class CCBlockStateProperties {
 
     public static final EnumProperty<VerticalStairShape> VERTICAL_STAIR_SHAPE = EnumProperty.create("vertical_stair_shape", VerticalStairShape.class);
     public static final EnumProperty<Side> SIDE = EnumProperty.create("side", Side.class);
+    public static final EnumProperty<SideType> SIDE_TYPE = EnumProperty.create("side_type", SideType.class);
     public static final IntegerProperty BASE_TYPE = IntegerProperty.create("base_type", 0, BASE_TYPE_COUNT - 1);
 
     public enum Side implements StringRepresentable {
@@ -24,6 +25,25 @@ public class CCBlockStateProperties {
         }
 
         public Side getOpposite() {
+            return this == LEFT ? RIGHT : LEFT;
+        }
+
+        @Override
+        public @NotNull String getSerializedName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    public enum SideType implements StringRepresentable {
+        LEFT,
+        RIGHT,
+        BOTH;
+
+        public boolean isRight() {
+            return this == RIGHT;
+        }
+
+        public SideType getOpposite() {
             return this == LEFT ? RIGHT : LEFT;
         }
 

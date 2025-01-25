@@ -31,6 +31,7 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_HALF_PANEL,
             CCBlocks.COPYCAT_PANE,
             CCBlocks.COPYCAT_FLAT_PANE,
+            CCBlocks.COPYCAT_HALF_STAIR,
             /* Multi-states */
             CCBlocks.COPYCAT_BYTE,
             CCBlocks.COPYCAT_BYTE_PANEL,

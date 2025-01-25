@@ -234,6 +234,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_PANE_CYCLE = conversionCycle(CCBlocks.COPYCAT_PANE, CCBlocks.COPYCAT_FLAT_PANE);
 
+    GeneratedRecipe COPYCAT_HALF_STAIRS = copycat(CCBlocks.COPYCAT_HALF_STAIR, 2);
+
     Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
             CCBlocks.COPYCAT_BASE,
             CCBlocks.COPYCAT_GLASS_FLUID_PIPE
