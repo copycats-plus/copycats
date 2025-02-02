@@ -46,6 +46,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 /**
@@ -523,7 +524,7 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
         if (diff.equals(Vec3i.ZERO))
             return true;
 
-        Direction facing = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction facing = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
 
         BlockState toState = reader.getBlockState(toPos);
 
@@ -545,7 +546,7 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
                     BlockPos midPos = fromPos.offset(axisDiff);
                     BlockState midState = reader.getBlockState(midPos);
                     Vec3i remainingDiff = diff.subtract(axisDiff);
-                    Direction remainingFacing = Direction.fromDelta(remainingDiff.getX(), remainingDiff.getY(), remainingDiff.getZ());
+                    Direction remainingFacing = directionFromDelta(remainingDiff.getX(), remainingDiff.getY(), remainingDiff.getZ());
                     if (!BlockFaceUtils.faceMatch(reader, midState, midPos, toState, toPos, remainingFacing))
                         return false;
                 }

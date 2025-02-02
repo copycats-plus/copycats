@@ -1,18 +1,6 @@
 {
   "advancements": [
     {
-      "fabric:load_conditions": [
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_half_layer",
-          "invert": false
-        },
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_vertical_half_layer",
-          "invert": false
-        }
-      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
         "criteria": {
@@ -45,9 +33,20 @@
           "recipes": [
             "copycats:crafting/copycat_vertical_half_layer_from_conversion"
           ]
+        }
+      },
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_half_layer",
+          "invert": false
         },
-        "sends_telemetry_event": false
-      }
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_vertical_half_layer",
+          "invert": false
+        }
+      ]
     }
   ]
 }

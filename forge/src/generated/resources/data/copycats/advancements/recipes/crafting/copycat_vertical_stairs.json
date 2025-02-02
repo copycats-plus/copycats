@@ -31,8 +31,7 @@
           "recipes": [
             "copycats:stonecutting/copycat_vertical_stairs"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

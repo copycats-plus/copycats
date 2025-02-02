@@ -3,7 +3,6 @@ package com.copycatsplus.copycats.mixin.compat.verticalslabcompat;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.compat.Mods;
 import com.copycatsplus.copycats.foundation.annotation.ModMixin;
-import net.mehvahdjukaar.moonlight.api.set.BlockTypeRegistry;
 import net.mehvahdjukaar.vsc.CutBlockType;
 import net.mehvahdjukaar.vsc.CutBlockTypeRegistry;
 import net.minecraft.resources.ResourceLocation;

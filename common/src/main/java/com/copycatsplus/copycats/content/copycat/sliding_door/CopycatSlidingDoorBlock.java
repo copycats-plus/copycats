@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
@@ -40,8 +39,8 @@ public class CopycatSlidingDoorBlock extends SlidingDoorBlock implements ICopyca
 
     public static BooleanProperty CT = CopycatDoorBlock.CT;
 
-    public CopycatSlidingDoorBlock(Properties properties, BlockSetType type, boolean folds) {
-        super(properties, type, folds);
+    public CopycatSlidingDoorBlock(Properties properties, boolean folds) {
+        super(properties, folds);
         registerDefaultState(defaultBlockState().setValue(CT, true));
     }
 
@@ -51,7 +50,7 @@ public class CopycatSlidingDoorBlock extends SlidingDoorBlock implements ICopyca
     }
 
     public static CopycatSlidingDoorBlock metal(Properties properties, boolean folds) {
-        return new CopycatSlidingDoorBlock(properties, TRAIN_SET_TYPE.get(), folds);
+        return new CopycatSlidingDoorBlock(properties, folds);
     }
 
     @Override

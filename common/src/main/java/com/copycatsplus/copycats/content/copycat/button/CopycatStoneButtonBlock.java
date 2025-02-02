@@ -82,7 +82,7 @@ public class CopycatStoneButtonBlock extends StoneButtonBlock implements ICopyca
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState fromState, Direction face, BlockPos fromPos, BlockPos toPos, BlockState toState) {
         return true;
     }
 

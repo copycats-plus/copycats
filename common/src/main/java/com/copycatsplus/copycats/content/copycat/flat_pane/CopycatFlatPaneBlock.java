@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 @SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -105,7 +107,7 @@ public class CopycatFlatPaneBlock extends CCWaterloggedCopycatBlock implements I
         Vec3i diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO))
             return false;
-        Direction facing = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction facing = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (toState.getBlock() instanceof IronBarsBlock) {
             if (facing == null)
                 return true;
@@ -124,7 +126,7 @@ public class CopycatFlatPaneBlock extends CCWaterloggedCopycatBlock implements I
         Vec3i diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO))
             return true;
-        Direction facing = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+        Direction facing = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
         if (toState.getBlock() instanceof IronBarsBlock) {
             if (facing == null)
                 return false;
@@ -176,7 +178,7 @@ public class CopycatFlatPaneBlock extends CCWaterloggedCopycatBlock implements I
                                          BlockHitResult ray) {
             List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
                     state.getValue(AXIS),
-                    dir -> world.getBlockState(pos.relative(dir)).canBeReplaced());
+                    dir -> world.getBlockState(pos.relative(dir)).getMaterial().isReplaceable());
 
             if (directions.isEmpty())
                 return PlacementOffset.fail();

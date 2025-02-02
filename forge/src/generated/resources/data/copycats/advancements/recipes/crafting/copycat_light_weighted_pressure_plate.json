@@ -31,8 +31,7 @@
           "recipes": [
             "copycats:stonecutting/copycat_light_weighted_pressure_plate"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

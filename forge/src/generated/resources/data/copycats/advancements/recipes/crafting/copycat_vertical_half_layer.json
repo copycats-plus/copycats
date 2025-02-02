@@ -31,8 +31,7 @@
           "recipes": [
             "copycats:stonecutting/copycat_vertical_half_layer"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

@@ -31,8 +31,7 @@
           "recipes": [
             "copycats:stonecutting/copycat_slab"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

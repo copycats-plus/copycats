@@ -1,13 +1,6 @@
 {
   "advancements": [
     {
-      "fabric:load_conditions": [
-        {
-          "condition": "copycats:feature_enabled",
-          "feature": "copycats:copycat_stone_button",
-          "invert": false
-        }
-      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
         "criteria": {
@@ -38,9 +31,15 @@
           "recipes": [
             "copycats:stonecutting/copycat_stone_button"
           ]
-        },
-        "sends_telemetry_event": false
-      }
+        }
+      },
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_stone_button",
+          "invert": false
+        }
+      ]
     }
   ]
 }

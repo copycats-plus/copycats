@@ -31,8 +31,7 @@
           "recipes": [
             "copycats:stonecutting/copycat_wooden_button"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {
