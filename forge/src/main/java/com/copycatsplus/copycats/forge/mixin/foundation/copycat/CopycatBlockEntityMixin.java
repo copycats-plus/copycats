@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.forge.mixin.foundation.copycat;
 
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.forge.CopycatModelForge;
@@ -24,7 +25,8 @@ import org.spongepowered.asm.mixin.Mixin;
         CCCopycatBlockEntity.class,
         CopycatFluidPipeBlockEntity.class,
         CopycatStraightPipeBlockEntity.class,
-        CopycatShaftBlockEntity.class
+        CopycatShaftBlockEntity.class,
+        CopycatSlidingDoorBlockEntity.class
 })
 public abstract class CopycatBlockEntityMixin extends SmartBlockEntity implements ICopycatBlockEntity {
 

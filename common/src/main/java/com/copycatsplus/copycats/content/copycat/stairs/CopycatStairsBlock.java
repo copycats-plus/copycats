@@ -47,7 +47,7 @@ import static net.minecraft.core.Direction.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE<CCCopycatBlockEntity>, ICustomCTBlocking, IStateType {
+public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, ICustomCTBlocking, IBE<CCCopycatBlockEntity>, IStateType {
 
     public CopycatStairsBlock(Properties properties) {
         super(Blocks.OAK_PLANKS.defaultBlockState(), properties);
@@ -100,84 +100,6 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        boolean flipped = state.getValue(HALF) == Half.TOP;
-        Direction facing = state.getValue(StairBlock.FACING);
-        BlockState toState = reader.getBlockState(toPos);
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-
-        if (CopycatVerticalStairBlock.isStairs(toState)) {
-            return false;
-        } else {
-            if (diff.getY() == 0) {
-                // if target is level with this block,
-                // only allows it to connect if it's adjacent to a full face of this block
-                StairsShape shape = state.getValue(SHAPE);
-                int fullCount = 0;
-                if (diff.getX() != 0) {
-                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.X, directionOf(diff.getX())));
-                    if (faceShape.isFull())
-                        fullCount++;
-                    else if (diff.getZ() != 0) {
-                        if (diff.getX() != 0 && faceShape.topNegative && faceShape.bottomNegative)
-                            fullCount++;
-                    }
-                }
-                if (diff.getZ() != 0) {
-                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.Z, directionOf(diff.getZ())));
-                    if (faceShape.isFull())
-                        fullCount++;
-                    else if (diff.getX() != 0) {
-                        if (diff.getZ() != 0 && faceShape.topPositive && faceShape.bottomPositive)
-                            fullCount++;
-                    }
-                }
-                return fullCount < Mth.abs(diff.getX()) + Mth.abs(diff.getZ());
-            } else {
-                // if target is not level with this block,
-                // only allow connections below the base of this block
-                return (diff.getY() > 0) != flipped;
-            }
-        }
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-        Direction side = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
-
-        if (side != null) {
-            FaceShape sideShape = getFaceShape(state, side);
-            if (!sideShape.canConnect()) return false;
-            if (CopycatVerticalStairBlock.isStairs(toState)) {
-                if (!sideShape.equals(getFaceShape(toState, side.getOpposite()))) return false;
-            } else {
-                if (!sideShape.isFull()) return false;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public Optional<Boolean> isCTBlocked(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos connectingPos, BlockPos blockingPos, Direction face) {
-        return CCBlocks.COPYCAT_VERTICAL_STAIRS.get().isCTBlocked(reader, state, pos, connectingPos, blockingPos, face);
-    }
-
-    @Override
-    public Optional<Boolean> blockCTTowards(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos ctPos, BlockPos connectingPos, Direction face) {
-        return CCBlocks.COPYCAT_VERTICAL_STAIRS.get().blockCTTowards(reader, state, pos, ctPos, connectingPos, face);
-    }
-
-    @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
         return ICopycatBlock.super.rotate(state, rotation);
     }
@@ -217,6 +139,16 @@ public class CopycatStairsBlock extends StairBlock implements ICopycatBlock, IBE
             }
         }
         return state;
+    }
+
+    @Override
+    public Optional<Boolean> isCTBlocked(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos connectingPos, BlockPos blockingPos, Direction face) {
+        return connectingPos.getY() >= pos.getY() ? Optional.empty() : Optional.of(false);
+    }
+
+    @Override
+    public Optional<Boolean> blockCTTowards(BlockAndTintGetter reader, BlockState state, BlockPos pos, BlockPos ctPos, BlockPos connectingPos, Direction face) {
+        return Optional.of(false);
     }
 
     public boolean supportsExternalFaceHiding(BlockState state) {

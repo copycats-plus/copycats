@@ -1,6 +1,5 @@
 package com.copycatsplus.copycats.utility;
 
-import com.copycatsplus.copycats.CCBlocks;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -10,6 +9,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.phys.Vec3;
 
 import static com.copycatsplus.copycats.content.copycat.slice.CopycatSliceBlock.HALF;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
@@ -37,6 +37,35 @@ public class BlockUtils {
         return facing;
     }
 
+    /**
+     * Transform a block state that has 8 possible orientations at the 8 corners of a cube, represented by the
+     * {@link net.minecraft.world.level.block.state.properties.BlockStateProperties#HORIZONTAL_FACING} and
+     * {@link net.minecraft.world.level.block.state.properties.BlockStateProperties#HALF} properties.
+     * When the facing of the block matches the facing of viewing perspective, the block should be located at the far left corner.
+     */
+    public static BlockState transformCornerLike(BlockState state, StructureTransform transform) {
+        return vecToCorner(state, transform.applyWithoutOffset(cornerToVec(state)));
+    }
+
+    public static Vec3 cornerToVec(BlockState state) {
+        Direction facing = state.getValue(HORIZONTAL_FACING);
+        double x = facing == Direction.EAST || facing == Direction.SOUTH ? 1 : 0;
+        double z = facing == Direction.SOUTH || facing == Direction.WEST ? 1 : 0;
+        double y = state.getValue(HALF) == Half.TOP ? 1 : 0;
+        return new Vec3(x, y, z);
+    }
+
+    public static BlockState vecToCorner(BlockState state, Vec3 vec) {
+        Direction facing = vec.x > 0.5 ? vec.z > 0.5 ? Direction.SOUTH : Direction.EAST : vec.z > 0.5 ? Direction.WEST : Direction.NORTH;
+        Half half = vec.y > 0.5 ? Half.TOP : Half.BOTTOM;
+        return state.setValue(HORIZONTAL_FACING, facing).setValue(HALF, half);
+    }
+
+    /**
+     * Transforms a block state that has 8 possible orientations at the 8 horizontal edges of a cube, represented by the
+     * {@link net.minecraft.world.level.block.state.properties.BlockStateProperties#HORIZONTAL_FACING} and
+     * {@link net.minecraft.world.level.block.state.properties.BlockStateProperties#HALF} properties.
+     */
     public static BlockState transformStepLikeHorizontal(BlockState state, StructureTransform transform, BlockState verticalState) {
         if (transform.mirror != null && transform.mirror != Mirror.NONE) {
             if (transform.mirror.rotation() == OctahedralGroup.INVERT_Y) {
@@ -68,6 +97,11 @@ public class BlockUtils {
         return state;
     }
 
+    /**
+     * Transforms a block state that has 4 possible orientations at the 4 vertical edges of a cube, represented by the
+     * {@link net.minecraft.world.level.block.state.properties.BlockStateProperties#HORIZONTAL_FACING} property.
+     * When the facing of the block matches the facing of viewing perspective, the block should be located at the far left corner.
+     */
     public static BlockState transformStepLikeVertical(BlockState state, StructureTransform transform, BlockState horizontalState) {
         if (transform.mirror != null && transform.mirror != Mirror.NONE) {
             Direction.Axis mirrorAxis = null;

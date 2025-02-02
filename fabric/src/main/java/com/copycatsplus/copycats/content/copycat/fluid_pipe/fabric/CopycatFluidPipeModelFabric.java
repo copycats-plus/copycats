@@ -18,8 +18,8 @@ import java.util.function.Supplier;
 
 public class CopycatFluidPipeModelFabric extends CopycatModelFabric {
 
-    public CopycatFluidPipeModelFabric(BakedModel originalModel, CopycatModelCore core) {
-        super(originalModel, core, false);
+    public CopycatFluidPipeModelFabric(BakedModel originalModel, CopycatModelCore core, boolean disableAO) {
+        super(originalModel, core, disableAO);
     }
 
     @Override

@@ -28,6 +28,14 @@ public class CopycatDoorModelCore extends CopycatModelCore {
             return;
         }
 
+        if (state.getValue(CopycatDoorBlock.CT)) {
+            assembleWithCT(state, context);
+        } else {
+            assembleWithoutCT(state, context);
+        }
+    }
+
+    private static void assembleWithCT(BlockState state, CopycatRenderContext context) {
         int rot = (int) state.getValue(DoorBlock.FACING).toYRot();
         boolean rightHinge = state.getValue(DoorBlock.HINGE).equals(DoorHingeSide.RIGHT);
         DoubleBlockHalf half = state.getValue(DoorBlock.HALF);
@@ -118,6 +126,69 @@ public class CopycatDoorModelCore extends CopycatModelCore {
                         vec3(2, 0, 0),
                         aabb(1, 4, 16).move(15, 8, 0),
                         cull(WEST | UP));
+            }
+        }
+    }
+
+    private static void assembleWithoutCT(BlockState state, CopycatRenderContext context) {
+        int rot = (int) state.getValue(DoorBlock.FACING).toYRot();
+        boolean rightHinge = state.getValue(DoorBlock.HINGE).equals(DoorHingeSide.RIGHT);
+        DoubleBlockHalf half = state.getValue(DoorBlock.HALF);
+        boolean open = state.getValue(DoorBlock.OPEN);
+        AssemblyTransform transform = t -> t.rotateY(rot);
+        if (half == DoubleBlockHalf.LOWER) {
+            if (!open) {
+                //Front
+                context.assemblePiece(transform,
+                        vec3(0, 0, 0),
+                        aabb(16, 16, 2),
+                        cull(SOUTH));
+                //Back
+                context.assemblePiece(transform,
+                        vec3(0, 0, 2),
+                        aabb(16, 16, 1).move(0, 0, 15),
+                        cull(NORTH));
+            } else {
+                if (!rightHinge) {
+                    transform = t -> t.flipX(true).rotateY(rot);
+                }
+                //Front
+                context.assemblePiece(transform,
+                        vec3(0, 0, 0),
+                        aabb(2, 16, 16),
+                        cull(EAST));
+                //Back
+                context.assemblePiece(transform,
+                        vec3(2, 0, 0),
+                        aabb(1, 16, 16).move(15, 0, 0),
+                        cull(WEST));
+            }
+        } else {
+            if (!open) {
+                //Front
+                context.assemblePiece(transform,
+                        vec3(0, 0, 0),
+                        aabb(16, 16, 2).move(0, 0, 0),
+                        cull(SOUTH));
+                //Back
+                context.assemblePiece(transform,
+                        vec3(0, 0, 2),
+                        aabb(16, 16, 1).move(0, 0, 15),
+                        cull(NORTH));
+            } else {
+                if (!rightHinge) {
+                    transform = t -> t.flipX(true).rotateY(rot);
+                }
+                //Front
+                context.assemblePiece(transform,
+                        vec3(0, 0, 0),
+                        aabb(2, 16, 16).move(0, 0, 0),
+                        cull(EAST));
+                //Back
+                context.assemblePiece(transform,
+                        vec3(2, 0, 0),
+                        aabb(1, 16, 16).move(15, 0, 0),
+                        cull(WEST));
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.copycatsplus.copycats.mixin.compat.radium;
 
+import com.copycatsplus.copycats.compat.Mods;
 import com.copycatsplus.copycats.content.copycat.slab.CopycatSlabBlock;
+import com.copycatsplus.copycats.foundation.annotation.ModMixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.level.block.Block;
@@ -13,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 /**
  * Make sure Radium's pathfinding algorithm considers slabs properly, since they do not extend from {@link net.minecraft.world.level.block.SlabBlock}.
  */
+@ModMixin(requiredMods = Mods.INDIUM)
 @Mixin(targets = "me.jellysquid.mods.lithium.common.ai.pathing.PathNodeDefaults")
 @Pseudo
 public class PathNodeDefaultsMixin {

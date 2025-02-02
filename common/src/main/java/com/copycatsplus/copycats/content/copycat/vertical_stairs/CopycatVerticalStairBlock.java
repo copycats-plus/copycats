@@ -39,6 +39,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 import static net.minecraft.core.Direction.*;
 import static net.minecraft.world.level.block.StairBlock.HALF;
 
@@ -122,7 +123,7 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
         }
         boolean left = canConnect(state, level, pos, facing.getCounterClockWise());
         boolean leftParity = getHorizontalParity(state, level, pos, facing.getCounterClockWise());
-        if (left && (verticalDirection == null || verticalDirection == Direction.DOWN && side == leftParity || verticalDirection == Direction.UP && side != leftParity)) {
+        if (left) {
             horizontalConnection = false;
             if (verticalDirection == null) {
                 verticalDirection = leftParity == side ? Direction.DOWN : Direction.UP;
@@ -130,10 +131,10 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
         } else {
             boolean right = canConnect(state, level, pos, facing.getClockWise());
             boolean rightParity = getHorizontalParity(state, level, pos, facing.getClockWise());
-            if (right && (verticalDirection == null || verticalDirection == Direction.UP && side == rightParity || verticalDirection == Direction.DOWN && side != rightParity)) {
+            if (right) {
                 horizontalConnection = true;
                 if (verticalDirection == null) {
-                    verticalDirection = rightParity == side ? Direction.UP : Direction.DOWN;
+                    verticalDirection = rightParity == side ? Direction.DOWN : Direction.UP;
                 }
             }
         }
@@ -165,7 +166,7 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
         BlockState blockState = level.getBlockState(pos.relative(face));
         if (!isStairs(blockState)) return false;
         if (blockState.getBlock() instanceof CopycatVerticalStairBlock) {
-            return (state.getValue(FACING).getCounterClockWise() == face) == blockState.getValue(SIDE).isRight();
+            return ((state.getValue(FACING).getCounterClockWise() == face) == state.getValue(SIDE).isRight()) == blockState.getValue(SIDE).isRight();
         } else {
             return blockState.getValue(StairBlock.HALF) == Half.TOP;
         }
@@ -179,7 +180,7 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
         Direction otherFacing = blockState.getValue(FACING);
         if (selfFacing == otherFacing.getOpposite()) return false;
         if (selfFacing == otherFacing && face.getAxis() != selfFacing.getAxis()) return true;
-        return selfFacing != otherFacing;
+        return selfFacing == otherFacing;
     }
 
     public static boolean isStairs(BlockState state) {
@@ -231,83 +232,6 @@ public class CopycatVerticalStairBlock extends CCWaterloggedCopycatBlock impleme
             }
         }
         return state;
-    }
-
-    @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        boolean right = state.getValue(SIDE).isRight();
-        Direction facing = state.getValue(FACING);
-        BlockState toState = reader.getBlockState(toPos);
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-
-        if (isStairs(toState)) {
-            return false;
-        } else {
-            if (diff.get(facing.getAxis()) == 0) {
-                // if target is level with this block,
-                // only allows it to connect if it's adjacent to a full face of this block
-                VerticalStairShape shape = state.getValue(SHAPE);
-                int fullCount = 0;
-                if (diff.getX() != 0) {
-                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.X, directionOf(diff.getX())));
-                    if (faceShape.isFull())
-                        fullCount++;
-                    else if ((shape == VerticalStairShape.OUTER_BOTTOM || shape == VerticalStairShape.OUTER_TOP) && (diff.getY() != 0 || diff.getZ() != 0)) {
-                        if (diff.getX() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getX() < 0 && faceShape.topPositive && faceShape.bottomPositive)
-                            fullCount++;
-                    }
-                }
-                if (diff.getY() != 0) {
-                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.Y, directionOf(diff.getY())));
-                    if (faceShape.isFull())
-                        fullCount++;
-                    else if ((shape == VerticalStairShape.OUTER_BOTTOM || shape == VerticalStairShape.OUTER_TOP) && (diff.getX() != 0 || diff.getZ() != 0)) {
-                        if (diff.getY() > 0 && faceShape.topNegative && faceShape.topPositive || diff.getX() < 0 && faceShape.bottomNegative && faceShape.bottomPositive)
-                            fullCount++;
-                    }
-                }
-                if (diff.getZ() != 0) {
-                    FaceShape faceShape = getFaceShape(state, fromAxisAndDirection(Axis.Z, directionOf(diff.getZ())));
-                    if (faceShape.isFull())
-                        fullCount++;
-                    else if ((shape == VerticalStairShape.OUTER_BOTTOM || shape == VerticalStairShape.OUTER_TOP) && (diff.getX() != 0 || diff.getY() != 0)) {
-                        if (diff.getZ() > 0 && faceShape.topNegative && faceShape.bottomNegative || diff.getZ() < 0 && faceShape.topPositive && faceShape.bottomPositive)
-                            fullCount++;
-                    }
-                }
-                return fullCount < Mth.abs(diff.getX()) + Mth.abs(diff.getY()) + Mth.abs(diff.getZ());
-            } else {
-                // if target is not level with this block,
-                // only allow connections below the base of this block
-                return diff.get(facing.getAxis()) * (facing.getAxisDirection() == AxisDirection.POSITIVE ? -1 : 1) > 0;
-            }
-        }
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-        Direction side = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
-
-        if (side != null) {
-            FaceShape sideShape = getFaceShape(state, side);
-            if (!sideShape.canConnect()) return false;
-            if (isStairs(toState)) {
-                if (!sideShape.equals(getFaceShape(toState, side.getOpposite()))) return false;
-            } else {
-                if (!sideShape.isFull()) return false;
-            }
-        }
-
-        return true;
     }
 
     @Override

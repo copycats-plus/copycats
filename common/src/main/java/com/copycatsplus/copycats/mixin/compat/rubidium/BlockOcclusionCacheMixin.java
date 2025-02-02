@@ -1,5 +1,7 @@
 package com.copycatsplus.copycats.mixin.compat.rubidium;
 
+import com.copycatsplus.copycats.compat.Mods;
+import com.copycatsplus.copycats.foundation.annotation.ModMixin;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Makes sure that copycat blocks are not occluded by Rubidium
  */
+@ModMixin(requiredMods = Mods.SODIUM)
 @Mixin(targets = "me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache")
 @Pseudo
 public class BlockOcclusionCacheMixin {

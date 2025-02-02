@@ -3,11 +3,16 @@
   "block.copycats.copycat_block": "Imitador de Bloco",
   "block.copycats.copycat_board": "Imitador de Tábua",
   "block.copycats.copycat_byte": "Imitador de Mini-Bloco",
+  "block.copycats.copycat_door": "Imitador de Porta",
   "block.copycats.copycat_fence": "Imitador de Cerca",
   "block.copycats.copycat_fence_gate": "Imitador de Portão",
+  "block.copycats.copycat_ghost_block": "Imitador de Bloco Fantasma",
   "block.copycats.copycat_half_layer": "Imitador de Meia-Camada",
   "block.copycats.copycat_half_panel": "Imitador de Meio-Painel",
   "block.copycats.copycat_heavy_weighted_pressure_plate": "Imitador de Placa de pressão pesada",
+  "block.copycats.copycat_iron_door": "Imitador de Porta de Ferro",
+  "block.copycats.copycat_iron_trapdoor": "Imitador de Alçapão de Ferro",
+  "block.copycats.copycat_ladder": "Imitador de Escada",
   "block.copycats.copycat_layer": "Imitador de Camada",
   "block.copycats.copycat_light_weighted_pressure_plate": "Imitador de Placa de pressão leve",
   "block.copycats.copycat_slab": "Imitador de Laje",
@@ -23,5 +28,9 @@
   "block.copycats.copycat_wooden_pressure_plate": "Imitador de Placa de pressão de madeira",
   "item.copycats.copycat_box": "Imitador de Caixa",
   "item.copycats.copycat_catwalk": "Imitador de Passarela",
-  "itemGroup.copycats.main": "Create: +Imitadores"
+  "itemGroup.copycats.main": "Create: +Imitadores",
+  "tooltip.copycats.characteristics.copycat.title": "Imitador",
+  "tooltip.copycats.characteristics.functional.title": "Funcional",
+  "tooltip.copycats.characteristics.ghost.title": "Fantasma",
+  "tooltip.copycats.characteristics.pre_assembled.title": "Pré-montado"
 }

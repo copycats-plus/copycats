@@ -1,0 +1,53 @@
+{
+  "advancements": [
+    {
+      "fabric:load_conditions": [
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_pane",
+          "invert": false
+        },
+        {
+          "condition": "copycats:feature_enabled",
+          "feature": "copycats:copycat_flat_pane",
+          "invert": false
+        }
+      ],
+      "advancement": {
+        "parent": "minecraft:recipes/root",
+        "criteria": {
+          "has_item": {
+            "conditions": {
+              "items": [
+                {
+                  "items": [
+                    "copycats:copycat_pane"
+                  ]
+                }
+              ]
+            },
+            "trigger": "minecraft:inventory_changed"
+          },
+          "has_the_recipe": {
+            "conditions": {
+              "recipe": "copycats:crafting/copycat_flat_pane_from_conversion"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+          }
+        },
+        "requirements": [
+          [
+            "has_item",
+            "has_the_recipe"
+          ]
+        ],
+        "rewards": {
+          "recipes": [
+            "copycats:crafting/copycat_flat_pane_from_conversion"
+          ]
+        },
+        "sends_telemetry_event": false
+      }
+    }
+  ]
+}

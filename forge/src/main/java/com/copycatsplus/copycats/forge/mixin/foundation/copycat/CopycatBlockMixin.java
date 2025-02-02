@@ -6,9 +6,12 @@ import com.copycatsplus.copycats.content.copycat.fence_gate.CopycatFenceGateBloc
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeBlock;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatGlassFluidPipeBlock;
 import com.copycatsplus.copycats.content.copycat.ladder.CopycatLadderBlock;
+import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneBlock;
+import com.copycatsplus.copycats.content.copycat.pane.CopycatPaneBlock;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatPressurePlateBlock;
 import com.copycatsplus.copycats.content.copycat.pressure_plate.CopycatWeightedPressurePlate;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlock;
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlock;
 import com.copycatsplus.copycats.content.copycat.stairs.CopycatStairsBlock;
 import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.wall.CopycatWallBlock;
@@ -56,7 +59,9 @@ import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMate
         CopycatShaftBlock.class,
         CopycatFluidPipeBlock.class,
         CopycatGlassFluidPipeBlock.class,
-        CopycatDoorBlock.class
+        CopycatDoorBlock.class,
+        CopycatSlidingDoorBlock.class,
+        CopycatPaneBlock.class
 })
 public abstract class CopycatBlockMixin extends Block implements ICopycatBlock {
 

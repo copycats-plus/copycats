@@ -1,5 +1,8 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatFoldingDoorModelCore;
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlock;
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
@@ -16,7 +19,10 @@ import net.minecraft.world.level.block.state.properties.Property;
 public enum CCCopycatPartialModels implements ICopycatPartialModel {
     SHAFT(new CopycatShaftModelCore(), BlockStateProperties.AXIS),
     COGWHEEL(new CopycatCogWheelModelCore(), BlockStateProperties.AXIS),
-    LARGE_COGWHEEL(new CopycatLargeCogWheelModelCore(), BlockStateProperties.AXIS);
+    LARGE_COGWHEEL(new CopycatLargeCogWheelModelCore(), BlockStateProperties.AXIS),
+    SLIDING_DOOR(new CopycatSlidingDoorModelCore(true), BlockStateProperties.DOUBLE_BLOCK_HALF, BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, CopycatSlidingDoorBlock.CT),
+    FOLDING_DOOR_LEFT(new CopycatFoldingDoorModelCore(true, true), BlockStateProperties.DOUBLE_BLOCK_HALF, BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, CopycatSlidingDoorBlock.CT),
+    FOLDING_DOOR_RIGHT(new CopycatFoldingDoorModelCore(false, true), BlockStateProperties.DOUBLE_BLOCK_HALF, BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.OPEN, CopycatSlidingDoorBlock.CT);
 
     /**
      * Creates a new partial model with the given core and block state properties.

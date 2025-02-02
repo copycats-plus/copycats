@@ -17,8 +17,13 @@ dependencies {
     modCompileOnly("net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
     modCompileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_common_version}")
 
-    modCompileOnly("curse.maven:additional-placements-930469:${additionalplacements_curse_id}")
-    modCompileOnly("curse.maven:rubidium-574856:${rubidium_curse_id}")
+    modCompileOnly("curse.maven:additional-placements-fabric-930469:${additionalplacements_fabric_curse_id}")
+    modCompileOnly("curse.maven:embeddium-908741:${embeddium_curse_id}")
+    modCompileOnly("curse.maven:selene-499980:${moonlight_curse_fabric_id}")
+    modCompileOnly("curse.maven:vertical-slabs-compat-724387:${vertical_slabs_curse_fabric_id}")
+
+    //Used for all diagonal mods as they all shadow a common library we can mixin
+    modCompileOnly("fuzs.diagonalblocks:diagonalblocks-common:${diagonal_mods_version}")
 
     annotationProcessor(implementation("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
 }

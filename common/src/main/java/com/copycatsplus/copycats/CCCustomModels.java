@@ -32,7 +32,7 @@ public class CCCustomModels {
     }
 
     @ExpectPlatform
-    public static BakedModel getFluidPipeModel(BakedModel original, CopycatModelCore copycat) {
+    public static BakedModel getFluidPipeModel(BakedModel original, CopycatModelCore copycat, boolean disableAO) {
         throw new AssertionError();
     }
 }

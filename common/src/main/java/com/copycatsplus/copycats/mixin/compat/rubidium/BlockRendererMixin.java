@@ -1,6 +1,8 @@
 package com.copycatsplus.copycats.mixin.compat.rubidium;
 
-import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateRenderManager;
+import com.copycatsplus.copycats.compat.Mods;
+import com.copycatsplus.copycats.foundation.annotation.ModMixin;
+import com.copycatsplus.copycats.foundation.copycat.CopycatExternalContext;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateTextureAtlasSprite;
 import me.jellysquid.mods.sodium.client.model.IndexBufferBuilder;
 import me.jellysquid.mods.sodium.client.model.light.data.QuadLightData;
@@ -12,8 +14,8 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * <p>
  * Rubidium compatible version of {@link com.copycatsplus.copycats.mixin.foundation.copycat.multistate.ModelBlockRendererMixin}.
  */
+@ModMixin(requiredMods = {Mods.RUBIDIUM, Mods.SODIUM})
 @Mixin(BlockRenderer.class)
 @Pseudo
 public class BlockRendererMixin {
@@ -37,7 +40,7 @@ public class BlockRendererMixin {
     )
     private void beforeColor(BlockAndTintGetter world, BlockState state, BlockPos pos, BlockPos origin, ModelVertexSink vertices, IndexBufferBuilder indices, Vec3 blockOffset, ColorSampler<BlockState> colorSampler, BakedQuad bakedQuad, QuadLightData light, ChunkModelBuilder model, CallbackInfo ci) {
         if (bakedQuad.getSprite() instanceof MultiStateTextureAtlasSprite sprite)
-            MultiStateRenderManager.setRenderingProperty(sprite.getProperty());
+            CopycatExternalContext.setPropertyForBlockColor(sprite.getProperty());
     }
 
     @Inject(
@@ -50,6 +53,6 @@ public class BlockRendererMixin {
             require = 0
     )
     private void afterColor(BlockAndTintGetter world, BlockState state, BlockPos pos, BlockPos origin, ModelVertexSink vertices, IndexBufferBuilder indices, Vec3 blockOffset, ColorSampler<BlockState> colorSampler, BakedQuad bakedQuad, QuadLightData light, ChunkModelBuilder model, CallbackInfo ci) {
-        MultiStateRenderManager.setRenderingProperty(null);
+        CopycatExternalContext.setPropertyForBlockColor(null);
     }
 }

@@ -8,6 +8,7 @@ import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.redstone.RoseQuartzLampBlock;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockEntityItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
+import com.simibubi.create.foundation.blockEntity.IMergeableBE;
 import com.simibubi.create.foundation.utility.IPartialSafeNBT;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -44,7 +45,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement, ITransformableBlockEntity, IPartialSafeNBT {
+public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement, ITransformableBlockEntity, IPartialSafeNBT, IMergeableBE {
 
     void notifyUpdate();
 
@@ -166,6 +167,16 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
     }
 
     @Override
+    default void accept(BlockEntity other) {
+        if (other instanceof ICopycatBlockEntity be) {
+            setMaterial(be.getMaterial());
+            setConsumedItem(be.getConsumedItem());
+            setCTEnabled(be.isCTEnabled());
+            BlockEntityUtils.redraw((BlockEntity) this);
+        }
+    }
+
+    @Override
     default void transform(StructureTransform transform) {
         setMaterialInternal(transform.apply(getMaterial()));
         notifyUpdate();
@@ -208,6 +219,7 @@ public interface ICopycatBlockEntity extends ISpecialBlockEntityItemRequirement,
     static void writeSafe(ICopycatBlockEntity self, CompoundTag tag) {
         ItemStack stackWithoutNBT = self.getConsumedItem().copy();
         stackWithoutNBT.setTag(null);
+        BlockEntityUtils.saveMetadata((BlockEntity) self, tag);
         write(tag, stackWithoutNBT, self.getMaterial(), self.isCTEnabled());
     }
 

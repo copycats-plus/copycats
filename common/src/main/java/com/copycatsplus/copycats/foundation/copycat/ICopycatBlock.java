@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.foundation.copycat;
 
+import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
-import com.copycatsplus.copycats.mixin.foundation.copycat.ChunkAccessAccessor;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.simibubi.create.AllBlocks;
@@ -12,6 +12,7 @@ import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.utility.Iterate;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -19,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +38,6 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -318,7 +319,7 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
 
     static BlockState getAppearance(ICopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
                                     BlockState queryState, BlockPos queryPos) {
-        if (block.isIgnoredConnectivitySide(level, state, side, pos, queryPos))
+        if (block.isIgnoredConnectivitySide(level, state, side, pos, queryPos, queryState))
             return state;
 
         BlockState material = getMaterial(level, pos);
@@ -469,30 +470,88 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
     /**
      * Determines whether textures on an adjacent block should appear connected to the copycat block.
      *
-     * @param reader  The world.
-     * @param state   The state of the copycat block.
-     * @param face    The face of the adjacent block that is being rendered.
-     * @param fromPos The position of the copycat block.
-     * @param toPos   The position of the adjacent block.
+     * @param reader    The world.
+     * @param fromState The state of the copycat block.
+     * @param face      The face of the adjacent block that is being rendered.
+     * @param fromPos   The position of the copycat block.
+     * @param toPos     The position of the adjacent block.
+     * @param toState   The state of the adjacent block.
      * @return Whether the adjacent block is not allowed to connect.
      */
-    default boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                              BlockPos fromPos, BlockPos toPos) {
-        return false;
+    default boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState fromState, Direction face,
+                                              BlockPos fromPos, BlockPos toPos, BlockState toState) {
+        // !Specific to Create's CT!
+        // A hack to fix blocking logic
+        if (CopycatExternalContext.isForBlockingLogic()) {
+            return false;
+        }
+
+        // queryState is inconsistent between different CT mods
+        // our assumption is that queryState refers to the true block state (copycat), not the material
+        toState = reader.getBlockState(toPos);
+
+        // we are swapping to and from states because we want to consider from the perspective of the block that is trying
+        // to display connected textures
+        return !checkConnection(reader, toPos, fromPos, toState);
     }
 
     /**
      * Determines whether the copycat block can connect its textures towards the adjacent block.
      *
-     * @param reader  The world.
-     * @param fromPos The position of the copycat block.
-     * @param toPos   The position of the adjacent block.
-     * @param state   The state of the copycat block.
+     * @param reader    The world.
+     * @param fromPos   The position of the copycat block.
+     * @param toPos     The position of the adjacent block.
+     * @param fromState The state of the copycat block.
      * @return Whether the copycat block can connect its textures towards the adjacent block.
      */
     default boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                             BlockState state) {
-        return true;
+                                             BlockState fromState) {
+        BlockState toState = reader.getBlockState(toPos);
+
+        // If the adjacent block is a copycat, IsIgnoredConnectivitySide has already handled the connection
+        if (toState.getBlock() instanceof ICopycatBlock) {
+            return true;
+        }
+
+        return checkConnection(reader, fromPos, toPos, fromState);
+    }
+
+    default boolean checkConnection(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
+                                    BlockState fromState) {
+        Vec3i diff = toPos.subtract(fromPos);
+
+        if (diff.equals(Vec3i.ZERO))
+            return true;
+
+        Direction facing = Direction.fromDelta(diff.getX(), diff.getY(), diff.getZ());
+
+        BlockState toState = reader.getBlockState(toPos);
+
+        if (facing != null) {
+            return BlockFaceUtils.faceMatch(reader, fromState, fromPos, toState, toPos, facing);
+        } else if (diff.getX() != 0 && diff.getY() != 0 && diff.getZ() != 0) {
+            // three axes offsets only happens when checking for CT blocking
+            return true;
+        } else {
+            // diagonal connections are checked in two situations:
+            // 1. to determine whether the corner of a block should be shown or not
+            //  - if the diagonal connection is allowed, the corner will be hidden if the two sides are also connected
+            // 2. to determine whether a connection can be blocked by a diagonal block
+            //  - in this case, allowing the diagonal connection blocks the direct connection
+            for (Direction.Axis axis : Iterate.axes) {
+                if (diff.get(axis) != 0) {
+                    Vec3i axisDiff = Vec3i.ZERO;
+                    axisDiff = axisDiff.relative(axis, diff.get(axis));
+                    BlockPos midPos = fromPos.offset(axisDiff);
+                    BlockState midState = reader.getBlockState(midPos);
+                    Vec3i remainingDiff = diff.subtract(axisDiff);
+                    Direction remainingFacing = Direction.fromDelta(remainingDiff.getX(), remainingDiff.getY(), remainingDiff.getZ());
+                    if (!BlockFaceUtils.faceMatch(reader, midState, midPos, toState, toPos, remainingFacing))
+                        return false;
+                }
+            }
+            return true;
+        }
     }
 
     /**
@@ -539,15 +598,23 @@ public interface ICopycatBlock extends IWrenchable, IStateType, ITransformableBl
                                      BlockState neighborState,
                                      Direction dir) {
         BlockPos toPos = pos.relative(dir);
-        BlockState material = state.getBlock() instanceof ICopycatBlock
-                ? getMaterial(level, pos)
-                : state;
-        BlockState neighborMaterial = neighborState.getBlock() instanceof ICopycatBlock
-                ? getMaterial(level, toPos)
-                : neighborState;
-        if (material.skipRendering(neighborMaterial, dir.getOpposite())) {
-            return BlockFaceUtils.canOcclude(level, neighborState, toPos, state, pos, dir.getOpposite());
+
+        if (level instanceof ScaledBlockAndTintGetter scaledLevel && state.getBlock() instanceof IMultiStateCopycatBlock) {
+            CopycatExternalContext.setPropertyForAppearance(scaledLevel.getPropertyForRender(state, pos));
+        } else {
+            CopycatExternalContext.setPropertyForAppearance(null);
         }
+
+        if (BlockFaceUtils.canOcclude(level, neighborState, toPos, state, pos, dir.getOpposite())) {
+            BlockState material = state.getBlock() instanceof IMultiStateCopycatBlock
+                    ? IMultiStateCopycatBlock.getMaterial(level, pos, CopycatExternalContext.getPropertyForAppearance())
+                    : state.getBlock() instanceof ICopycatBlock ? ICopycatBlock.getMaterial(level, pos) : state;
+            BlockState neighborMaterial = neighborState.getBlock() instanceof IMultiStateCopycatBlock && level instanceof ScaledBlockAndTintGetter scaledLevel
+                    ? IMultiStateCopycatBlock.getMaterial(level, toPos, scaledLevel.getPropertyForRender(neighborState, toPos))
+                    : neighborState.getBlock() instanceof ICopycatBlock ? ICopycatBlock.getMaterial(level, toPos) : neighborState;
+            return material.skipRendering(neighborMaterial, dir.getOpposite());
+        }
+
         return false;
     }
 

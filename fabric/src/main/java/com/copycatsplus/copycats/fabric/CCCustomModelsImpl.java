@@ -6,7 +6,7 @@ import net.minecraft.client.resources.model.BakedModel;
 
 public class CCCustomModelsImpl {
 
-    public static BakedModel getFluidPipeModel(BakedModel original, CopycatModelCore copycat) {
-        return new CopycatFluidPipeModelFabric(original, copycat);
+    public static BakedModel getFluidPipeModel(BakedModel original, CopycatModelCore copycat, boolean disableAO) {
+        return new CopycatFluidPipeModelFabric(original, copycat, disableAO);
     }
 }

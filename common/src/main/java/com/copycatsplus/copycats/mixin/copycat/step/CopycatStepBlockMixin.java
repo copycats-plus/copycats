@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.mixin.copycat.step;
 
 import com.copycatsplus.copycats.CCBlocks;
+import com.copycatsplus.copycats.foundation.copycat.CopycatExternalContext;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.utility.BlockUtils;
@@ -71,5 +72,37 @@ public abstract class CopycatStepBlockMixin extends WaterloggedCopycatBlock impl
     @Override
     public BlockState transform(BlockState state, StructureTransform transform) {
         return BlockUtils.transformStepLikeHorizontal(state, transform, CCBlocks.COPYCAT_VERTICAL_STEP.getDefaultState());
+    }
+
+    @Override
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
+        if (CopycatExternalContext.isForBlockingLogic()) {
+            return false;
+        }
+
+        return !checkConnection(reader, toPos, fromPos, reader.getBlockState(toPos));
+    }
+
+    @Override
+    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState fromState) {
+        BlockState toState = reader.getBlockState(toPos);
+
+        if (toState.getBlock() instanceof ICopycatBlock) {
+            return true;
+        }
+
+        return checkConnection(reader, fromPos, toPos, fromState);
+    }
+
+    public boolean supportsExternalFaceHiding(BlockState state) {
+        return true;
+    }
+
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 }

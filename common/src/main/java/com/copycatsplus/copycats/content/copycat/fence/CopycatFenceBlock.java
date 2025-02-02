@@ -96,21 +96,14 @@ public class CopycatFenceBlock extends FenceBlock implements ICopycatBlock, IBE<
 
     @Override
     public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return true;
-        return !canConnectTexturesToward(reader, toPos, fromPos, toState);
+                                             BlockPos fromPos, BlockPos toPos, BlockState toState) {
+        if (isPole(state)) return ICopycatBlock.super.isIgnoredConnectivitySide(reader, state, face, fromPos, toPos, toState);
+        return true;
     }
 
     @Override
     public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
-        if (toPos.getX() == fromPos.getX() && toPos.getZ() == fromPos.getZ()) {
-            if (toState.is(this)) {
-                return isPole(state) && isPole(toState);
-            }
-        }
+        if (isPole(state)) return ICopycatBlock.super.canConnectTexturesToward(reader, fromPos, toPos, state);
         return false;
     }
 

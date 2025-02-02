@@ -53,14 +53,6 @@ public class CopycatLayerBlock extends CCWaterloggedCopycatBlock implements ISpe
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        Direction facing = state.getValue(FACING);
-        BlockState toState = reader.getBlockState(toPos);
-
-        return !toState.is(this);
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState stateForPlacement = super.getStateForPlacement(context);
         if (stateForPlacement == null) return null;
@@ -114,33 +106,6 @@ public class CopycatLayerBlock extends CCWaterloggedCopycatBlock implements ISpe
     @Override
     public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
         return ICopycatBlock.getRequiredItemsForLayer(state, LAYERS);
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
-        Direction facing = state.getValue(FACING);
-
-        if (toPos.equals(fromPos.relative(facing))) return false;
-
-        BlockPos diff = fromPos.subtract(toPos);
-        int coord = facing.getAxis().choose(diff.getX(), diff.getY(), diff.getZ());
-
-        if (!toState.is(this)) return coord != -facing.getAxisDirection().getStep();
-
-        if (isOccluded(state, toState, facing)) return true;
-        if (toState.setValue(WATERLOGGED, false) == state.setValue(WATERLOGGED, false) && coord == 0) return true;
-        return false;
-    }
-
-    private static boolean isOccluded(BlockState state, BlockState other, Direction pDirection) {
-        state = state.setValue(WATERLOGGED, false);
-        other = other.setValue(WATERLOGGED, false);
-        Direction facing = state.getValue(FACING);
-        if (facing.getOpposite() == other.getValue(FACING) && pDirection == facing) return true;
-        if (other.getValue(FACING) != facing) return false;
-        return pDirection.getAxis() != facing.getAxis();
     }
 
     @Override

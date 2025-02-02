@@ -37,7 +37,7 @@ public final class WrappedCopycatBlock extends CopycatBlock {
 
     @Override
     public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        return wrapped.get().isIgnoredConnectivitySide(reader, state, face, fromPos, toPos);
+        return wrapped.get().isIgnoredConnectivitySide(reader, state, face, fromPos, toPos, reader.getBlockState(toPos));
     }
 
     @Override

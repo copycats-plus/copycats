@@ -22,8 +22,8 @@ public class CopycatFluidPipeModelForge extends CopycatModelForge {
 
     private static final ModelProperty<CopycatFluidPipeModelCore.PipeModelData> PIPE_PROPERTY = new ModelProperty<>();
 
-    public CopycatFluidPipeModelForge(BakedModel originalModel, CopycatModelCore core) {
-        super(originalModel, core, false);
+    public CopycatFluidPipeModelForge(BakedModel originalModel, CopycatModelCore core, boolean disableAO) {
+        super(originalModel, core, disableAO);
     }
 
     @Override
