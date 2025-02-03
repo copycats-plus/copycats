@@ -53,24 +53,39 @@ public abstract class CopycatPanelBlockMixin extends WaterloggedCopycatBlock imp
         return super.getBlockEntity(worldIn, pos);
     }
 
-    @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        if (CopycatExternalContext.isForBlockingLogic()) {
-            return false;
+    @Inject(
+            method = "isIgnoredConnectivitySide",
+            at = @At("RETURN"),
+            cancellable = true
+    )
+    private void isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue()) {
+            return;
         }
-
-        return !checkConnection(reader, toPos, fromPos, reader.getBlockState(toPos));
+        if (CopycatExternalContext.isForBlockingLogic()) {
+            cir.setReturnValue(false);
+            return;
+        }
+        cir.setReturnValue(!checkConnection(reader, toPos, fromPos, reader.getBlockState(toPos)));
     }
 
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState fromState) {
+    @Inject(
+            method = "canConnectTexturesToward",
+            at = @At("RETURN"),
+            cancellable = true
+    )
+    private void canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState fromState, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) {
+            return;
+        }
         BlockState toState = reader.getBlockState(toPos);
 
         if (toState.getBlock() instanceof ICopycatBlock) {
-            return true;
+            cir.setReturnValue(true);
+            return;
         }
 
-        return checkConnection(reader, fromPos, toPos, fromState);
+        cir.setReturnValue(checkConnection(reader, fromPos, toPos, fromState));
     }
 
     public boolean supportsExternalFaceHiding(BlockState state) {
