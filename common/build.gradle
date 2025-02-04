@@ -22,8 +22,5 @@ dependencies {
     modCompileOnly("curse.maven:selene-499980:${moonlight_curse_fabric_id}")
     modCompileOnly("curse.maven:vertical-slabs-compat-724387:${vertical_slabs_curse_fabric_id}")
 
-    //Used for all diagonal mods as they all shadow a common library we can mixin
-    modCompileOnly("fuzs.diagonalblocks:diagonalblocks-common:${diagonal_mods_version}")
-
     annotationProcessor(implementation("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
 }
