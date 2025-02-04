@@ -5,8 +5,10 @@ import com.copycatsplus.copycats.compat.AthenaCompat;
 import com.copycatsplus.copycats.compat.Mods;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.IStateType;
+import com.copycatsplus.copycats.foundation.copycat.CopycatExternalContext;
 import com.copycatsplus.copycats.foundation.copycat.StateType;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
 import com.copycatsplus.copycats.network.CCPackets;
 import com.copycatsplus.copycats.network.FillCopycatPacket;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
@@ -41,9 +43,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -60,7 +59,7 @@ import java.util.stream.IntStream;
  * {@link IBE#getBlockEntityType} in the concrete class, and redirect calls of
  * {@link IMultiStateCopycatBlock#use},
  * {@link IMultiStateCopycatBlock#setPlacedBy},
- * {@link IMultiStateCopycatBlock#hidesNeighborFace},
+ * {@link ICopycatBlock#hidesNeighborFace},
  * {@link IMultiStateCopycatBlock#rotate},
  * {@link IMultiStateCopycatBlock#mirror},
  * {@link Block#getShape},
@@ -170,7 +169,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
 
     default String getPropertyFromRender(String renderingProperty,
                                          BlockState state,
-                                         ScaledBlockAndTintGetter level,
+                                         BlockGetter level,
                                          Vec3i vector,
                                          BlockPos blockPos) {
         Vec3i scale = vectorScale(state);
@@ -392,27 +391,24 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         }
     }
 
-    @Nullable
-    static VoxelShape blockShapeOverride(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        if (pLevel instanceof ScaledBlockAndTintGetter) {
-            return Shapes.block(); // todo: patch the blocking check to consider multistates properly
-        }
-        return null;
-    }
-
     static BlockState getAppearance(IMultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
                                     BlockState queryState, BlockPos queryPos) {
-        String property;
+
         BlockAndTintGetter reader = Mods.ATHENA.runIfInstalled(() -> () -> AthenaCompat.unwrapAthenaGetter(level)).orElse(level);
-        if (reader instanceof ScaledBlockAndTintGetter scaledLevel) {
-            property = scaledLevel.getPropertyForRender(state, pos);
+
+        if (reader instanceof ScaledBlockAndTintGetter scaledLevel && state.getBlock() instanceof IMultiStateCopycatBlock) {
+            CopycatExternalContext.setPropertyForAppearance(scaledLevel.getPropertyForRender(state, pos));
         } else {
-            property = block.defaultProperty();
+            CopycatExternalContext.setPropertyForAppearance(block.defaultProperty());
         }
-        IMultiStateCopycatBlockEntity be = block.getCopycatBlockEntity(reader, queryPos);
-        if (block.isIgnoredConnectivitySide(property, reader, state, side, pos, queryPos))
+
+        if (block.isIgnoredConnectivitySide(reader, state, side, pos, queryPos, queryState))
             return state;
 
+        String property;
+        property = CopycatExternalContext.getPropertyForAppearance();
+        if (property == null)
+            property = block.defaultProperty();
         BlockState material = IMultiStateCopycatBlock.getMaterial(reader, pos, property);
         return material.is(Blocks.AIR) ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
     }
@@ -442,31 +438,6 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         )).toList());
     }
 
-    @Override
-    default boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                              BlockPos fromPos, BlockPos toPos) {
-        return isIgnoredConnectivitySide(defaultProperty(), reader, state, face, fromPos, toPos);
-    }
-
-    @Override
-    default boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                             BlockState state) {
-        return canConnectTexturesToward(defaultProperty(), reader, fromPos, toPos, state);
-    }
-
-    /**
-     * Determines whether textures on an adjacent part/block should appear connected to the copycat block part.
-     *
-     * @param reader  The world which is scaled by {@link IMultiStateCopycatBlock#vectorScale}.
-     * @param state   The state of the copycat block part.
-     * @param face    The face of the adjacent block/part that is being rendered.
-     * @param fromPos The position of the copycat block part.
-     * @param toPos   The position of the adjacent block/part.
-     * @return Whether the adjacent block/part is not allowed to connect.
-     */
-    boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face,
-                                      BlockPos fromPos, BlockPos toPos);
-
     /**
      * Determines whether the copycat block part can connect its textures towards the adjacent block/part.
      *
@@ -476,8 +447,10 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
      * @param state   The state of the copycat block part.
      * @return Whether the copycat block part can connect its textures towards the adjacent block/part.
      */
-    boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                     BlockState state);
+    default boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
+                                             BlockState state) {
+        return canConnectTexturesToward(reader, fromPos, toPos, state);
+    }
 
     @Override
     default boolean canOcclude(BlockGetter level, BlockState state, BlockPos pos) {
@@ -508,33 +481,6 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         return Optional.of(BlockFaceUtils.canOcclude(level, neighborState, neighborPos, state, pos, dir.getOpposite()));
     }
 
-    /**
-     * Whether this copycat can hide the face of an adjacent block.
-     * <p>
-     * Note that face hiding is different from occlusion, as it is meant for hiding inner faces of transparent blocks.
-     * Face hiding hides the face of the adjacent block if the adjacent block is the same type regardless of whether
-     * this block has occlusion enabled.
-     */
-    static boolean hidesNeighborFace(BlockGetter level,
-                                     BlockPos pos,
-                                     BlockState state,
-                                     BlockState neighborState,
-                                     Direction dir) {
-        BlockPos toPos = pos.relative(dir);
-        if (!(level instanceof ScaledBlockAndTintGetter scaledWorld)) return false;
-        // todo: incomplete face hiding if two multi-states have different orientations
-        BlockState material = state.getBlock() instanceof IMultiStateCopycatBlock
-                ? getMaterial(level, pos, scaledWorld.getPropertyForRender(state, pos))
-                : state;
-        BlockState neighborMaterial = neighborState.getBlock() instanceof IMultiStateCopycatBlock
-                ? getMaterial(level, toPos, scaledWorld.getPropertyForRender(neighborState, toPos))
-                : neighborState;
-        if (material.skipRendering(neighborMaterial, dir.getOpposite())) {
-            return BlockFaceUtils.canOcclude(level, neighborState, toPos, state, pos, dir.getOpposite());
-        }
-        return false;
-    }
-
     @Environment(EnvType.CLIENT)
     static BlockColor wrappedColor() {
         return new WrappedBlockColor();
@@ -549,7 +495,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
             if (pLevel == null || pPos == null)
                 return GrassColor.get(0.5D, 1.0D);
 
-            String renderingProperty = MultiStateRenderManager.getRenderingProperty();
+            String renderingProperty = CopycatExternalContext.getPropertyForBlockColor();
             if (renderingProperty != null) {
                 return Minecraft.getInstance()
                         .getBlockColors()

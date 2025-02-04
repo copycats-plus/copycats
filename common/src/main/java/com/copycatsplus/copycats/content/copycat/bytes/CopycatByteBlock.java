@@ -1,12 +1,13 @@
 package com.copycatsplus.copycats.content.copycat.bytes;
 
 import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.MathUtils;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -16,13 +17,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -139,19 +138,6 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
         super.createBlockStateDefinition(pBuilder.add(TOP_NE, TOP_NW, TOP_SE, TOP_SW, BOTTOM_NE, BOTTOM_NW, BOTTOM_SE, BOTTOM_SW));
     }
 
-
-    @Override
-    public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        BlockState toState = reader.getBlockState(toPos);
-        return !toState.is(this);
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        return toState.is(this);
-    }
-
     private static VoxelShape calculateMultiFaceShape(BlockState pState) {
         VoxelShape shape = Shapes.empty();
         for (Byte bite : allBytes) {
@@ -168,8 +154,6 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        VoxelShape shapeOverride = IMultiStateCopycatBlock.blockShapeOverride(pState, pLevel, pPos, pContext);
-        if (shapeOverride != null) return shapeOverride;
         return Objects.requireNonNull(this.shapesCache.get(pState));
     }
 
@@ -191,7 +175,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
         Vec3 bias = Vec3.atLowerCornerOf(context.getClickedFace().getNormal()).scale(1 / 16f);
         Vec3 biasedLocation = context.getClickLocation().add(bias);
         if (!blockPosContaining(biasedLocation).equals(context.getClickedPos())) {
-            biasedLocation = clampToBlockPos(biasedLocation, context.getClickedPos());
+            biasedLocation = MathUtils.clampToGrid(biasedLocation, context.getClickedPos());
         }
         Byte bite = getByteFromVec(biasedLocation, context.getClickedPos());
         if (state.is(this)) {
@@ -219,7 +203,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
         Vec3 bias = Vec3.atLowerCornerOf(pUseContext.getClickedFace().getNormal()).scale(1 / 16f);
         Vec3 biasedLocation = pUseContext.getClickLocation().add(bias);
         if (!blockPosContaining(biasedLocation).equals(pUseContext.getClickedPos())) {
-            biasedLocation = clampToBlockPos(biasedLocation, pUseContext.getClickedPos());
+            biasedLocation = MathUtils.clampToGrid(biasedLocation, pUseContext.getClickedPos());
         }
         Byte bite = getByteFromVec(biasedLocation, pUseContext.getClickedPos());
         return !pState.getValue(byByte(bite));
@@ -269,7 +253,7 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
                                      BlockState state,
                                      BlockState neighborState,
                                      Direction dir) {
-        return IMultiStateCopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override
@@ -279,7 +263,14 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
 
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
-        be.getMaterialItemStorage().remapStorage(key -> byByte(transformByte(transform, byteMap.get(key))).getName());
+        be.getMaterialItemStorage().remapStorage(key -> {
+            Byte bite = byteMap.get(key);
+            if (bite == null) {
+                Copycats.LOGGER.debug("Can't find byte for key {} in {}. NBT data for this copycat byte might be corrupt.", key, state);
+                return key;
+            }
+            return byByte(transformByte(transform, bite)).getName();
+        });
     }
 
     private static Byte transformByte(StructureTransform transform, Byte bite) {
@@ -293,14 +284,6 @@ public class CopycatByteBlock extends WaterloggedMultiStateCopycatBlock implemen
             };
         }
         return bite;
-    }
-
-    public static Vec3 clampToBlockPos(Vec3 vec, BlockPos pos) {
-        return new Vec3(
-                Mth.clamp(vec.x, pos.getX(), pos.getX() + 1),
-                Mth.clamp(vec.y, pos.getY(), pos.getY() + 1),
-                Mth.clamp(vec.z, pos.getZ(), pos.getZ() + 1)
-        );
     }
 
     public static Byte getByteFromVec(Vec3 vec, BlockPos pos) {

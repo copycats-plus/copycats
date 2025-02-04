@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "tag": "c:ingots/zinc"
-  },
-  "result": "copycats:copycat_heavy_weighted_pressure_plate",
-  "count": 2
-}

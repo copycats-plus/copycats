@@ -1,4 +1,5 @@
 {
+  "block.copycats.copycat_base": "Copycat Base",
   "block.copycats.copycat_beam": "Copycat balk",
   "block.copycats.copycat_block": "Copycat blok",
   "block.copycats.copycat_board": "Copycat bord",
@@ -40,6 +41,7 @@
   "item.copycats.copycat_catwalk": "Copycat catwalk",
   "itemGroup.copycats.functional": "Create: Copycats+ | functional",
   "itemGroup.copycats.main": "Create: Copycats+",
+  "keyinfo.copycats.fill_copycat": "Vul Copycat met Materiaal",
   "tooltip.copycats.characteristics.copy_cat.description": "R-klik op een _cat_.",
   "tooltip.copycats.characteristics.copy_cat.title": "???",
   "tooltip.copycats.characteristics.copycat.description": "R-klik met materiaal om _assign_ en _rotate_. Sleutel om _remove materiaal.",

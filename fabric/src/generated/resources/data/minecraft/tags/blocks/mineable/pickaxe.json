@@ -9,10 +9,13 @@
     "copycats:copycat_wooden_button",
     "copycats:copycat_stone_button",
     "copycats:copycat_byte",
+    "copycats:copycat_byte_panel",
     "copycats:copycat_fence",
     "copycats:copycat_fence_gate",
     "copycats:copycat_ghost_block",
     "copycats:copycat_half_layer",
+    "copycats:copycat_vertical_half_layer",
+    "copycats:copycat_stacked_half_layer",
     "copycats:copycat_half_panel",
     "copycats:copycat_ladder",
     "copycats:copycat_layer",
@@ -22,6 +25,7 @@
     "copycats:copycat_light_weighted_pressure_plate",
     "copycats:copycat_slab",
     "copycats:copycat_slice",
+    "copycats:copycat_corner_slice",
     "copycats:copycat_stairs",
     "copycats:copycat_vertical_stairs",
     "copycats:copycat_trapdoor",
@@ -38,6 +42,10 @@
     "copycats:copycat_fluid_pipe",
     "copycats:copycat_glass_fluid_pipe",
     "copycats:copycat_door",
-    "copycats:copycat_iron_door"
+    "copycats:copycat_iron_door",
+    "copycats:copycat_pane",
+    "copycats:copycat_sliding_door",
+    "copycats:copycat_folding_door",
+    "copycats:copycat_flat_pane"
   ]
 }

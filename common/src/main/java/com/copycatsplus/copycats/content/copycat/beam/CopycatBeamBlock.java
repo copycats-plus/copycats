@@ -38,6 +38,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 import static net.minecraft.core.Direction.Axis;
 
 @ParametersAreNonnullByDefault
@@ -61,48 +62,6 @@ public class CopycatBeamBlock extends CCWaterloggedCopycatBlock implements IStat
                 () -> InteractionUtils.usePlacementHelper(placementHelperId, state, world, pos, player, hand, ray),
                 () -> super.use(state, world, pos, player, hand, ray)
         );
-    }
-
-    @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        Axis axis = state.getValue(AXIS);
-        BlockState toState = reader.getBlockState(toPos);
-
-        if (toState.is(this)) {
-            // connecting to another copycat beam
-            return toState.getValue(AXIS) != axis;
-        } else {
-            // doesn't connect to any other blocks
-            return true;
-        }
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                            BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
-        Axis axis = state.getValue(AXIS);
-
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
-        if (face == null) {
-            return false;
-        }
-
-        if (toState.is(this)) {
-            try {
-                return toState.getValue(AXIS) == axis && face.getAxis() == axis;
-            } catch (IllegalStateException ignored) {
-                return false;
-            }
-        } else {
-            return false;
-        }
     }
 
     @SuppressWarnings("deprecation")

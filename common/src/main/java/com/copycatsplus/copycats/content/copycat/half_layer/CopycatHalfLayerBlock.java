@@ -1,12 +1,18 @@
 package com.copycatsplus.copycats.content.copycat.half_layer;
 
+import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
 import com.copycatsplus.copycats.Copycats;
+import com.copycatsplus.copycats.content.copycat.stacked_half_layer.CopycatStackedHalfLayerBlock;
+import com.copycatsplus.copycats.content.copycat.vertical_half_layer.CopycatVerticalHalfLayerBlock;
+import com.copycatsplus.copycats.foundation.copycat.CopycatTransformableState;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
+import com.copycatsplus.copycats.foundation.copycat.multistate.MaterialItemStorage;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.BlockUtils;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.content.contraptions.StructureTransform;
@@ -145,7 +151,7 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock imp
             if (state.getValue(targetProp) < 8)
                 return state.cycle(targetProp);
             else {
-                Copycats.LOGGER.warn("Can't figure out where to place a step layer! Please file an issue if you see this.");
+                Copycats.LOGGER.warn("Can't figure out where to place a half layer! Please file an issue if you see this.");
                 return state;
             }
         } else {
@@ -224,95 +230,124 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock imp
         return ICopycatBlock.getRequiredItemsForLayer(state, POSITIVE_LAYERS).union(ICopycatBlock.getRequiredItemsForLayer(state, NEGATIVE_LAYERS));
     }
 
-    @Override
-    public boolean isIgnoredConnectivitySide(String property, BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        BlockState toState = reader.getBlockState(toPos);
-        return !toState.is(this);
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(String property, BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (reader instanceof ScaledBlockAndTintGetter scaledReader && toState.is(this)) {
-            String toProperty = scaledReader.getPropertyForRender(toState, toPos);
-            int fromLayers = state.getValue(property.equals(POSITIVE_LAYERS.getName()) ? POSITIVE_LAYERS : NEGATIVE_LAYERS);
-            int toLayers = toState.getValue(toProperty.equals(POSITIVE_LAYERS.getName()) ? POSITIVE_LAYERS : NEGATIVE_LAYERS);
-            return fromLayers == toLayers;
+    public static CopycatTransformableState<Integer> toTransformableState(BlockState state) {
+        if (state.is(CCBlocks.COPYCAT_HALF_LAYER.get())) {
+            Axis axis = state.getValue(AXIS);
+            Half half = state.getValue(HALF);
+            return CopycatTransformableState.create(t -> {
+                t.addPart(axis == Axis.X ? 12 : 8, half == Half.BOTTOM ? 0 : 16, axis == Axis.Z ? 12 : 8).setData(state.getValue(POSITIVE_LAYERS));
+                t.addPart(axis == Axis.X ? 4 : 8, half == Half.BOTTOM ? 0 : 16, axis == Axis.Z ? 4 : 8).setData(state.getValue(NEGATIVE_LAYERS));
+            });
+        } else if (state.is(CCBlocks.COPYCAT_VERTICAL_HALF_LAYER.get())) {
+            Direction facing = state.getValue(CopycatVerticalHalfLayerBlock.FACING);
+            return CopycatTransformableState.create(t -> {
+                t.addPart(12, 8, 16).rotateY(facing).setData(state.getValue(POSITIVE_LAYERS));
+                t.addPart(4, 8, 16).rotateY(facing).setData(state.getValue(NEGATIVE_LAYERS));
+            });
+        } else if (state.is(CCBlocks.COPYCAT_STACKED_HALF_LAYER.get())) {
+            Direction facing = state.getValue(CopycatStackedHalfLayerBlock.FACING);
+            return CopycatTransformableState.create(t -> {
+                t.addPart(8, 12, 16).rotateY(facing).setData(state.getValue(POSITIVE_LAYERS));
+                t.addPart(8, 4, 16).rotateY(facing).setData(state.getValue(NEGATIVE_LAYERS));
+            });
+        } else {
+            throw new IllegalArgumentException("Unsupported block state");
         }
-        return toState.is(this);
     }
 
-    @Override
-    public BlockState transform(BlockState state, StructureTransform transform) {
-        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
-            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Y) {
-                state = state.cycle(HALF);
-            } else {
-                state = state.rotate(transform.mirror.getRotation(Direction.get(AxisDirection.POSITIVE, state.getValue(AXIS))));
+    public static CopycatTransformableState<MaterialItemStorage.MaterialItem> toTransformableStorage(BlockState state, IMultiStateCopycatBlockEntity be) {
+        if (state.is(CCBlocks.COPYCAT_HALF_LAYER.get())) {
+            Axis axis = state.getValue(AXIS);
+            Half half = state.getValue(HALF);
+            return CopycatTransformableState.create(t -> {
+                t.addPart(axis == Axis.X ? 12 : 8, half == Half.BOTTOM ? 0 : 16, axis == Axis.Z ? 12 : 8)
+                        .setData(be.getMaterialItemStorage().getMaterialItem(POSITIVE_LAYERS.getName()));
+                t.addPart(axis == Axis.X ? 4 : 8, half == Half.BOTTOM ? 0 : 16, axis == Axis.Z ? 4 : 8)
+                        .setData(be.getMaterialItemStorage().getMaterialItem(NEGATIVE_LAYERS.getName()));
+            });
+        } else if (state.is(CCBlocks.COPYCAT_VERTICAL_HALF_LAYER.get())) {
+            Direction facing = state.getValue(CopycatVerticalHalfLayerBlock.FACING);
+            return CopycatTransformableState.create(t -> {
+                t.addPart(12, 8, 16).rotateY(facing)
+                        .setData(be.getMaterialItemStorage().getMaterialItem(POSITIVE_LAYERS.getName()));
+                t.addPart(4, 8, 16).rotateY(facing)
+                        .setData(be.getMaterialItemStorage().getMaterialItem(NEGATIVE_LAYERS.getName()));
+            });
+        } else if (state.is(CCBlocks.COPYCAT_STACKED_HALF_LAYER.get())) {
+            Direction facing = state.getValue(CopycatStackedHalfLayerBlock.FACING);
+            return CopycatTransformableState.create(t -> {
+                t.addPart(8, 12, 16).rotateY(facing)
+                        .setData(be.getMaterialItemStorage().getMaterialItem(POSITIVE_LAYERS.getName()));
+                t.addPart(8, 4, 16).rotateY(facing)
+                        .setData(be.getMaterialItemStorage().getMaterialItem(NEGATIVE_LAYERS.getName()));
+            });
+        } else {
+            throw new IllegalArgumentException("Unsupported block state");
+        }
+    }
+
+    public static BlockState fromTransformableState(BlockState state, CopycatTransformableState<Integer> transformableState) {
+        CopycatTransformableState.Part<Integer> firstPart = transformableState.parts.get(0);
+        Direction facing = firstPart.getFacing();
+        if (facing.getAxis().isVertical()) {
+            Axis axis = firstPart.getHorizontalFacing().getAxis();
+            Half half = firstPart.isTop() ? Half.TOP : Half.BOTTOM;
+            state = BlockUtils.tryCopyProperties(state, CCBlocks.COPYCAT_HALF_LAYER.getDefaultState())
+                    .setValue(CopycatHalfLayerBlock.AXIS, axis)
+                    .setValue(CopycatHalfLayerBlock.HALF, half);
+            for (CopycatTransformableState.Part<Integer> part : transformableState.parts) {
+                boolean positive = part.vector.get(axis) > 8;
+                state = state.setValue(positive ? POSITIVE_LAYERS : NEGATIVE_LAYERS, part.data);
             }
-        }
-        if (transform.rotationAxis != null) {
-            if (transform.rotationAxis == Axis.Y) {
-                Function<Axis, Axis> swap = axis -> axis == Axis.Z ? Axis.X : Axis.Z;
-                state = switch (transform.rotation) {
-                    case NONE -> state;
-                    case CLOCKWISE_90 -> {
-                        Axis axis = state.getValue(AXIS);
-                        if (axis == Axis.X) {
-                            yield state.setValue(AXIS, swap.apply(axis));
-                        } else {
-                            yield state.setValue(AXIS, swap.apply(axis))
-                                    .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
-                                    .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
-                        }
-                    }
-                    case CLOCKWISE_180 -> state
-                            .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
-                            .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
-                    case COUNTERCLOCKWISE_90 -> {
-                        Axis axis = state.getValue(AXIS);
-                        if (axis == Axis.Z) {
-                            yield state.setValue(AXIS, swap.apply(axis));
-                        } else {
-                            yield state.setValue(AXIS, swap.apply(axis))
-                                    .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
-                                    .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
-                        }
-                    }
-                };
-            } else if (transform.rotation == Rotation.CLOCKWISE_180) {
-                if (transform.rotationAxis != state.getValue(AXIS)) {
-                    state = state
-                            .cycle(HALF)
-                            .setValue(POSITIVE_LAYERS, state.getValue(NEGATIVE_LAYERS))
-                            .setValue(NEGATIVE_LAYERS, state.getValue(POSITIVE_LAYERS));
-                } else {
-                    state = state.cycle(HALF);
-                }
+        } else if (firstPart.vector.getY() == 8) {
+            state = BlockUtils.tryCopyProperties(state, CCBlocks.COPYCAT_VERTICAL_HALF_LAYER.getDefaultState())
+                    .setValue(CopycatVerticalHalfLayerBlock.FACING, facing);
+            for (CopycatTransformableState.Part<Integer> part : transformableState.parts) {
+                boolean right = part.isRight(facing);
+                state = state.setValue(right ? NEGATIVE_LAYERS : POSITIVE_LAYERS, part.data);
+            }
+        } else {
+            state = BlockUtils.tryCopyProperties(state, CCBlocks.COPYCAT_STACKED_HALF_LAYER.getDefaultState())
+                    .setValue(CopycatStackedHalfLayerBlock.FACING, facing);
+            for (CopycatTransformableState.Part<Integer> part : transformableState.parts) {
+                boolean top = part.isTop();
+                state = state.setValue(top ? POSITIVE_LAYERS : NEGATIVE_LAYERS, part.data);
             }
         }
         return state;
     }
 
+    public static void fromTransformableStorage(BlockState state, IMultiStateCopycatBlockEntity be, CopycatTransformableState<MaterialItemStorage.MaterialItem> transformableState) {
+        CopycatTransformableState.Part<MaterialItemStorage.MaterialItem> firstPart = transformableState.parts.get(0);
+        Direction facing = firstPart.getFacing();
+        if (facing.getAxis().isVertical()) {
+            Axis axis = firstPart.getHorizontalFacing().getAxis();
+            for (CopycatTransformableState.Part<MaterialItemStorage.MaterialItem> part : transformableState.parts) {
+                boolean positive = part.vector.get(axis) > 8;
+                be.getMaterialItemStorage().storeMaterialItem(positive ? POSITIVE_LAYERS.getName() : NEGATIVE_LAYERS.getName(), part.data);
+            }
+        } else if (firstPart.vector.getY() == 8) {
+            for (CopycatTransformableState.Part<MaterialItemStorage.MaterialItem> part : transformableState.parts) {
+                boolean right = part.isRight(facing);
+                be.getMaterialItemStorage().storeMaterialItem(right ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName(), part.data);
+            }
+        } else {
+            for (CopycatTransformableState.Part<MaterialItemStorage.MaterialItem> part : transformableState.parts) {
+                boolean top = part.isTop();
+                be.getMaterialItemStorage().storeMaterialItem(top ? POSITIVE_LAYERS.getName() : NEGATIVE_LAYERS.getName(), part.data);
+            }
+        }
+    }
+
+    @Override
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        return fromTransformableState(state, toTransformableState(state).transform(transform));
+    }
+
     @Override
     public void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform) {
-        Axis axis = state.getValue(AXIS);
-        if (transform.mirror != null && transform.mirror != Mirror.NONE) {
-            if (transform.mirror.rotation() == OctahedralGroup.INVERT_Z && axis == Axis.Z || transform.mirror.rotation() == OctahedralGroup.INVERT_X && axis == Axis.X) {
-                be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
-            }
-        }
-        if (transform.rotationAxis != null) {
-            if (transform.rotationAxis.isVertical()) {
-                if (transform.rotation == Rotation.CLOCKWISE_90 && axis == Axis.X ||
-                        transform.rotation == Rotation.CLOCKWISE_180 ||
-                        transform.rotation == Rotation.COUNTERCLOCKWISE_90 && axis == Axis.Z) {
-                    be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
-                }
-            } else if (transform.rotation == Rotation.CLOCKWISE_180 && transform.rotationAxis != axis) {
-                be.getMaterialItemStorage().remapStorage(s -> s.equals(POSITIVE_LAYERS.getName()) ? NEGATIVE_LAYERS.getName() : POSITIVE_LAYERS.getName());
-            }
-        }
+        state = fromTransformableState(state, toTransformableState(state).untransform(transform));
+        fromTransformableStorage(state, be, toTransformableStorage(state, be).transform(transform));
     }
 
     @SuppressWarnings("deprecation")
@@ -336,8 +371,6 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock imp
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        VoxelShape shapeOverride = IMultiStateCopycatBlock.blockShapeOverride(pState, pLevel, pPos, pContext);
-        if (shapeOverride != null) return shapeOverride;
         return Objects.requireNonNull(this.shapesCache.get(pState));
     }
 
@@ -350,6 +383,6 @@ public class CopycatHalfLayerBlock extends WaterloggedMultiStateCopycatBlock imp
                                      BlockState state,
                                      BlockState neighborState,
                                      Direction dir) {
-        return IMultiStateCopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 }

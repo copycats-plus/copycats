@@ -85,50 +85,6 @@ public class CopycatHalfPanelBlock extends CCWaterloggedCopycatBlock implements 
         );
     }
 
-    @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        Direction direction = state.getValue(FACING);
-        Direction offset = state.getValue(OFFSET);
-        BlockState toState = reader.getBlockState(toPos);
-
-        if (toState.is(this)) {
-            // connecting to another copycat beam
-            return toState.getValue(FACING) != direction || toState.getValue(OFFSET) != offset;
-        } else {
-            // doesn't connect to any other blocks
-            return true;
-        }
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                            BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        if (!toState.is(this)) return false;
-        Direction facing = state.getValue(FACING);
-        Direction offset = state.getValue(OFFSET);
-
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
-        if (face == null) {
-            return false;
-        }
-
-        if (toState.is(this)) {
-            try {
-                return toState.getValue(FACING) == facing && toState.getValue(OFFSET) == offset && face.getAxis() == getOffsetAxis(facing, offset);
-            } catch (IllegalStateException ignored) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
     @SuppressWarnings("deprecation")
     @Override
     public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {

@@ -1,6 +1,8 @@
 package com.copycatsplus.copycats.fabric.mixin.foundation.copycat;
 
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
+import com.copycatsplus.copycats.content.copycat.pane.CopycatPaneBlock;
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlock;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.CopycatMaterialStore;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
@@ -68,7 +70,9 @@ import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMate
         CopycatWallBlock.class,
         CopycatShaftBlock.class,
         CopycatFluidPipeBlock.class,
-        CopycatGlassFluidPipeBlock.class
+        CopycatGlassFluidPipeBlock.class,
+        CopycatSlidingDoorBlock.class,
+        CopycatPaneBlock.class
 })
 public abstract class CopycatBlockMixin extends Block implements ICopycatBlock,
         CustomFrictionBlock, CustomSoundTypeBlock, LightEmissiveBlock, ExplosionResistanceBlock,

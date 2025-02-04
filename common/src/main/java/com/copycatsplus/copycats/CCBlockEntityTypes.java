@@ -1,5 +1,7 @@
 package com.copycatsplus.copycats;
 
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlockEntity;
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorRenderer;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
@@ -36,6 +38,7 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_LAYER,
                             CCBlocks.COPYCAT_SLICE,
                             CCBlocks.COPYCAT_VERTICAL_SLICE,
+                            CCBlocks.COPYCAT_CORNER_SLICE,
                             CCBlocks.COPYCAT_WOODEN_BUTTON,
                             CCBlocks.COPYCAT_STONE_BUTTON,
                             CCBlocks.COPYCAT_WOODEN_PRESSURE_PLATE,
@@ -47,7 +50,9 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_VERTICAL_SLOPE,
                             CCBlocks.COPYCAT_SLOPE_LAYER,
                             CCBlocks.COPYCAT_DOOR,
-                            CCBlocks.COPYCAT_IRON_DOOR
+                            CCBlocks.COPYCAT_IRON_DOOR,
+                            CCBlocks.COPYCAT_PANE,
+                            CCBlocks.COPYCAT_FLAT_PANE
                     )
                     .register();
 
@@ -57,7 +62,10 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_SLAB,
                             CCBlocks.COPYCAT_BYTE,
                             CCBlocks.COPYCAT_HALF_LAYER,
-                            CCBlocks.COPYCAT_BOARD
+                            CCBlocks.COPYCAT_VERTICAL_HALF_LAYER,
+                            CCBlocks.COPYCAT_STACKED_HALF_LAYER,
+                            CCBlocks.COPYCAT_BOARD,
+                            CCBlocks.COPYCAT_BYTE_PANEL
                     )
                     .register();
 
@@ -90,6 +98,12 @@ public class CCBlockEntityTypes {
             REGISTRATE.blockEntity("copycat_glass_fluid_pipe", CopycatStraightPipeBlockEntity::new)
                     .validBlocks(CCBlocks.COPYCAT_GLASS_FLUID_PIPE)
                     .renderer(() -> TransparentStraightPipeRenderer::new)
+                    .register();
+
+    public static final BlockEntityEntry<? extends CopycatSlidingDoorBlockEntity> COPYCAT_SLIDING_DOOR =
+            REGISTRATE.blockEntity("copycat_sliding_door", CopycatSlidingDoorBlockEntity::new)
+                    .validBlocks(CCBlocks.COPYCAT_SLIDING_DOOR, CCBlocks.COPYCAT_FOLDING_DOOR)
+                    .renderer(() -> CopycatSlidingDoorRenderer::new)
                     .register();
 
     public static void register() {

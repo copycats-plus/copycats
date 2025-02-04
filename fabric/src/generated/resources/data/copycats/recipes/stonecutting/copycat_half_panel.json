@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "tag": "c:ingots/zinc"
-  },
-  "result": "copycats:copycat_half_panel",
-  "count": 8
-}

@@ -7,7 +7,6 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
 import com.copycatsplus.copycats.utility.Platform;
-import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
@@ -142,15 +141,25 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_BYTE = copycat(CCBlocks.COPYCAT_BYTE, 8);
 
+    GeneratedRecipe COPYCAT_BYTE_PANEL = copycat(CCBlocks.COPYCAT_BYTE_PANEL, 16);
+
     GeneratedRecipe COPYCAT_LAYER = copycat(CCBlocks.COPYCAT_LAYER, 8);
 
     GeneratedRecipe COPYCAT_SLICE = copycat(CCBlocks.COPYCAT_SLICE, 16);
 
     GeneratedRecipe COPYCAT_VERTICAL_SLICE = copycat(CCBlocks.COPYCAT_VERTICAL_SLICE, 16);
 
+    GeneratedRecipe COPYCAT_CORNER_SLICE = copycat(CCBlocks.COPYCAT_CORNER_SLICE, 16);
+
     GeneratedRecipe COPYCAT_SLICE_CYCLE = conversionCycle(CCBlocks.COPYCAT_SLICE, CCBlocks.COPYCAT_VERTICAL_SLICE);
 
     GeneratedRecipe COPYCAT_HALF_LAYER = copycat(CCBlocks.COPYCAT_HALF_LAYER, 16);
+
+    GeneratedRecipe COPYCAT_VERTICAL_HALF_LAYER = copycat(CCBlocks.COPYCAT_VERTICAL_HALF_LAYER, 16);
+
+    GeneratedRecipe COPYCAT_STACKED_HALF_LAYER = copycat(CCBlocks.COPYCAT_STACKED_HALF_LAYER, 16);
+
+    GeneratedRecipe COPYCAT_HALF_LAYER_CYCLE = conversionCycle(CCBlocks.COPYCAT_HALF_LAYER, CCBlocks.COPYCAT_VERTICAL_HALF_LAYER, CCBlocks.COPYCAT_STACKED_HALF_LAYER);
 
     GeneratedRecipe COPYCAT_LAYER_FROM_HALF_LAYERS = create(CCBlocks.COPYCAT_LAYER).withSuffix("_from_half_layers")
             .unlockedBy(CCBlocks.COPYCAT_HALF_LAYER::get)
@@ -214,6 +223,18 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_IRON_DOOR = copycatWithBaseItem(Items.IRON_DOOR, CCBlocks.COPYCAT_IRON_DOOR, 1);
 
+    GeneratedRecipe COPYCAT_PANE = copycat(CCBlocks.COPYCAT_PANE, 8);
+
+    GeneratedRecipe COPYCAT_SLIDING_DOOR = copycat(CCBlocks.COPYCAT_SLIDING_DOOR, 1);
+
+    GeneratedRecipe COPYCAT_FOLDING_DOOR = copycat(CCBlocks.COPYCAT_FOLDING_DOOR, 1);
+
+    GeneratedRecipe COPYCAT_SLIDING_DOOR_CYCLE = conversionCycle(CCBlocks.COPYCAT_SLIDING_DOOR, CCBlocks.COPYCAT_FOLDING_DOOR);
+
+    GeneratedRecipe COPYCAT_FLAT_PANE = copycat(CCBlocks.COPYCAT_FLAT_PANE, 8);
+
+    GeneratedRecipe COPYCAT_PANE_CYCLE = conversionCycle(CCBlocks.COPYCAT_PANE, CCBlocks.COPYCAT_FLAT_PANE);
+
     Set<RegistryEntry<? extends Block>> blocksWithoutRecipe = Set.of(
             CCBlocks.COPYCAT_BASE,
             CCBlocks.COPYCAT_GLASS_FLUID_PIPE
@@ -260,6 +281,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(result)
                 .unlockedBy(AllItems.ZINC_INGOT::get)
                 .returns(resultCount)
+                .requiresResultFeature()
                 .viaStonecuttingTag(TaggedIngredients.ZINC::getTag)
                 .create();
     }
@@ -272,6 +294,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(result)
                 .unlockedBy(base)
                 .returns(resultCount)
+                .requiresResultFeature()
                 .viaShapeless(b -> b.requires(base.get(), resultCount).requires(AllItems.ZINC_INGOT.get()));
     }
 
@@ -283,6 +306,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
         return create(result)
                 .unlockedBy(() -> base)
                 .returns(resultCount)
+                .requiresResultFeature()
                 .viaShapeless(b -> b.requires(base, resultCount).requires(AllItems.ZINC_INGOT.get()));
     }
 

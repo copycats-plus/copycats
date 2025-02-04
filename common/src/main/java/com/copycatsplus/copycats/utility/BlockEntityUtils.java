@@ -3,9 +3,11 @@ package com.copycatsplus.copycats.utility;
 import com.copycatsplus.copycats.foundation.copycat.CopycatMaterialStore;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
+import com.copycatsplus.copycats.mixin.foundation.copycat.BlockEntityAccessor;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -36,6 +38,10 @@ public class BlockEntityUtils {
             level.sendBlockUpdated(blockEntity.getBlockPos(), state, state, 16);
             updateLight(blockEntity);
         }
+    }
+
+    public static void saveMetadata(BlockEntity blockEntity, CompoundTag tag) {
+        ((BlockEntityAccessor) blockEntity).callSaveMetadata(tag);
     }
 
     @ExpectPlatform

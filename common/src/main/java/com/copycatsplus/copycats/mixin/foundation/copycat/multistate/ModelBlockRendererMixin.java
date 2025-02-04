@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.mixin.foundation.copycat.multistate;
 
-import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateRenderManager;
+import com.copycatsplus.copycats.foundation.copycat.CopycatExternalContext;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateTextureAtlasSprite;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -31,7 +31,7 @@ public class ModelBlockRendererMixin {
     )
     private void beforeColor(BlockAndTintGetter level, BlockState state, BlockPos pos, VertexConsumer consumer, PoseStack.Pose pose, BakedQuad quad, float brightness0, float brightness1, float brightness2, float brightness3, int lightmap0, int lightmap1, int lightmap2, int lightmap3, int packedOverlay, CallbackInfo ci) {
         if (quad.getSprite() instanceof MultiStateTextureAtlasSprite sprite)
-            MultiStateRenderManager.setRenderingProperty(sprite.getProperty());
+            CopycatExternalContext.setPropertyForBlockColor(sprite.getProperty());
     }
 
     @Inject(
@@ -44,6 +44,6 @@ public class ModelBlockRendererMixin {
             require = 0
     )
     private void afterColor(BlockAndTintGetter level, BlockState state, BlockPos pos, VertexConsumer consumer, PoseStack.Pose pose, BakedQuad quad, float brightness0, float brightness1, float brightness2, float brightness3, int lightmap0, int lightmap1, int lightmap2, int lightmap3, int packedOverlay, CallbackInfo ci) {
-        MultiStateRenderManager.setRenderingProperty(null);
+        CopycatExternalContext.setPropertyForBlockColor(null);
     }
 }

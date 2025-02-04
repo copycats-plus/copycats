@@ -1,24 +1,38 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "create:cogwheel"
-    },
-    {
-      "item": "create:cogwheel"
-    },
-    {
-      "item": "create:cogwheel"
-    },
-    {
-      "item": "create:cogwheel"
-    },
-    {
-      "item": "create:zinc_ingot"
+      "conditions": [
+        {
+          "type": "copycats:feature_enabled",
+          "feature": "copycats:copycat_cogwheel",
+          "invert": false
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "item": "create:cogwheel"
+          },
+          {
+            "item": "create:cogwheel"
+          },
+          {
+            "item": "create:cogwheel"
+          },
+          {
+            "item": "create:cogwheel"
+          },
+          {
+            "item": "create:zinc_ingot"
+          }
+        ],
+        "result": {
+          "count": 4,
+          "item": "copycats:copycat_cogwheel"
+        }
+      }
     }
-  ],
-  "result": {
-    "item": "copycats:copycat_cogwheel",
-    "count": 4
-  }
+  ]
 }

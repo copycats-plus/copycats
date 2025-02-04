@@ -118,7 +118,7 @@ allprojects {
             content { includeGroup("com.jamieswhiteshirt") }
         }
         maven {
-            //Forge Config Api Port
+            //Forge Config Api Port, DiagonalBlocks
             url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
         }
         maven { // for Porting Lib: Mixin Extras, Fabric ASM

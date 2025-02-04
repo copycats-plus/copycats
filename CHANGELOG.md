@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.1.3 - 2024-09-15
 
-## Changed
+### Changed
 
 - Multistate copycats can now be mined with both pickaxes and axes
 

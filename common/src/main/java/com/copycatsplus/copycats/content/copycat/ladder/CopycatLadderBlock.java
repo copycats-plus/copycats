@@ -145,7 +145,7 @@ public class CopycatLadderBlock extends LadderBlock implements ICopycatBlock, IB
 
     @Override
     public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
+                                             BlockPos fromPos, BlockPos toPos, BlockState toState) {
         return true;
     }
 

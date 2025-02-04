@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.datagen;
 
 import com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock;
+import com.copycatsplus.copycats.content.copycat.byte_panel.CopycatBytePanelBlock;
 import com.copycatsplus.copycats.content.copycat.bytes.CopycatByteBlock;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
@@ -54,6 +55,24 @@ public class CCLootGen {
                                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatByteBlock.byByte(bite), true)))
                                 .add(LootItem.lootTableItem(block))
                 );
+            }
+        };
+    }
+
+    public static <B extends Block> BiConsumer<LootTable.Builder, B> lootForBytePanels() {
+        return (builder, block) -> {
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    builder.withPool(
+                            LootPool.lootPool()
+                                    .setRolls(ConstantValue.exactly(1.0F))
+                                    .when(ExplosionCondition.survivesExplosion())
+                                    .when(LootItemBlockStatePropertyCondition
+                                            .hasBlockStateProperties(block)
+                                            .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CopycatBytePanelBlock.fromProperty(CopycatBytePanelBlock.getProperty(i, j)), true)))
+                                    .add(LootItem.lootTableItem(block))
+                    );
+                }
             }
         };
     }

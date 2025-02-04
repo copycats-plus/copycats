@@ -4,6 +4,8 @@ import com.copycatsplus.copycats.CCBlockStateProperties.Side;
 import com.copycatsplus.copycats.CCBlockStateProperties.VerticalStairShape;
 import com.copycatsplus.copycats.content.copycat.half_layer.CopycatHalfLayerBlock;
 import com.copycatsplus.copycats.content.copycat.half_panel.CopycatHalfPanelBlock;
+import com.copycatsplus.copycats.content.copycat.stacked_half_layer.CopycatStackedHalfLayerBlock;
+import com.copycatsplus.copycats.content.copycat.vertical_half_layer.CopycatVerticalHalfLayerBlock;
 import com.copycatsplus.copycats.content.copycat.vertical_stairs.CopycatVerticalStairBlock;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.MutableAABB;
@@ -78,6 +80,12 @@ public class CCShapes {
                             aabb(layer * 2, 16, layer * 2).move(16 - layer * 2, 0, 16 - layer * 2)
                     )
             ));
+    public static final Map<Direction, Map<Half, Map<Integer, MutableShape>>> CORNER_SLICE =
+            forHorizontalDirections(forHalves(forAll(LAYERS,
+                    layer -> shape(
+                            aabb(layer * 2, layer * 2, layer * 2).move(16 - layer * 2, 0, 16 - layer * 2)
+                    )
+            )));
     public static final Map<Axis, Map<Half, Map<Integer, MutableShape>>> HALF_LAYER_BOTTOM =
             forHorizontalAxes(forHalves(forAll(CopycatHalfLayerBlock.NEGATIVE_LAYERS,
                     layer -> shape(
@@ -90,6 +98,33 @@ public class CCShapes {
                             aabb(16, layer * 2, 8).move(0, 0, 8)
                     )
             )));
+    public static final Map<Axis, MutableShape> HORIZONTAL_PANE = forAxes(shape(
+            aabb(16, 16, 2).move(0, 0, 7)
+    ));
+    public static final Map<Direction, Map<Integer, MutableShape>> VERTICAL_HALF_LAYER_LEFT =
+            forHorizontalDirections(forAll(CopycatHalfLayerBlock.POSITIVE_LAYERS,
+                    layer -> shape(
+                            aabb(8, 16, layer * 2).move(8, 0, 16 - layer * 2)
+                    )
+            ));
+    public static final Map<Direction, Map<Integer, MutableShape>> VERTICAL_HALF_LAYER_RIGHT =
+            forHorizontalDirections(forAll(CopycatHalfLayerBlock.NEGATIVE_LAYERS,
+                    layer -> shape(
+                            aabb(8, 16, layer * 2).move(0, 0, 16 - layer * 2)
+                    )
+            ));
+    public static final Map<Direction, Map<Integer, MutableShape>> STACKED_HALF_LAYER_TOP =
+            forHorizontalDirections(forAll(CopycatHalfLayerBlock.POSITIVE_LAYERS,
+                    layer -> shape(
+                            aabb(16, 8, layer * 2).move(0, 8, 16 - layer * 2)
+                    )
+            ));
+    public static final Map<Direction, Map<Integer, MutableShape>> STACKED_HALF_LAYER_BOTTOM =
+            forHorizontalDirections(forAll(CopycatHalfLayerBlock.NEGATIVE_LAYERS,
+                    layer -> shape(
+                            aabb(16, 8, layer * 2).move(0, 0, 16 - layer * 2)
+                    )
+            ));
     public static final Map<Direction, Map<Side, Map<VerticalStairShape, MutableShape>>> VERTICAL_STAIR =
             forHorizontalDirections(forAll(CopycatVerticalStairBlock.SIDE, CopycatVerticalStairBlock.SHAPE,
                     (side, shape) ->
@@ -110,7 +145,7 @@ public class CCShapes {
                             })
                                     .flipX(side == Side.RIGHT)
             ));
-    private static final int SLOPE_SUBDIVISIONS = 16;
+    private static final int SLOPE_SUBDIVISIONS = 8;
     public static final Map<Direction, Map<Half, MutableShape>> SLOPE =
             forHorizontalDirections(forHalves(shape(
                     IntStream.range(0, SLOPE_SUBDIVISIONS)

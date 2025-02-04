@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.mixin.copycat.panel;
 
+import com.copycatsplus.copycats.foundation.copycat.CopycatExternalContext;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.simibubi.create.content.decoration.copycat.CopycatPanelBlock;
@@ -43,5 +44,52 @@ public abstract class CopycatPanelBlockMixin extends WaterloggedCopycatBlock imp
     @Override
     public CopycatBlockEntity getBlockEntity(BlockGetter worldIn, BlockPos pos) {
         return super.getBlockEntity(worldIn, pos);
+    }
+
+    @Inject(
+            method = "isIgnoredConnectivitySide",
+            at = @At("RETURN"),
+            cancellable = true
+    )
+    private void isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue()) {
+            return;
+        }
+        if (CopycatExternalContext.isForBlockingLogic()) {
+            cir.setReturnValue(false);
+            return;
+        }
+        cir.setReturnValue(!checkConnection(reader, toPos, fromPos, reader.getBlockState(toPos)));
+    }
+
+    @Inject(
+            method = "canConnectTexturesToward",
+            at = @At("RETURN"),
+            cancellable = true
+    )
+    private void canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState fromState, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) {
+            return;
+        }
+        BlockState toState = reader.getBlockState(toPos);
+
+        if (toState.getBlock() instanceof ICopycatBlock) {
+            cir.setReturnValue(true);
+            return;
+        }
+
+        cir.setReturnValue(checkConnection(reader, fromPos, toPos, fromState));
+    }
+
+    public boolean supportsExternalFaceHiding(BlockState state) {
+        return true;
+    }
+
+    public boolean hidesNeighborFace(BlockGetter level,
+                                     BlockPos pos,
+                                     BlockState state,
+                                     BlockState neighborState,
+                                     Direction dir) {
+        return ICopycatBlock.hidesNeighborFace(level, pos, state, neighborState, dir);
     }
 }

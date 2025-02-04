@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.fabric.mixin.foundation.copycat;
 
+import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeBlockEntity;
@@ -25,7 +26,8 @@ import org.spongepowered.asm.mixin.Mixin;
 public class CopycatBlockEntityMixin {
     @Mixin({
             CCCopycatBlockEntity.class,
-            CopycatShaftBlockEntity.class
+            CopycatShaftBlockEntity.class,
+            CopycatSlidingDoorBlockEntity.class
     })
     public static abstract class BlockEntityWithoutAttachmentData extends SmartBlockEntity implements ICopycatBlockEntity, RenderAttachmentBlockEntity {
 

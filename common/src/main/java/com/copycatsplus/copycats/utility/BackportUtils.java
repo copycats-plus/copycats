@@ -43,4 +43,14 @@ public class BackportUtils {
     public static <T extends Comparable<T>> BlockState trySetValue(BlockState state, Property<T> property, T value) {
         return state.hasProperty(property) ? state.setValue(property, value) : state;
     }
+
+    public static class Vector2i {
+        public int x;
+        public int y;
+
+        public Vector2i(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 }

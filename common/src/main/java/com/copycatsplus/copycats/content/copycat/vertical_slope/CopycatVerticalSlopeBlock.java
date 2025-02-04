@@ -46,6 +46,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.copycatsplus.copycats.utility.BackportUtils.directionFromDelta;
+
 import static net.minecraft.core.Direction.Axis;
 
 @ParametersAreNonnullByDefault
@@ -69,63 +70,6 @@ public class CopycatVerticalSlopeBlock extends CCWaterloggedCopycatBlock impleme
                 () -> InteractionUtils.usePlacementHelper(placementHelperId, state, world, pos, player, hand, ray),
                 () -> super.use(state, world, pos, player, hand, ray)
         );
-    }
-
-    @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos) {
-        Direction direction = state.getValue(FACING);
-        BlockState toState = reader.getBlockState(toPos);
-
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return false;
-        }
-        Direction connectFace = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
-        if (connectFace == null) {
-            return false;
-        }
-
-        if (toState.is(this)) {
-            Direction toDirection = toState.getValue(FACING);
-            if (toDirection == direction) return false;
-
-            if (connectFace == direction.getOpposite() || connectFace == direction.getClockWise())
-                return true;
-            if (connectFace.getOpposite() == toDirection.getOpposite() || connectFace.getOpposite() == toDirection.getClockWise())
-                return true;
-            return false;
-        } else {
-            return !(direction == connectFace || direction.getCounterClockWise() == connectFace);
-        }
-    }
-
-    @Override
-    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos,
-                                            BlockState state) {
-        BlockState toState = reader.getBlockState(toPos);
-        Direction facing = state.getValue(FACING);
-
-        BlockPos diff = toPos.subtract(fromPos);
-        if (diff.equals(Vec3i.ZERO)) {
-            return true;
-        }
-        Direction face = directionFromDelta(diff.getX(), diff.getY(), diff.getZ());
-        if (face == null) {
-            return true;
-        }
-
-        if (toState.is(this)) {
-            try {
-                return toState.getValue(FACING) == facing &&
-                        face.getAxis().isVertical() ||
-                        face.getAxis().isHorizontal();
-            } catch (IllegalStateException ignored) {
-                return false;
-            }
-        } else {
-            return face == facing || face == facing.getCounterClockWise();
-        }
     }
 
     @Override

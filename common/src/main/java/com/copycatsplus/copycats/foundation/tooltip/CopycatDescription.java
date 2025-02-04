@@ -75,7 +75,8 @@ public class CopycatDescription {
             tabBuilder.append(Components.literal(holdDesc[0]).withStyle(DARK_GRAY));
             tabBuilder.append(keyShift.plainCopy()
                     .withStyle(shift ? WHITE : GRAY));
-            tabBuilder.append(Components.literal(holdDesc[1]).withStyle(DARK_GRAY));
+            if (holdDesc.length > 1)
+                tabBuilder.append(Components.literal(holdDesc[1]).withStyle(DARK_GRAY));
             (shift ? longDescription : shortDescription).add(0, tabBuilder);
             (shift ? longDescription : shortDescription).add(1, Components.immutableEmpty());
         }
