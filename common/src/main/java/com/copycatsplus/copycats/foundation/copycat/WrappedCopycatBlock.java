@@ -52,7 +52,7 @@ public final class WrappedCopycatBlock extends CopycatBlock {
         }
 
         if (toState.getBlock() instanceof ICopycatBlock toCopycat) {
-            if (toCopycat.isIgnoredConnectivitySide(reader, toState, face, toPos, fromPos))
+            if (toCopycat.isIgnoredConnectivitySide(reader, toState, face, toPos, fromPos, fromState))
                 return null;
         }
 

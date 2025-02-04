@@ -29,8 +29,8 @@
           }
         ],
         "result": {
-          "count": 4,
-          "item": "copycats:copycat_fluid_pipe"
+          "item": "copycats:copycat_fluid_pipe",
+          "count": 4
         }
       }
     }

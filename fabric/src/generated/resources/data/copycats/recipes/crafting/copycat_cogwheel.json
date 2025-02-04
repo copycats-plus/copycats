@@ -29,8 +29,8 @@
           }
         ],
         "result": {
-          "count": 4,
-          "item": "copycats:copycat_cogwheel"
+          "item": "copycats:copycat_cogwheel",
+          "count": 4
         }
       }
     }

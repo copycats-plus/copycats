@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
@@ -81,18 +82,25 @@ public class ConnectedTextureBehaviourMixin {
         }
     }
 
-    @WrapOperation(
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;isFaceFull(Lnet/minecraft/world/phys/shapes/VoxelShape;Lnet/minecraft/core/Direction;)Z"),
-            method = "isBeingBlocked"
+    @Inject(
+            method = "isBeingBlocked",
+            at = @At("HEAD"),
+            cancellable = true
     )
-    private boolean isFaceFull(VoxelShape shape, Direction face, Operation<Boolean> original, BlockState state, BlockAndTintGetter reader, BlockPos pos, BlockPos otherPos,
-                               Direction face2) {
+    private void isFaceFull(BlockState state, BlockAndTintGetter reader, BlockPos pos, BlockPos otherPos, Direction face, CallbackInfoReturnable<Boolean> cir) {
+        Direction face2 = face.getOpposite();
         BlockPos blockingPos = otherPos.relative(face2);
         BlockState otherState = reader.getBlockState(otherPos);
         BlockState blockingState = reader.getBlockState(blockingPos);
-        if (blockingState.getBlock() instanceof ICopycatBlock)
-            return BlockFaceUtils.faceMatch(reader, otherState, otherPos, blockingState, blockingPos, face2);
-        return original.call(shape, face);
+        if (blockingState.getBlock() instanceof ICopycatBlock) {
+            if (!BlockFaceUtils.faceMatch(reader, otherState, otherPos, blockingState, blockingPos, face2)) {
+                cir.setReturnValue(false);
+                return;
+            }
+        }
+        if (!Block.isFaceFull(blockingState.getShape(reader, otherPos.relative(face)), face2)) {
+            cir.setReturnValue(false);
+        }
     }
 
 

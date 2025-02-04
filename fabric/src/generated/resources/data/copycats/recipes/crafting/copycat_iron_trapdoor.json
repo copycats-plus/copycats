@@ -11,11 +11,11 @@
       ],
       "recipe": {
         "type": "minecraft:stonecutting",
-        "count": 2,
         "ingredient": {
-          "tag": "c:zinc_ingots"
+          "tag": "c:ingots/zinc"
         },
-        "result": "copycats:copycat_iron_trapdoor"
+        "result": "copycats:copycat_iron_trapdoor",
+        "count": 2
       }
     }
   ]

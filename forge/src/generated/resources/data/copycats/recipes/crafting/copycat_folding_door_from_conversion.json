@@ -4,14 +4,14 @@
     {
       "conditions": [
         {
-          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_sliding_door",
-          "invert": false
+          "invert": false,
+          "type": "copycats:feature_enabled"
         },
         {
-          "type": "copycats:feature_enabled",
           "feature": "copycats:copycat_folding_door",
-          "invert": false
+          "invert": false,
+          "type": "copycats:feature_enabled"
         }
       ],
       "recipe": {

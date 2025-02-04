@@ -62,23 +62,15 @@ public abstract class CopycatPanelBlockMixin extends WaterloggedCopycatBlock imp
         cir.setReturnValue(!checkConnection(reader, toPos, fromPos, reader.getBlockState(toPos)));
     }
 
-    @Inject(
-            method = "canConnectTexturesToward",
-            at = @At("RETURN"),
-            cancellable = true
-    )
-    private void canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState fromState, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) {
-            return;
-        }
+    @Override
+    public boolean canConnectTexturesToward(BlockAndTintGetter reader, BlockPos fromPos, BlockPos toPos, BlockState fromState) {
         BlockState toState = reader.getBlockState(toPos);
 
         if (toState.getBlock() instanceof ICopycatBlock) {
-            cir.setReturnValue(true);
-            return;
+            return true;
         }
 
-        cir.setReturnValue(checkConnection(reader, fromPos, toPos, fromState));
+        return checkConnection(reader, fromPos, toPos, fromState);
     }
 
     public boolean supportsExternalFaceHiding(BlockState state) {
