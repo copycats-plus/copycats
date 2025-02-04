@@ -10,49 +10,79 @@
 
 All the copycats you've ever wanted, combined into a single mod!
 
+### Join our discord for test builds and discussions!
+
 [![Discord Banner](https://discordapp.com/api/guilds/1202240504809652365/widget.png?style=banner2)](https://discord.gg/YxPPFHn4SS)
 
 [![BisectHosting](https://copycats-site.vercel.app/api/banner)](https://copycats-site.vercel.app/api/link)
 
+## What's new in v2.2
+
+![What's new in v2.2](https://cdn.modrinth.com/data/UT2M39wf/images/db6415ade4151ca3f5581fc6f565e570c2bee758.png)
+
+- **Universal CT System**
+  - All copycats now connect textures with each other as long as they have a matching block face
+- Copycat byte panels
+  - A quarter of a panel. 4 of which forms a full panel
+- Copycat corner slices
+  - Resizable slices to go with slices and vertical slices
+- Copycat sliding/folding doors
+  - Animated doors with separate upper and lower textures. CT can be toggled for each half
+- Copycat panes
+  - Connects to iron bars, glass panes and Copycat flat panes
+- Copycat flat panes
+  - Connects to panes and can be placed horizontally
+- Vertical/Stacked half layers
+  - Rotated versions of Copycat half layers
+- and [a lot of bug fixes and improvements...](https://github.com/copycats-plus/copycats/blob/multiloader/CHANGELOG.md)
+
 ## Features
 
-![All copycats](https://cdn.modrinth.com/data/UT2M39wf/images/e20c128b7c0e000e904584811d20f753d846af80.png)
+![All decorative copycats](https://cdn.modrinth.com/data/UT2M39wf/images/e86daed566bd26230e283ca4fe6225c11a48a84e.png)
+
+![All functional copycats](https://cdn.modrinth.com/data/UT2M39wf/images/246b6b6067699d29d70842364d09dfde86bfde11.png)
 
 **All copycats can be toggled on/off using the feature toggle**
 
 - Copycat Block
 - Copycat Slab
   - Supports all orientations and double slab variants.
-- Copycat Beam
-  - A centered Copycat Step.
+- Copycat Stairs/Vertical Stairs
+- Copycat Fence
+- Copycat Wall
 - Copycat Vertical Step
+- Copycat Beam
+  - A centered Copycat Step
+- Copycat Slice/Vertical Slice/Corner Slice
+  - Can be resized to 8 different sizes
+- Copycat Ghost Block
+  - Has no collision box
+- Copycat Layer
+  - Can be placed in any orientation and stacks to full block size
 - Copycat Half Panel
   - Supports 4 orientations on each block face
-- Copycat Stairs
-- Copycat Fence
-- Copycat Fence Gate
-- Copycat Trapdoor/Iron Trapdoor
-- Copycat Door/Iron Door
-- Copycat Wall
-- Copycat Board
-  - A 1-pixel thick panel. Multiple boards can be placed in the same block space like glow lichen.
-- Copycat Box
-  - A pre-assembled copycat board.
-- Copycat Catwalk
-  - A pre-assembled copycat board.
+- Copycat Pane
+  - Connects to iron bars, glass panes and Copycat Flat Panes
+- Copycat Flat Pane
+  - A flat version of Copycat Pane, can be placed horizontally
 - Copycat Byte
-  - A mini-block. Bytes can be placed/dismantled individually, 8 of which forms a full block.
-- Copycat Layer
-  - Can be placed in any orientation and stacks to full block size.
-- Copycat Half Layer
-  - Can be stacked to full block size with 2 columns of half layers in one block space.
-- Copycat Slice
-  - Can be resized to 8 different sizes.
-- Copycat Vertical Slice
-  - Can be resized to 8 different sizes.
+  - A mini-block. Bytes can be placed/dismantled individually, 8 of which forms a full block
+- Copycat Byte Panel
+  - A quarter of a panel. 4 of which forms a full panel
+- Copycat Board
+  - A 1-pixel thick panel. Multiple boards can be placed in the same block space like glow lichen
+- Copycat Box/Catwalk
+  - A pre-assembled copycat board
+- Copycat Half Layer/Vertical Half Layer/Stacked Half Layer
+  - Can be stacked to full block size with 2 columns of half layers in one block space
+- Copycat Door/Iron Door/Sliding Door/Folding Door
+  - Can toggle CT by shift-R-clicking with an empty hand
+- Copycat Trapdoor/Iron Trapdoor
+- Copycat Fence Gate
 - Copycat Wooden/Stone Button
 - Copycat Wooden/Stone Pressure Plate
 - Copycat Light/Heavy Weighted Pressure Plate
+- Copycat Ladder
 - Copycat Fluid Pipe
 - Copycat Shaft
 - Copycat Cogwheel/Large Cogwheel
