@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.0 - 2025-02-04
+
+### Added
+
+- **Universal CT System**
+  - All copycats now connect textures with each other as long as they have a matching block face
+- Copycat byte panels
+  - A quarter of a panel. 4 of which forms a full panel
+- Copycat corner slices
+  - Resizable slices to go with slices and vertical slices
+- Copycat sliding/folding doors
+  - Animated doors with separate upper and lower textures. CT can be toggled for each half
+- Copycat panes
+  - Connects to iron bars, glass panes and Copycat flat panes
+- Copycat flat panes
+  - Connects to panes and can be placed horizontally
+- Vertical/Stacked half layers
+  - Rotated versions of Copycat half layers
+
+### Fixed
+
+- Fixed feature toggle not disabling crafting recipes correctly
+- Fixed disabled items still being searchable in inventory
+- Fixed copycat doors not being placed correctly by schematics
+- Fixed copycat doors disappearing when disassembled from a contraption
+- Fixed a crash caused by incompatibility with newer versions of Additional Placements
+- Fixed a performance issue caused by uncached ResourceLocations
+- Reduced the resolution of slope hitboxes to reduce lag on contraptions
+- Added a filter to hide non-critical errors related to compatibility mixins
+- Added a missing description for copycat walls
+- Fixed compatibility with Diagonal Fences/Windows/Walls
+- Fixed a crash due to malformed NBT data in copycat bytes
+- Fixed copycat slabs losing their textures when rotated
+- Fixed copycat vertical stairs not updating their shapes correctly
+- Fixed copycat panels (from base Create) not connecting textures to regular blocks
+- Fixed a potential crash with Continuity
+- Fixed a crash when tooltip translations are malformed
+
 ## 2.1.4 - 2024-09-15
 
 ### Fixed
