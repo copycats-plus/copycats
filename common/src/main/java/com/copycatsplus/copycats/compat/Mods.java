@@ -34,7 +34,10 @@ public enum Mods {
     RUBIDIUM("rubidium"),
     ATHENA("athena"),
     INDIUM("indium"),
+    LITHIUM("lithium"),
+    RADIUM("radium"),
     STARLIGHT("starlight"),
+    MORE_CULLING("moreculling"),
     DOUBLE_SLABS("doubleslabs"),
     VERTICAL_SLAB_COMPAT("v_slab_compat");
 

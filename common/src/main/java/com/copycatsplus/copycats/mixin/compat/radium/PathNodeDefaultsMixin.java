@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 /**
  * Make sure Radium's pathfinding algorithm considers slabs properly, since they do not extend from {@link net.minecraft.world.level.block.SlabBlock}.
  */
-@ModMixin(requiredMods = Mods.INDIUM)
+@ModMixin(requiredMods = {Mods.LITHIUM, Mods.RADIUM})
 @Mixin(targets = "me.jellysquid.mods.lithium.common.ai.pathing.PathNodeDefaults")
 @Pseudo
 public class PathNodeDefaultsMixin {
