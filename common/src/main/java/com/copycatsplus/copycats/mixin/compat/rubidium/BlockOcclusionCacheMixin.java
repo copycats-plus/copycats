@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Makes sure that copycat blocks are not occluded by Rubidium
  */
-@ModMixin(requiredMods = Mods.SODIUM)
+@ModMixin(requiredMods = {Mods.SODIUM, Mods.RUBIDIUM})
 @Mixin(targets = "me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache")
 @Pseudo
 public class BlockOcclusionCacheMixin {
