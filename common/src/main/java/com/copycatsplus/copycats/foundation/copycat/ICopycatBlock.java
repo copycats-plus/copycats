@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.foundation.copycat;
 
+import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;

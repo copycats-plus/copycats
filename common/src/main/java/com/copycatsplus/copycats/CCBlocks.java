@@ -8,6 +8,8 @@ import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCo
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneBlock;
 import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneModelCore;
+import com.copycatsplus.copycats.content.copycat.flower_pot.CopycatFlowerPotBlock;
+import com.copycatsplus.copycats.content.copycat.flower_pot.CopycatFlowerPotModelCore;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftModelCore;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatFoldingDoorModelCore;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlock;
@@ -106,6 +108,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -832,6 +835,18 @@ public class CCBlocks {
                             CopycatCharacteristics.CT_TOGGLE
                     ))
                     .transform(customItemModel("copycat_base", "flat_pane"))
+                    .register();
+
+    public static final BlockEntry<CopycatFlowerPotBlock> COPYCAT_FLOWER_POT =
+            REGISTRATE.block("copycat_flower_pot", p -> new CopycatFlowerPotBlock(Blocks.AIR, p))
+                    .transform(CCBuilderTransformers.copycat())
+                    .transform(FeatureToggle.register())
+                    .onRegister(onClient(() -> createBlockModel(CopycatFlowerPotModelCore::new)))
+                    .item()
+                    .onRegister(CopycatDescription.register(
+                            CopycatCharacteristics.COPYCAT
+                    ))
+                    .transform(customItemModel("copycat_base", "flower_pot"))
                     .register();
 
     @ExpectPlatform

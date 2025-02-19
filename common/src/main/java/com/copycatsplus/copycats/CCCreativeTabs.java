@@ -19,6 +19,7 @@ public class CCCreativeTabs {
             CCBlocks.COPYCAT_VERTICAL_STAIRS,
             CCBlocks.COPYCAT_FENCE,
             CCBlocks.COPYCAT_WALL,
+            CCBlocks.COPYCAT_FLOWER_POT,
 
             /* Simple copycats */
             CCBlocks.COPYCAT_VERTICAL_STEP,

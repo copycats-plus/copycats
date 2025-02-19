@@ -57,4 +57,10 @@ public class CopycatGhostBlock extends CCCopycatBlock implements IStateType {
     public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
         return super.isPathfindable(pState, pLevel, pPos, pType);
     }
+
+    //Allow ghost blocks to let light through
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
+    }
 }

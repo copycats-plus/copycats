@@ -52,7 +52,8 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_DOOR,
                             CCBlocks.COPYCAT_IRON_DOOR,
                             CCBlocks.COPYCAT_PANE,
-                            CCBlocks.COPYCAT_FLAT_PANE
+                            CCBlocks.COPYCAT_FLAT_PANE,
+                            CCBlocks.COPYCAT_FLOWER_POT
                     )
                     .register();
 
