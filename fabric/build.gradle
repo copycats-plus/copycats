@@ -13,6 +13,7 @@ loom {
     runs {
         client {
             vmArg "-XX:+AllowEnhancedClassRedefinition"
+            vmArg "-Dsodium.checks.issue2561=false"
             programArgs "--username=Dev"
         }
         server {

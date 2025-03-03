@@ -29,8 +29,6 @@ public class CopycatSlidingDoorRenderer extends SafeBlockEntityRenderer<CopycatS
     protected void renderSafe(CopycatSlidingDoorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
         BlockState blockState = be.getBlockState();
-        if (!be.shouldRenderSpecial(blockState))
-            return;
 
         Direction facing = blockState.getValue(DoorBlock.FACING);
         Direction movementDirection = facing.getClockWise();
@@ -47,51 +45,39 @@ public class CopycatSlidingDoorRenderer extends SafeBlockEntityRenderer<CopycatS
                 .add(Vec3.atLowerCornerOf(facing.getNormal())
                         .scale(value2 * 1 / 32f));
 
+        if (((SlidingDoorBlock) blockState.getBlock()).isFoldingDoor()) {
+            boolean flip = blockState.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT;
+            for (boolean left : Iterate.trueAndFalse) {
+                SuperByteBuffer partial = left ^ flip ?
+                        IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.FOLDING_DOOR_LEFT, be) :
+                        IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.FOLDING_DOOR_RIGHT, be);
+                float f = flip ? -1 : 1;
 
-        for (DoubleBlockHalf half : DoubleBlockHalf.values()) {
-            CopycatSlidingDoorBlockEntity halfBE = half == DoubleBlockHalf.UPPER
-                    ? be.getPaired()
-                    : be;
-            if (halfBE == null) continue;
+                partial.translate(0, -1 / 512f, 0)
+                        .translate(Vec3.atLowerCornerOf(facing.getNormal())
+                                .scale(value2 * 1 / 32f));
+                partial.rotateCentered(Direction.UP,
+                        Mth.DEG_TO_RAD * AngleHelper.horizontalAngle(facing.getClockWise()));
 
-            if (((SlidingDoorBlock) blockState.getBlock()).isFoldingDoor()) {
-                boolean flip = blockState.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT;
-                for (boolean left : Iterate.trueAndFalse) {
-                    SuperByteBuffer partial = left ^ flip ?
-                            IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.FOLDING_DOOR_LEFT, halfBE) :
-                            IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.FOLDING_DOOR_RIGHT, halfBE);
-                    float f = flip ? -1 : 1;
+                if (flip)
+                    partial.translate(0, 0, 1);
+                partial.rotateY(91 * f * value * value);
 
-                    partial.translate(0, half == DoubleBlockHalf.UPPER ? 1 : 0, 0);
+                if (!left)
+                    partial.translate(0, 0, f / 2f)
+                            .rotateY(-181 * f * value * value);
 
-                    partial.translate(0, -1 / 512f, 0)
-                            .translate(Vec3.atLowerCornerOf(facing.getNormal())
-                                    .scale(value2 * 1 / 32f));
-                    partial.rotateCentered(Direction.UP,
-                            Mth.DEG_TO_RAD * AngleHelper.horizontalAngle(facing.getClockWise()));
+                if (flip)
+                    partial.translate(0, 0, -1 / 2f);
 
-                    if (flip)
-                        partial.translate(0, 0, 1);
-                    partial.rotateY(91 * f * value * value);
-
-                    if (!left)
-                        partial.translate(0, 0, f / 2f)
-                                .rotateY(-181 * f * value * value);
-
-                    if (flip)
-                        partial.translate(0, 0, -1 / 2f);
-
-                    partial.light(light)
-                            .renderInto(ms, vb);
-                }
-            } else {
-                IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.SLIDING_DOOR, halfBE)
-                        .translate(0, half == DoubleBlockHalf.UPPER ? 1 - 1 / 512f : 0, 0)
-                        .translate(offset)
-                        .light(light)
+                partial.light(light)
                         .renderInto(ms, vb);
             }
+        } else {
+            IKineticCopycatBlockRenderer.super.getRotatedModel(CCCopycatPartialModels.SLIDING_DOOR, be)
+                    .translate(offset)
+                    .light(light)
+                    .renderInto(ms, vb);
         }
-
     }
 }

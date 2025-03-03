@@ -14,7 +14,7 @@ All the copycats you've ever wanted, combined into a single mod!
 
 [![Discord Banner](https://discordapp.com/api/guilds/1202240504809652365/widget.png?style=banner2)](https://discord.gg/YxPPFHn4SS)
 
-[![BisectHosting](https://copycats-site.vercel.app/api/banner)](https://copycats-site.vercel.app/api/link)
+[![BisectHosting](https://copycats-site-sigma.vercel.app/api/banner)](https://copycats-site-sigma.vercel.app/api/link)
 
 ## What's new in v2.2
 
