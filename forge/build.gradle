@@ -123,7 +123,6 @@ publishMods {
     file = tasks.remapJar.archiveFile
     displayName = file.map { it.asFile.name.substring(0, it.asFile.name.lastIndexOf('.')) }
     modLoaders.add("forge")
-    modLoaders.add("neoforge")
 
     modrinth {
         accessToken = project.findProperty("MODRINTH_TOKEN")
