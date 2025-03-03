@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.sliding_door;
 
+import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.mixin.copycat.sliding_door.SlidingDoorBlockEntityAccessor;
 import com.simibubi.create.content.contraptions.StructureTransform;
@@ -21,47 +22,10 @@ public class CopycatSlidingDoorBlockEntity extends SlidingDoorBlockEntity implem
     protected BlockState material;
     protected ItemStack consumedItem;
     protected boolean enableCT;
-    protected CopycatSlidingDoorBlockEntity paired;
-    private boolean initialized;
 
     public CopycatSlidingDoorBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         ICopycatBlockEntity.super.init();
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        updatePaired();
-    }
-
-    @Override
-    public void tick() {
-        if (getBlockState().getValue(HALF) == DoubleBlockHalf.LOWER) {
-            super.tick();
-            return;
-        }
-        if (!initialized && hasLevel()) {
-            initialize();
-            initialized = true;
-        }
-    }
-
-    public void updatePaired() {
-        if (getBlockState().getValue(HALF) == DoubleBlockHalf.LOWER) {
-            paired = (CopycatSlidingDoorBlockEntity) level.getBlockEntity(worldPosition.above());
-        } else {
-            paired = (CopycatSlidingDoorBlockEntity) level.getBlockEntity(worldPosition.below());
-        }
-    }
-
-    public CopycatSlidingDoorBlockEntity getPaired() {
-        return paired;
-    }
-
-    @Override
-    public boolean shouldRenderSpecial(BlockState state) {
-        return state.getValue(HALF) == DoubleBlockHalf.LOWER && super.shouldRenderSpecial(state);
     }
 
     public LerpedFloat animation() {

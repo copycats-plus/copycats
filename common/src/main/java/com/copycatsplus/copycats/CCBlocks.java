@@ -16,7 +16,6 @@ import com.copycatsplus.copycats.content.copycat.pane.CopycatPaneBlock;
 import com.copycatsplus.copycats.content.copycat.pane.CopycatPaneModelCore;
 import com.copycatsplus.copycats.content.copycat.corner_slice.CopycatCornerSliceBlock;
 import com.copycatsplus.copycats.content.copycat.corner_slice.CopycatCornerSliceModelCore;
-import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorMovementBehaviour;
 import com.copycatsplus.copycats.content.copycat.stacked_half_layer.CopycatStackedHalfLayerBlock;
 import com.copycatsplus.copycats.content.copycat.stacked_half_layer.CopycatStackedMultiHalfLayerModelCore;
 import com.copycatsplus.copycats.content.copycat.vertical_half_layer.CopycatVerticalHalfLayerBlock;
@@ -90,6 +89,7 @@ import com.copycatsplus.copycats.foundation.tooltip.CopycatDescription;
 import com.copycatsplus.copycats.utility.Platform;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.contraptions.behaviour.DoorMovingInteraction;
+import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorMovementBehaviour;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
 import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
@@ -781,7 +781,7 @@ public class CCBlocks {
                     .transform(FeatureToggle.register(FeatureCategory.FUNCTIONAL))
                     .onRegister(onClient(() -> createBlockModel(() -> new CopycatSlidingDoorModelCore(false))))
                     .onRegister(interactionBehaviour(new DoorMovingInteraction()))
-                    .onRegister(movementBehaviour(new CopycatSlidingDoorMovementBehaviour()))
+                    .onRegister(movementBehaviour(new SlidingDoorMovementBehaviour()))
                     .tag(BlockTags.DOORS)
                     .tag(BlockTags.WOODEN_DOORS) // for villager AI
                     .tag(AllTags.AllBlockTags.NON_DOUBLE_DOOR.tag)
@@ -804,7 +804,7 @@ public class CCBlocks {
                     .transform(FeatureToggle.register(FeatureCategory.FUNCTIONAL))
                     .onRegister(onClient(() -> createBlockModel(() -> new CopycatFoldingDoorModelCore(false, false))))
                     .onRegister(interactionBehaviour(new DoorMovingInteraction()))
-                    .onRegister(movementBehaviour(new CopycatSlidingDoorMovementBehaviour()))
+                    .onRegister(movementBehaviour(new SlidingDoorMovementBehaviour()))
                     .tag(BlockTags.DOORS)
                     .tag(BlockTags.WOODEN_DOORS) // for villager AI
                     .tag(AllTags.AllBlockTags.NON_DOUBLE_DOOR.tag)

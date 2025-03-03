@@ -92,15 +92,6 @@ public class CopycatSlidingDoorBlock extends SlidingDoorBlock implements ICopyca
         return InteractionResult.PASS;
     }
 
-    @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
-        super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
-        getBlockEntityOptional(pLevel, pPos).ifPresent(be -> {
-            if (be instanceof CopycatSlidingDoorBlockEntity copycatBE)
-                copycatBE.updatePaired();
-        });
-    }
-
     @Nullable
     @Override
     public BlockState getAcceptedBlockState(Level pLevel, BlockPos pPos, ItemStack item, Direction face) {
