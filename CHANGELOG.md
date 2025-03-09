@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.2 - 2025-03-09
+
+#### NOTICE:
+With this version, 1.19.2 and 1.18.2 have become EOL. This means that unless there is a major bug they will no longer receive updates, and we will be focusing on 1.20.1 and 1.21.1 versions of Create only.
+
+### Changed
+
+- In this update we changed how we manage the 
+block shapes to optimize the lag when assembling/disassembling contraptions. During our testing we managed to optimize
+it by an avg ~56%. There will still be a bit of lag, but it should be nowhere near as bad, and we will continue to optimize it more in future versions(maintained versions).
+
 ## 2.2.1 - 2025-03-03
 
 ### Fixed

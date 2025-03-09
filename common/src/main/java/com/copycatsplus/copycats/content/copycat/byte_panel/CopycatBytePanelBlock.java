@@ -1,9 +1,11 @@
 package com.copycatsplus.copycats.content.copycat.byte_panel;
 
+import com.copycatsplus.copycats.content.copycat.board.CopycatBoardBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.copycatsplus.copycats.utility.BackportUtils;
 import com.copycatsplus.copycats.utility.BackportUtils.Vector2i;
 import com.google.common.collect.ImmutableMap;
@@ -57,6 +59,10 @@ public class CopycatBytePanelBlock extends WaterloggedMultiStateCopycatBlock imp
     public static BooleanProperty TOP_RIGHT = BooleanProperty.create("top_right");
     public static DirectionProperty FACING = BlockStateProperties.FACING;
     private final ImmutableMap<BlockState, VoxelShape> shapesCache;
+    private final ImmutableMap<FaceData, VoxelShape> partialFaceCache;
+
+    public static record FaceData(String property, Direction facing, Direction direction) {
+    }
 
     public CopycatBytePanelBlock(Properties properties) {
         super(properties);
@@ -68,6 +74,21 @@ public class CopycatBytePanelBlock extends WaterloggedMultiStateCopycatBlock imp
                 .setValue(FACING, Direction.DOWN)
         );
         this.shapesCache = this.getShapeForEachState(CopycatBytePanelBlock::calculateMultiFaceShape);
+        ImmutableMap.Builder<FaceData, VoxelShape> builder = ImmutableMap.builder();
+        BlockState state = defaultBlockState()
+                .setValue(BOTTOM_LEFT, true)
+                .setValue(BOTTOM_RIGHT, true)
+                .setValue(TOP_LEFT, true)
+                .setValue(TOP_RIGHT, true);
+        for (String property : storageProperties()) {
+            for (Direction facing : FACING.getPossibleValues()) {
+                state = state.setValue(FACING, facing);
+                for (Direction face : Direction.values()) {
+                    builder.put(new FaceData(property, facing, face), BlockFaceUtils.getPartialFaceShape(null, state, property, face));
+                }
+            }
+        }
+        this.partialFaceCache = builder.build();
     }
 
     @Override
@@ -159,6 +180,15 @@ public class CopycatBytePanelBlock extends WaterloggedMultiStateCopycatBlock imp
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return Objects.requireNonNull(this.shapesCache.get(pState));
+    }
+
+    @Override
+    public VoxelShape getPartialFaceShape(BlockGetter level, BlockState state, String property, Direction face) {
+        if (!partExists(state, property)) return Shapes.empty();
+        return Objects.requireNonNull(partialFaceCache.getOrDefault(
+                new FaceData(property, state.getValue(FACING), face),
+                Shapes.empty()
+        ));
     }
 
     @Override
