@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -130,6 +131,11 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
             @Override
             public String getPropertyFromInteraction(BlockState state, BlockGetter level, Vec3i hitLocation, BlockPos blockPos, Direction facing, Vec3 unscaledHit) {
                 return defaultProperty();
+            }
+
+            @Override
+            public VoxelShape getPartialFaceShape(BlockGetter level, BlockState state, String property, Direction face) {
+                return state.getFaceOcclusionShape(level, BlockPos.ZERO, face);
             }
 
             @Override

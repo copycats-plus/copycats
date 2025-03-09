@@ -13,6 +13,7 @@ import com.copycatsplus.copycats.network.CCPackets;
 import com.copycatsplus.copycats.network.FillCopycatPacket;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.copycatsplus.copycats.utility.BlockFaceUtils;
+import com.google.common.collect.ImmutableMap;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
@@ -43,11 +44,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /**
@@ -412,6 +415,11 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         BlockState material = IMultiStateCopycatBlock.getMaterial(reader, pos, property);
         return material.is(Blocks.AIR) ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
     }
+
+    /**
+     * Get the face shape of a particular part. Results of this method should be cached for performance.
+     */
+    VoxelShape getPartialFaceShape(BlockGetter level, BlockState state, String property, Direction face);
 
     static BlockState getMaterial(BlockGetter reader, BlockPos targetPos, String property) {
         if (reader.getBlockEntity(targetPos) instanceof IMultiStateCopycatBlockEntity cbe)

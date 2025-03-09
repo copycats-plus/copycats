@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.content.copycat.slab;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCShapes;
+import com.copycatsplus.copycats.content.copycat.half_layer.CopycatHalfLayerBlock;
 import com.copycatsplus.copycats.foundation.copycat.CopycatTransformableState;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
@@ -9,7 +10,9 @@ import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopyca
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MaterialItemStorage;
 import com.copycatsplus.copycats.foundation.copycat.multistate.WaterloggedMultiStateCopycatBlock;
+import com.copycatsplus.copycats.utility.BlockFaceUtils;
 import com.copycatsplus.copycats.utility.InteractionUtils;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.math.OctahedralGroup;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
@@ -52,8 +55,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.copycatsplus.copycats.utility.BlockUtils.transformFacing;
@@ -64,6 +66,10 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
     public static final EnumProperty<SlabType> SLAB_TYPE = BlockStateProperties.SLAB_TYPE;
+    private final ImmutableMap<FaceData, VoxelShape> partialFaceCache;
+
+    private static record FaceData(String property, Axis axis, Direction face) {
+    }
 
     private static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
 
@@ -72,6 +78,15 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
         registerDefaultState(defaultBlockState()
                 .setValue(AXIS, Axis.Y)
                 .setValue(SLAB_TYPE, SlabType.BOTTOM));
+        ImmutableMap.Builder<FaceData, VoxelShape> builder = ImmutableMap.builder();
+        for (String property : storageProperties()) {
+            for (Axis axis : AXIS.getPossibleValues()) {
+                for (Direction face : Direction.values()) {
+                    builder.put(new FaceData(property, axis, face), BlockFaceUtils.getPartialFaceShape(null, defaultBlockState().setValue(SLAB_TYPE, SlabType.DOUBLE).setValue(AXIS, axis), property, face));
+                }
+            }
+        }
+        this.partialFaceCache = builder.build();
     }
 
     @Override
@@ -242,6 +257,15 @@ public class CopycatSlabBlock extends WaterloggedMultiStateCopycatBlock implemen
         } else {
             return CCShapes.SLAB_TOP.get(axis).toShape();
         }
+    }
+
+    @Override
+    public VoxelShape getPartialFaceShape(BlockGetter level, BlockState state, String property, Direction face) {
+        if (!partExists(state, property)) return Shapes.empty();
+        return Objects.requireNonNull(partialFaceCache.getOrDefault(
+                new FaceData(property, state.getValue(AXIS), face),
+                Shapes.empty()
+        ));
     }
 
     public boolean supportsExternalFaceHiding(BlockState state) {
