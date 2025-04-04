@@ -3,6 +3,7 @@ package com.copycatsplus.copycats.content.copycat.sliding_door;
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.AssemblyTransform;
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.CopycatRenderContext;
+import com.copycatsplus.copycats.utility.BlockUtils;
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,9 +23,20 @@ public class CopycatSlidingDoorModelCore extends CopycatModelCore {
         this.kinetic = kinetic;
     }
 
+    public static MaterialMapper updatePropertiesClosed(Class<?> clazz) {
+        return (state, mat) -> {
+            if (mat == null)
+                return null;
+            if (clazz.isInstance(mat.getBlock())) {
+                return BlockUtils.tryCopyProperties(state, mat).setValue(DoorBlock.OPEN, false);
+            }
+            return mat;
+        };
+    }
+
     @Override
     public void registerModels(List<ModelEntry> entries) {
-        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesIfMatch(DoorBlock.class), kinetic ? EntryType.KINETIC_COPYCAT : EntryType.COPYCAT));
+        entries.add(new ModelEntry(MATERIAL_KEY, ModelGetter.MATERIAL, this, updatePropertiesClosed(DoorBlock.class), kinetic ? EntryType.KINETIC_COPYCAT : EntryType.COPYCAT));
     }
 
     @Override
