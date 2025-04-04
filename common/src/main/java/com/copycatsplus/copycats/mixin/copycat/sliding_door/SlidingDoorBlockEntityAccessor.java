@@ -9,4 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface SlidingDoorBlockEntityAccessor {
     @Accessor
     LerpedFloat getAnimation();
+
+    @Accessor
+    int getBridgeTicks();
 }

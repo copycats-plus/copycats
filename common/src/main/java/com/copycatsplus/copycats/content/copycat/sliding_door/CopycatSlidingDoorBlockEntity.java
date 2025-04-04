@@ -32,6 +32,14 @@ public class CopycatSlidingDoorBlockEntity extends SlidingDoorBlockEntity implem
         return ((SlidingDoorBlockEntityAccessor) this).getAnimation();
     }
 
+    public int bridgeTicks() {
+        return ((SlidingDoorBlockEntityAccessor) this).getBridgeTicks();
+    }
+
+    protected boolean shouldRenderSpecial(BlockState state) {
+        return !isVisible(state) || bridgeTicks() != 0;
+    }
+
     @Override
     public BlockState getMaterial() {
         return material;
