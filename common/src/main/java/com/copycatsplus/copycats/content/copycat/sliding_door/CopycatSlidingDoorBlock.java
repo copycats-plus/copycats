@@ -21,6 +21,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -97,6 +98,11 @@ public class CopycatSlidingDoorBlock extends SlidingDoorBlock implements ICopyca
     @Override
     public BlockState getAcceptedBlockState(Level pLevel, BlockPos pPos, ItemStack item, Direction face) {
         return ICopycatBlock.super.getAcceptedBlockState(pLevel, pPos, item, face);
+    }
+
+    @Override
+    public boolean isAcceptedRegardless(BlockState material) {
+        return (material.getBlock() instanceof DoorBlock);
     }
 
     @Override
