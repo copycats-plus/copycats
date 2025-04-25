@@ -105,6 +105,11 @@ allprojects {
             url = "https://modmaven.dev"
         }
         maven {
+            //Location of EMI
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/"
+        }
+        maven {
             url = "https://cursemaven.com"
         }
         mavenCentral()

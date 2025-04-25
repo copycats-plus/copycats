@@ -1,7 +1,8 @@
 package com.copycatsplus.copycats.config;
 
-import com.copycatsplus.copycats.compat.CopycatsJEI;
 import com.copycatsplus.copycats.compat.Mods;
+import com.copycatsplus.copycats.compat.recipe_viewers.CopycatsEMI;
+import com.copycatsplus.copycats.compat.recipe_viewers.CopycatsJEI;
 import com.copycatsplus.copycats.mixin.feature_toggle.CreativeModeTabsAccessor;
 import com.copycatsplus.copycats.utility.LogicalSidedProvider;
 import com.copycatsplus.copycats.utility.Platform;
@@ -145,6 +146,7 @@ public class FeatureToggle {
                         CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);
                     }
                     Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
+                    Mods.EMI.executeIfInstalled(() -> CopycatsEMI::refreshItemList);
                 })
         );
     }

@@ -22,7 +22,10 @@
       "com.copycatsplus.copycats.datagen.fabric.CCDatagenImpl"
     ],
     "jei_mod_plugin": [
-      "com.copycatsplus.copycats.compat.CopycatsJEI"
+      "com.copycatsplus.copycats.compat.recipe_viewers.CopycatsJEI"
+    ],
+    "emi": [
+      "com.copycatsplus.copycats.compat.recipe_viewers.CopycatsEMI"
     ],
     "additional-placements-generators": [
       "com.copycatsplus.copycats.compat.AdditionalPlacementsCompat"

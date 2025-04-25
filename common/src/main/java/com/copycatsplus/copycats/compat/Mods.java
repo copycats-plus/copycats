@@ -21,6 +21,7 @@ public enum Mods {
      * For the feature toggle system
      */
     JEI("jei"),
+    EMI("emi"),
     CREATE("create"),
     /**
      * For copycat fence compatibility (only prevents crash)

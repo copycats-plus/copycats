@@ -1,4 +1,4 @@
-package com.copycatsplus.copycats.compat;
+package com.copycatsplus.copycats.compat.recipe_viewers;
 
 import com.copycatsplus.copycats.CCCreativeTabs;
 import com.copycatsplus.copycats.Copycats;

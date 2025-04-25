@@ -22,6 +22,7 @@ dependencies {
     // required for proper remapping and compiling
 //    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
     modCompileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_common_version}")
+    modCompileOnly("dev.emi:emi-xplat-mojmap:${emi_common_version}+${minecraft_version}")
 
     modImplementation("curse.maven:additional-placements-674852:${additionalplacements_forge_curse_id}")
     modImplementation("curse.maven:embeddium-908741:${embeddium_forge_curse_id}")
