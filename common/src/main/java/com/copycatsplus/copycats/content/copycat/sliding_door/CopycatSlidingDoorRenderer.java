@@ -29,6 +29,9 @@ public class CopycatSlidingDoorRenderer extends SafeBlockEntityRenderer<CopycatS
     protected void renderSafe(CopycatSlidingDoorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
         BlockState blockState = be.getBlockState();
+        if (!be.shouldRenderSpecial(blockState)) {
+            return;
+        }
 
         Direction facing = blockState.getValue(DoorBlock.FACING);
         Direction movementDirection = facing.getClockWise();
