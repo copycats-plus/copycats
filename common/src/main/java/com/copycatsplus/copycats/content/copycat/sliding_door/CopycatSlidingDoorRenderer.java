@@ -40,7 +40,7 @@ public class CopycatSlidingDoorRenderer extends SafeBlockEntityRenderer<CopycatS
         float value = be.animation().getValue(partialTicks);
         float value2 = Mth.clamp(value * 10, 0, 1);
 
-        VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
+        VertexConsumer vb = buffer.getBuffer(RenderType.translucentMovingBlock());
         Vec3 offset = Vec3.atLowerCornerOf(movementDirection.getNormal())
                 .scale(value * value * 13 / 16f)
                 .add(Vec3.atLowerCornerOf(facing.getNormal())
