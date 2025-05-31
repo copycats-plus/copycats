@@ -153,19 +153,14 @@ public class CopycatLadderBlock extends LadderBlock implements ICopycatBlock, IB
     private static class PlacementHelper extends PoleHelper<Direction> {
 
         private PlacementHelper() {
-            super(state -> state.getBlock() instanceof AbstractSimpleShaftBlock
-                    || state.getBlock() instanceof LadderBlock, $ -> Axis.Y, FACING);
+            super(state -> state.getBlock() instanceof LadderBlock && state.getBlock() instanceof ICopycatBlock, $ -> Axis.Y, FACING);
         }
 
         @Override
         public Predicate<ItemStack> getItemPredicate() {
-            return i -> i.getItem() instanceof BlockItem
-                    && ((BlockItem) i.getItem()).getBlock() instanceof LadderBlock;
-        }
-
-        @Override
-        public Predicate<BlockState> getStatePredicate() {
-            return state -> state.getBlock() instanceof LadderBlock;
+            return i -> i.getItem() instanceof BlockItem blockItem
+                    && blockItem.getBlock() instanceof LadderBlock
+                    && blockItem.getBlock() instanceof ICopycatBlock;
         }
 
         @Override
