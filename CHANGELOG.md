@@ -5,9 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.1 - 2025-05-31 [1.21 only]
+
+### Added
+
+- Support for Create 6.0.x in Minecraft 1.21.1
+
+### Fixed
+
+- Placement assist of copycat ladders affecting vanilla ladders
+- Copycat slopes having incorrect hitboxes
+- Copycats not emitting light when a light source is used as material
+- Z-fighting on copycat sliding and folding doors 
+
 ## 3.0.0 - 2025-04-25
 
 ### Added
+
 - Support for Create 6.0.x
 - EMI Support (You need to rejoin your world/server for it to update hidden features currently. This is due to EMI not having an option to update the shown items on the go)
 
