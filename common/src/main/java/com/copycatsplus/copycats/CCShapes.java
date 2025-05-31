@@ -147,7 +147,7 @@ public class CCShapes {
     public static final Map<Direction, Map<Half, MutableShape>> SLOPE =
             forHorizontalDirections(forHalves(shape(
                     IntStream.range(0, SLOPE_SUBDIVISIONS)
-                            .mapToObj(i -> aabb(16, i + 1, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                            .mapToObj(i -> aabb(16, (i + 1.0) / SLOPE_SUBDIVISIONS * 16.0, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
                             .toArray(MutableAABB[]::new)
             ).outline(
                     line(vec3(0, 0, 0), vec3(16, 0, 0)),
@@ -163,7 +163,7 @@ public class CCShapes {
     public static final Map<Direction, MutableShape> VERTICAL_SLOPE =
             forHorizontalDirections(shape(
                     IntStream.range(0, SLOPE_SUBDIVISIONS)
-                            .mapToObj(i -> aabb(i + 1, 16, 16.0 / SLOPE_SUBDIVISIONS).move(15 - i, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                            .mapToObj(i -> aabb((i + 1.0) / SLOPE_SUBDIVISIONS * 16.0, 16, 16.0 / SLOPE_SUBDIVISIONS).move(15 - i * 16.0 / SLOPE_SUBDIVISIONS, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
                             .toArray(MutableAABB[]::new)
             ).outline(
                     line(vec3(0, 0, 16), vec3(16, 0, 16)),
@@ -181,7 +181,7 @@ public class CCShapes {
                     layer -> layer <= 4 ?
                             shape(
                                     IntStream.range(0, SLOPE_SUBDIVISIONS)
-                                            .mapToObj(i -> aabb(16, (i + 1) * layer / 4.0, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                                            .mapToObj(i -> aabb(16, (i + 1.0) / SLOPE_SUBDIVISIONS * 16 * layer / 4.0, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
                                             .toArray(MutableAABB[]::new)
                             ).outline(
                                     line(vec3(0, 0, 0), vec3(16, 0, 0)),
@@ -196,7 +196,7 @@ public class CCShapes {
                             ) :
                             shape(
                                     IntStream.range(0, SLOPE_SUBDIVISIONS)
-                                            .mapToObj(i -> aabb(16, 16 * (layer - 4) / 4.0 + (i + 1) * (1 - (layer - 4) / 4.0), 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                                            .mapToObj(i -> aabb(16, 16 * (layer - 4) / 4.0 + (i + 1.0) / SLOPE_SUBDIVISIONS * 16 * (1 - (layer - 4) / 4.0), 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
                                             .toArray(MutableAABB[]::new)
                             ).outline(
                                     line(vec3(0, 0, 0), vec3(16, 0, 0)),
