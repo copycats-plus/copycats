@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.neoforge.mixin.foundation.copycat;
 
 import com.copycatsplus.copycats.content.copycat.button.CopycatButtonBlock;
+import com.copycatsplus.copycats.content.copycat.chaining_door.CopycatChainingDoorBlock;
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
 import com.copycatsplus.copycats.content.copycat.fence_gate.CopycatFenceGateBlock;
@@ -66,7 +67,8 @@ import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMate
         CopycatGlassFluidPipeBlock.class,
         CopycatDoorBlock.class,
         CopycatSlidingDoorBlock.class,
-        CopycatPaneBlock.class
+        CopycatPaneBlock.class,
+        CopycatChainingDoorBlock.class
 })
 public abstract class CopycatBlockMixin extends Block implements ICopycatBlock {
 

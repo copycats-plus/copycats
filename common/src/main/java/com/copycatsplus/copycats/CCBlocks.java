@@ -5,6 +5,10 @@ import com.copycatsplus.copycats.config.FeatureCategory;
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.copycatsplus.copycats.content.copycat.byte_panel.CopycatBytePanelBlock;
 import com.copycatsplus.copycats.content.copycat.byte_panel.CopycatMultiBytePanelModelCore;
+import com.copycatsplus.copycats.content.copycat.chaining_door.CopycatChainingDoorBlock;
+import com.copycatsplus.copycats.content.copycat.chaining_door.CopycatChainingDoorModelCore;
+import com.copycatsplus.copycats.content.copycat.chaining_sliding_door.CopycatChainingSlidingDoorBlock;
+import com.copycatsplus.copycats.content.copycat.chaining_sliding_door.CopycatChainingSlidingDoorModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneBlock;
@@ -833,6 +837,42 @@ public class CCBlocks {
                             CopycatCharacteristics.CT_TOGGLE
                     ))
                     .transform(customItemModel("copycat_base", "flat_pane"))
+                    .register();
+
+    public static final BlockEntry<CopycatChainingDoorBlock> COPYCAT_CHAINING_DOOR =
+            REGISTRATE.block("copycat_chaining_door", CopycatChainingDoorBlock::new)
+                    .transform(CCBuilderTransformers.copycat())
+                    .transform(FeatureToggle.register(FeatureCategory.FUNCTIONAL))
+                    .onRegister(interactionBehaviour(new DoorMovingInteraction()))
+                    .onRegister(onClient(() -> createBlockModel(CopycatChainingDoorModelCore::new)))
+                    .onRegister(b -> registerBrittleCheck(state -> state.getBlock() == b ? CheckResult.SUCCESS : CheckResult.PASS))
+                    .item()
+                    .onRegister(CopycatDescription.register(
+                            CopycatCharacteristics.COPYCAT,
+                            CopycatCharacteristics.CT_TOGGLE,
+                            CopycatCharacteristics.FUNCTIONAL
+                    ))
+                    .tag(ItemTags.DOORS)
+                    .tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag)
+                    .transform(customItemModel("copycat_base", "chaining_door"))
+                    .register();
+
+    public static final BlockEntry<CopycatChainingSlidingDoorBlock> COPYCAT_CHAINING_SLIDING_DOOR =
+            REGISTRATE.block("copycat_chaining_sliding_door", CopycatChainingSlidingDoorBlock::new)
+                    .transform(CCBuilderTransformers.copycat())
+                    .transform(FeatureToggle.register(FeatureCategory.FUNCTIONAL))
+                    .onRegister(interactionBehaviour(new DoorMovingInteraction()))
+                    .onRegister(onClient(() -> createBlockModel(CopycatChainingSlidingDoorModelCore::new)))
+                    .onRegister(b -> registerBrittleCheck(state -> state.getBlock() == b ? CheckResult.SUCCESS : CheckResult.PASS))
+                    .item()
+                    .onRegister(CopycatDescription.register(
+                            CopycatCharacteristics.COPYCAT,
+                            CopycatCharacteristics.CT_TOGGLE,
+                            CopycatCharacteristics.FUNCTIONAL
+                    ))
+                    .tag(ItemTags.DOORS)
+                    .tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag)
+                    .transform(customItemModel("copycat_base", "chaining_sliding_door"))
                     .register();
 
     @ExpectPlatform

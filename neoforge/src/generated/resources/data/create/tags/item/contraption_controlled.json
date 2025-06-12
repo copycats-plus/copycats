@@ -2,6 +2,8 @@
   "values": [
     "copycats:copycat_door",
     "copycats:copycat_sliding_door",
-    "copycats:copycat_folding_door"
+    "copycats:copycat_folding_door",
+    "copycats:copycat_chaining_door",
+    "copycats:copycat_chaining_sliding_door"
   ]
 }

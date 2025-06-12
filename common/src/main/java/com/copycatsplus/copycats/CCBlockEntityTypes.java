@@ -53,7 +53,8 @@ public class CCBlockEntityTypes {
                             CCBlocks.COPYCAT_DOOR,
                             CCBlocks.COPYCAT_IRON_DOOR,
                             CCBlocks.COPYCAT_PANE,
-                            CCBlocks.COPYCAT_FLAT_PANE
+                            CCBlocks.COPYCAT_FLAT_PANE,
+                            CCBlocks.COPYCAT_CHAINING_DOOR
                     )
                     .register();
 
@@ -103,7 +104,7 @@ public class CCBlockEntityTypes {
 
     public static final BlockEntityEntry<? extends CopycatSlidingDoorBlockEntity> COPYCAT_SLIDING_DOOR =
             REGISTRATE.blockEntity("copycat_sliding_door", CopycatSlidingDoorBlockEntity::new)
-                    .validBlocks(CCBlocks.COPYCAT_SLIDING_DOOR, CCBlocks.COPYCAT_FOLDING_DOOR)
+                    .validBlocks(CCBlocks.COPYCAT_SLIDING_DOOR, CCBlocks.COPYCAT_FOLDING_DOOR, CCBlocks.COPYCAT_CHAINING_SLIDING_DOOR)
                     .renderer(() -> CopycatSlidingDoorRenderer::new)
                     .register();
 

@@ -45,6 +45,8 @@
     "copycats:copycat_pane",
     "copycats:copycat_sliding_door",
     "copycats:copycat_folding_door",
-    "copycats:copycat_flat_pane"
+    "copycats:copycat_flat_pane",
+    "copycats:copycat_chaining_door",
+    "copycats:copycat_chaining_sliding_door"
   ]
 }
