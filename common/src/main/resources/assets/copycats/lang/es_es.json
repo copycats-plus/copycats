@@ -40,6 +40,7 @@
   "item.copycats.copycat_catwalk": "Puente imitador",
   "itemGroup.copycats.functional": "Crear: Copycats+ | Funcional",
   "itemGroup.copycats.main": "Crear: Copycats+",
+  "keyinfo.copycats.fill_copycat": "Rellenar Imitador con el Material",
   "tooltip.copycats.characteristics.copy_cat.description": "Clic derecho en un _gato_.",
   "tooltip.copycats.characteristics.copy_cat.title": "???",
   "tooltip.copycats.characteristics.copycat.description": "Clic derecho con el material para _asignar_ y _rotar_. Utiliza una llave inglesa para _remover el material_.",

@@ -75,6 +75,7 @@ allprojects {
     String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
     version = "${getGitTag()}+mc.${minecraft_version}-${project.name}${nightly ? "-build.${buildNumber}" : ""}"
     group = rootProject.maven_group
+    ext.ci = ci
 
     repositories {
         maven {
@@ -110,28 +111,30 @@ allprojects {
             url = "https://maven.terraformersmc.com/"
         }
         maven {
-            url = "https://cursemaven.com"
+            name = 'CurseForge maven'
+            url = 'https://cursemaven.com'
         }
         mavenCentral()
         maven {
             url = "https://mvn.devos.one/snapshots/"
         }
-        maven { url = "https://mvn.devos.one/releases/" }
         maven {
-            url = "https://cursemaven.com"
+            url = "https://mvn.devos.one/releases/"
         }
         maven {
             url = "https://jitpack.io"
         }
-        maven { // Reach Entity Attributes
+        maven {
+            name = "Reach Entity Attributes"
             url = "https://maven.jamieswhiteshirt.com/libs-release"
             content { includeGroup("com.jamieswhiteshirt") }
         }
         maven {
-            //Forge Config Api Port, DiagonalBlocks
+            name = "Forge Config Api Port, DiagonalBlocks"
             url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
         }
-        maven { // for Porting Lib: Mixin Extras, Fabric ASM
+        maven {
+            name = "Porting Lib: Mixin Extras, Fabric ASM"
             url = "https://jitpack.io/"
             content { includeGroupAndSubgroups("com.github") }
         }
@@ -151,7 +154,7 @@ allprojects {
         }
     }
 
-    configurations{
+    configurations {
         findAndDelete
     }
 

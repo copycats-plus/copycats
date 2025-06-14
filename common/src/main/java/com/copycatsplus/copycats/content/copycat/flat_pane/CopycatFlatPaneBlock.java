@@ -36,6 +36,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
@@ -100,7 +101,9 @@ public class CopycatFlatPaneBlock extends CCWaterloggedCopycatBlock implements I
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState fromState, Direction face, BlockPos fromPos, BlockPos toPos, BlockState toState) {
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState fromState, Direction face, BlockPos fromPos, @Nullable BlockPos toPos, @Nullable BlockState toState) {
+        if (toPos == null)
+            return true;
         toState = reader.getBlockState(toPos);
         Vec3i diff = toPos.subtract(fromPos);
         if (diff.equals(Vec3i.ZERO))

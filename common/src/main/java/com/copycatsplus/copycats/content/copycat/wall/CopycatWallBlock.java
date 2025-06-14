@@ -100,11 +100,15 @@ public class CopycatWallBlock extends WallBlock implements ICopycatBlock, IBE<CC
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face,
-                                             BlockPos fromPos, BlockPos toPos, BlockState toState) {
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, @Nullable BlockPos toPos, @Nullable BlockState toState) {
+        if (toPos == null)
+            return true;
+
         if (isPole(state))
             return ICopycatBlock.super.isIgnoredConnectivitySide(reader, state, face, fromPos, toPos, toState);
 
+        if (toState == null)
+            toState = reader.getBlockState(toPos);
         if (!toState.is(this) || !state.is(this)) return true;
 
         boolean isCross = true;

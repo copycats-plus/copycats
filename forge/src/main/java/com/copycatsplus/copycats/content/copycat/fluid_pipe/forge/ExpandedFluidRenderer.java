@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.fluid.FluidRenderer;
 import dev.engine_room.flywheel.lib.transform.PoseTransformStack;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.render.FluidRenderHelper;
 import net.createmod.catnip.render.PonderRenderTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -66,7 +67,7 @@ public class ExpandedFluidRenderer {
         }
 
         if (progress != 1.0F) {
-            FluidRenderer.renderStillTiledFace(Direction.DOWN, hMin, hMin, hMax, hMax, yMin, builder, ms, light, color, stillTexture);
+            FluidRenderHelper.renderStillTiledFace(Direction.DOWN, hMin, hMin, hMax, hMax, yMin, builder, ms, light, color, stillTexture);
         }
 
         ms.popPose();

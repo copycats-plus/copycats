@@ -78,8 +78,9 @@ public class CopycatPaneBlock extends ConnectedGlassPaneBlock implements ICopyca
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState fromState, Direction face,
-                                             BlockPos fromPos, BlockPos toPos, BlockState toState) {
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, @Nullable BlockPos toPos, @Nullable BlockState toState) {
+        if (toPos == null)
+            return true;
         return face.getAxis().isVertical() || !reader.getBlockState(toPos).is(this) && !reader.getBlockState(toPos).is(CCBlocks.COPYCAT_FLAT_PANE.get());
     }
 

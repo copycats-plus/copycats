@@ -8,6 +8,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
@@ -36,8 +37,8 @@ public final class WrappedCopycatBlock extends CopycatBlock {
     }
 
     @Override
-    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, BlockPos toPos) {
-        return wrapped.get().isIgnoredConnectivitySide(reader, state, face, fromPos, toPos, reader.getBlockState(toPos));
+    public boolean isIgnoredConnectivitySide(BlockAndTintGetter reader, BlockState state, Direction face, BlockPos fromPos, @Nullable BlockPos toPos) {
+        return wrapped.get().isIgnoredConnectivitySide(reader, state, face, fromPos, toPos, toPos == null ? null : reader.getBlockState(toPos));
     }
 
     @Override

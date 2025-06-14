@@ -49,6 +49,11 @@ public class CopycatGhostBlock extends CCCopycatBlock implements IStateType {
     }
 
     @Override
+    public boolean canOcclude(BlockGetter level, BlockState state, BlockPos pos) {
+        return false;
+    }
+
+    @Override
     public BlockState transform(BlockState state, StructureTransform transform) {
         return state;
     }

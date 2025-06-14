@@ -395,7 +395,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
     }
 
     static BlockState getAppearance(IMultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
-                                    BlockState queryState, BlockPos queryPos) {
+                                    @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
 
         BlockAndTintGetter reader = Mods.ATHENA.runIfInstalled(() -> () -> AthenaCompat.unwrapAthenaGetter(level)).orElse(level);
 
