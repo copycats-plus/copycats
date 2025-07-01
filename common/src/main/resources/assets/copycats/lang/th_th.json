@@ -1,1 +1,11 @@
-{}
+{
+  "block.copycats.copycat_beam": "เลียนแบบบีม",
+  "block.copycats.copycat_block": "บล็อคเลียนแบบ",
+  "block.copycats.copycat_board": "กระดานคัดลอก",
+  "block.copycats.copycat_fence": "รั้วเลียนแบบ",
+  "block.copycats.copycat_fence_gate": "ประตูรั้วเลียนแบบ",
+  "block.copycats.copycat_slab": "แผ่นลอกเลียนแบบ",
+  "block.copycats.copycat_stairs": "บันไดเลียนแบบ",
+  "block.copycats.copycat_vertical_step": "เลียนแบบขั้นตอนแนวตั้ง",
+  "block.copycats.copycat_wall": "กำแพงเลียนแบบ"
+}
