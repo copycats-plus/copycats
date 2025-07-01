@@ -1,1 +1,13 @@
-{}
+{
+  "block.copycats.copycat_beam": "Kopiatu",
+  "block.copycats.copycat_block": "Kopiatu Blokea",
+  "block.copycats.copycat_board": "Kopiatu Kontseilua",
+  "block.copycats.copycat_fence": "Kopiatu Hesia",
+  "block.copycats.copycat_fence_gate": "Kopiatu Hesiaren Atea",
+  "block.copycats.copycat_slab": "Kopiatu Lauza",
+  "block.copycats.copycat_stairs": "Kopiatu Eskailerak",
+  "block.copycats.copycat_vertical_step": "Kopiatu Urrats Bertikala",
+  "block.copycats.copycat_wall": "Kopiatu Horma",
+  "item.copycats.copycat_box": "Kopiatu Kutxa",
+  "item.copycats.copycat_catwalk": "Kopiatu Pasarela"
+}
