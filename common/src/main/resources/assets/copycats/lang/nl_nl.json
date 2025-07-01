@@ -51,7 +51,6 @@
   "itemGroup.copycats.main": "Create: Copycats+ | Decoratief",
   "keyinfo.copycats.fill_copycat": "Vul Copycat met Materiaal",
   "tooltip.copycats.characteristics.copy_cat.description": "R-klik op een _cat_.",
-  "tooltip.copycats.characteristics.copy_cat.title": "???",
   "tooltip.copycats.characteristics.copycat.description": "R-klik met materiaal om _assign_ en _rotate_. Moersleutel om _remove materiaal.",
   "tooltip.copycats.characteristics.copycat.title": "Copycat",
   "tooltip.copycats.characteristics.ct_toggle.description": "Shift-R-klik met lege hand om _toggle connected textures_ te wisselen.",
