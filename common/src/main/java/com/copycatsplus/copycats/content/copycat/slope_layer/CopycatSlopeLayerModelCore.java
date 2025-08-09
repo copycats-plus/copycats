@@ -15,8 +15,20 @@ public class CopycatSlopeLayerModelCore extends CopycatModelCore {
         int layer = state.getValue(CopycatSlopeLayerBlock.LAYERS);
         Direction facing = state.getValue(CopycatSlopeLayerBlock.FACING);
         Half half = state.getValue(CopycatSlopeLayerBlock.HALF);
+        boolean in_wall = state.getValue(CopycatSlopeLayerBlock.IN_WALL);
 
-        AssemblyTransform transform = t -> t.rotateY((int) facing.toYRot()).flipY(half == Half.TOP);
+        AssemblyTransform transform = t -> {
+            t.rotateY((int) facing.toYRot()).flipY(half == Half.TOP);
+
+            if (in_wall) {
+                switch (facing){
+                    case NORTH -> t.rotateX(half == Half.TOP ? 270 : 90);
+                    case SOUTH -> t.rotateX(half == Half.TOP ? 90 : 270);
+                    case WEST -> t.rotateZ(half == Half.TOP ? 90 : 270);
+                    case EAST -> t.rotateZ(half == Half.TOP ? 270 : 90);
+                }
+            }
+        };
 
         if (layer <= 4)
             CopycatSlopeModelCore.assembleSlope(context, transform, 0, layer * 4, enhanced);

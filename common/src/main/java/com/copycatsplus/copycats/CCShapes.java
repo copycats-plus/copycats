@@ -176,43 +176,53 @@ public class CCShapes {
                     line(vec3(16, 0, 0), vec3(0, 0, 16)),
                     line(vec3(16, 16, 0), vec3(0, 16, 16))
             ));
-    public static final Map<Direction, Map<Half, Map<Integer, MutableShape>>> SLOPE_LAYER =
-            forHorizontalDirections(forHalves(forAll(LAYERS,
-                    layer -> layer <= 4 ?
-                            shape(
-                                    IntStream.range(0, SLOPE_SUBDIVISIONS)
-                                            .mapToObj(i -> aabb(16, (i + 1.0) / SLOPE_SUBDIVISIONS * 16 * layer / 4.0, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
-                                            .toArray(MutableAABB[]::new)
-                            ).outline(
-                                    line(vec3(0, 0, 0), vec3(16, 0, 0)),
-                                    line(vec3(0, 0, 16), vec3(16, 0, 16)),
-                                    line(vec3(0, 0, 0), vec3(0, 0, 16)),
-                                    line(vec3(16, 0, 0), vec3(16, 0, 16)),
-                                    line(vec3(0, 0, 16), vec3(0, 4 * layer, 16)),
-                                    line(vec3(16, 0, 16), vec3(16, 4 * layer, 16)),
-                                    line(vec3(0, 4 * layer, 16), vec3(16, 4 * layer, 16)),
-                                    line(vec3(0, 0, 0), vec3(0, 4 * layer, 16)),
-                                    line(vec3(16, 0, 0), vec3(16, 4 * layer, 16))
-                            ) :
-                            shape(
-                                    IntStream.range(0, SLOPE_SUBDIVISIONS)
-                                            .mapToObj(i -> aabb(16, 16 * (layer - 4) / 4.0 + (i + 1.0) / SLOPE_SUBDIVISIONS * 16 * (1 - (layer - 4) / 4.0), 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
-                                            .toArray(MutableAABB[]::new)
-                            ).outline(
-                                    line(vec3(0, 0, 0), vec3(16, 0, 0)),
-                                    line(vec3(0, 0, 16), vec3(16, 0, 16)),
-                                    line(vec3(0, 0, 0), vec3(0, 0, 16)),
-                                    line(vec3(16, 0, 0), vec3(16, 0, 16)),
-                                    line(vec3(0, 0, 0), vec3(0, (layer - 4) * 4, 0)),
-                                    line(vec3(16, 0, 0), vec3(16, (layer - 4) * 4, 0)),
-                                    line(vec3(0, 0, 16), vec3(0, 16, 16)),
-                                    line(vec3(16, 0, 16), vec3(16, 16, 16)),
-                                    line(vec3(0, 16, 16), vec3(16, 16, 16)),
-                                    line(vec3(0, (layer - 4) * 4, 0), vec3(16, (layer - 4) * 4, 0)),
-                                    line(vec3(0, (layer - 4) * 4, 0), vec3(0, 16, 16)),
-                                    line(vec3(16, (layer - 4) * 4, 0), vec3(16, 16, 16))
-                            )
-            )));
+    public static final Map<Direction, Map<Half, Map<Boolean, Map<Integer, MutableShape>>>> SLOPE_LAYER =
+            forDirections(forHalves(forAll(IN_WALL,
+                    in_wall -> forAll(LAYERS,
+                            layer -> {
+                                MutableShape baseShape = layer <= 4 ?
+                                        shape(
+                                                IntStream.range(0, SLOPE_SUBDIVISIONS)
+                                                        .mapToObj(i -> aabb(16, (i + 1.0) / SLOPE_SUBDIVISIONS * 16 * layer / 4.0, 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                                                        .toArray(MutableAABB[]::new)
+                                        ).outline(
+                                                line(vec3(0, 0, 0), vec3(16, 0, 0)),
+                                                line(vec3(0, 0, 16), vec3(16, 0, 16)),
+                                                line(vec3(0, 0, 0), vec3(0, 0, 16)),
+                                                line(vec3(16, 0, 0), vec3(16, 0, 16)),
+                                                line(vec3(0, 0, 16), vec3(0, 4 * layer, 16)),
+                                                line(vec3(16, 0, 16), vec3(16, 4 * layer, 16)),
+                                                line(vec3(0, 4 * layer, 16), vec3(16, 4 * layer, 16)),
+                                                line(vec3(0, 0, 0), vec3(0, 4 * layer, 16)),
+                                                line(vec3(16, 0, 0), vec3(16, 4 * layer, 16))
+                                        ) :
+                                        shape(
+                                                IntStream.range(0, SLOPE_SUBDIVISIONS)
+                                                        .mapToObj(i -> aabb(16, 16 * (layer - 4) / 4.0 + (i + 1.0) / SLOPE_SUBDIVISIONS * 16 * (1 - (layer - 4) / 4.0), 16.0 / SLOPE_SUBDIVISIONS).move(0, 0, i * 16.0 / SLOPE_SUBDIVISIONS))
+                                                        .toArray(MutableAABB[]::new)
+                                        ).outline(
+                                                line(vec3(0, 0, 0), vec3(16, 0, 0)),
+                                                line(vec3(0, 0, 16), vec3(16, 0, 16)),
+                                                line(vec3(0, 0, 0), vec3(0, 0, 16)),
+                                                line(vec3(16, 0, 0), vec3(16, 0, 16)),
+                                                line(vec3(0, 0, 0), vec3(0, (layer - 4) * 4, 0)),
+                                                line(vec3(16, 0, 0), vec3(16, (layer - 4) * 4, 0)),
+                                                line(vec3(0, 0, 16), vec3(0, 16, 16)),
+                                                line(vec3(16, 0, 16), vec3(16, 16, 16)),
+                                                line(vec3(0, 16, 16), vec3(16, 16, 16)),
+                                                line(vec3(0, (layer - 4) * 4, 0), vec3(16, (layer - 4) * 4, 0)),
+                                                line(vec3(0, (layer - 4) * 4, 0), vec3(0, 16, 16)),
+                                                line(vec3(16, (layer - 4) * 4, 0), vec3(16, 16, 16))
+                                        );
+
+                                MutableShape shape = baseShape.copy();
+                                if (in_wall) {
+                                    shape.rotateX(270);
+                                }
+
+                                return shape;
+                            }
+                    ))));
 
     public static AssemblyTransform halves(Half half) {
         return t -> t.flipY(half == Half.TOP);
