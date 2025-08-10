@@ -177,7 +177,7 @@ public class CCShapes {
                     line(vec3(16, 16, 0), vec3(0, 16, 16))
             ));
     public static final Map<Direction, Map<Half, Map<Boolean, Map<Integer, MutableShape>>>> SLOPE_LAYER =
-            forDirections(forHalves(forAll(IN_WALL,
+            forHorizontalDirections(forHalves(forAll(IN_WALL,
                     in_wall -> forAll(LAYERS,
                             layer -> {
                                 MutableShape baseShape = layer <= 4 ?

@@ -35,14 +35,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static net.minecraft.core.Direction.DOWN;
+import static net.minecraft.core.Direction.UP;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements SpecialBlockItemRequirement, IStateType {
 
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final BooleanProperty IN_WALL = BlockStateProperties.IN_WALL;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
@@ -168,7 +168,7 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
     @Override
     public boolean isPathfindable(@NotNull BlockState pState, @NotNull PathComputationType pType) {
         return switch (pType) {
-            case LAND -> pState.getValue(LAYERS) < 5 && !pState.getValue(FACING).equals(DOWN);
+            case LAND -> pState.getValue(LAYERS) < 5 && pState.getValue(FACING).equals(UP);
             default -> false;
         };
     }
