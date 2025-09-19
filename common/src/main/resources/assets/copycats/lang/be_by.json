@@ -9,5 +9,6 @@
   "block.copycats.copycat_vertical_step": "Вертыкальны крок",
   "block.copycats.copycat_wall": "Плот-копія сцяна",
   "item.copycats.copycat_box": "Скрынка-копія",
-  "item.copycats.copycat_catwalk": "Подыум копія"
+  "item.copycats.copycat_catwalk": "Подыум копія",
+  "tooltip.copycats.characteristics.ghost.title": "Прывід"
 }
