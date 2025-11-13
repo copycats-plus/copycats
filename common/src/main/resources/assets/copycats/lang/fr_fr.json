@@ -28,5 +28,6 @@
   "block.copycats.copycat_wooden_pressure_plate": "Plaque de pression en bois imitatrice",
   "item.copycats.copycat_box": "Boite imitatrice",
   "item.copycats.copycat_catwalk": "Passerelle imitatrice",
-  "itemGroup.copycats.main": "Create: Copycats+"
+  "itemGroup.copycats.main": "Create: Copycats+",
+  "tooltip.copycats.characteristics.copycat.description": "Clic droit avec un matériau pour _assigner_ et _tourner_. Clé pour _retirer le matériau_."
 }
