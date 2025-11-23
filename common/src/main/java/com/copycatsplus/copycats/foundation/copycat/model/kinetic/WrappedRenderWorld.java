@@ -80,4 +80,14 @@ public class WrappedRenderWorld extends VirtualBlockGetter {
         Biome plainsBiome = Minecraft.getInstance().getConnection().registryAccess().registryOrThrow(Registries.BIOME).getOrThrow(Biomes.PLAINS);
         return resolver.getColor(plainsBiome, pos.getX(), pos.getZ());
     }
+
+    @Override
+    public int getHeight() {
+        return level.getHeight();
+    }
+
+    @Override
+    public int getMinBuildHeight() {
+        return level.getMinBuildHeight();
+    }
 }

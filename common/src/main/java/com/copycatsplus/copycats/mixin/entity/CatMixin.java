@@ -20,7 +20,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.neoforged.neoforge.common.Tags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -116,7 +115,7 @@ public abstract class CatMixin extends TamableAnimal {
                 this.setPersistenceRequired();
             }
             cir.setReturnValue(InteractionResult.sidedSuccess(level().isClientSide()));
-        } else if (stack.is(Tags.Items.TOOLS_WRENCH)) {
+        } else if (stack.is(AllTags.AllItemTags.WRENCH.tag)) {
             CatVariant currentVariant = getVariant();
             if (!currentVariant.equals(CCCatVariants.COPY_CAT.value())) return;
 
