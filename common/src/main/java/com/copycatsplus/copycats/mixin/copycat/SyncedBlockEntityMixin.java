@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Mixin for Create 6.0.7 and up, where calling `notifyUpdate` on a virtual world causes a crash due to getChunk being
  * unimplemented in VirtualRenderWorld
  */
-@Mixin(SyncedBlockEntity.class)
+@Mixin(value = SyncedBlockEntity.class, remap = false)
 public class SyncedBlockEntityMixin {
     @Inject(
             method = "notifyUpdate()V",

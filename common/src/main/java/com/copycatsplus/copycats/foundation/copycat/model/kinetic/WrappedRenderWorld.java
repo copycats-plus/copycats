@@ -90,10 +90,4 @@ public class WrappedRenderWorld extends VirtualBlockGetter {
     public int getMinBuildHeight() {
         return level.getMinBuildHeight();
     }
-
-    @Override
-    public void blockEntityChanged(BlockPos pos) {
-        // no-op
-        // cannot set changed state because getChunk is not implemented
-    }
 }
