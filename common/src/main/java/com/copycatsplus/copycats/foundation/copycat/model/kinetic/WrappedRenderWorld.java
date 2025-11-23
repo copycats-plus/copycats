@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.*;
@@ -16,10 +17,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.DataLayer;
 import net.minecraft.world.level.chunk.LightChunk;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.lighting.LayerLightEventListener;
 import net.minecraft.world.level.lighting.LevelLightEngine;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -62,16 +63,6 @@ public class WrappedRenderWorld extends VirtualBlockGetter {
     public @NotNull FluidState getFluidState(@NotNull BlockPos pos) {
         if (!pos.equals(targetPos)) return Fluids.EMPTY.defaultFluidState();
         return level.getFluidState(pos);
-    }
-
-    @Override
-    public int getHeight() {
-        return level.getHeight();
-    }
-
-    @Override
-    public int getMinBuildHeight() {
-        return level.getMinBuildHeight();
     }
 
     @Override

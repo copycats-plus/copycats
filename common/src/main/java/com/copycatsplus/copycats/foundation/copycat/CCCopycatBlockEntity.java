@@ -6,6 +6,7 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
@@ -40,7 +41,8 @@ public class CCCopycatBlockEntity extends SmartBlockEntity implements ICopycatBl
     }
 
     public void notifyUpdate() {
-        super.notifyUpdate();
+        if (!(getLevel() instanceof VirtualRenderWorld))
+            super.notifyUpdate();
     }
 
     public Level getLevel() {
