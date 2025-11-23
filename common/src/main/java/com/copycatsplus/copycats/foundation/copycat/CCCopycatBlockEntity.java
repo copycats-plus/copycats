@@ -40,11 +40,6 @@ public class CCCopycatBlockEntity extends SmartBlockEntity implements ICopycatBl
         ICopycatBlockEntity.super.init();
     }
 
-    public void notifyUpdate() {
-        if (!(getLevel() instanceof VirtualRenderWorld))
-            super.notifyUpdate();
-    }
-
     public Level getLevel() {
         return super.getLevel();
     }

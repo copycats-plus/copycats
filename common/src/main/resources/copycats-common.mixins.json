@@ -10,6 +10,7 @@
     "compat.rubidium.BlockOcclusionCacheMixin",
     "compat.rubidium.BlockRendererMixin",
     "compat.verticalslabcompat.CutBlockTypeRegistryMixin",
+    "copycat.SyncedBlockEntityMixin",
     "copycat.VoxelShapeAccessor",
     "copycat.cogwheel.CogWheelBlockItemMixin",
     "copycat.door.BlockHelperMixin",

@@ -18,10 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.DataLayer;
 import net.minecraft.world.level.chunk.LightChunk;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.lighting.LayerLightEventListener;
 import net.minecraft.world.level.lighting.LevelLightEngine;
-import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -89,5 +89,11 @@ public class WrappedRenderWorld extends VirtualBlockGetter {
     @Override
     public int getMinBuildHeight() {
         return level.getMinBuildHeight();
+    }
+
+    @Override
+    public void blockEntityChanged(BlockPos pos) {
+        // no-op
+        // cannot set changed state because getChunk is not implemented
     }
 }
