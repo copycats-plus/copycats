@@ -3,8 +3,9 @@ package com.copycatsplus.copycats.datagen.recipes.fabric;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.datagen.recipes.gen.CopycatsRecipeProvider;
 import com.copycatsplus.copycats.datagen.recipes.gen.GeneratedRecipeBuilder;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.platform.services.RegisteredObjectsHelper;
 import io.github.fabricators_of_create.porting_lib.data.ConditionalRecipe;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -119,14 +120,14 @@ public class GeneratedRecipeBuilderFabric implements GeneratedRecipeBuilder {
     }
 
     private ResourceLocation getRegistryName() {
-        return compatDatagenOutput == null ? RegisteredObjects.getKeyOrThrow(result.get()
+        return compatDatagenOutput == null ? CatnipServices.REGISTRIES.getKeyOrThrow(result.get()
                 .asItem()) : compatDatagenOutput;
     }
 
 
     @Override
     public GeneratedRecipeBuilder requiresResultFeature() {
-        return requiresFeature(RegisteredObjects.getKeyOrThrow(result.get().asItem()));
+        return requiresFeature(CatnipServices.REGISTRIES.getKeyOrThrow(result.get().asItem()));
     }
 
     @Override
@@ -266,7 +267,7 @@ public class GeneratedRecipeBuilderFabric implements GeneratedRecipeBuilder {
                                 exp, (int) (cookingTime * cookingTimeModifier), serializer));
                 if (unlockedBy != null)
                     b.unlockedBy("has_item", inventoryTrigger(unlockedBy.get()));
-                b.save(consumer::accept, createSimpleLocation(RegisteredObjects.getKeyOrThrow(serializer)
+                b.save(consumer::accept, createSimpleLocation(CatnipServices.REGISTRIES.getKeyOrThrow(serializer)
                         .getPath()));
             });
         }

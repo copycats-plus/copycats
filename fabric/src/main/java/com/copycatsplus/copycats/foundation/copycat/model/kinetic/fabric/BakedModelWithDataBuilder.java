@@ -1,12 +1,12 @@
 package com.copycatsplus.copycats.foundation.copycat.model.kinetic.fabric;
 
-import com.jozufozu.flywheel.core.model.BlockModel;
-import com.jozufozu.flywheel.core.model.Bufferable;
-import com.jozufozu.flywheel.core.model.ShadeSeparatingVertexConsumer;
-import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import dev.engine_room.flywheel.lib.model.baked.EmptyVirtualBlockGetter;
+import net.createmod.catnip.render.ShadedBlockSbbBuilder;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -15,9 +15,9 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class BakedModelWithDataBuilder implements Bufferable {
+public final class BakedModelWithDataBuilder {
     private final BakedModel model;
-    private BlockAndTintGetter renderWorld = VirtualEmptyBlockGetter.INSTANCE;
+    private BlockAndTintGetter renderWorld = EmptyVirtualBlockGetter.FULL_BRIGHT;
     private BlockState referenceState = Blocks.AIR.defaultBlockState();
     private PoseStack poseStack = new PoseStack();
     private BlockPos renderPos = BlockPos.ZERO;
@@ -46,20 +46,19 @@ public final class BakedModelWithDataBuilder implements Bufferable {
         return this;
     }
 
-    @Override
-    public void bufferInto(VertexConsumer consumer, ModelBlockRenderer blockRenderer, RandomSource random) {
-        BakedModel model = this.model; //DefaultLayerFilteringBakedModel.wrap(this.model); // not sure what the goal of this filter is, but it filtered out all copycat quads
-        if (consumer instanceof ShadeSeparatingVertexConsumer shadeSeparatingWrapper) {
-            model = shadeSeparatingWrapper.wrapModel(model);
-        }
-        blockRenderer.tesselateBlock(renderWorld, model, referenceState, renderPos, poseStack, consumer, false, random, 42, OverlayTexture.NO_OVERLAY);
-    }
+    public SuperByteBuffer build() {
+        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
 
-    public BlockModel toModel(String name) {
-        return BlockModel.of(this, name);
-    }
+        RandomSource random = RandomSource.createNewThreadLocalInstance();
 
-    public BlockModel toModel() {
-        return toModel(referenceState.toString());
+        ShadedBlockSbbBuilder sbbBuilder = ShadedBlockSbbBuilder.create();
+        sbbBuilder.begin();
+
+        poseStack.pushPose();
+        dispatcher.getModelRenderer().tesselateBlock(renderWorld, model, referenceState, renderPos, poseStack, sbbBuilder, false, random, 42, OverlayTexture.NO_OVERLAY);
+
+        poseStack.popPose();
+
+        return sbbBuilder.end();
     }
 }

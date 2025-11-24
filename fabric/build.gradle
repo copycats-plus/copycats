@@ -45,7 +45,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 
-    modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_fabric_version}")
+    modImplementation("com.simibubi.create:create-fabric:${create_fabric_version}")
     // because create fabric is a bit broken I think
     modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_port_version}")
 
