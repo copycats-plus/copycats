@@ -55,7 +55,7 @@ dependencies {
     modImplementation("curse.maven:continuity-531351:${continuity_curse_version}")
 //    modImplementation("blank:continuity-3.0.0:beta.6+1.20.1.build.105")
     modImplementation("curse.maven:athena-841890:${athena_fabric_curse_id}")
-    modImplementation("curse.maven:indium-459496:${indium_fabric_curse_id}")
+    modImplementation("maven.modrinth:indium:${indium_fabric_version}")
     modLocalRuntime("maven.modrinth:sodium:${sodium_fabric_version}")
 //    modLocalRuntime("maven.modrinth:extended-cogwheels:${extended_cogwheels_fabric_version}")
     modLocalRuntime("curse.maven:spark-361579:${spark_fabric_curse_id}")

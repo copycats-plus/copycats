@@ -76,14 +76,14 @@ public class CCBlockEntityTypes {
 
     public static final BlockEntityEntry<? extends CopycatShaftBlockEntity> COPYCAT_SHAFT =
             REGISTRATE.blockEntity("copycat_shaft", CopycatShaftBlockEntity::new)
-                    .visual(() -> CopycatShaftVisual::new, false)
+                    // .visual(() -> CopycatShaftVisual::new, false) // TODO: This isn't compiling correctly on Fabric. The Visual needs to be an SimpleBlockEntityVisualFactory instead of SimpleBlockEntityVisual.Factory
                     .validBlocks(CCBlocks.COPYCAT_SHAFT)
                     .renderer(() -> CopycatShaftRenderer::new)
                     .register();
 
     public static final BlockEntityEntry<? extends CopycatCogWheelBlockEntity> COPYCAT_COGWHEEL =
             REGISTRATE.blockEntity("copycat_cogwheel", CopycatCogWheelBlockEntity::new)
-                    .visual(() -> CopycatCogWheelVisual::new, false)
+                    // .visual(() -> CopycatCogWheelVisual::new, false) // TODO: This isn't compiling correctly on Fabric. The Visual needs to be an SimpleBlockEntityVisualFactory instead of SimpleBlockEntityVisual.Factory
                     .validBlocks(CCBlocks.COPYCAT_COGWHEEL, CCBlocks.COPYCAT_LARGE_COGWHEEL)
                     .renderer(() -> CopycatCogWheelRenderer::new)
                     .register();
