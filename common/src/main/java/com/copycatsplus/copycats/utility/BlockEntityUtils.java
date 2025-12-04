@@ -1,9 +1,13 @@
 package com.copycatsplus.copycats.utility;
 
+import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
+import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.CopycatMaterialStore;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.mixin.foundation.copycat.BlockEntityAccessor;
+import com.simibubi.create.foundation.data.CreateBlockEntityBuilder;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -47,6 +51,16 @@ public class BlockEntityUtils {
     @ExpectPlatform
     public static void requestModelDataUpdate(BlockEntity blockEntity) {
 
+    }
+
+    @ExpectPlatform
+    public static CreateBlockEntityBuilder<CopycatShaftBlockEntity, CreateRegistrate> addShaftVisual(CreateBlockEntityBuilder<CopycatShaftBlockEntity, CreateRegistrate> shaft) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static CreateBlockEntityBuilder<CopycatCogWheelBlockEntity, CreateRegistrate> addCogWheelVisual(CreateBlockEntityBuilder<CopycatCogWheelBlockEntity, CreateRegistrate> cogwheel) {
+        throw new AssertionError();
     }
 
     private static void updateLight(BlockEntity blockEntity) {

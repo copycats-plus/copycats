@@ -9,6 +9,10 @@ public class CopycatsClientImpl {
 
     public static void init() {
         CopycatsClient.init();
-        MinecraftForge.EVENT_BUS.<ReloadLevelRendererEvent>addListener(RendererReloadCache::onReloadLevelRenderer);
+        MinecraftForge.EVENT_BUS.<ReloadLevelRendererEvent>addListener(reloadLevelRendererEvent -> {
+            for (RendererReloadCache<?, ?> cache : RendererReloadCache.getALL()) {
+                cache.clear();
+            }
+        });
     }
 }

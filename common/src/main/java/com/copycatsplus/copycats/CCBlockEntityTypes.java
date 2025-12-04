@@ -5,17 +5,17 @@ import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoor
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
-import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelVisual;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelRenderer;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeBlockEntity;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatFluidPipeRenderer;
 import com.copycatsplus.copycats.content.copycat.fluid_pipe.CopycatStraightPipeBlockEntity;
 import com.copycatsplus.copycats.content.copycat.ladder.MultiStateCopycatLadderBlockEntity;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;
-import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftVisual;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftRenderer;
+import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.simibubi.create.content.fluids.pipes.TransparentStraightPipeRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
+import org.jetbrains.annotations.NotNull;
 
 public class CCBlockEntityTypes {
     private static final CopycatRegistrate REGISTRATE = Copycats.getRegistrate();
@@ -74,19 +74,29 @@ public class CCBlockEntityTypes {
                     .validBlocks(/*CCBlocks.COPYCAT_LADDER*/)
                     .register();
 
-    public static final BlockEntityEntry<? extends CopycatShaftBlockEntity> COPYCAT_SHAFT =
-            REGISTRATE.blockEntity("copycat_shaft", CopycatShaftBlockEntity::new)
-                    // .visual(() -> CopycatShaftVisual::new, false) // TODO: This isn't compiling correctly on Fabric. The Visual needs to be an SimpleBlockEntityVisualFactory instead of SimpleBlockEntityVisual.Factory
-                    .validBlocks(CCBlocks.COPYCAT_SHAFT)
-                    .renderer(() -> CopycatShaftRenderer::new)
-                    .register();
+    public static final BlockEntityEntry<? extends CopycatShaftBlockEntity> COPYCAT_SHAFT = getCopycatShaft();
 
-    public static final BlockEntityEntry<? extends CopycatCogWheelBlockEntity> COPYCAT_COGWHEEL =
-            REGISTRATE.blockEntity("copycat_cogwheel", CopycatCogWheelBlockEntity::new)
-                    // .visual(() -> CopycatCogWheelVisual::new, false) // TODO: This isn't compiling correctly on Fabric. The Visual needs to be an SimpleBlockEntityVisualFactory instead of SimpleBlockEntityVisual.Factory
-                    .validBlocks(CCBlocks.COPYCAT_COGWHEEL, CCBlocks.COPYCAT_LARGE_COGWHEEL)
-                    .renderer(() -> CopycatCogWheelRenderer::new)
-                    .register();
+    private static @NotNull BlockEntityEntry<CopycatShaftBlockEntity> getCopycatShaft() {
+        var shaft = REGISTRATE.blockEntity("copycat_shaft", CopycatShaftBlockEntity::new);
+
+        shaft = BlockEntityUtils.addShaftVisual(shaft);
+
+        return shaft.validBlocks(CCBlocks.COPYCAT_SHAFT)
+                .renderer(() -> CopycatShaftRenderer::new)
+                .register();
+    }
+
+    public static final BlockEntityEntry<? extends CopycatCogWheelBlockEntity> COPYCAT_COGWHEEL = getCopycatCogwheel();
+
+    private static @NotNull BlockEntityEntry<CopycatCogWheelBlockEntity> getCopycatCogwheel() {
+        var cogwheel = REGISTRATE.blockEntity("copycat_cogwheel", CopycatCogWheelBlockEntity::new);
+
+        cogwheel = BlockEntityUtils.addCogWheelVisual(cogwheel);
+
+        return cogwheel.validBlocks(CCBlocks.COPYCAT_COGWHEEL, CCBlocks.COPYCAT_LARGE_COGWHEEL)
+                .renderer(() -> CopycatCogWheelRenderer::new)
+                .register();
+    }
 
     public static final BlockEntityEntry<? extends CopycatFluidPipeBlockEntity> COPYCAT_FLUID_PIPE =
             REGISTRATE.blockEntity("copycat_fluid_pipe", CopycatFluidPipeBlockEntity::new)
