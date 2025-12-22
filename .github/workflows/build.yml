@@ -55,21 +55,21 @@ jobs:
                       loom-cache
 
             - name: Build jar
-              run: ./gradlew :forge:build
+              run: ./gradlew build
 
             - name: Publish to GitHub Packages
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               if: env.GITHUB_TOKEN != ''
               continue-on-error: true
-              run: ./gradlew :forge:publishMavenJavaPublicationToGitHubPackagesRepository
+              run: ./gradlew publishMavenJavaPublicationToGitHubPackagesRepository
 
             - name: Publish to realRobotix Maven
               env:
                   MAVEN_USER: ${{ secrets.MAVEN_USER }}
                   MAVEN_ACCESS_TOKEN: ${{ secrets.MAVEN_ACCESS_TOKEN }}
               if: env.MAVEN_USER != '' && env.MAVEN_ACCESS_TOKEN != ''
-              run: ./gradlew :forge:publishMavenJavaPublicationToRealRobotixMavenRepository -PrealRobotixMavenUsername=${{ secrets.MAVEN_USER }} -PrealRobotixMavenPassword=${{ secrets.MAVEN_ACCESS_TOKEN }}
+              run: ./gradlew publishMavenJavaPublicationToRealRobotixMavenRepository -PrealRobotixMavenUsername=${{ secrets.MAVEN_USER }} -PrealRobotixMavenPassword=${{ secrets.MAVEN_ACCESS_TOKEN }}
 
             - name: Find jars
               id: find_jars
