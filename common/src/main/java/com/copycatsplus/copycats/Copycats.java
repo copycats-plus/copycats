@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.config.CCConfigs;
 import com.copycatsplus.copycats.datagen.recipes.CCStandardRecipes;
 import com.copycatsplus.copycats.foundation.tooltip.CopycatDescription;
 import com.copycatsplus.copycats.network.CCPackets;
+import com.copycatsplus.copycats.registrate.CopycatRegistrate;
 import com.copycatsplus.copycats.utility.TooltipUtils;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;

@@ -2,7 +2,7 @@ package com.copycatsplus.copycats.fabric;
 
 import com.copycatsplus.copycats.CCBlocks;
 import com.copycatsplus.copycats.CCCreativeTabs;
-import com.copycatsplus.copycats.CopycatRegistrate;
+import com.copycatsplus.copycats.registrate.CopycatRegistrate;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.simibubi.create.AllCreativeModeTabs;

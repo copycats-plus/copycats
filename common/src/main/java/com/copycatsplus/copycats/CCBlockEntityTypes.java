@@ -14,6 +14,7 @@ import com.copycatsplus.copycats.content.copycat.ladder.MultiStateCopycatLadderB
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftVisual;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftRenderer;
+import com.copycatsplus.copycats.registrate.CopycatRegistrate;
 import com.simibubi.create.content.fluids.pipes.TransparentStraightPipeRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -75,15 +76,15 @@ public class CCBlockEntityTypes {
                     .register();
 
     public static final BlockEntityEntry<? extends CopycatShaftBlockEntity> COPYCAT_SHAFT =
-            REGISTRATE.blockEntity("copycat_shaft", CopycatShaftBlockEntity::new)
-                    .visual(() -> CopycatShaftVisual::new, false)
+            REGISTRATE.copycatBlockEntity("copycat_shaft", CopycatShaftBlockEntity::new)
+                    .copycatVisual(() -> CopycatShaftVisual::new, false)
                     .validBlocks(CCBlocks.COPYCAT_SHAFT)
                     .renderer(() -> CopycatShaftRenderer::new)
                     .register();
 
     public static final BlockEntityEntry<? extends CopycatCogWheelBlockEntity> COPYCAT_COGWHEEL =
-            REGISTRATE.blockEntity("copycat_cogwheel", CopycatCogWheelBlockEntity::new)
-                    .visual(() -> CopycatCogWheelVisual::new, false)
+            REGISTRATE.copycatBlockEntity("copycat_cogwheel", CopycatCogWheelBlockEntity::new)
+                    .copycatVisual(() -> CopycatCogWheelVisual::new, false)
                     .validBlocks(CCBlocks.COPYCAT_COGWHEEL, CCBlocks.COPYCAT_LARGE_COGWHEEL)
                     .renderer(() -> CopycatCogWheelRenderer::new)
                     .register();

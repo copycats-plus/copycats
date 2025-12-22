@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.datagen;
 
-import com.copycatsplus.copycats.CopycatRegistrate;
+import com.copycatsplus.copycats.registrate.CopycatRegistrate;
 import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.tooltip.CopycatCharacteristics;
 import com.google.gson.JsonElement;

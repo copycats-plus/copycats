@@ -1,6 +1,6 @@
-package com.copycatsplus.copycats.fabric;
+package com.copycatsplus.copycats.registrate.fabric;
 
-import com.copycatsplus.copycats.CopycatRegistrate;
+import com.copycatsplus.copycats.registrate.CopycatRegistrate;
 import com.copycatsplus.copycats.fabric.mixin_interfaces.CreateRegistrateAccessor;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.resources.ResourceKey;

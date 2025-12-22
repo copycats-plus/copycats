@@ -1,6 +1,6 @@
-package com.copycatsplus.copycats.forge;
+package com.copycatsplus.copycats.registrate.forge;
 
-import com.copycatsplus.copycats.CopycatRegistrate;
+import com.copycatsplus.copycats.registrate.CopycatRegistrate;
 import com.copycatsplus.copycats.forge.mixin_interfaces.CreateRegistrateAccessor;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.world.item.CreativeModeTab;
