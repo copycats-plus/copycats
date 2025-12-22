@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 /**
  * Allow fans to blow through copycat blocks
  */
-@Mixin(value = AirCurrent.class, remap = false)
+@Mixin(value = AirCurrent.class, remap = true)
 public class AirCurrentMixin {
 
     @Redirect(method = "getFlowLimit", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/decoration/copycat/CopycatBlock;getMaterial(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
