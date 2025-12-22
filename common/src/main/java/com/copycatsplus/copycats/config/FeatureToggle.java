@@ -139,15 +139,17 @@ public class FeatureToggle {
      * Refresh item visibility in all places when the list of enabled features has changed
      */
     static void refreshItemVisibility() {
-        Platform.Environment.CLIENT.runIfCurrent(() -> () ->
-                LogicalSidedProvider.WORKQUEUE.get(Platform.Environment.CLIENT).submit(() -> {
-                    CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();
-                    if (cachedParameters != null) {
-                        CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);
-                    }
-                    Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
-                    Mods.EMI.executeIfInstalled(() -> CopycatsEMI::refreshItemList);
-                })
-        );
+        if (LogicalSidedProvider.WORKQUEUE.get(Platform.Environment.CLIENT) != null) {
+            Platform.Environment.CLIENT.runIfCurrent(() -> () ->
+                    LogicalSidedProvider.WORKQUEUE.get(Platform.Environment.CLIENT).submit(() -> {
+                        CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();
+                        if (cachedParameters != null) {
+                            CreativeModeTabsAccessor.callBuildAllTabContents(cachedParameters);
+                        }
+                        Mods.JEI.executeIfInstalled(() -> CopycatsJEI::refreshItemList);
+                        Mods.EMI.executeIfInstalled(() -> CopycatsEMI::refreshItemList);
+                    })
+            );
+        }
     }
 }
