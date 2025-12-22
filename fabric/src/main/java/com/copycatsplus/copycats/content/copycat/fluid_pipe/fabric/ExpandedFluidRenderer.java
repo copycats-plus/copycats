@@ -1,12 +1,15 @@
 package com.copycatsplus.copycats.content.copycat.fluid_pipe.fabric;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.render.RenderTypes;
-import com.simibubi.create.foundation.utility.AngleHelper;
+import dev.engine_room.flywheel.lib.transform.PoseTransformStack;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.render.FluidRenderHelper;
+import net.createmod.catnip.render.PonderRenderTypes;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
@@ -18,7 +21,7 @@ import net.minecraft.util.Mth;
 @SuppressWarnings("UnstableApiUsage")
 public class ExpandedFluidRenderer {
     public static VertexConsumer getFluidBuilder(MultiBufferSource buffer) {
-        return buffer.getBuffer(RenderTypes.getFluid());
+        return buffer.getBuffer(PonderRenderTypes.fluid());
     }
 
     public static void renderFluidStream(FluidStack fluidStack, Direction direction, float radius, float progress, float centerOffset,
@@ -44,12 +47,12 @@ public class ExpandedFluidRenderer {
         if (inbound)
             direction = direction.getOpposite();
 
-        TransformStack msr = TransformStack.cast(ms);
+        PoseTransformStack msr = TransformStack.of(ms);
         ms.pushPose();
-        msr.centre()
+        msr.center()
                 .rotateY(AngleHelper.horizontalAngle(direction))
                 .rotateX(direction == Direction.UP ? 180 : direction == Direction.DOWN ? 0 : 270)
-                .unCentre();
+                .uncenter();
         ms.translate(.5, 0, .5);
 
         float h = radius;
@@ -67,7 +70,7 @@ public class ExpandedFluidRenderer {
         }
 
         if (progress != 1)
-            FluidRenderer.renderStillTiledFace(Direction.DOWN, hMin, hMin, hMax, hMax, yMin, builder, ms, light, color, stillTexture);
+            FluidRenderHelper.renderStillTiledFace(Direction.DOWN, hMin, hMin, hMax, hMax, yMin, builder, ms, light, color, stillTexture);
 
         ms.popPose();
     }

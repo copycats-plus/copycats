@@ -3,7 +3,7 @@ package com.copycatsplus.copycats.fabric;
 
 import com.copycatsplus.copycats.CCCatVariants;
 import com.copycatsplus.copycats.fabric.mixin_interfaces.HolderReferenceAccessor;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

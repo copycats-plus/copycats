@@ -8,11 +8,13 @@ import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGett
 import com.copycatsplus.copycats.foundation.copycat.model.assembly.fabric.CopycatRenderContextFabric;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
-import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.fabric.VirtualRenderHelper;
 import io.github.fabricators_of_create.porting_lib.models.CustomParticleIconModel;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.render.ShadeSeparatingSuperByteBuffer;
+import net.createmod.catnip.render.TemplateMesh;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
@@ -65,7 +67,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
 
     private void gatherOcclusionData(BlockAndTintGetter world, BlockPos pos, BlockState state, BlockState material,
                                      OcclusionData occlusionData, ICopycatBlock copycatBlock) {
-        if (VirtualEmptyBlockGetter.is(world))
+        if (VirtualRenderHelper.isVirtual(world))
             return;
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         for (Direction face : Iterate.directions) {
@@ -122,7 +124,7 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
             materials = new HashMap<>();
             remainingDataMap = new HashMap<>();
         }
-        final boolean isVirtual = VirtualEmptyBlockGetter.is(blockView);
+        final boolean isVirtual = VirtualRenderHelper.isVirtual(blockView);
 
         for (CopycatModelCore.ModelEntry entry : entries) {
             BlockState material = entry.materialMapper().map(state, materials.get(entry.key()));

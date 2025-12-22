@@ -1,16 +1,12 @@
 package com.copycatsplus.copycats.compat.recipe_viewers;
 
 import com.copycatsplus.copycats.CCCreativeTabs;
-import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.config.FeatureToggle;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
-
-import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.registry.EmiStackList;
 
 @EmiEntrypoint
 public class CopycatsEMI implements EmiPlugin {

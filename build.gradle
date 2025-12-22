@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4.+"
-    id "dev.architectury.loom" version "1.10.+" apply false
+    id "dev.architectury.loom" version "1.11.+" apply false
 }
 
 boolean ci = System.getenv("CI") != null ? System.getenv("CI").toBoolean() : false
@@ -108,7 +108,7 @@ allprojects {
         maven {
             //Location of EMI
             name = "TerraformersMC"
-            url = "https://maven.terraformersmc.com/"
+            url = "https://maven.terraformersmc.com/releases"
         }
         maven {
             name = 'CurseForge maven'

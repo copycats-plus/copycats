@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats.foundation.copycat.model.fabric;
 
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
-import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -32,15 +31,15 @@ public class ScaledBlockAndTintGetterFabric extends ScaledBlockAndTintGetter imp
     }
 
     public static ScaledBlockAndTintGetterFabric create(boolean isVirtual, String renderingProperty, Object renderData, BlockAndTintGetter wrapped, BlockPos origin, Vec3i originInner, Vec3i scale, Predicate<BlockPos> filter) {
-        if (isVirtual)
+/*        if (isVirtual)
             return new Virtual(renderingProperty, renderData, wrapped, origin, originInner, scale, filter);
-        else
+        else*/
             return new ScaledBlockAndTintGetterFabric(renderingProperty, renderData, wrapped, origin, originInner, scale, filter);
     }
 
-    public static class Virtual extends ScaledBlockAndTintGetterFabric implements VirtualEmptyBlockGetter {
+/*    public static class Virtual extends ScaledBlockAndTintGetterFabric implements BlockAndTintGetter {
         private Virtual(String renderingProperty, Object renderData, BlockAndTintGetter wrapped, BlockPos origin, Vec3i originInner, Vec3i scale, Predicate<BlockPos> filter) {
             super(renderingProperty, renderData, wrapped, origin, originInner, scale, filter);
         }
-    }
+    }*/
 }

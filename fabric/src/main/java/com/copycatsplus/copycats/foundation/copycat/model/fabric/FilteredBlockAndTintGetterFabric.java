@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.foundation.copycat.model.fabric;
 
 import com.copycatsplus.copycats.foundation.copycat.model.FilteredBlockAndTintGetter;
-import com.jozufozu.flywheel.core.virtual.VirtualEmptyBlockGetter;
+import dev.engine_room.flywheel.lib.model.baked.EmptyVirtualBlockGetter;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -40,7 +40,7 @@ public class FilteredBlockAndTintGetterFabric extends FilteredBlockAndTintGetter
             return new FilteredBlockAndTintGetterFabric(renderData, wrapped, origin, filter);
     }
 
-    public static class Virtual extends FilteredBlockAndTintGetterFabric implements VirtualEmptyBlockGetter {
+    public static class Virtual extends FilteredBlockAndTintGetterFabric implements BlockAndTintGetter {
         private Virtual(Object renderData, BlockAndTintGetter wrapped, BlockPos origin, Predicate<BlockPos> filter) {
             super(renderData, wrapped, origin, filter);
         }

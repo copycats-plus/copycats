@@ -5,7 +5,7 @@ architectury {
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
-    forge "net.minecraftforge:forge:${forge_version}"
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
     // Compile against Create Fabric in common
     // beware of differences across platforms!
@@ -13,21 +13,17 @@ dependencies {
     // All dependencies except Flywheel and Registrate are NOT safe to use!
     // Flywheel and Registrate must also be used carefully due to differences.
     //TODO: Change to fabric when its out
-    modCompileOnly("com.simibubi.create:create-${minecraft_version}:${create_forge_version}:slim") { transitive = false }
-    modCompileOnly("com.tterrag.registrate:Registrate:${registrate_forge_version}")
-    modImplementation("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_forge_version}")
-    compileOnly("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_forge_version}")
-    modImplementation("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
+    modImplementation("com.simibubi.create:create-fabric:${create_fabric_version}")
 
     // required for proper remapping and compiling
-//    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
+    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
     modCompileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_common_version}")
-    modCompileOnly("dev.emi:emi-xplat-mojmap:${emi_common_version}+${minecraft_version}")
+    modCompileOnly("dev.emi:emi-xplat-intermediary:${emi_common_version}+${minecraft_version}")
 
-    modImplementation("curse.maven:additional-placements-674852:${additionalplacements_forge_curse_id}")
-    modImplementation("curse.maven:embeddium-908741:${embeddium_forge_curse_id}")
-    modCompileOnly("curse.maven:selene-499980:${moonlight_curse_forge_id}")
-    modCompileOnly("curse.maven:vertical-slabs-compat-724387:${vertical_slabs_curse_forge_id}")
+    modImplementation("curse.maven:additional-placements-fabric-930469:${additionalplacements_fabric_curse_id}")
+    modImplementation("curse.maven:embeddium-908741:${embeddium_fabric_curse_id}")
+    modCompileOnly("curse.maven:selene-499980:${moonlight_curse_fabric_id}")
+    modCompileOnly("curse.maven:vertical-slabs-compat-724387:${vertical_slabs_curse_fabric_id}")
 
     //Used for all diagonal mods as they all shadow a common library we can mixin
     modCompileOnly("fuzs.diagonalblocks:diagonalblocks-common:${diagonal_mods_version}")

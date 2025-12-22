@@ -9,7 +9,7 @@ import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftBlockEntity;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlockEntity;
 import com.simibubi.create.content.fluids.pipes.StraightPipeBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -52,7 +52,7 @@ public class CopycatBlockEntityMixin {
 
         @Override
         public @Nullable Object getRenderAttachmentData() {
-            return Pair.of(super.getRenderAttachmentData(), getMaterial());
+            return Pair.of(super.getRenderData(), getMaterial());
         }
     }
 
@@ -67,7 +67,7 @@ public class CopycatBlockEntityMixin {
 
         @Override
         public @Nullable Object getRenderAttachmentData() {
-            return Pair.of(super.getRenderAttachmentData(), getMaterial());
+            return Pair.of(super.getRenderData(), getMaterial());
         }
     }
 }
