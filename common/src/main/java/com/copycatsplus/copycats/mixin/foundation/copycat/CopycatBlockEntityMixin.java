@@ -57,7 +57,8 @@ public abstract class CopycatBlockEntityMixin extends SmartBlockEntity implement
 
     @Inject(
             at = @At("HEAD"),
-            method = "write(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/block/state/BlockState;)V"
+            method = "write(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/block/state/BlockState;)V",
+            remap = true
     )
     private void writeCT(CompoundTag tag, ItemStack stack, BlockState material, CallbackInfo ci) {
         tag.putBoolean("EnableCT", copycats$enableCT);
@@ -65,7 +66,8 @@ public abstract class CopycatBlockEntityMixin extends SmartBlockEntity implement
 
     @Inject(
             at = @At("HEAD"),
-            method = "read(Lnet/minecraft/nbt/CompoundTag;Z)V"
+            method = "read(Lnet/minecraft/nbt/CompoundTag;Z)V",
+            remap = true
     )
     private void readCT(CompoundTag tag, boolean clientPacket, CallbackInfo ci) {
         if (tag.contains("EnableCT")) // need to check because copycats migrated from C:Connected don't have this tag
