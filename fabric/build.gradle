@@ -12,7 +12,7 @@ loom {
     runs {
         client {
             vmArg "-XX:+AllowEnhancedClassRedefinition"
-            vmArg "-Dsodium.checks.issue2561=false"
+            vmArg "-Dsodium.checks.issue2561=false" // disable LWJGL version checks
             programArgs "--username=Dev"
         }
         server {
@@ -27,6 +27,7 @@ loom {
             vmArg "-Dfabric-api.datagen.modid=copycats"
             vmArg "-Dporting_lib.datagen.existing_resources=${project(":common").file("src/main/resources")}"
             vmArg "-Dporting_lib.datagen.existing-mod=create"
+            vmArg "-Dsodium.checks.issue2561=false" // disable LWJGL version checks
 
             environmentVariable("DATAGEN", "TRUE")
         }
