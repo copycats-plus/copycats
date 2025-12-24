@@ -86,7 +86,7 @@ public class WorldWithRenderData implements RenderAttachedBlockView {
             return new WorldWithRenderData(blockView, renderData, origin);
     }
 
-    public static class Virtual extends WorldWithRenderData implements RenderAttachedBlockView {
+    public static class Virtual extends WorldWithRenderData implements RenderAttachedBlockView, VirtualWorld {
         private Virtual(BlockAndTintGetter blockView, Object renderData, BlockPos origin) {
             super(blockView, renderData, origin);
         }

@@ -40,7 +40,7 @@ public class FilteredBlockAndTintGetterFabric extends FilteredBlockAndTintGetter
             return new FilteredBlockAndTintGetterFabric(renderData, wrapped, origin, filter);
     }
 
-    public static class Virtual extends FilteredBlockAndTintGetterFabric implements BlockAndTintGetter {
+    public static class Virtual extends FilteredBlockAndTintGetterFabric implements BlockAndTintGetter, VirtualWorld {
         private Virtual(Object renderData, BlockAndTintGetter wrapped, BlockPos origin, Predicate<BlockPos> filter) {
             super(renderData, wrapped, origin, filter);
         }

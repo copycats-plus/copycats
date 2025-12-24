@@ -31,15 +31,15 @@ public class ScaledBlockAndTintGetterFabric extends ScaledBlockAndTintGetter imp
     }
 
     public static ScaledBlockAndTintGetterFabric create(boolean isVirtual, String renderingProperty, Object renderData, BlockAndTintGetter wrapped, BlockPos origin, Vec3i originInner, Vec3i scale, Predicate<BlockPos> filter) {
-/*        if (isVirtual)
+        if (isVirtual)
             return new Virtual(renderingProperty, renderData, wrapped, origin, originInner, scale, filter);
-        else*/
+        else
             return new ScaledBlockAndTintGetterFabric(renderingProperty, renderData, wrapped, origin, originInner, scale, filter);
     }
 
-/*    public static class Virtual extends ScaledBlockAndTintGetterFabric implements BlockAndTintGetter {
+    public static class Virtual extends ScaledBlockAndTintGetterFabric implements BlockAndTintGetter, VirtualWorld {
         private Virtual(String renderingProperty, Object renderData, BlockAndTintGetter wrapped, BlockPos origin, Vec3i originInner, Vec3i scale, Predicate<BlockPos> filter) {
             super(renderingProperty, renderData, wrapped, origin, originInner, scale, filter);
         }
-    }*/
+    }
 }
