@@ -62,4 +62,12 @@ public class BlockEntityUtils {
             level.getChunk(pos).setUnsaved(true);
         }
     }
+
+    public static boolean isWorldRenderWorld(Level level) {
+        if (Platform.Environment.CLIENT.isCurrent()) {
+            return Platform.Environment.CLIENT.getIfCurrent(() -> ClientUtils.isVirtualRenderWorld(level), false);
+        } else {
+            return false;
+        }
+    }
 }

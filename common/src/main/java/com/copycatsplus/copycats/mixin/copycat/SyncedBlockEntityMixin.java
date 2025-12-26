@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.mixin.copycat;
 
+import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity;
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +21,7 @@ public class SyncedBlockEntityMixin {
     )
     private void doNotSyncVirtual(CallbackInfo ci) {
         SyncedBlockEntity self = (SyncedBlockEntity) (Object) this;
-        if (self.getLevel() != null && self.getLevel() instanceof VirtualRenderWorld) {
+        if (self.getLevel() != null && (BlockEntityUtils.isWorldRenderWorld(self.getLevel()))) {
             ci.cancel();
         }
     }

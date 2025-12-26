@@ -1,7 +1,9 @@
 package com.copycatsplus.copycats.utility;
 
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 /**
  * This class should only be accessed on the client side.
@@ -14,5 +16,9 @@ public class ClientUtils {
         }
         Minecraft.getInstance().player.sendSystemMessage(Component.literal(message));
         return true;
+    }
+
+    public static boolean isVirtualRenderWorld(Level level) {
+        return level instanceof VirtualRenderWorld;
     }
 }
