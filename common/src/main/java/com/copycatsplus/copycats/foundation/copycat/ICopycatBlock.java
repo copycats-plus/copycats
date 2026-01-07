@@ -37,7 +37,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.Tags;
@@ -46,7 +45,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
@@ -76,7 +74,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlock {
+public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlock, ICopycatCullable {
 
     @Nullable
     default ICopycatBlockEntity getCopycatBlockEntity(BlockGetter worldIn, BlockPos pos) {
@@ -564,37 +562,6 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
             }
             return true;
         }
-    }
-
-    /**
-     * Whether this copycat can occlude faces of adjacent blocks if their shape is fully covered by the copycat.
-     *
-     * @param level The world.
-     * @param state The state of the copycat block.
-     * @param pos   The position of the copycat block.
-     * @return Whether the copycat can occlude faces of adjacent blocks.
-     */
-    default boolean canOcclude(BlockGetter level, BlockState state, BlockPos pos) {
-        BlockState material = getMaterial(level, pos);
-        if (AllBlocks.COPYCAT_BASE.has(material)) return false; // copycat_base is incorrectly set to occlude
-        return material.canOcclude();
-    }
-
-    /**
-     * Whether the shape of this copycat can occlude the face of an adjacent block.
-     * <p>
-     * Implementations of this method should not consider occlusion criteria that are based on the material of the copycat.
-     * Only properties intrinsic to the copycat block, such as its shape, should be considered.
-     *
-     * @param level       The world.
-     * @param pos         The position of the copycat block.
-     * @param state       The state of the copycat block.
-     * @param neighborPos The position of the adjacent block.
-     * @param dir         The direction from the copycat block to the adjacent block.
-     * @return Whether the shape of the copycat can occlude the face of the adjacent block. If empty, the vanilla occlusion logic is used.
-     */
-    default Optional<Boolean> shapeCanOccludeNeighbor(BlockGetter level, BlockPos pos, BlockState state, BlockPos neighborPos, Direction dir) {
-        return Optional.empty();
     }
 
     /**

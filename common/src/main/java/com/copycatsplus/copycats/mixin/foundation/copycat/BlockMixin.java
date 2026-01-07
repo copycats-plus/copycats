@@ -1,6 +1,6 @@
 package com.copycatsplus.copycats.mixin.foundation.copycat;
 
-import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatCullable;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -40,7 +40,7 @@ public class BlockMixin {
         if (instance.getBlock() instanceof BracketBlock) {
             return false;
         }
-        if (instance.getBlock() instanceof ICopycatBlock copycatBlock) {
+        if (instance.getBlock() instanceof ICopycatCullable copycatBlock) {
             if (copycatBlock.canOcclude(level, instance, pos)) {
                 stateRef.set(instance);
                 return true;
@@ -58,7 +58,7 @@ public class BlockMixin {
     private static void calculateOcclusionShape(BlockState state, BlockGetter level, BlockPos offset, Direction face, BlockPos pos,
                                                 CallbackInfoReturnable<Boolean> cir, @Share("copycat$blockState") LocalRef<BlockState> stateRef) {
         BlockState blockState = stateRef.get();
-        if (blockState != null && blockState.getBlock() instanceof ICopycatBlock copycatBlock) {
+        if (blockState != null && blockState.getBlock() instanceof ICopycatCullable copycatBlock) {
             Optional<Boolean> result = copycatBlock.shapeCanOccludeNeighbor(level, pos, blockState, offset, face.getOpposite()).map(b -> !b);
             result.ifPresent(cir::setReturnValue);
         }
