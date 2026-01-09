@@ -58,7 +58,7 @@
   "tooltip.copycats.characteristics.ct_toggle.title": "З можливістю поєднання текстур",
   "tooltip.copycats.characteristics.functional.description": "_Функціонує так само_ як оригінал.",
   "tooltip.copycats.characteristics.functional.title": "Функціональний",
-  "tooltip.copycats.characteristics.ghost.description": "Пропускає сутностей _наскрізь_.",
+  "tooltip.copycats.characteristics.ghost.description": "Пропускає сутності _наскрізь_.",
   "tooltip.copycats.characteristics.ghost.title": "Примарний",
   "tooltip.copycats.characteristics.multi_state.description": "_Декілька частин_ з різними матеріалами можуть бути вставлені в простір блоку. Затискання _%s_ вставляє матеріал в усі частини.",
   "tooltip.copycats.characteristics.multi_state.title": "Багатоматеріальний",
