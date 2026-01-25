@@ -4,6 +4,7 @@ import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopyca
 import com.copycatsplus.copycats.foundation.copycat.multistate.MultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import net.fabricmc.fabric.api.blockview.v2.FabricBlockView;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,14 +25,14 @@ public class MultiStateCopycatBlockEntityMixin {
             MultiStateCopycatBlockEntity.class,
             CopycatCogWheelBlockEntity.class
     })
-    public static abstract class BlockEntityWithoutAttachmentData extends SmartBlockEntity implements IMultiStateCopycatBlockEntity, RenderAttachmentBlockEntity {
+    public static abstract class BlockEntityWithoutAttachmentData extends SmartBlockEntity implements IMultiStateCopycatBlockEntity, FabricBlockView {
 
         public BlockEntityWithoutAttachmentData(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
         }
 
         @Override
-        public @Nullable Object getRenderAttachmentData() {
+        public @Nullable Object getRenderData() {
             synchronized (getMaterialItemStorage()) {
                 return Collections.synchronizedMap(getMaterialItemStorage().getMaterialMap());
             }

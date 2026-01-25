@@ -10,6 +10,7 @@ import com.simibubi.create.content.fluids.pipes.FluidPipeBlockEntity;
 import com.simibubi.create.content.fluids.pipes.StraightPipeBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.createmod.catnip.data.Pair;
+import net.fabricmc.fabric.api.blockview.v2.FabricBlockView;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,14 +30,14 @@ public class CopycatBlockEntityMixin {
             CopycatShaftBlockEntity.class,
             CopycatSlidingDoorBlockEntity.class
     })
-    public static abstract class BlockEntityWithoutAttachmentData extends SmartBlockEntity implements ICopycatBlockEntity, RenderAttachmentBlockEntity {
+    public static abstract class BlockEntityWithoutAttachmentData extends SmartBlockEntity implements ICopycatBlockEntity, FabricBlockView {
 
         public BlockEntityWithoutAttachmentData(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
         }
 
         @Override
-        public @Nullable Object getRenderAttachmentData() {
+        public @Nullable Object getRenderData() {
             return Pair.of(null, getMaterial());
         }
     }
@@ -44,14 +45,14 @@ public class CopycatBlockEntityMixin {
     @Mixin({
             CopycatFluidPipeBlockEntity.class,
     })
-    public static abstract class FluidPipeData extends FluidPipeBlockEntity implements ICopycatBlockEntity, RenderAttachmentBlockEntity {
+    public static abstract class FluidPipeData extends FluidPipeBlockEntity implements ICopycatBlockEntity, FabricBlockView {
 
         public FluidPipeData(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
         }
 
         @Override
-        public @Nullable Object getRenderAttachmentData() {
+        public @Nullable Object getRenderData() {
             return Pair.of(super.getRenderData(), getMaterial());
         }
     }
@@ -59,14 +60,14 @@ public class CopycatBlockEntityMixin {
     @Mixin({
             CopycatStraightPipeBlockEntity.class,
     })
-    public static abstract class StraightPipeData extends StraightPipeBlockEntity implements ICopycatBlockEntity, RenderAttachmentBlockEntity {
+    public static abstract class StraightPipeData extends StraightPipeBlockEntity implements ICopycatBlockEntity, FabricBlockView {
 
         public StraightPipeData(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
         }
 
         @Override
-        public @Nullable Object getRenderAttachmentData() {
+        public @Nullable Object getRenderData() {
             return Pair.of(super.getRenderData(), getMaterial());
         }
     }

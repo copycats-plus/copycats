@@ -1,6 +1,7 @@
 package com.copycatsplus.copycats.foundation.copycat.model.fabric;
 
 import com.copycatsplus.copycats.CCBlocks;
+import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.model.CopycatModelCore;
@@ -13,8 +14,6 @@ import com.simibubi.create.foundation.utility.fabric.VirtualRenderHelper;
 import io.github.fabricators_of_create.porting_lib.models.CustomParticleIconModel;
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.data.Pair;
-import net.createmod.catnip.render.ShadeSeparatingSuperByteBuffer;
-import net.createmod.catnip.render.TemplateMesh;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
@@ -24,7 +23,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -60,6 +58,16 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
         core.registerModels(entries);
     }
 
+    public static TextureAtlasSprite getIcon(BakedModel model, @Nullable Object data) {
+        if (model instanceof CustomParticleIconModel particleIconModel)
+            return particleIconModel.getParticleIcon(data);
+        return model.getParticleIcon();
+    }
+
+    public static BlockState getMaterial(BlockState material) {
+        return material == null ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
+    }
+
     @Override
     public boolean isCustomRenderer() {
         return true; // Stops Continuity from trying to wrap this model
@@ -92,33 +100,28 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
         Map<String, BlockState> materials;
         Map<String, Object> remainingDataMap;
-        if (blockView instanceof RenderAttachedBlockView attachmentView) {
-            Object attachment = attachmentView.getBlockEntityRenderAttachment(pos);
-            if (attachment instanceof BlockState material1) {
-                materials = Map.of(MATERIAL_KEY, material1);
+        Object attachment = blockView.getBlockEntityRenderData(pos);
+        if (attachment instanceof BlockState material1) {
+            materials = Map.of(MATERIAL_KEY, material1);
+            remainingDataMap = Map.of();
+        } else if (attachment instanceof Pair<?, ?> pair && pair.getSecond() instanceof BlockState material2) {
+            materials = Map.of(MATERIAL_KEY, material2);
+            if (pair.getFirst() != null)
+                remainingDataMap = Map.of(MATERIAL_KEY, pair.getFirst());
+            else
                 remainingDataMap = Map.of();
-            } else if (attachment instanceof Pair<?, ?> pair && pair.getSecond() instanceof BlockState material2) {
-                materials = Map.of(MATERIAL_KEY, material2);
-                if (pair.getFirst() != null)
-                    remainingDataMap = Map.of(MATERIAL_KEY, pair.getFirst());
-                else
-                    remainingDataMap = Map.of();
-            } else if (attachment instanceof Map<?, ?> mats) {
-                synchronized (attachment) {
-                    materials = new HashMap<>();
-                    remainingDataMap = new HashMap<>();
-                    for (Map.Entry<?, ?> entry : mats.entrySet()) {
-                        if (entry.getValue() instanceof Pair<?, ?> pair && pair.getSecond() instanceof BlockState material3) {
-                            materials.put((String) entry.getKey(), material3);
-                            remainingDataMap.put((String) entry.getKey(), pair.getFirst());
-                        } else if (entry.getValue() instanceof BlockState material4) {
-                            materials.put((String) entry.getKey(), material4);
-                        }
-                    }
-                }
-            } else {
+        } else if (attachment instanceof Map<?, ?> mats) {
+            synchronized (attachment) {
                 materials = new HashMap<>();
                 remainingDataMap = new HashMap<>();
+                for (Map.Entry<?, ?> entry : mats.entrySet()) {
+                    if (entry.getValue() instanceof Pair<?, ?> pair && pair.getSecond() instanceof BlockState material3) {
+                        materials.put((String) entry.getKey(), material3);
+                        remainingDataMap.put((String) entry.getKey(), pair.getFirst());
+                    } else if (entry.getValue() instanceof BlockState material4) {
+                        materials.put((String) entry.getKey(), material4);
+                    }
+                }
             }
         } else {
             materials = new HashMap<>();
@@ -285,16 +288,6 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
         }
     }
 
-    public static TextureAtlasSprite getIcon(BakedModel model, @Nullable Object data) {
-        if (model instanceof CustomParticleIconModel particleIconModel)
-            return particleIconModel.getParticleIcon(data);
-        return model.getParticleIcon();
-    }
-
-    public static BlockState getMaterial(BlockState material) {
-        return material == null ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
-    }
-
     public static class OcclusionData {
         private final boolean[] occluded;
 
@@ -312,6 +305,14 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
     }
 
     public record MaterialFixer(RenderMaterial materialDefault) implements RenderContext.QuadTransform {
+        public static MaterialFixer create(BlockState materialState) {
+            RenderType type = ItemBlockRenderTypes.getChunkRenderType(materialState);
+            BlendMode blendMode = BlendMode.fromRenderLayer(type);
+            MaterialFinder finder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).materialFinder();
+            RenderMaterial renderMaterial = finder.blendMode(blendMode).find();
+            return new CopycatModelFabric.MaterialFixer(renderMaterial);
+        }
+
         @Override
         public boolean transform(MutableQuadView quad) {
             if (quad.material().blendMode() == BlendMode.DEFAULT) {
@@ -319,14 +320,6 @@ public class CopycatModelFabric extends ForwardingBakedModel implements CustomPa
                 quad.material(materialDefault);
             }
             return true;
-        }
-
-        public static MaterialFixer create(BlockState materialState) {
-            RenderType type = ItemBlockRenderTypes.getChunkRenderType(materialState);
-            BlendMode blendMode = BlendMode.fromRenderLayer(type);
-            MaterialFinder finder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer()).materialFinder();
-            RenderMaterial renderMaterial = finder.blendMode(blendMode).find();
-            return new CopycatModelFabric.MaterialFixer(renderMaterial);
         }
     }
 }
