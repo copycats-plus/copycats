@@ -139,7 +139,7 @@ public class FeatureToggle {
      * Refresh item visibility in all places when the list of enabled features has changed
      */
     static void refreshItemVisibility() {
-        if (LogicalSidedProvider.WORKQUEUE.get(Platform.Environment.CLIENT) != null) {
+        if (LogicalSidedProvider.WORKQUEUE.isPresent(Platform.Environment.CLIENT)) {
             Platform.Environment.CLIENT.runIfCurrent(() -> () ->
                     LogicalSidedProvider.WORKQUEUE.get(Platform.Environment.CLIENT).submit(() -> {
                         CreativeModeTab.ItemDisplayParameters cachedParameters = CreativeModeTabsAccessor.getCACHED_PARAMETERS();

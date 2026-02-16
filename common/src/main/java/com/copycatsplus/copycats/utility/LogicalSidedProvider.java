@@ -33,4 +33,16 @@ public class LogicalSidedProvider<T> {
     public T get(final Platform.Environment side) {
         return side == Platform.Environment.CLIENT ? clientSide.apply(client) : serverSide.apply(server);
     }
+
+    public boolean isPresent(Platform.Environment environment) {
+        if (Platform.Environment.SERVER.isCurrent()) {
+            if (environment.equals(Platform.Environment.CLIENT)) {
+                return false;
+            } else {
+                return serverSide != null;
+            }
+        } else {
+            return clientSide != null;
+        }
+    }
 }
