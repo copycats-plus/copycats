@@ -34,6 +34,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -44,6 +45,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -255,7 +257,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
     @Override
     default ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // prioritize wrench interactions over others
-        if (stack.is(AllTags.AllItemTags.WRENCH.tag)) {
+        if (stack.is(Tags.Items.TOOLS_WRENCH)) {
             InteractionResult result = AllItems.WRENCH.get().useOn(new UseOnContext(player, hand, hitResult));
             if (result.indicateItemUse())
                 player.swing(hand);

@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4.+"
-    id "dev.architectury.loom" version "1.7.+" apply false
+    id "dev.architectury.loom" version "1.10.+" apply false
 }
 
 boolean ci = System.getenv("CI") != null ? System.getenv("CI").toBoolean() : false
@@ -91,8 +91,8 @@ allprojects {
             url = 'https://maven.createmod.net/'
         }
         maven {
-            name = 'tterrag maven'
-            url = 'https://maven.tterrag.com/'
+            name = 'ithundxr maven'
+            url = "https://maven.ithundxr.dev/snapshots"
         }
         maven {
             // location of the maven that hosts JEI files before January 2023
@@ -222,5 +222,5 @@ allprojects {
 }
 
 wrapper {
-    gradleVersion = "8.8"
+    gradleVersion = "8.14"
 }

@@ -40,6 +40,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -219,7 +220,7 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
 
     default ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // prioritize wrench interactions over others
-        if (stack.is(AllTags.AllItemTags.WRENCH.tag)) {
+        if (stack.is(Tags.Items.TOOLS_WRENCH)) {
             InteractionResult result = AllItems.WRENCH.get().useOn(new UseOnContext(player, hand, hitResult));
             if (result.indicateItemUse())
                 player.swing(hand);

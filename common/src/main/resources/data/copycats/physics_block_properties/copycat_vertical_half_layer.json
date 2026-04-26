@@ -1,0 +1,8 @@
+{
+  "selector": "copycats:copycat_vertical_half_layer",
+
+  "properties": {
+    "sable:mass": 0.5,
+    "sable:volume": 0.5
+  }
+}

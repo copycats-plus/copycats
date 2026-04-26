@@ -1,0 +1,8 @@
+{
+  "selector": "copycats:copycat_vertical_step",
+
+  "properties": {
+    "sable:mass": 0.25,
+    "sable:volume": 0.25
+  }
+}

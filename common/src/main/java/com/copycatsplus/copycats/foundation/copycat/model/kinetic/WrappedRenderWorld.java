@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ColorResolver;
@@ -31,7 +32,8 @@ public class WrappedRenderWorld extends VirtualRenderWorld {
     protected ModelData modelData;
 
     public WrappedRenderWorld(ICopycatBlockEntity be) {
-        super(be.getLevel());
+        super(be.getLevel(), be.getLevel().getMinBuildHeight(), be.getLevel().getHeight(), Vec3i.ZERO, () -> {
+        });
         this.level = be.getLevel();
         this.targetPos = be.getBlockPos();
         this.material = be.getMaterial();
@@ -66,16 +68,6 @@ public class WrappedRenderWorld extends VirtualRenderWorld {
     }
 
     @Override
-    public int getHeight() {
-        return level.getHeight();
-    }
-
-    @Override
-    public int getMinBuildHeight() {
-        return level.getMinBuildHeight();
-    }
-
-    @Override
     public float getShade(@NotNull Direction direction, boolean shade) {
         return 1;
     }
@@ -92,5 +84,11 @@ public class WrappedRenderWorld extends VirtualRenderWorld {
             return this.modelData;
         }
         return super.getModelData(pos);
+    }
+
+    @Override
+    public void blockEntityChanged(BlockPos pos) {
+        // no-op
+        // cannot set changed state because getChunk is not implemented
     }
 }
