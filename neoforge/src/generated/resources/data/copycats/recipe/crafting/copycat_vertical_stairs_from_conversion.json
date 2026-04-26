@@ -2,12 +2,12 @@
   "neoforge:conditions": [
     {
       "type": "copycats:feature_enabled",
-      "feature": "copycats:copycat_vertical_stairs",
+      "feature": "copycats:copycat_stairs",
       "invert": false
     },
     {
       "type": "copycats:feature_enabled",
-      "feature": "copycats:copycat_stairs",
+      "feature": "copycats:copycat_vertical_stairs",
       "invert": false
     }
   ],
@@ -15,7 +15,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "copycats:copycat_stairs"
+      "item": "copycats:copycat_stairs"
     }
   ],
   "result": {

@@ -184,21 +184,7 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_VERTICAL_STAIRS = copycat(CCBlocks.COPYCAT_VERTICAL_STAIRS, 1);
 
-    GeneratedRecipe COPYCAT_STAIRS_CYCLE_1 = create(CCBlocks.COPYCAT_STAIRS).withSuffix("_from_conversion")
-            .unlockedBy(CCBlocks.COPYCAT_VERTICAL_STAIRS::get)
-            .requiresResultFeature()
-            .requiresFeature(CCBlocks.COPYCAT_VERTICAL_STAIRS)
-            .viaShapeless(b -> b
-                    .requires(CCBlocks.COPYCAT_VERTICAL_STAIRS)
-            );
-
-    GeneratedRecipe COPYCAT_STAIRS_CYCLE_2 = create(CCBlocks.COPYCAT_VERTICAL_STAIRS).withSuffix("_from_conversion")
-            .unlockedByTag(() -> CCTags.Items.COPYCAT_STAIRS.tag)
-            .requiresResultFeature()
-            .requiresFeature(CCBlocks.COPYCAT_STAIRS)
-            .viaShapeless(b -> b
-                    .requires(CCTags.Items.COPYCAT_STAIRS.tag)
-            );
+    GeneratedRecipe COPYCAT_STAIRS_CYCLE = conversionCycle(CCBlocks.COPYCAT_STAIRS, CCBlocks.COPYCAT_VERTICAL_STAIRS);
 
     GeneratedRecipe COPYCAT_GHOST_BLOCK = copycat(CCBlocks.COPYCAT_GHOST_BLOCK, 1);
 
