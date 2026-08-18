@@ -6,7 +6,6 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
@@ -33,6 +32,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CCCopycatBlockEntity extends SmartBlockEntity implements ICopycatBlockEntity {
 
     protected BlockState material;
+    protected ItemStack lightItem;
     protected ItemStack consumedItem;
     protected boolean enableCT;
 
@@ -71,6 +71,11 @@ public class CCCopycatBlockEntity extends SmartBlockEntity implements ICopycatBl
     }
 
     @Override
+    public ItemStack getLightItem() {
+        return lightItem;
+    }
+
+    @Override
     public ItemStack getConsumedItem() {
         return consumedItem;
     }
@@ -78,6 +83,11 @@ public class CCCopycatBlockEntity extends SmartBlockEntity implements ICopycatBl
     @Override
     public boolean isCTEnabled() {
         return enableCT;
+    }
+
+    @Override
+    public void setLightItemInternal(ItemStack stack) {
+        this.lightItem = stack;
     }
 
     @Override

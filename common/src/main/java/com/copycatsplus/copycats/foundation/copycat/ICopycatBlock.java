@@ -21,6 +21,7 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -29,7 +30,9 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -136,16 +139,33 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
         if (copycatBE == null)
             return InteractionResult.PASS;
         ItemStack consumedItem = copycatBE.getConsumedItem();
-        if (!copycatBE.hasCustomMaterial())
+        ItemStack lightItem = copycatBE.getLightItem();
+
+        boolean hasConsumedItem = !consumedItem.isEmpty();
+        boolean hasLightItem = !lightItem.isEmpty();
+
+        if (!copycatBE.hasCustomMaterial() && !hasLightItem)
             return InteractionResult.PASS;
+
         Player player = context.getPlayer();
-        if (!player.isCreative())
-            player.getInventory()
-                    .placeItemBackInInventory(consumedItem);
-        context.getLevel()
-                .levelEvent(2001, context.getClickedPos(), Block.getId(getMaterial(context.getLevel(), context.getClickedPos())));
+        if (!player.isCreative()) {
+            if (hasConsumedItem)
+                player.getInventory().placeItemBackInInventory(consumedItem);
+            if (hasLightItem)
+                player.getInventory().placeItemBackInInventory(lightItem);
+        }
+
+        if (hasConsumedItem)
+            context.getLevel()
+                    .levelEvent(2001, context.getClickedPos(), Block.getId(getMaterial(context.getLevel(), context.getClickedPos())));
+        else if (hasLightItem) {
+            SoundEvent soundEvent = ((BlockItem) lightItem.getItem()).getBlock().defaultBlockState().getSoundType().getBreakSound();
+            context.getLevel().playSound(null, copycatBE.getBlockPos(), soundEvent, SoundSource.BLOCKS, 1, .75f);
+        }
+
         copycatBE.setMaterial(AllBlocks.COPYCAT_BASE.getDefaultState());
         copycatBE.setConsumedItem(ItemStack.EMPTY);
+        copycatBE.setLightItem(ItemStack.EMPTY);
         return InteractionResult.SUCCESS;
     }
 
@@ -231,6 +251,9 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
         if (player == null || !player.mayBuild())
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
+        ItemInteractionResult lightItemInteractionResult = useLightItemOn(stack, state, level, pos, player, hand, hitResult);
+        if(lightItemInteractionResult != null) return lightItemInteractionResult;
+
         Direction face = hitResult.getDirection();
         BlockState materialIn = getAcceptedBlockState(level, pos, stack, face);
 
@@ -263,6 +286,45 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
                 .playSound(null, copycatBE.getBlockPos(), material.getSoundType()
                         .getPlaceSound(), SoundSource.BLOCKS, 1, .75f);
 
+        if (player.isCreative())
+            return ItemInteractionResult.SUCCESS;
+
+        stack.shrink(1);
+        if (stack.isEmpty())
+            player.setItemInHand(hand, ItemStack.EMPTY);
+        return ItemInteractionResult.SUCCESS;
+    }
+
+    default boolean canUseLightItem(ItemStack stack) {
+        return stack.is(Items.GLOWSTONE) || stack.is(Items.TORCH) || stack.is(Items.SOUL_TORCH);
+    }
+
+    default @Nullable ItemInteractionResult useLightItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!canUseLightItem(stack)) {
+            return null;
+        }
+
+        ICopycatBlockEntity copycatBE = getCopycatBlockEntity(level, pos);
+
+        if (copycatBE == null)
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        if (copycatBE.getLightItem().is(stack.getItem())) {
+            if (!player.isCreative())
+                player.getInventory().placeItemBackInInventory(copycatBE.getLightItem());
+
+            SoundEvent soundEvent = ((BlockItem) stack.getItem()).getBlock().defaultBlockState().getSoundType().getBreakSound();
+            level.playSound(null, copycatBE.getBlockPos(), soundEvent, SoundSource.BLOCKS, 1, .75f);
+            copycatBE.setLightItem(ItemStack.EMPTY);
+            return ItemInteractionResult.SUCCESS;
+        }
+
+        if(!copycatBE.getLightItem().isEmpty() && !player.isCreative())
+            player.getInventory().placeItemBackInInventory(copycatBE.getLightItem());
+
+        copycatBE.setLightItem(stack);
+        SoundEvent soundEvent = ((BlockItem) stack.getItem()).getBlock().defaultBlockState().getSoundType().getPlaceSound();
+        level.playSound(null, copycatBE.getBlockPos(), soundEvent, SoundSource.BLOCKS, 1, .75f);
         if (player.isCreative())
             return ItemInteractionResult.SUCCESS;
 
@@ -322,7 +384,11 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
     default BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (player.isCreative()) {
             ICopycatBlockEntity copycatBE = getCopycatBlockEntity(level, pos);
-            if (copycatBE != null) copycatBE.setConsumedItem(ItemStack.EMPTY);
+            if (copycatBE != null) {
+                copycatBE.setConsumedItem(ItemStack.EMPTY);
+                copycatBE.setLightItem(ItemStack.EMPTY);
+            }
+
         }
         return state;
     }

@@ -30,6 +30,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class MultiStateCopycatBlockEntity extends SmartBlockEntity implements IMultiStateCopycatBlockEntity {
 
+    protected ItemStack lightItem;
     private MaterialItemStorage materialItemStorage;
 
     public MultiStateCopycatBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -44,6 +45,16 @@ public class MultiStateCopycatBlockEntity extends SmartBlockEntity implements IM
     @Override
     public void setMaterialItemStorageInternal(MaterialItemStorage storage) {
         materialItemStorage = storage;
+    }
+
+    @Override
+    public ItemStack getLightItem() {
+        return lightItem;
+    }
+
+    @Override
+    public void setLightItemInternal(ItemStack stack) {
+        this.lightItem = stack;
     }
 
     @Override

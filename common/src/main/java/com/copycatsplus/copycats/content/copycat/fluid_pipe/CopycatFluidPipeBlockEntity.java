@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats.content.copycat.fluid_pipe;
 
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
-import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlockEntity;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -17,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class CopycatFluidPipeBlockEntity extends FluidPipeBlockEntity implements ICopycatBlockEntity {
 
     protected BlockState material;
+    protected ItemStack lightItem;
     protected ItemStack consumedItem;
     protected boolean enableCT;
 
@@ -28,6 +28,11 @@ public class CopycatFluidPipeBlockEntity extends FluidPipeBlockEntity implements
     @Override
     public BlockState getMaterial() {
         return material;
+    }
+
+    @Override
+    public ItemStack getLightItem() {
+        return lightItem;
     }
 
     @Override
@@ -43,6 +48,11 @@ public class CopycatFluidPipeBlockEntity extends FluidPipeBlockEntity implements
     @Override
     public void setMaterialInternal(BlockState material) {
         this.material = material;
+    }
+
+    @Override
+    public void setLightItemInternal(ItemStack stack) {
+        this.lightItem = stack;
     }
 
     @Override
