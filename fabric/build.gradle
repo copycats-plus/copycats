@@ -1,6 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
-    id 'me.modmuss50.mod-publish-plugin' version "0.5.1"
+    id 'me.modmuss50.mod-publish-plugin' version "2.2.0"
 }
 
 architectury {
@@ -128,6 +128,7 @@ publishMods {
         accessToken = project.findProperty("MODRINTH_TOKEN")
         projectId = "UT2M39wf"
         minecraftVersions.add(minecraft_version)
+        environment = CLIENT_AND_SERVER
 
         requires {
             id = "Xbc0uyRg"
@@ -141,6 +142,8 @@ publishMods {
         accessToken = project.findProperty("CURSEFORGE_TOKEN")
         projectId = "968398"
         minecraftVersions.add(minecraft_version)
+        client = true
+        server = true
     }
 
     dryRun = Boolean.parseBoolean(doDryRun)
