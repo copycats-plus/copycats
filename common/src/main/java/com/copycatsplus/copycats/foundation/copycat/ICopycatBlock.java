@@ -44,7 +44,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
@@ -321,11 +320,11 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
     }
 
     static BlockState getAppearance(ICopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
-                                    @Nullable BlockState queryState, @Nullable BlockPos queryPos, BiFunction<BlockGetter, BlockPos, BlockState> getThreadSafeMaterial) {
+                                    @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
         if (block.isIgnoredConnectivitySide(level, state, side, pos, queryPos, queryState))
             return state;
 
-        BlockState material = getThreadSafeMaterial.apply(level, pos);
+        BlockState material = getMaterial(level, pos);
         return material.is(Blocks.AIR) ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
     }
 
@@ -336,7 +335,7 @@ public interface ICopycatBlock extends IWrenchable, IStateType, TransformableBlo
     static BlockState getMaterial(BlockGetter reader, BlockPos targetPos) {
         if (reader.getBlockEntity(targetPos) instanceof ICopycatBlockEntity cbe)
             return cbe.getMaterial();
-        return AllBlocks.COPYCAT_BASE.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     /**
