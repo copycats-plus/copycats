@@ -128,6 +128,10 @@ public class MaterialItemStorage {
         return anyUpdated.get();
     }
 
+    public void clear() {
+        storage.clear();
+    }
+
     /**
      * Stores copycat data for a single part of a multi-state copycat.
      */
