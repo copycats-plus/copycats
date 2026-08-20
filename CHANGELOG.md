@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.8 - 2026-08-20
+
+### Fixed
+
+- Made the material storage for multistates get properly cleared on chunk unload/block removal. Fixing [Issue #420](https://github.com/copycats-plus/copycats/issues/420)
+
 ## 3.0.7 - 2026-02-16
 
 ### Fixed
@@ -22,6 +28,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for Create Fabric 6.0.7+
+
+### Fixed
+
+- Null issue with config showing on startups
+
+## 3.0.6 - 2026-08-20
+
+### Fixed
+
+- Made the material storage for multistates get properly cleared on chunk unload/block removal. Fixing [Issue #420](https://github.com/copycats-plus/copycats/issues/420)
+
+
+## 3.0.5 - 2026-02-15
+
+### Added
+
+- Support for Create Fabric 6.0.7+ (1.20.1)
 
 ### Fixed
 

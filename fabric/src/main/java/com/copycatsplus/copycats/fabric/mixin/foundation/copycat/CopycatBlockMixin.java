@@ -185,6 +185,6 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock,
 
     @Override
     public BlockState getAppearance(BlockState state, BlockAndTintGetter renderView, BlockPos pos, Direction side, @Nullable BlockState sourceState, @Nullable BlockPos sourcePos) {
-        return ICopycatBlock.getAppearance(this, state, renderView, pos, side, sourceState, sourcePos);
+        return ICopycatBlock.getAppearance(this, state, renderView, pos, side, sourceState, sourcePos, ICopycatBlock::getMaterial);
     }
 }

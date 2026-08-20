@@ -271,6 +271,6 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IMult
 
     @Override
     public BlockState getAppearance(BlockState state, BlockAndTintGetter renderView, BlockPos pos, Direction side, @Nullable BlockState sourceState, @Nullable BlockPos sourcePos) {
-        return IMultiStateCopycatBlock.getAppearance(this, state, renderView, pos, side, sourceState, sourcePos);
+        return IMultiStateCopycatBlock.getAppearance(this, state, renderView, pos, side, sourceState, sourcePos, IMultiStateCopycatBlock::getMaterial);
     }
 }
