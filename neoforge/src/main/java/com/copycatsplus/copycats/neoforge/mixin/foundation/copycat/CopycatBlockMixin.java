@@ -17,7 +17,6 @@ import com.copycatsplus.copycats.content.copycat.trapdoor.CopycatTrapdoorBlock;
 import com.copycatsplus.copycats.content.copycat.wall.CopycatWallBlock;
 import com.copycatsplus.copycats.foundation.copycat.CCCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
-import com.copycatsplus.copycats.foundation.copycat.model.neoforge.CopycatModelNeoForge;
 import com.simibubi.create.AllBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +36,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -151,16 +149,7 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock {
 
     @Override
     public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
-        return ICopycatBlock.getAppearance(this, state, level, pos, side, queryState, queryPos,
-                (reader, blockPos) -> {
-                    ModelData data = reader.getModelData(blockPos);
-                    if (data.equals(ModelData.EMPTY)) {
-                        return ICopycatBlock.getMaterial(reader, blockPos);
-                    } else {
-                        BlockState material = data.get(CopycatModelNeoForge.MATERIAL_PROPERTY);
-                        return material != null ? material : AllBlocks.COPYCAT_BASE.getDefaultState();
-                    }
-                });
+        return ICopycatBlock.getAppearance(this, state, level, pos, side, queryState, queryPos);
     }
 
     /*

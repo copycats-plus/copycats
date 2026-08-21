@@ -12,7 +12,6 @@ import com.copycatsplus.copycats.network.CCPackets;
 import com.copycatsplus.copycats.network.FillCopycatPacket;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
 import com.copycatsplus.copycats.utility.BlockFaceUtils;
-import com.copycatsplus.copycats.utility.TriFunction;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
@@ -398,7 +397,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
     }
 
     static BlockState getAppearance(IMultiStateCopycatBlock block, BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
-                                    @Nullable BlockState queryState, @Nullable BlockPos queryPos, TriFunction<BlockGetter, BlockPos, String, BlockState> getThreadSafeMaterial) {
+                                    @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
 
         BlockAndTintGetter reader = Mods.ATHENA.runIfInstalled(() -> () -> AthenaCompat.unwrapAthenaGetter(level)).orElse(level);
 
@@ -415,7 +414,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         property = CopycatExternalContext.getPropertyForAppearance();
         if (property == null)
             property = block.defaultProperty();
-        BlockState material = getThreadSafeMaterial.apply(reader, pos, property);
+        BlockState material = IMultiStateCopycatBlock.getMaterial(reader, pos, property);
         return material.is(Blocks.AIR) ? AllBlocks.COPYCAT_BASE.getDefaultState() : material;
     }
 
@@ -428,7 +427,7 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
         if (reader.getBlockEntity(targetPos) instanceof IMultiStateCopycatBlockEntity cbe)
             if (cbe.getMaterialItemStorage().getMaterialItem(property) != null)
                 return cbe.getMaterialItemStorage().getMaterialItem(property).material();
-        return AllBlocks.COPYCAT_BASE.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     void transformStorage(BlockState state, IMultiStateCopycatBlockEntity be, StructureTransform transform);

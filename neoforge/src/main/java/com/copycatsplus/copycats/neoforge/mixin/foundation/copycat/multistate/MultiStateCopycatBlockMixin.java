@@ -1,7 +1,6 @@
 package com.copycatsplus.copycats.neoforge.mixin.foundation.copycat.multistate;
 
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
-import com.copycatsplus.copycats.foundation.copycat.model.neoforge.CopycatModelNeoForge;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlock;
 import com.copycatsplus.copycats.foundation.copycat.multistate.IMultiStateCopycatBlockEntity;
 import com.copycatsplus.copycats.foundation.copycat.multistate.MaterialItemStorage;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +29,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -210,17 +207,7 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IBloc
 
     @Override
     public BlockState getAppearance(BlockState state, BlockAndTintGetter renderView, BlockPos pos, Direction side, @org.jetbrains.annotations.Nullable BlockState sourceState, @org.jetbrains.annotations.Nullable BlockPos sourcePos) {
-        return IMultiStateCopycatBlock.getAppearance(this, state, renderView, pos, side, sourceState, sourcePos,
-                (reader, blockPos, property) -> {
-                    ModelData data = reader.getModelData(blockPos);
-                    if (data.equals(ModelData.EMPTY)) {
-                        return IMultiStateCopycatBlock.getMaterial(reader, blockPos, property);
-                    } else {
-                        Map<String, BlockState> map = data.get(CopycatModelNeoForge.MATERIALS_PROPERTY);
-                        if (map == null) return AllBlocks.COPYCAT_BASE.getDefaultState();
-                        return map.getOrDefault(property, AllBlocks.COPYCAT_BASE.getDefaultState());
-                    }
-                });
+        return IMultiStateCopycatBlock.getAppearance(this, state, renderView, pos, side, sourceState, sourcePos);
     }
 
     /*
