@@ -126,7 +126,7 @@ public class CopycatModelNeoForge extends BakedModelWrapperWithData {
             Map<String, OcclusionData> occlusionMap = new HashMap<>();
             for (Map.Entry<String, BlockState> s : materials.entrySet()) {
                 Vec3i inner = multiStateBlock.getVectorFromProperty(state, s.getKey());
-                boolean enableCT = !(world.getBlockEntity(pos) instanceof IMultiStateCopycatBlockEntity multiStateBE) || multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()).enableCT();
+                boolean enableCT = !(world.getBlockEntity(pos) instanceof IMultiStateCopycatBlockEntity multiStateBE) || (multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()) != null && multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()).enableCT());
                 ScaledBlockAndTintGetter scaledWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, multiStateBlock.vectorScale(state), p -> true);
 
                 OcclusionData occlusionData = new OcclusionData();
