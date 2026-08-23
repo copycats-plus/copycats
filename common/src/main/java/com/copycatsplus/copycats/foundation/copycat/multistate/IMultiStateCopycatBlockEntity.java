@@ -73,7 +73,7 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
 
     @Override
     default boolean isCTEnabled() {
-        return getMaterialItemStorage().getMaterialItem(getBlock().defaultProperty()).enableCT();
+        return getMaterialItemStorage().getMaterialItem(getBlock().defaultProperty()) != null && getMaterialItemStorage().getMaterialItem(getBlock().defaultProperty()).enableCT();
     }
 
     @Override
