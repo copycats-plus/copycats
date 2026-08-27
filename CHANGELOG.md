@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.8 - 2026-08-23
+
+### Fixed
+
+- Fix null issue causing crashes when trying to get materials that are null. Fixing [Issue #423](https://github.com/copycats-plus/copycats/issues/423)
+
+## 3.0.7 - 2026-08-21
+
+### Fixed
+
+- Revert commit that was breaking air currents from fans. Fixing [Issue #422](https://github.com/copycats-plus/copycats/issues/422)
+
+
+## 3.0.6 - 2026-08-20
+
+### Fixed
+
+- Made the material storage for multistates get properly cleared on chunk unload/block removal. Fixing [Issue #420](https://github.com/copycats-plus/copycats/issues/420)
+
+
 ## 3.0.5 - 2026-02-15
 
 ### Added

@@ -53,6 +53,12 @@ public class MultiStateCopycatBlockEntity extends SmartBlockEntity implements IM
     }
 
     @Override
+    public void invalidate() {
+        super.invalidate();
+        getMaterialItemStorage().clear();
+    }
+
+    @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
     }
 
