@@ -1,1 +1,13 @@
-{}
+{
+  "block.copycats.copycat_beam": "Kopio Säde",
+  "block.copycats.copycat_block": "Kopio Lohko",
+  "block.copycats.copycat_board": "Kopio Lauta",
+  "block.copycats.copycat_fence": "Kopio Aita",
+  "block.copycats.copycat_fence_gate": "Kopio Aidan Portti",
+  "block.copycats.copycat_slab": "Kopio Slab",
+  "block.copycats.copycat_stairs": "Kopio Portaat",
+  "block.copycats.copycat_vertical_step": "Kopio Pystysuora Askel",
+  "block.copycats.copycat_wall": "Kopio Seinä",
+  "item.copycats.copycat_box": "Kopio Laatikko",
+  "item.copycats.copycat_catwalk": "Kopio Kattevandring"
+}
