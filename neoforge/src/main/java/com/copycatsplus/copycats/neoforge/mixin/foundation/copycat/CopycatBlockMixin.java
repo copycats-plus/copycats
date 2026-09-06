@@ -1,5 +1,6 @@
 package com.copycatsplus.copycats.neoforge.mixin.foundation.copycat;
 
+import com.copycatsplus.copycats.Copycats;
 import com.copycatsplus.copycats.content.copycat.button.CopycatButtonBlock;
 import com.copycatsplus.copycats.content.copycat.door.CopycatDoorBlock;
 import com.copycatsplus.copycats.content.copycat.fence.CopycatFenceBlock;
@@ -20,6 +21,8 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.simibubi.create.AllBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -116,11 +119,22 @@ public abstract class CopycatBlockMixin extends Block implements ICopycatBlock {
     @Override
     public boolean addLandingEffects(BlockState state1, ServerLevel level, BlockPos pos, BlockState state2,
                                      LivingEntity entity, int numberOfParticles) {
-        return getMaterial(level, pos).addLandingEffects(level, pos, state2, entity, numberOfParticles);
+        BlockState material = getMaterial(level, pos);
+
+        // addLandingEffect is true if a *custom* fall block particle is defined
+        // for the material.
+        if (material.addLandingEffects(level, pos, state2, entity, numberOfParticles))
+            return true;
+
+        // As there isn't a custom effect, this copies how vanilla makes the particles,
+        // but as a custom landing effect. See LivingEntity#checkFallDamage
+        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, material).setPos(pos), entity.getX(), entity.getY(), entity.getZ(), numberOfParticles, 0.0f, 0.0f, 0.0f, 0.15f);
+        return true;
     }
 
     @Override
     public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) {
+        Copycats.LOGGER.info("Running !!");
         return getMaterial(level, pos).addRunningEffects(level, pos, entity);
     }
 
