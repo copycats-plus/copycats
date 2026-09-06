@@ -9,6 +9,8 @@ import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelModelCo
 import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatLargeCogWheelModelCore;
 import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneBlock;
 import com.copycatsplus.copycats.content.copycat.flat_pane.CopycatFlatPaneModelCore;
+import com.copycatsplus.copycats.content.copycat.redstone_lamp.CopycatRedstoneLampBlock;
+import com.copycatsplus.copycats.content.copycat.redstone_lamp.CopycatRedstoneLampBlockModelCore;
 import com.copycatsplus.copycats.content.copycat.shaft.CopycatShaftModelCore;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatFoldingDoorModelCore;
 import com.copycatsplus.copycats.content.copycat.sliding_door.CopycatSlidingDoorBlock;
@@ -106,9 +108,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 
 import java.util.HashSet;
@@ -574,6 +576,20 @@ public class CCBlocks {
                             CopycatCharacteristics.FUNCTIONAL
                     ))
                     .transform(customItemModel("copycat_base", "trapdoor"))
+                    .register();
+
+    public static final BlockEntry<CopycatRedstoneLampBlock> COPYCAT_REDSTONE_LAMP =
+            REGISTRATE.block("copycat_redstone_lamp", CopycatRedstoneLampBlock::new)
+                    .transform(CCBuilderTransformers.copycat())
+                    .transform(FeatureToggle.register(FeatureCategory.FUNCTIONAL))
+                    .properties(p -> p.lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0))
+                    .onRegister(onClient(() -> createBlockModel(CopycatRedstoneLampBlockModelCore::new)))
+                    .item()
+                    .onRegister(CopycatDescription.register(
+                            CopycatCharacteristics.COPYCAT,
+                            CopycatCharacteristics.CT_TOGGLE
+                    ))
+                    .transform(customItemModel("copycat_base", "block"))
                     .register();
 
     public static final BlockEntry<CopycatVerticalSliceBlock> COPYCAT_VERTICAL_SLICE =
