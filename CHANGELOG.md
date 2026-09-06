@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.10 - 2026-09-06
+
+### Fixed
+
+- Actually fix crash issue. Fixing [Issue #423](https://github.com/copycats-plus/copycats/issues/423)
+
 ## 3.0.9 - 2026-08-23
 
 ### Fixed

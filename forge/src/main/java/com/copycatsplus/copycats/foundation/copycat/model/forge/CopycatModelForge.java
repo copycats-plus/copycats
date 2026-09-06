@@ -128,7 +128,16 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
             Map<String, OcclusionData> occlusionMap = new HashMap<>();
             for (Map.Entry<String, BlockState> s : materials.entrySet()) {
                 Vec3i inner = multiStateBlock.getVectorFromProperty(state, s.getKey());
-                boolean enableCT = !(world.getBlockEntity(pos) instanceof IMultiStateCopycatBlockEntity multiStateBE) || (multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()) != null && multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()).enableCT());
+                boolean enableCT = !(world.getBlockEntity(pos) instanceof IMultiStateCopycatBlockEntity);
+                if ((world.getBlockEntity(pos) instanceof IMultiStateCopycatBlockEntity multiStateBE)) {
+                    if (multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()) != null)
+                        try {
+                            enableCT = multiStateBE.getMaterialItemStorage().getMaterialItem(s.getKey()).enableCT();
+                            //Doing this as a double insurance
+                        } catch (Exception ignored) {
+                            enableCT = true;
+                        }
+                }
                 ScaledBlockAndTintGetter scaledWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, multiStateBlock.vectorScale(state), p -> true);
 
                 OcclusionData occlusionData = new OcclusionData();
@@ -136,9 +145,10 @@ public class CopycatModelForge extends BakedModelWrapperWithData {
                     gatherOcclusionData(scaledWorld, pos, state, s.getValue(), occlusionData, copycatBlock);
                 occlusionMap.put(s.getKey(), occlusionData);
 
+                boolean finalEnableCT = enableCT;
                 ScaledBlockAndTintGetter filteredWorld = new ScaledBlockAndTintGetterForge(s.getKey(), world, pos, inner, multiStateBlock.vectorScale(state),
                         targetPos -> {
-                            if (!enableCT) return false;
+                            if (!finalEnableCT) return false;
                             return multiStateBlock.canConnectTexturesToward(s.getKey(), scaledWorld, pos, targetPos, state);
                         });
                 wrappedDataMap.put(s.getKey(), getModelOf(s.getValue()).getModelData(
