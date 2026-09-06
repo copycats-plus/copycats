@@ -44,6 +44,7 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
+    public static final BooleanProperty IN_WALL = BlockStateProperties.IN_WALL;
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
 
     public CopycatSlopeLayerBlock(Properties pProperties) {
@@ -51,13 +52,14 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
         registerDefaultState(defaultBlockState()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(HALF, Half.BOTTOM)
+                .setValue(IN_WALL, false)
                 .setValue(LAYERS, 1)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        super.createBlockStateDefinition(pBuilder.add(FACING, HALF, LAYERS));
+        super.createBlockStateDefinition(pBuilder.add(FACING, HALF, IN_WALL, LAYERS));
     }
 
     @Override
@@ -74,16 +76,26 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
                 return state;
             }
         } else {
-            Half half = context.getClickedFace() == Direction.DOWN
-                    ? Half.TOP
-                    : context.getClickedFace() == Direction.UP
-                    ? Half.BOTTOM
-                    : context.getClickLocation().y - context.getClickedPos().getY() > 0.5
-                    ? Half.TOP
-                    : Half.BOTTOM;
-            return stateForPlacement
-                    .setValue(FACING, context.getHorizontalDirection())
-                    .setValue(HALF, half);
+            Direction playerHorizontal = context.getHorizontalDirection();
+            Direction clickedFace = context.getClickedFace();
+            if (clickedFace == Direction.UP || clickedFace == Direction.DOWN) {
+                Half half = clickedFace == Direction.DOWN
+                        ? Half.TOP
+                        : Half.BOTTOM;
+                return stateForPlacement
+                        .setValue(FACING, playerHorizontal)
+                        .setValue(IN_WALL, false)
+                        .setValue(HALF, half);
+            }
+            else {
+                Half half = context.getClickLocation().y - context.getClickedPos().getY() > 0.5
+                        ? Half.TOP
+                        : Half.BOTTOM;
+                return stateForPlacement
+                        .setValue(FACING, clickedFace)
+                        .setValue(IN_WALL, true)
+                        .setValue(HALF, half);
+            }
         }
     }
 
@@ -94,8 +106,14 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
         if (!itemstack.is(this.asItem())) return false;
         if (pState.getValue(LAYERS) == 8) return false;
         Half half = pState.getValue(HALF);
+        boolean inWall = pState.getValue(IN_WALL);
         Direction facing = pState.getValue(FACING);
-        if (pUseContext.getClickedFace() == facing.getOpposite()) return true;
+        if(!inWall) {
+            if (pUseContext.getClickedFace() == facing.getOpposite()) return true;
+        }
+        else {
+            if (pUseContext.getClickedFace() == facing) return true;
+        }
         if (half == Half.TOP && pUseContext.getClickedFace() == Direction.DOWN) return true;
         if (half == Half.BOTTOM && pUseContext.getClickedFace() == Direction.UP) return true;
         return false;
@@ -155,9 +173,10 @@ public class CopycatSlopeLayerBlock extends CCWaterloggedCopycatBlock implements
         };
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        return CCShapes.SLOPE_LAYER.get(pState.getValue(FACING)).get(pState.getValue(HALF)).get(pState.getValue(LAYERS)).toShape();
+        return CCShapes.SLOPE_LAYER.get(pState.getValue(FACING)).get(pState.getValue(HALF)).get(pState.getValue(IN_WALL)).get(pState.getValue(LAYERS)).toShape();
     }
 
 
