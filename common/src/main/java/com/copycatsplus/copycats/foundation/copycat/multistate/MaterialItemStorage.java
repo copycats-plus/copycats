@@ -11,8 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public class MaterialItemStorage {
     private Map<String, MaterialItem> storage;
 
     private MaterialItemStorage(Set<String> properties) {
-        storage = new HashMap<>(properties.size());
+        storage = new ConcurrentHashMap<>(properties.size());
         for (String property : properties) {
             storage.put(property, new MaterialItem(AllBlocks.COPYCAT_BASE.getDefaultState(), ItemStack.EMPTY));
         }
@@ -44,9 +44,13 @@ public class MaterialItemStorage {
 
     /**
      * Get the material item for a specific property.
+     * <p>
+     * If the property is missing from the storage, for example when the stored data was cleared
+     * or predates the copycat's current storage layout, a default material item is inserted and
+     * returned instead of {@code null} so that callers never crash on missing data.
      */
-    public @Nullable MaterialItem getMaterialItem(String property) {
-        return storage.get(property);
+    public MaterialItem getMaterialItem(String property) {
+        return storage.computeIfAbsent(property, key -> new MaterialItem(AllBlocks.COPYCAT_BASE.getDefaultState(), ItemStack.EMPTY));
     }
 
     /**
@@ -88,7 +92,7 @@ public class MaterialItemStorage {
      * Check if a specific property has a custom material.
      */
     public boolean hasCustomMaterial(String property) {
-        return storage.get(property).hasCustomMaterial();
+        return getMaterialItem(property).hasCustomMaterial();
     }
 
     /**
@@ -97,7 +101,7 @@ public class MaterialItemStorage {
      * @param keyMapper A function which accepts a key and returns a new key where the corresponding material should be stored.
      */
     public void remapStorage(Function<String, String> keyMapper) {
-        Map<String, MaterialItem> newStorage = new HashMap<>();
+        Map<String, MaterialItem> newStorage = new ConcurrentHashMap<>();
         storage.forEach((key, materialItem) -> newStorage.put(keyMapper.apply(key), materialItem));
         storage = newStorage;
     }
