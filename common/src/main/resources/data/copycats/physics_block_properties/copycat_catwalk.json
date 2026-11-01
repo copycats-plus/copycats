@@ -1,8 +1,0 @@
-{
-  "selector": "copycats:copycat_catwalk",
-
-  "properties": {
-    "sable:mass": 0.25,
-    "sable:volume": 0.25
-  }
-}
