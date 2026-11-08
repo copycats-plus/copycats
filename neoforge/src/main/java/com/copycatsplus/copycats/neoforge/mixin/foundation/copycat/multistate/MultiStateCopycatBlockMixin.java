@@ -9,6 +9,8 @@ import com.copycatsplus.copycats.content.copycat.cogwheel.CopycatCogWheelBlock;
 import com.simibubi.create.AllBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,6 +32,8 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.copycatsplus.copycats.foundation.copycat.ICopycatBlock.getMaterial;
 
 /**
  * Implement platform-specific methods for multi-state copycat blocks.
@@ -132,8 +136,15 @@ public abstract class MultiStateCopycatBlockMixin extends Block implements IBloc
             IMultiStateCopycatBlockEntity copycatBE = copycatBlock.getCopycatBlockEntity(level, pos);
             if (copycatBE == null)
                 return super.addLandingEffects(state1, level, pos, state2, entity, numberOfParticles);
+
             BlockState material = copycatBE.getMaterialItemStorage().getMaterialItem(property).material();
-            return material.addLandingEffects(level, pos, material, entity, numberOfParticles);
+
+            // See CopycatBlockMixin#addLandingEffects for explanation
+            if (material.addLandingEffects(level, pos, material, entity, numberOfParticles))
+                return true;
+
+            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, material).setPos(pos), entity.getX(), entity.getY(), entity.getZ(), numberOfParticles, 0.0f, 0.0f, 0.0f, 0.15f);
+            return true;
         } else {
             return super.addLandingEffects(state1, level, pos, state2, entity, numberOfParticles);
         }
