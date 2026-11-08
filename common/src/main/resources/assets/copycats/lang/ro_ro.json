@@ -1,4 +1,15 @@
 {
+  "block.copycats.copycat_beam": "Bârnă de copiat",
+  "block.copycats.copycat_block": "Bloc de copiere",
+  "block.copycats.copycat_board": "Secțiune de copiere",
+  "block.copycats.copycat_fence": "Gard de copiere",
+  "block.copycats.copycat_fence_gate": "Poartă de copiat",
+  "block.copycats.copycat_slab": "Laborator de copiere",
+  "block.copycats.copycat_stairs": "Scări de copiere",
+  "block.copycats.copycat_vertical_step": "Copycat Pas Vertical",
+  "block.copycats.copycat_wall": "Perete de copiat",
+  "item.copycats.copycat_box": "Cutie de Copycat",
+  "item.copycats.copycat_catwalk": "Copycat Catwalk",
   "itemGroup.copycats.functional": "Create: Copycats+ | Funcționale",
   "itemGroup.copycats.main": "Create: Copycats+ | Decorative"
 }
