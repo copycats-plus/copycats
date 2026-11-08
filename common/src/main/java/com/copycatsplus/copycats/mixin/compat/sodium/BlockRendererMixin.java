@@ -1,4 +1,4 @@
-package com.copycatsplus.copycats.mixin.compat.rubidium;
+package com.copycatsplus.copycats.mixin.compat.sodium;
 
 import com.copycatsplus.copycats.compat.Mods;
 import com.copycatsplus.copycats.foundation.annotation.ModMixin;

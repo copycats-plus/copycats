@@ -1,7 +1,7 @@
 package com.copycatsplus.copycats.mixin.foundation.copycat;
 
 import com.copycatsplus.copycats.compat.Mods;
-import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
+import com.copycatsplus.copycats.foundation.copycat.ICopycatCullable;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.simibubi.create.content.decoration.bracket.BracketBlock;
@@ -36,7 +36,7 @@ public class BlockStateBaseCacheMixin {
         if (instance.getBlock() instanceof BracketBlock) {
             return false;
         }
-        if (instance.getBlock() instanceof ICopycatBlock) {
+        if (instance.getBlock() instanceof ICopycatCullable) {
             return true;
         }
         return original.call(instance);

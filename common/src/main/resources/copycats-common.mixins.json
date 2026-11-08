@@ -7,8 +7,8 @@
   "mixins": [
     "compat.diagonalblocks.DiagonalBlockTypeImplMixin",
     "compat.radium.PathNodeDefaultsMixin",
-    "compat.rubidium.BlockOcclusionCacheMixin",
-    "compat.rubidium.BlockRendererMixin",
+    "compat.sodium.BlockOcclusionCacheMixin",
+    "compat.sodium.BlockRendererMixin",
     "compat.verticalslabcompat.CutBlockTypeRegistryMixin",
     "copycat.SyncedBlockEntityMixin",
     "copycat.VoxelShapeAccessor",
