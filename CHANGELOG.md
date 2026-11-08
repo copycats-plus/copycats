@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.11 - 2026-11-08
+
+### Fixed
+
+- Copycat bytes crashing when encountering invalid property name ([Issue #371](https://github.com/copycats-plus/copycats/issues/371))
+- Copycat byte panels crashing when encountering invalid property name ([Issue #441](https://github.com/copycats-plus/copycats/issues/441))
+- NPE in material item storage ([Issue #430](https://github.com/copycats-plus/copycats/issues/430) [PR #433](https://github.com/copycats-plus/copycats/pull/433))
+- Invalid fall particles ([Issue #238](https://github.com/copycats-plus/copycats/issues/238) [Issue #373](https://github.com/copycats-plus/copycats/issues/373) [PR #393](https://github.com/copycats-plus/copycats/pull/393))
+- Missing tags for doors and trapdoors ([Issue #377](https://github.com/copycats-plus/copycats/issues/377) [PR #383](https://github.com/copycats-plus/copycats/pull/383))
+
 ## 3.0.9 - 2026-09-06
 
 ### Fixed
@@ -23,13 +33,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Revert commit that was breaking air currents from fans. Fixing [Issue #422](https://github.com/copycats-plus/copycats/issues/422)
 
-
 ## 3.0.6 - 2026-08-20
 
 ### Fixed
 
 - Made the material storage for multistates get properly cleared on chunk unload/block removal. Fixing [Issue #420](https://github.com/copycats-plus/copycats/issues/420)
-
 
 ## 3.0.5 - 2026-02-15
 
