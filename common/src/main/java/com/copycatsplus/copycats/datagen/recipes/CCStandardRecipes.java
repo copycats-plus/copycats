@@ -115,6 +115,8 @@ public class CCStandardRecipes extends CopycatsRecipeProvider {
 
     GeneratedRecipe COPYCAT_IRON_TRAPDOOR = copycat(CCBlocks.COPYCAT_IRON_TRAPDOOR, 2);
 
+    GeneratedRecipe COPYCAT_REDSTONE_LAMP = copycatWithBaseItem(Items.REDSTONE_LAMP, CCBlocks.COPYCAT_REDSTONE_LAMP, 1);
+
     GeneratedRecipe COPYCAT_TRAPDOOR_CYCLE = conversionCycle(AllBlocks.COPYCAT_PANEL, CCBlocks.COPYCAT_TRAPDOOR);
 
     GeneratedRecipe COPYCAT_WALL = copycat(CCBlocks.COPYCAT_WALL, 1);

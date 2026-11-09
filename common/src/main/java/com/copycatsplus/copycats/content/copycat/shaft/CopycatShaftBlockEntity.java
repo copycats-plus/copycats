@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 public class CopycatShaftBlockEntity extends BracketedKineticBlockEntity implements ICopycatBlockEntity {
 
     protected BlockState material;
+    protected ItemStack lightItem;
+
     protected ItemStack consumedItem;
     protected boolean enableCT;
 
@@ -26,6 +28,11 @@ public class CopycatShaftBlockEntity extends BracketedKineticBlockEntity impleme
     @Override
     public BlockState getMaterial() {
         return material;
+    }
+
+    @Override
+    public ItemStack getLightItem() {
+        return lightItem;
     }
 
     @Override
@@ -41,6 +48,11 @@ public class CopycatShaftBlockEntity extends BracketedKineticBlockEntity impleme
     @Override
     public void setMaterialInternal(BlockState material) {
         this.material = material;
+    }
+
+    @Override
+    public void setLightItemInternal(ItemStack stack) {
+        this.lightItem = stack;
     }
 
     @Override

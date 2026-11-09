@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "copycats:feature_enabled",
+      "feature": "copycats:copycat_redstone_lamp",
+      "invert": false
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:redstone_lamp"
+    },
+    {
+      "item": "create:zinc_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "copycats:copycat_redstone_lamp"
+  }
+}

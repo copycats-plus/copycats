@@ -2,6 +2,7 @@ package com.copycatsplus.copycats.foundation.copycat.multistate;
 
 import com.copycatsplus.copycats.foundation.copycat.ICopycatBlockEntity;
 import com.copycatsplus.copycats.utility.BlockEntityUtils;
+import com.copycatsplus.copycats.utility.ItemUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.redstone.RoseQuartzLampBlock;
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -60,6 +62,7 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
         } else {
             setMaterialItemStorageInternal(MaterialItemStorage.create(Set.of("block")));
         }
+        setLightItemInternal(ItemStack.EMPTY);
     }
 
     @Override
@@ -234,6 +237,8 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
     @Override
     default void transform(BlockEntity blockEntity, StructureTransform transform) {
         getBlock().transformStorage(this.getBlockState(), this, transform);
+
+
         for (String key : getMaterialItemStorage().getAllProperties()) {
             getMaterialItemStorage().getMaterialItem(key).setMaterial(transform.apply(getMaterialItemStorage().getMaterialItem(key).material()));
         }
@@ -241,6 +246,8 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
     }
 
     static void read(IMultiStateCopycatBlockEntity self, CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        self.setLightItem(ItemStack.parseOptional(registries, tag.getCompound("LightItem")));
+
         if (self.getBlockState().getBlock() instanceof IMultiStateCopycatBlock) {
             boolean anyUpdated = self.getMaterialItemStorage().deserialize(tag.getCompound("material_data"), registries);
 
@@ -250,11 +257,15 @@ public interface IMultiStateCopycatBlockEntity extends ICopycatBlockEntity {
     }
 
     static void writeSafe(IMultiStateCopycatBlockEntity self, CompoundTag tag, HolderLookup.Provider registries) {
+        ItemStack lightItemWithoutNBT = self.getConsumedItem().copy();
+        ItemStack lightItemWithoutComponents = new ItemStack(lightItemWithoutNBT.getItemHolder(), lightItemWithoutNBT.getCount(), DataComponentPatch.EMPTY);
         BlockEntityUtils.saveMetadata((BlockEntity) self, tag);
         tag.put("material_data", self.getMaterialItemStorage().serializeSafe(registries));
+        tag.put("LightItem", ItemUtils.serializeNBT(lightItemWithoutComponents, registries));
     }
 
     static void write(IMultiStateCopycatBlockEntity self, CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         tag.put("material_data", self.getMaterialItemStorage().serialize(registries));
+        tag.put("LightItem", ItemUtils.serializeNBT(self.getLightItem(), registries));
     }
 }

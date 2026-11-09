@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class CopycatSlidingDoorBlockEntity extends SlidingDoorBlockEntity implements ICopycatBlockEntity {
 
     protected BlockState material;
+    protected ItemStack lightItem;
     protected ItemStack consumedItem;
     protected boolean enableCT;
 
@@ -40,6 +41,11 @@ public class CopycatSlidingDoorBlockEntity extends SlidingDoorBlockEntity implem
     }
 
     @Override
+    public ItemStack getLightItem() {
+        return lightItem;
+    }
+
+    @Override
     public ItemStack getConsumedItem() {
         return consumedItem;
     }
@@ -52,6 +58,11 @@ public class CopycatSlidingDoorBlockEntity extends SlidingDoorBlockEntity implem
     @Override
     public void setMaterialInternal(BlockState material) {
         this.material = material;
+    }
+
+    @Override
+    public void setLightItemInternal(ItemStack stack) {
+        this.lightItem = stack;
     }
 
     @Override

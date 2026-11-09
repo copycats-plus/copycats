@@ -20,14 +20,13 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -67,12 +66,17 @@ public interface ICopycatBlockEntity extends SpecialBlockEntityItemRequirement, 
 
     BlockState getMaterial();
 
+    ItemStack getLightItem();
+
     ItemStack getConsumedItem();
 
     boolean isCTEnabled();
 
     @ApiStatus.OverrideOnly
     void setMaterialInternal(BlockState material);
+
+    @ApiStatus.OverrideOnly
+    void setLightItemInternal(ItemStack stack);
 
     @ApiStatus.OverrideOnly
     void setConsumedItemInternal(ItemStack consumedItem);
@@ -86,6 +90,7 @@ public interface ICopycatBlockEntity extends SpecialBlockEntityItemRequirement, 
     default void init() {
         setMaterialInternal(AllBlocks.COPYCAT_BASE.getDefaultState());
         setConsumedItemInternal(ItemStack.EMPTY);
+        setLightItem(ItemStack.EMPTY);
         setCTEnabledInternal(true);
     }
 
@@ -155,6 +160,21 @@ public interface ICopycatBlockEntity extends SpecialBlockEntityItemRequirement, 
         return true;
     }
 
+    default int getLightLevel() {
+        ItemStack lightItem = getLightItem();
+
+        if(lightItem.is(Items.GLOWSTONE)) return 15;
+        if(lightItem.is(Items.TORCH)) return 14;
+        if(lightItem.is(Items.SOUL_TORCH)) return 7;
+        return -1;
+    }
+
+    default void setLightItem(ItemStack stack) {
+        setLightItemInternal(ItemUtils.copyStackWithSize(stack, 1));
+
+        BlockEntityUtils.redraw((BlockEntity) this);
+    }
+
     default void setConsumedItem(ItemStack stack) {
         setConsumedItemInternal(ItemUtils.copyStackWithSize(stack, 1));
         notifyUpdate();
@@ -196,6 +216,8 @@ public interface ICopycatBlockEntity extends SpecialBlockEntityItemRequirement, 
 
         self.setConsumedItem(ItemStack.parseOptional(registries, (tag.getCompound("Item"))));
 
+        self.setLightItem(ItemStack.parseOptional(registries, tag.getCompound("LightItem")));
+
         BlockState prevMaterial = self.getMaterial();
         if (!tag.contains("Material")) {
             self.setConsumedItem(ItemStack.EMPTY);
@@ -225,18 +247,21 @@ public interface ICopycatBlockEntity extends SpecialBlockEntityItemRequirement, 
     static void writeSafe(ICopycatBlockEntity self, CompoundTag tag, HolderLookup.Provider registries) {
         ItemStack stackWithoutNBT = self.getConsumedItem().copy();
         ItemStack stackWithoutComponents = new ItemStack(stackWithoutNBT.getItemHolder(), stackWithoutNBT.getCount(), DataComponentPatch.EMPTY);
+        ItemStack lightItemWithoutNBT = self.getConsumedItem().copy();
+        ItemStack lightItemWithoutComponents = new ItemStack(lightItemWithoutNBT.getItemHolder(), lightItemWithoutNBT.getCount(), DataComponentPatch.EMPTY);
         BlockEntityUtils.saveMetadata((BlockEntity) self, tag);
-        write(tag, stackWithoutComponents, self.getMaterial(), registries, self.isCTEnabled());
+        write(tag, stackWithoutComponents, self.getMaterial(), lightItemWithoutComponents, registries, self.isCTEnabled());
     }
 
     static void write(ICopycatBlockEntity self, CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
-        write(tag, self.getConsumedItem(), self.getMaterial(), registries, self.isCTEnabled());
+        write(tag, self.getConsumedItem(), self.getMaterial(), self.getLightItem(), registries, self.isCTEnabled());
     }
 
     @ApiStatus.Internal
-    static void write(CompoundTag tag, ItemStack stack, BlockState material, HolderLookup.Provider registries, boolean enableCT) {
+    static void write(CompoundTag tag, ItemStack stack, BlockState material, ItemStack lightItem, HolderLookup.Provider registries, boolean enableCT) {
         tag.put("Item", ItemUtils.serializeNBT(stack, registries));
         tag.put("Material", NbtUtils.writeBlockState(material));
+        tag.put("LightItem", ItemUtils.serializeNBT(lightItem, registries));
         tag.putBoolean("EnableCT", enableCT);
     }
 }

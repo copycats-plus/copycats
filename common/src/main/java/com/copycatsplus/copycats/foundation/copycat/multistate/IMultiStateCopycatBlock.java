@@ -3,10 +3,7 @@ package com.copycatsplus.copycats.foundation.copycat.multistate;
 import com.copycatsplus.copycats.CCKeys;
 import com.copycatsplus.copycats.compat.AthenaCompat;
 import com.copycatsplus.copycats.compat.Mods;
-import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
-import com.copycatsplus.copycats.foundation.copycat.IStateType;
-import com.copycatsplus.copycats.foundation.copycat.CopycatExternalContext;
-import com.copycatsplus.copycats.foundation.copycat.StateType;
+import com.copycatsplus.copycats.foundation.copycat.*;
 import com.copycatsplus.copycats.foundation.copycat.model.ScaledBlockAndTintGetter;
 import com.copycatsplus.copycats.network.CCPackets;
 import com.copycatsplus.copycats.network.FillCopycatPacket;
@@ -26,6 +23,7 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -33,6 +31,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
@@ -234,18 +233,37 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
             }
         }
 
-        if (!copycatBE.getMaterialItemStorage().hasCustomMaterial(property))
+        ItemStack lightItem = copycatBE.getLightItem();
+
+        boolean hasConsumedItem = !consumedItem.isEmpty();
+        boolean hasCustomMaterial = copycatBE.getMaterialItemStorage().hasCustomMaterial(property);
+        boolean hasLightItem = !lightItem.isEmpty();
+
+        if (!hasCustomMaterial && !hasLightItem)
             return InteractionResult.PASS;
 
         Player player = context.getPlayer();
-        if (!player.isCreative())
-            player.getInventory()
-                    .placeItemBackInInventory(consumedItem);
-        context.getLevel()
-                .levelEvent(2001, context.getClickedPos(), Block.getId(material.material()));
+        if (!player.isCreative()) {
+            if (hasConsumedItem)
+                player.getInventory().placeItemBackInInventory(consumedItem);
+            if (hasLightItem)
+                player.getInventory().placeItemBackInInventory(lightItem);
+        }
+
+        if (hasConsumedItem)
+            context.getLevel()
+                    .levelEvent(2001, context.getClickedPos(), Block.getId(material.material()));
+        else if (hasCustomMaterial) {
+            SoundEvent soundEvent = material.material().getSoundType().getBreakSound();
+            context.getLevel().playSound(null, copycatBE.getBlockPos(), soundEvent, SoundSource.BLOCKS, 1, .75f);
+        } else {
+            SoundEvent soundEvent = ((BlockItem) lightItem.getItem()).getBlock().defaultBlockState().getSoundType().getBreakSound();
+            context.getLevel().playSound(null, copycatBE.getBlockPos(), soundEvent, SoundSource.BLOCKS, 1, .75f);
+        }
 
         copycatBE.setMaterial(property, AllBlocks.COPYCAT_BASE.getDefaultState());
         copycatBE.setConsumedItem(property, ItemStack.EMPTY);
+        copycatBE.setLightItem(ItemStack.EMPTY);
         return InteractionResult.SUCCESS;
     }
 
@@ -267,6 +285,9 @@ public interface IMultiStateCopycatBlock extends ICopycatBlock, IStateType {
 
         if (player == null || !player.mayBuild())
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        ItemInteractionResult lightItemInteractionResult = useLightItemOn(stack, state, level, pos, player, hand, hitResult);
+        if(lightItemInteractionResult != null) return lightItemInteractionResult;
 
         String property = getPropertyFromInteraction(state, level, pos, hitResult, true);
 

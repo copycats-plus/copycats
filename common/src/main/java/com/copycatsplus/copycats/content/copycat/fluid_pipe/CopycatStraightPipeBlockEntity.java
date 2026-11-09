@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class CopycatStraightPipeBlockEntity extends StraightPipeBlockEntity implements ICopycatBlockEntity {
 
     protected BlockState material;
+    protected ItemStack lightItem;
     protected ItemStack consumedItem;
     protected boolean enableCT;
 
@@ -25,6 +26,11 @@ public class CopycatStraightPipeBlockEntity extends StraightPipeBlockEntity impl
     @Override
     public BlockState getMaterial() {
         return material;
+    }
+
+    @Override
+    public ItemStack getLightItem() {
+        return lightItem;
     }
 
     @Override
@@ -40,6 +46,11 @@ public class CopycatStraightPipeBlockEntity extends StraightPipeBlockEntity impl
     @Override
     public void setMaterialInternal(BlockState material) {
         this.material = material;
+    }
+
+    @Override
+    public void setLightItemInternal(ItemStack stack) {
+        this.lightItem = stack;
     }
 
     @Override

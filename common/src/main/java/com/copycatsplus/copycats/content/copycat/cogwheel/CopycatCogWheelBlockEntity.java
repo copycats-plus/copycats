@@ -9,6 +9,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,6 +19,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CopycatCogWheelBlockEntity extends BracketedKineticBlockEntity implements IMultiStateCopycatBlockEntity {
+    protected ItemStack lightItem;
     private MaterialItemStorage storage;
 
     public CopycatCogWheelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -33,6 +35,16 @@ public class CopycatCogWheelBlockEntity extends BracketedKineticBlockEntity impl
     @Override
     public void setMaterialItemStorageInternal(MaterialItemStorage storage) {
         this.storage = storage;
+    }
+
+    @Override
+    public ItemStack getLightItem() {
+        return lightItem;
+    }
+
+    @Override
+    public void setLightItemInternal(ItemStack stack) {
+        this.lightItem = stack;
     }
 
     @Override
