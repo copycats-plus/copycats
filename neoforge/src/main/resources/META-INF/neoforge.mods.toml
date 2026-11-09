@@ -31,6 +31,11 @@ issueTrackerURL="${mod_issues}"
    versionRange="${create_neoforge_range}"
    ordering="NONE"
    side="BOTH"
+[[dependencies.${archives_base_name}]]
+   modId="aerocopycats"
+   type="incompatible"
+   reason="Causes copycats to crash on assembly"
+   versionRange="(,1.1.1]"
 
 [[mixins]]
 config = "copycats-common.mixins.json"
