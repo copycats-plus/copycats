@@ -4,6 +4,8 @@ import com.copycatsplus.copycats.foundation.copycat.ICopycatBlock;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.decoration.bracket.BracketBlock;
 import net.minecraft.core.BlockPos;
@@ -29,6 +31,7 @@ public class BlockMixin {
     )
     private static boolean canCopycatOcclude(BlockState instance,
                                              Operation<Boolean> original,
+                                             @Share("copycat$blockState") LocalRef<BlockState> stateRef,
                                              @Local(argsOnly = true) BlockGetter level,
                                              @Local(argsOnly = true, ordinal = 1) BlockPos pos) {
         if (AllBlocks.COPYCAT_BASE.has(instance)) {
@@ -38,7 +41,11 @@ public class BlockMixin {
             return false;
         }
         if (instance.getBlock() instanceof ICopycatBlock copycatBlock) {
-            return copycatBlock.canOcclude(level, instance, pos);
+            if (copycatBlock.canOcclude(level, instance, pos)) {
+                stateRef.set(instance);
+                return true;
+            }
+            return false;
         }
         return original.call(instance);
     }
@@ -48,9 +55,10 @@ public class BlockMixin {
             at = @At(value = "NEW", target = "net/minecraft/world/level/block/Block$BlockStatePairKey"),
             cancellable = true
     )
-    private static void calculateOcclusionShape(BlockState state, BlockGetter level, BlockPos offset, Direction face, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        BlockState blockState = level.getBlockState(pos);
-        if (blockState.getBlock() instanceof ICopycatBlock copycatBlock) {
+    private static void calculateOcclusionShape(BlockState state, BlockGetter level, BlockPos offset, Direction face, BlockPos pos,
+                                                CallbackInfoReturnable<Boolean> cir, @Share("copycat$blockState") LocalRef<BlockState> stateRef) {
+        BlockState blockState = stateRef.get();
+        if (blockState != null && blockState.getBlock() instanceof ICopycatBlock copycatBlock) {
             Optional<Boolean> result = copycatBlock.shapeCanOccludeNeighbor(level, pos, blockState, offset, face.getOpposite()).map(b -> !b);
             result.ifPresent(cir::setReturnValue);
         }
