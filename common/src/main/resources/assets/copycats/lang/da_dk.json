@@ -1,1 +1,13 @@
-{}
+{
+  "block.copycats.copycat_beam": "Kobberstråle",
+  "block.copycats.copycat_block": "Kobberblok",
+  "block.copycats.copycat_board": "Kobberbræt",
+  "block.copycats.copycat_fence": "Kobberhegn",
+  "block.copycats.copycat_fence_gate": "Kobberhegn Port",
+  "block.copycats.copycat_slab": "Kobberhegnslab",
+  "block.copycats.copycat_stairs": "Kobberhegn rører",
+  "block.copycats.copycat_vertical_step": "Lodret Kobbertrin",
+  "block.copycats.copycat_wall": "Kobbervæg",
+  "item.copycats.copycat_box": "Kobberboks",
+  "item.copycats.copycat_catwalk": "Kopierkat gå"
+}

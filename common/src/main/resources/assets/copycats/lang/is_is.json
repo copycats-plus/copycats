@@ -1,1 +1,13 @@
-{}
+{
+  "block.copycats.copycat_beam": "Eftirlíkingargeisli",
+  "block.copycats.copycat_block": "Eftirlíkingarblokk",
+  "block.copycats.copycat_board": "Eftirlíkingarborð",
+  "block.copycats.copycat_fence": "Eftirlíkingargirðing",
+  "block.copycats.copycat_fence_gate": "Eftirlíkingargirðingarhlið",
+  "block.copycats.copycat_slab": "Eftirlíkingarplata",
+  "block.copycats.copycat_stairs": "Eftirlíkingarstigar",
+  "block.copycats.copycat_vertical_step": "Lóðrétt þrep eftirlíkingar",
+  "block.copycats.copycat_wall": "Eftirlíkingarveggur",
+  "item.copycats.copycat_box": "Eftirlíkingarkassi",
+  "item.copycats.copycat_catwalk": "Eftirlíkingargöngustígur"
+}

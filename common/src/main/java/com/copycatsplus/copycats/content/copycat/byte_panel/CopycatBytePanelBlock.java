@@ -523,7 +523,7 @@ public class CopycatBytePanelBlock extends WaterloggedMultiStateCopycatBlock imp
         if (property.equals(BOTTOM_RIGHT.getName())) return BOTTOM_RIGHT;
         if (property.equals(TOP_LEFT.getName())) return TOP_LEFT;
         if (property.equals(TOP_RIGHT.getName())) return TOP_RIGHT;
-        throw new RuntimeException("Invalid property: " + property);
+        return BOTTOM_RIGHT;
     }
 
     public static String getProperty(int horizontal, int vertical) {
@@ -531,7 +531,7 @@ public class CopycatBytePanelBlock extends WaterloggedMultiStateCopycatBlock imp
         if (horizontal == 1 && vertical == 0) return BOTTOM_LEFT.getName();
         if (horizontal == 0 && vertical == 1) return TOP_RIGHT.getName();
         if (horizontal == 1 && vertical == 1) return TOP_LEFT.getName();
-        throw new RuntimeException("Invalid horizontal and vertical values: " + horizontal + ", " + vertical);
+        return BOTTOM_RIGHT.getName();
     }
 
     public static Vector2i getVector(String property) {
@@ -539,7 +539,7 @@ public class CopycatBytePanelBlock extends WaterloggedMultiStateCopycatBlock imp
         if (property.equals(BOTTOM_LEFT.getName())) return new Vector2i(1, 0);
         if (property.equals(TOP_RIGHT.getName())) return new Vector2i(0, 1);
         if (property.equals(TOP_LEFT.getName())) return new Vector2i(1, 1);
-        throw new RuntimeException("Invalid property: " + property);
+        return new Vector2i(0, 0);
     }
 
     public static Direction getHorizontal(Direction facing) {
